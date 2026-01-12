@@ -1,0 +1,63 @@
+# 虚拟环境
+venv/
+env/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 缓存文件
+__pycache__/
+*.pyc
+*.pyo
+
+# 日志文件
+*.log
+
+# 数据文件
+*.csv
+*.json
+*.pkl
+*.zip
+
+# 模型文件
+*.pth
+*.pt
+*.bin
+models/
+swanlog/
+output/
+data/
+catboost_info/
+model_dataset/
+._____temp/
+.lock
+
+
+# 自定义目录
+stock_data/
+feature_data/
+cache/
+summary/
+models*/
+real_feature_data/
+real_feature_data_daily/
+model_dataset*/
+tmp/
+logs/
+real_features_processors_v*/models
+real_features_processors_v*/data
+real_features_processors_v*/logs
+real_trading_data_simulation/
+
+# 只允许特定的csv文件
+!investment_plans/**/*.csv
+!real_trading_data/**/*.csv
+!real_trading_data/**/*.json
+!grid_trading_simulation_v4/*.csv
+!real_features_processors_v2/simulation_results/*.csv
+!real_features_processors_v2/real_trading_data/**/*.csv
+!real_features_processors_v2/real_trading_data/**/*.json
