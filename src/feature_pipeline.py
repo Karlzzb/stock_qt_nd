@@ -2018,7 +2018,7 @@ def get_cached_dataset(dataset_name):
 if __name__ == "__main__":
     full_stocks_data = get_cached_dataset(FULL_STOCK_DATA_KEY)
 
-    process_stocks_batch_parallel_optimized(full_stocks_data, 200, 24, start_date='2009-6-5')
+    process_stocks_batch_parallel_optimized(full_stocks_data, 430, 12, start_date='2022-5-28')
 
 
     # 生成莫一天的特征

@@ -323,7 +323,7 @@ def run_concurrent(init_capital, data):
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
         # 准备任务
         futures = []
-        for name, params in model_config.STRATEGY_PARAMS_CANDIDATES.items():
+        for name, params in model_config.STRATEGY_PARAMS_CANDIDATES_V8.items():
             future = executor.submit(
                 run_strategy_with_analysis,
                 name, params, init_capital, data.copy()

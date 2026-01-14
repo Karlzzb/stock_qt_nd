@@ -24,7 +24,7 @@ plt.rcParams['axes.unicode_minus'] = False
 
 from config.settings import MODEL_DIR, REAL_TRADING_DIR, DAILY_FEATURE_DIR, DATASET_DIR
 from comm_fun import ALLOCATION_STRATEGY, PROBA_MEAN, PROBA_STD,model_config, label_encoding
-STRATEGY_PARAMS = model_config.STRATEGY_PARAMS
+STRATEGY_PARAMS = model_config.STRATEGY_PARAMS_V8
 class PortfolioState:
     """投资组合状态管理器 - CSV版本，人工执行"""
 
