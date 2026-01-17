@@ -621,7 +621,7 @@ def analyze_feature_correlation(X, y, feature_names, top_k=20):
 
     return corr_df
 
-def analyze_feature_importance(lgb_models, feature_names, top_n=150, threshold=0.6):
+def analyze_feature_importance(lgb_models, feature_names, top_n=250, threshold=0.6):
     """分析特征重要性"""
     print(f"\n{'=' * 50}")
     print("特征重要性分析")
