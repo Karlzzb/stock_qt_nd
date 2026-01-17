@@ -200,14 +200,6 @@ def main():
     print(f"原始数据量: {len(data)}")
 
 
-    # NOTE: 对ST和不能交易的进行过滤
-    full_len = len(data)
-    st_df = pd.read_csv(DATASET_DIR / 'st_stocks_list.csv')
-    data = data[data['symbol'].str.match(r'^[60]')]
-    data = data[~data['symbol'].isin(st_df['ts_code'])]
-    print(f"原始数据量: {full_len} 过滤后数据量: {len(data)} 过滤后%: {(len(data)/full_len)* 100:.2f}%")
-    print(f"正样本比例: {data['label'].mean():.4f}")
-
     # 直接评估模型
     X = data[model_config.FULL_FEATURE_COLS]
     y = (data[predictor.model_config.LABEL_COL] > get_return_threshold(data)).astype(int)

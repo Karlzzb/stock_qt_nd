@@ -83,14 +83,11 @@ def load_and_preprocess_data(config):
             corr = data[col].corr(data['label'])
             print(f"  {col}: 与标签相关性={corr:.4f}")
 
-    # 6. NOTE: 对ST和不能交易的进行过滤
-    full_len = len(data)
-    st_df = pd.read_csv(DATASET_DIR / 'st_stocks_list.csv')
-    data = data[data['symbol'].str.match(r'^[60]')]
-    data = data[~data['symbol'].isin(st_df['ts_code'])]
-    print(f"原始数据量: {full_len} 过滤后数据量: {len(data)} 过滤后%: {(len(data)/full_len)* 100:.2f}%")
-    print(f"正样本比例: {data['label'].mean():.4f}")
+    # 添加高级特征
+    # data = create_advanced_features(data, config)
 
+    print(f"最终数据量: {len(data)}")
+    print(f"正样本比例: {data['label'].mean():.4f}")
     return data
 
 def train_lgb_models(X_train, y_train, config):
@@ -254,24 +251,24 @@ def meta_features_process(X, oof_preds, lgb_models, config, lgbm_feature_names,
     feature_names.extend(["pred_lgb", "pred_lgb_squared"])  # 记录特征名
 
     # B 类：Leaf PCA
-    leaf_all = []
-    for model in lgb_models:
-        leaf = model.predict(X[lgbm_feature_names], pred_leaf=True)
-        leaf_all.append(leaf)
-    leaf_all = np.concatenate(leaf_all, axis=1)
-    selected = config.KEEP_LGBM_LEAF_AMOUNT
-    if model_config.USE_PCA:
-        leaf_pca, pca = reduce_dimension(leaf_all, config, pca)
-    else:
-        leaf_pca = leaf_all
-
-    # 动态生成leaf特征名称
-    leaf_feature_names = []
-    for i in range(selected):
-        feature_name = f"leaf_pca_{i}" if model_config.USE_PCA else f"leaf_{i}"
-        X_stack[feature_name] = leaf_pca[:, i]
-        leaf_feature_names.append(feature_name)
-    feature_names.extend(leaf_feature_names)  # 记录特征名
+    if config.USE_LGBM_LEAF:
+        leaf_all = []
+        for model in lgb_models:
+            leaf = model.predict(X[lgbm_feature_names], pred_leaf=True)
+            leaf_all.append(leaf)
+        leaf_all = np.concatenate(leaf_all, axis=1)
+        selected = config.KEEP_LGBM_LEAF_TOP
+        if model_config.USE_PCA:
+            leaf_pca, pca = reduce_dimension(leaf_all, config, pca)
+        else:
+            leaf_pca = leaf_all
+        # 动态生成leaf特征名称
+        leaf_feature_names = []
+        for i in range(selected):
+            feature_name = f"leaf_pca_{i}" if model_config.USE_PCA else f"leaf_{i}"
+            X_stack[feature_name] = leaf_pca[:, i]
+            leaf_feature_names.append(feature_name)
+        feature_names.extend(leaf_feature_names)  # 记录特征名
 
     # C 类：少量稳态特征
     stable_feats = config.STABLE_FEATURES  # 你自己定义 5–10 个
@@ -624,7 +621,7 @@ def analyze_feature_correlation(X, y, feature_names, top_k=20):
 
     return corr_df
 
-def analyze_feature_importance(lgb_models, feature_names, top_n=200, threshold=0.6):
+def analyze_feature_importance(lgb_models, feature_names, top_n=150, threshold=0.6):
     """分析特征重要性"""
     print(f"\n{'=' * 50}")
     print("特征重要性分析")

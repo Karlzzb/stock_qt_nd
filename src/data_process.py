@@ -120,13 +120,13 @@ def data_clean(raw_data):
     numeric_cols = data.select_dtypes(include=[np.number]).columns
     # print(f"numeric_cols: {[col for col in numeric_cols]}")
     print(f"已删除 {before_count - after_count} 重复行，剩余 {after_count} 行数据")
-    key_columns = ['timestamp', model_config.LABEL_COL] + model_config.OPTIMIZED_FEATURE_COLS
+    key_columns = ['timestamp', model_config.LABEL_COL] + model_config.FULL_FEATURE_COLS
 
 
     # 2.  缺失值 统计与处理
     # 用合理的值填充NaN（只填充features里的数值cols, 不填充label）
     nan_cols = print_nan_report(data, key_columns)
-    # feature_numeric_cols = list(set(numeric_cols) & set(nan_cols) & set(model_config.OPTIMIZED_FEATURE_COLS))
+    # feature_numeric_cols = list(set(numeric_cols) & set(nan_cols) & set(model_config.FULL_FEATURE_COLS))
     # daily_data[feature_numeric_cols] = daily_data[feature_numeric_cols].fillna(0)
     # daily_data[feature_numeric_cols] = daily_data[feature_numeric_cols].fillna(EPS)
     # print(f"有空的列{[col for col in key_columns if col not in nan_cols]}")
@@ -161,14 +161,7 @@ def prepare_real_daily_features(daily_data):
     daily_data, _ = label_encoding(daily_data)
 
     # 5。分析特征关系
-    # analyze_feature_correlation(daily_data[model_config.OPTIMIZED_FEATURE_COLS],model_config.OPTIMIZED_FEATURE_COLS)
-
-    # 6. NOTE: 对ST和不能交易的进行过滤
-    full_len = len(daily_data)
-    st_df = pd.read_csv(DATASET_DIR / 'st_stocks_list.csv')
-    data = daily_data[daily_data['symbol'].str.match(r'^[60]')]
-    data = data[~data['symbol'].isin(st_df['ts_code'])]
-    print(f"原始数据量: {full_len} 过滤后数据量: {len(data)} 过滤后%: {(len(data)/full_len)* 100:.2f}%")
+    # analyze_feature_correlation(daily_data[model_config.FULL_FEATURE_COLS],model_config.FULL_FEATURE_COLS)
 
     daily_data = daily_data.sort_values('timestamp').reset_index(drop=True)
     return daily_data
