@@ -448,6 +448,10 @@ def main():
     meta_importance = analyze_meta_feature_importance(lr_meta, lr_feature_names)
     # 方法4: 相关性分析
     corr_analysis = analyze_feature_correlation(X_train, y_train, lr_feature_names)
+    # 方法5: LR层
+    coef_df = collect_lr_coefs(lr_model=lr_meta,X=X_train_lr,y=y_train,feature_names=lr_feature_names,n_splits=12)
+    stability_df = analyze_coef_stability(coef_df)
+
     # 按特征名合并两个重要性结果
     merged_importance = meta_importance
     if not shap_lr_importance.empty:
@@ -466,6 +470,7 @@ def main():
         meta_importance.to_excel(writer, sheet_name='元模型重要性')
         corr_analysis.to_excel(writer, sheet_name='相关性分析')
         merged_importance.to_excel(writer, sheet_name='SHAP+元模型重要性')
+        stability_df.to_excel(writer, sheet_name='元模型重要性(Rolling训练系数)')
 
 
     # 11. 在最终评估后添加过拟合检查
@@ -701,6 +706,52 @@ def analyze_feature_importance(lgb_models, feature_names, top_n=250, threshold=0
 
     return importance_df
 
+# Rolling 训练并收集系数
+def collect_lr_coefs(lr_model, X, y, feature_names, n_splits=10):
+    tscv = TimeSeriesSplit(n_splits=n_splits)
+
+    coef_records = []
+
+    for fold, (train_idx, _) in enumerate(tscv.split(X)):
+        X_train = X.iloc[train_idx]
+        y_train = y.iloc[train_idx]
+
+        lr_model.fit(X_train, y_train)
+
+        coef = lr_model.coef_[0]
+
+        coef_records.append(
+            pd.Series(coef, index=feature_names, name=f"fold_{fold}")
+        )
+
+    coef_df = pd.concat(coef_records, axis=1)
+    return coef_df
+
+def analyze_coef_stability(coef_df):
+    eps = 1e-9
+
+    stats = pd.DataFrame(index=coef_df.index)
+
+    # 1. 非零出现率
+    stats["selection_rate"] = (coef_df != 0).mean(axis=1)
+
+    # 2. 符号一致性
+    stats["sign_consistency"] = np.abs(
+        np.sign(coef_df).replace(0, np.nan).mean(axis=1)
+    )
+
+    # 3. 强度稳定性
+    abs_coef = coef_df.abs()
+    stats["mean_abs_coef"] = abs_coef.mean(axis=1)
+    stats["std_abs_coef"] = abs_coef.std(axis=1) + eps
+    stats["strength_stability"] = (
+        stats["mean_abs_coef"] / stats["std_abs_coef"]
+    )
+
+    return stats.sort_values(
+        ["selection_rate", "strength_stability"],
+        ascending=False
+    )
 
 def save_evaluation_results(results, title, save_path):
     """保存评估结果到文件"""
@@ -711,8 +762,6 @@ def save_evaluation_results(results, title, save_path):
             f.write(f"{metric:25}: {value:.4f}\n")
         f.write(f"\n保存时间: {pd.Timestamp.now()}\n")
     print(f"结果已保存到: {save_path}")
-
-
 
 def prepare_features(data, config):
     """准备特征"""
