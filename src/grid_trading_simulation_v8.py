@@ -319,7 +319,7 @@ def run_strategy_with_analysis(name, params, capital, full_data):
 
 def run_concurrent(init_capital, data):
     # 使用线程池并发执行
-    max_workers = 8  # 根据CPU核心数调整
+    max_workers = 16  # 根据CPU核心数调整
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
         # 准备任务
         futures = []
@@ -356,7 +356,7 @@ if __name__ == "__main__":
     processed_data = data_process(dataset_dir=DATASET_DIR,
                              required_files=[
                                  # "train_set.csv",
-                                 # "test_set.csv",
+                                 "test_set.csv",
                                  "validation_set.csv",
                              ])
     run_concurrent(248526, processed_data)
