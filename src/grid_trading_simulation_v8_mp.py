@@ -105,9 +105,9 @@ def concurrent_parameter_optimization(df_result, init_capital):
         'base_ratio': [0.86, 1.0],
         'target_profit': [0.15, 0.2, 0.25, 0.3, 0.35],
         'hard_stop_loss': [-0.08, -0.1, -0.12, -0.14],
-        'max_hold_days': [5, 7, 10, 15, 20, 25],
+        'max_hold_days': [5, 7, 10, 15, 20, 25, 30],
         'max_positions': [3, 5, 8, 10],
-        'min_probability': [0.5, 0.55, 0.65, 0.75],
+        'min_probability': [0.5, 0.55, 0.65, 0.75, 0.8],
     }
 
     param_names = list(param_grid.keys())
@@ -116,7 +116,7 @@ def concurrent_parameter_optimization(df_result, init_capital):
     print(f"开始参数优化，共 {len(param_combinations)} 种组合...")
 
     # 设置进程数：建议使用 CPU 核心数减 1
-    num_workers = 22 #max(1, os.cpu_count() - 1)
+    num_workers = 18 #max(1, os.cpu_count() - 1)
     print(f"使用 {num_workers} 个进程进行并发回测...")
 
     results = []
