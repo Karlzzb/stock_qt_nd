@@ -449,7 +449,8 @@ def main():
     # 方法4: 相关性分析
     corr_analysis = analyze_feature_correlation(X_train, y_train, lr_feature_names)
     # 方法5: LR层
-    coef_df = collect_lr_coefs(lr_model=lr_meta,X=X_train_lr,y=y_train,feature_names=lr_feature_names,n_splits=12)
+    lr_selected_columns = [name for name in lr_feature_names if not name.startswith('pred')]
+    coef_df = collect_lr_coefs(lr_model=lr_meta,X=X_train[lr_selected_columns],y=y_train,feature_names=lr_selected_columns,n_splits=12)
     stability_df = analyze_coef_stability(coef_df)
 
     # 按特征名合并两个重要性结果

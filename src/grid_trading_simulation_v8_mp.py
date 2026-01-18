@@ -116,7 +116,7 @@ def concurrent_parameter_optimization(df_result, init_capital):
     print(f"开始参数优化，共 {len(param_combinations)} 种组合...")
 
     # 设置进程数：建议使用 CPU 核心数减 1
-    num_workers = 16 #max(1, os.cpu_count() - 1)
+    num_workers = 22 #max(1, os.cpu_count() - 1)
     print(f"使用 {num_workers} 个进程进行并发回测...")
 
     results = []
