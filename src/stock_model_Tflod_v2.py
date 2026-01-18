@@ -293,7 +293,7 @@ def train_meta_model_reduce(X_train, y_train, oof_preds, lgb_models, config, lgb
 
     lr = LogisticRegression(
         max_iter=1000,
-        class_weight='balanced',
+        # class_weight='balanced',
         # class_weight = {0: 0.5, 1: 0.5}, # 大幅惩罚假阳性（错误预测为买入）
         random_state=config.RANDOM_STATE,
         C=0.001,  # 更强的正则化，防止过拟合
