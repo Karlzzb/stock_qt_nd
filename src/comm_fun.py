@@ -188,7 +188,7 @@ class Config:
     EXPECTED_PROFIT = 1.15 # 特征中的止盈
     EXPECTED_LOSS = 0.65 # 特征中的止损
     RETURN_THRESHOLD = 0.01  # 分类阈值
-    PROBA_THRESHOLD = 0.7 #阈值就是判断"是"与"否"的分界线。
+    PROBA_THRESHOLD = 0.3 #阈值就是判断"是"与"否"的分界线。
     FP_PENALTY_WEIGHT = 1.0 # 暂时没用到
 
     USE_LGBM_LEAF = False # 是否使用LGBM的叶子节点特征作为LR层的输入

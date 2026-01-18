@@ -185,30 +185,59 @@ def main():
     predictor = PriceChangePredictor(MODEL_DIR)
     config = model_config
 
-    # 文件加载
-    csv_files = glob(os.path.join(DATASET_DIR, "validation_set.csv"))
-    if not csv_files:
-        raise ValueError(f"No CSV files found in {config.DATA_PATH}")
+    # 定义要评估的数据集配置
+    dataset_configs = [
+        {
+            "file": "train_set.csv",
+            "title": "模型训练集表现",
+            "report_name": "train_report.txt"
+        },
+        {
+            "file": "test_set.csv",
+            "title": "模型测试集表现",
+            "report_name": "test_report.txt"
+        },
+        {
+            "file": "validation_set.csv",
+            "title": "模型验证集表现",
+            "report_name": "validation_report.txt"
+        }
+    ]
 
-    dfs = []
-    for file in csv_files:
-        df1 = pd.read_csv(file)
-        dfs.append(df1)
+    # 循环评估每个数据集
+    for dataset_config in dataset_configs:
+        file_name = dataset_config["file"]
+        title = dataset_config["title"]
+        report_name = dataset_config["report_name"]
 
-    # 合并数据
-    data = pd.concat(dfs, ignore_index=True).sort_values(by=config.TIME_COLS)
-    print(f"原始数据量: {len(data)}")
+        # 构建文件路径
+        file_path = os.path.join(DATASET_DIR, file_name)
 
+        # 检查文件是否存在
+        if not os.path.exists(file_path):
+            print(f"⚠️  文件不存在: {file_path}")
+            continue
 
-    # 直接评估模型
-    X = data[model_config.FULL_FEATURE_COLS]
-    y = (data[predictor.model_config.LABEL_COL] > get_return_threshold(data)).astype(int)
-    predictor.evaluate(
-        X_test=X,
-        y_test=y,
-        title="模型验证集表现",
-        save_path= MODEL_DIR / "validation_report.txt"
-)
+        try:
+            # 读取数据
+            data = pd.read_csv(file_path)
+            print(f"✅ 已加载数据: {file_name}, 数据量: {len(data)}")
+
+            # 评估模型
+            X = data[config.FULL_FEATURE_COLS]
+            y = (data[config.LABEL_COL] > get_return_threshold(data)).astype(int)
+
+            predictor.evaluate(
+                X_test=X,
+                y_test=y,
+                title=title,
+                save_path=MODEL_DIR / report_name
+            )
+
+            print(f"✅ 已完成评估: {title}\n")
+
+        except Exception as e:
+            print(f"❌ 处理 {file_name} 时出错: {e}")
 
 if __name__ == "__main__":
     main()
