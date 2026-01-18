@@ -202,6 +202,7 @@ def simple_run(initial_capital, strategy_name, strategy_params, full_data):
     # 第三步：分析结果
     # ==========================================
     analysis_txt_content = [f"{strategy_name} 回测数据："]
+    analysis_df_content = pd.DataFrame({'strategy_name': [strategy_name]})
 
     # 1. 计算最终收益
     final_asset = asset_curve.iloc[-1]['total']
@@ -210,6 +211,8 @@ def simple_run(initial_capital, strategy_name, strategy_params, full_data):
     logger.info(f"最终收益率: {return_rate:.2%}")
     analysis_txt_content.append(f"最终资产: {final_asset:,.2f}")
     analysis_txt_content.append(f"最终收益率: {return_rate:.2%}")
+    analysis_df_content['final_asset'] =  [final_asset]
+    analysis_df_content['return_rate'] = [return_rate]
 
     # 2. 计算最大回撤
     if not asset_curve.empty:
@@ -221,6 +224,7 @@ def simple_run(initial_capital, strategy_name, strategy_params, full_data):
         max_drawdown = asset_curve['drawdown'].min()
         logger.info(f"最大回撤: {max_drawdown:.2%}")
         analysis_txt_content.append(f"最大回撤: {max_drawdown:.2%}")
+        analysis_df_content['max_drawdown'] = [max_drawdown]
 
     # 3. 计算夏普比率
     if not asset_curve.empty and len(asset_curve) > 1:
@@ -242,6 +246,8 @@ def simple_run(initial_capital, strategy_name, strategy_params, full_data):
         logger.info(f"年化收益率: {annual_return:.2%}")
         analysis_txt_content.append(f"夏普比率: {sharpe_ratio:.4f}")
         analysis_txt_content.append(f"年化收益率: {annual_return:.2%}")
+        analysis_df_content['sharpe_ratio'] = [sharpe_ratio]
+        analysis_df_content['annual_return'] = [annual_return]
 
     # 4. 详细交易统计
     if not trade_log.empty:
@@ -258,6 +264,7 @@ def simple_run(initial_capital, strategy_name, strategy_params, full_data):
         open_trades = trade_log[trade_log['action'].isin(open_actions)]
         logger.info(f"总开仓次数: {len(open_trades)}")
         analysis_txt_content.append(f"总开仓次数: {len(open_trades)}")
+        analysis_df_content['open_trades'] = [len(open_trades)]
 
         # 统计平仓交易
         closed_trades = trade_log[trade_log['action'].isin(close_actions)]
@@ -279,6 +286,11 @@ def simple_run(initial_capital, strategy_name, strategy_params, full_data):
             analysis_txt_content.append(f"亏损次数: {total_count - win_count}")
             analysis_txt_content.append(f"胜率: {win_rate:.2%}")
 
+            analysis_df_content['total_count'] = [total_count]
+            analysis_df_content['win_count'] =  [win_count]
+            analysis_df_content['lose_count'] = [total_count - win_count]
+            analysis_df_content['win_rate'] =  [win_rate]
+
             # 按交易类型分析
             logger.info(f"\n=== 按交易类型分析 ===")
             analysis_txt_content.append(f"\n=== 按交易类型分析 ===")
@@ -289,6 +301,8 @@ def simple_run(initial_capital, strategy_name, strategy_params, full_data):
                     action_win_rate = action_win_count / len(action_trades)
                     logger.info(f"  {action}: {len(action_trades)}次, 胜率{action_win_rate:.2%}")
                     analysis_txt_content.append(f"  {action}: {len(action_trades)}次, 胜率{action_win_rate:.2%}")
+                    analysis_df_content[f'{action}_trades'] =  [len(action_trades)]
+                    analysis_df_content[f'{action}_win_rate'] = [action_win_rate]
         else:
             logger.warning("没有完成的平仓交易")
 
@@ -297,7 +311,7 @@ def simple_run(initial_capital, strategy_name, strategy_params, full_data):
         # os.makedirs(analysis_dir, exist_ok=True)
         # with open(analysis_txt, 'w', encoding='utf-8') as f:
         #     f.write('\n'.join(analysis_txt_content))
-    return analysis_txt_content
+    return analysis_txt_content, analysis_df_content
 
 
 from tools.hold_analysis import hold_analyzer
@@ -312,14 +326,14 @@ import concurrent.futures
 def run_strategy_with_analysis(name, params, capital, full_data):
     """执行单个策略的完整流程"""
     print(f"正在测试参数组: {name}")
-    result = simple_run(initial_capital=capital, strategy_name=name,
+    result_txt, result_df = simple_run(initial_capital=capital, strategy_name=name,
                strategy_params=params, full_data=full_data)
-    return name, result
+    return name, result_txt, result_df
 
 
 def run_concurrent(init_capital, data):
     # 使用线程池并发执行
-    max_workers = 16  # 根据CPU核心数调整
+    max_workers = 20  # 根据CPU核心数调整
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
         # 准备任务
         futures = []
@@ -331,31 +345,38 @@ def run_concurrent(init_capital, data):
             futures.append(future)
 
         all_analysis_result = []
+        analysis_df_list = []
         # 等待所有任务完成并处理结果
         for future in concurrent.futures.as_completed(futures):
             try:
-                strategy_name, analysis_result = future.result()
+                strategy_name, analysis_result_txt, analysis_result_df = future.result()
                 # hold_analyzer(version="v8", param_suffix=strategy_name)
                 # profit_analyzer(version="v8", param_suffix=strategy_name)
                 # return_analyzer(version="v8", param_suffix=strategy_name)
                 # trades_analyzer(version="v8", param_suffix=strategy_name)
                 # correlation_analyzer(version="v8", param_suffix=strategy_name)
-                analysis_result.append("*" * 60)
-                all_analysis_result.extend(analysis_result)
+                analysis_result_txt.append("*" * 60)
+                all_analysis_result.extend(analysis_result_txt)
+                analysis_df_list.append(analysis_result_df)
                 print(f"参数组 {strategy_name} 测试完成")
             except Exception as e:
                 print(f"参数组执行出错: {e}")
         if len(all_analysis_result) > 0:
-            analysis_txt = RESULT_DIR / f'simple_run_grid_v8_full_params_analysis.txt'
+            analysis_txt = RESULT_DIR / f'strategy_compare_v8_full_analysis.txt'
             os.makedirs(RESULT_DIR, exist_ok=True)
             with open(analysis_txt, 'w', encoding='utf-8') as f:
                 f.write('\n'.join(all_analysis_result))
+        if len(analysis_df_list) > 0:
+            final_df = pd.concat(analysis_df_list, ignore_index=True)
+            analysis_df = RESULT_DIR / f'strategy_compare_v8_full_analysis.csv'
+            os.makedirs(RESULT_DIR, exist_ok=True)
+            final_df.to_csv(analysis_df, index=False, encoding='utf-8-sig')
 
 
 if __name__ == "__main__":
     processed_data = data_process(dataset_dir=DATASET_DIR,
                              required_files=[
-                                 # "train_set.csv",
+                                 "train_set.csv",
                                  "test_set.csv",
                                  "validation_set.csv",
                              ])

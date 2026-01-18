@@ -425,108 +425,728 @@ class Config:
     ]
 
     STRATEGY_PARAMS_CANDIDATES_V8 = {
-        "参数1": {
-            # 测试&验证集表现： 回报率:4.4155895962595455 倍  |  最大回撤： -0.30762444997644 | 胜率：0.5988700564971752 | 总交易数：177.0 | sharpe_ratio：1.893749281487686
+     "参数1":   {  # 测试&验证集表现： 回报率:9.918657302856444 倍  |  最大回撤： -0.3764488995075226 | 胜率：0.4829931972789115 | 总交易数：147.0 | sharpe_ratio：1.6205795227027626
 
             'base_ratio': 1.0,
-            'target_profit': 0.35,
-            'hard_stop_loss': -0.14,
-            'max_hold_days': 25,
-            'max_positions': 5,
-            'min_probability': 0.55,
-        },
-        "参数2": {
-            # 测试&验证集表现： 回报率:4.343556046449869 倍  |  最大回撤： -0.2689066407696095 | 胜率：0.5892857142857143 | 总交易数：112.0 | sharpe_ratio：1.6934532200426269
-
-            'base_ratio': 1.0,
-            'target_profit': 0.35,
-            'hard_stop_loss': -0.14,
-            'max_hold_days': 25,
-            'max_positions': 3,
-            'min_probability': 0.55,
-        },
-        "参数4": {
-            # 测试&验证集表现： 回报率:4.054925480633818 倍  |  最大回撤： -0.2607550200003021 | 胜率：0.5892857142857143 | 总交易数：112.0 | sharpe_ratio：1.7269705238902664
-
-            'base_ratio': 0.86,
-            'target_profit': 0.35,
-            'hard_stop_loss': -0.14,
-            'max_hold_days': 25,
-            'max_positions': 3,
-            'min_probability': 0.55,
-        },
-        "参数5": {
-            # 测试&验证集表现： 回报率:3.993467403812881 倍  |  最大回撤： -0.3039647395511332 | 胜率：0.5988700564971752 | 总交易数：177.0 | sharpe_ratio：1.8829951317387763
-
-            'base_ratio': 0.86,
-            'target_profit': 0.35,
-            'hard_stop_loss': -0.14,
-            'max_hold_days': 25,
-            'max_positions': 5,
-            'min_probability': 0.55,
-        },
-        "参数7": {
-            # 测试&验证集表现： 回报率:3.927396771363962 倍  |  最大回撤： -0.2486922880000421 | 胜率：0.5706521739130435 | 总交易数：184.0 | sharpe_ratio：1.8441101108037592
-
-            'base_ratio': 1.0,
-            'target_profit': 0.35,
+            'target_profit': 0.3,
             'hard_stop_loss': -0.12,
-            'max_hold_days': 25,
-            'max_positions': 5,
-            'min_probability': 0.55,
-        },
-        "参数12": {
-            # 测试&验证集表现： 回报率:3.773247064693432 倍  |  最大回撤： -0.2743779367396639 | 胜率：0.5518453427065027 | 总交易数：569.0 | sharpe_ratio：1.820856926118496
-
-            'base_ratio': 0.86,
-            'target_profit': 0.2,
-            'hard_stop_loss': -0.12,
-            'max_hold_days': 25,
-            'max_positions': 10,
+            'max_hold_days': 20,
+            'max_positions': 3,
             'min_probability': 0.5,
         },
-        "参数13": {
-            # 测试&验证集表现： 回报率:3.744923589483595 倍  |  最大回撤： -0.2377550560989665 | 胜率：0.5702479338842975 | 总交易数：121.0 | sharpe_ratio：1.6406033611213324
+     "参数2":   {  # 测试&验证集表现： 回报率:9.243922233581545 倍  |  最大回撤： -0.3756839036941528 | 胜率：0.5548780487804879 | 总交易数：164.0 | sharpe_ratio：1.7308561041331585
+
+            'base_ratio': 1.0,
+            'target_profit': 0.3,
+            'hard_stop_loss': -0.12,
+            'max_hold_days': 15,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数3":   {  # 测试&验证集表现： 回报率:8.407488822937012 倍  |  最大回撤： -0.256617784500122 | 胜率：0.5333333333333333 | 总交易数：165.0 | sharpe_ratio：1.69266180163751
+
+            'base_ratio': 1.0,
+            'target_profit': 0.3,
+            'hard_stop_loss': -0.1,
+            'max_hold_days': 15,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数4":   {  # 测试&验证集表现： 回报率:8.303739547729492 倍  |  最大回撤： -0.3692026734352112 | 胜率：0.5548780487804879 | 总交易数：164.0 | sharpe_ratio：1.6932015796703674
+
+            'base_ratio': 0.86,
+            'target_profit': 0.3,
+            'hard_stop_loss': -0.12,
+            'max_hold_days': 15,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数5":   {  # 测试&验证集表现： 回报率:8.209771156311035 倍  |  最大回撤： -0.3695238828659057 | 胜率：0.4829931972789115 | 总交易数：147.0 | sharpe_ratio：1.5262493650261288
+
+            'base_ratio': 0.86,
+            'target_profit': 0.3,
+            'hard_stop_loss': -0.12,
+            'max_hold_days': 20,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数6":   {  # 测试&验证集表现： 回报率:8.147415161132812 倍  |  最大回撤： -0.2562417387962341 | 胜率：0.5481927710843374 | 总交易数：166.0 | sharpe_ratio：1.6919786561088015
+
+            'base_ratio': 1.0,
+            'target_profit': 0.25,
+            'hard_stop_loss': -0.1,
+            'max_hold_days': 15,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数7":   {  # 测试&验证集表现： 回报率:8.136591911315918 倍  |  最大回撤： -0.3759572505950928 | 胜率：0.4931506849315068 | 总交易数：146.0 | sharpe_ratio：1.5490179375491655
 
             'base_ratio': 1.0,
             'target_profit': 0.25,
             'hard_stop_loss': -0.12,
-            'max_hold_days': 25,
+            'max_hold_days': 20,
             'max_positions': 3,
-            'min_probability': 0.55,
+            'min_probability': 0.5,
         },
-        "参数14": {
-            # 测试&验证集表现： 回报率:3.736008264728841 倍  |  最大回撤： -0.2815895291172428 | 胜率：0.5288461538461539 | 总交易数：728.0 | sharpe_ratio：1.678440363333714
+     "参数8":   {  # 测试&验证集表现： 回报率:7.651432991027832 倍  |  最大回撤： -0.3758613765239715 | 胜率：0.5493827160493827 | 总交易数：162.0 | sharpe_ratio：1.5934165067140589
+
+            'base_ratio': 1.0,
+            'target_profit': 0.35,
+            'hard_stop_loss': -0.12,
+            'max_hold_days': 15,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数9":   {  # 测试&验证集表现： 回报率:7.591700553894043 倍  |  最大回撤： -0.3726043105125427 | 胜率：0.5592105263157895 | 总交易数：152.0 | sharpe_ratio：1.652882446013948
+
+            'base_ratio': 1.0,
+            'target_profit': 0.3,
+            'hard_stop_loss': -0.14,
+            'max_hold_days': 15,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数10":   {  # 测试&验证集表现： 回报率:7.1439528465271 倍  |  最大回撤： -0.2412424832582473 | 胜率：0.5333333333333333 | 总交易数：165.0 | sharpe_ratio：1.7102585419478633
+
+            'base_ratio': 0.86,
+            'target_profit': 0.3,
+            'hard_stop_loss': -0.1,
+            'max_hold_days': 15,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数11":   {  # 测试&验证集表现： 回报率:7.001957893371582 倍  |  最大回撤： -0.3722607493400574 | 胜率：0.5751633986928104 | 总交易数：153.0 | sharpe_ratio：1.6272248476336877
+
+            'base_ratio': 1.0,
+            'target_profit': 0.25,
+            'hard_stop_loss': -0.14,
+            'max_hold_days': 15,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数12":   {  # 测试&验证集表现： 回报率:6.989335060119629 倍  |  最大回撤： -0.24082712829113 | 胜率：0.5481927710843374 | 总交易数：166.0 | sharpe_ratio：1.709129036976445
+
+            'base_ratio': 0.86,
+            'target_profit': 0.25,
+            'hard_stop_loss': -0.1,
+            'max_hold_days': 15,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数13":   {  # 测试&验证集表现： 回报率:6.8816399574279785 倍  |  最大回撤： -0.3691330850124359 | 胜率：0.4931506849315068 | 总交易数：146.0 | sharpe_ratio：1.4623397401790064
+
+            'base_ratio': 0.86,
+            'target_profit': 0.25,
+            'hard_stop_loss': -0.12,
+            'max_hold_days': 20,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数14":   {  # 测试&验证集表现： 回报率:6.827212333679199 倍  |  最大回撤： -0.3727701902389526 | 胜率：0.5223880597014925 | 总交易数：134.0 | sharpe_ratio：1.5837166412737569
+
+            'base_ratio': 1.0,
+            'target_profit': 0.3,
+            'hard_stop_loss': -0.14,
+            'max_hold_days': 20,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数15":   {  # 测试&验证集表现： 回报率:6.779245376586914 倍  |  最大回撤： -0.3756135404109955 | 胜率：0.5487804878048781 | 总交易数：164.0 | sharpe_ratio：1.5663027328069203
 
             'base_ratio': 1.0,
             'target_profit': 0.25,
             'hard_stop_loss': -0.12,
             'max_hold_days': 15,
-            'max_positions': 10,
+            'max_positions': 3,
             'min_probability': 0.5,
         },
-        "参数30": {
-            # 测试&验证集表现： 回报率:3.2777853423786643 倍  |  最大回撤： -0.298554911997731 | 胜率：0.5792079207920792 | 总交易数：202.0 | sharpe_ratio：1.7924028657508888
+     "参数16":   {  # 测试&验证集表现： 回报率:6.732370853424072 倍  |  最大回撤： -0.2554791569709778 | 胜率：0.5056179775280899 | 总交易数：178.0 | sharpe_ratio：1.5719606244180258
+
+            'base_ratio': 1.0,
+            'target_profit': 0.25,
+            'hard_stop_loss': -0.08,
+            'max_hold_days': 15,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数17":   {  # 测试&验证集表现： 回报率:6.704967498779297 倍  |  最大回撤： -0.3693049550056457 | 胜率：0.5493827160493827 | 总交易数：162.0 | sharpe_ratio：1.5446521204610593
+
+            'base_ratio': 0.86,
+            'target_profit': 0.35,
+            'hard_stop_loss': -0.12,
+            'max_hold_days': 15,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数18":   {  # 测试&验证集表现： 回报率:6.646203517913818 倍  |  最大回撤： -0.3765421509742737 | 胜率：0.4615384615384615 | 总交易数：143.0 | sharpe_ratio：1.4362085696267493
+
+            'base_ratio': 1.0,
+            'target_profit': 0.35,
+            'hard_stop_loss': -0.12,
+            'max_hold_days': 20,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数19":   {  # 测试&验证集表现： 回报率:6.551973342895508 倍  |  最大回撤： -0.2945987284183502 | 胜率：0.5277777777777778 | 总交易数：216.0 | sharpe_ratio：1.742972954710985
+
+            'base_ratio': 1.0,
+            'target_profit': 0.3,
+            'hard_stop_loss': -0.14,
+            'max_hold_days': 20,
+            'max_positions': 5,
+            'min_probability': 0.5,
+        },
+     "参数20":   {  # 测试&验证集表现： 回报率:6.3145246505737305 倍  |  最大回撤： -0.3664690256118774 | 胜率：0.5592105263157895 | 总交易数：152.0 | sharpe_ratio：1.6354535764362053
+
+            'base_ratio': 0.86,
+            'target_profit': 0.3,
+            'hard_stop_loss': -0.14,
+            'max_hold_days': 15,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数21":   {  # 测试&验证集表现： 回报率:6.311837673187256 倍  |  最大回撤： -0.275324285030365 | 胜率：0.4899328859060403 | 总交易数：149.0 | sharpe_ratio：1.7615055301791342
+
+            'base_ratio': 1.0,
+            'target_profit': 0.3,
+            'hard_stop_loss': -0.1,
+            'max_hold_days': 20,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数22":   {  # 测试&验证集表现： 回报率:6.1972856521606445 倍  |  最大回撤： -0.3670036196708679 | 胜率：0.5223880597014925 | 总交易数：134.0 | sharpe_ratio：1.5132792599105482
+
+            'base_ratio': 0.86,
+            'target_profit': 0.3,
+            'hard_stop_loss': -0.14,
+            'max_hold_days': 20,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数23":   {  # 测试&验证集表现： 回报率:6.0582594871521 倍  |  最大回撤： -0.3689103722572326 | 胜率：0.5487804878048781 | 总交易数：164.0 | sharpe_ratio：1.521924897150055
+
+            'base_ratio': 0.86,
+            'target_profit': 0.25,
+            'hard_stop_loss': -0.12,
+            'max_hold_days': 15,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数24":   {  # 测试&验证集表现： 回报率:6.0537638664245605 倍  |  最大回撤： -0.3745830953121185 | 胜率：0.4556962025316455 | 总交易数：158.0 | sharpe_ratio：1.6066903106006358
+
+            'base_ratio': 1.0,
+            'target_profit': 0.3,
+            'hard_stop_loss': -0.08,
+            'max_hold_days': 20,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数25":   {  # 测试&验证集表现： 回报率:5.908920764923096 倍  |  最大回撤： -0.2559486031532287 | 胜率：0.4829545454545454 | 总交易数：176.0 | sharpe_ratio：1.494564912835088
+
+            'base_ratio': 1.0,
+            'target_profit': 0.3,
+            'hard_stop_loss': -0.08,
+            'max_hold_days': 15,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数26":   {  # 测试&验证集表现： 回报率:5.857236862182617 倍  |  最大回撤： -0.3664835095405578 | 胜率：0.5751633986928104 | 总交易数：153.0 | sharpe_ratio：1.6112346007834124
+
+            'base_ratio': 0.86,
+            'target_profit': 0.25,
+            'hard_stop_loss': -0.14,
+            'max_hold_days': 15,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数27":   {  # 测试&验证集表现： 回报率:5.802156514811328 倍  |  最大回撤： -0.1685815076319301 | 胜率：0.6388888888888888 | 总交易数：36.0 | sharpe_ratio：1.4401387960519183
+
+            'base_ratio': 1.0,
+            'target_profit': 0.3,
+            'hard_stop_loss': -0.12,
+            'max_hold_days': 30,
+            'max_positions': 3,
+            'min_probability': 0.65,
+        },
+     "参数28":   {  # 测试&验证集表现： 回报率:5.684689521789551 倍  |  最大回撤： -0.2405117303133011 | 胜率：0.5056179775280899 | 总交易数：178.0 | sharpe_ratio：1.572534447813497
+
+            'base_ratio': 0.86,
+            'target_profit': 0.25,
+            'hard_stop_loss': -0.08,
+            'max_hold_days': 15,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数29":   {  # 测试&验证集表现： 回报率:5.621988773345947 倍  |  最大回撤： -0.37245774269104 | 胜率：0.5533333333333333 | 总交易数：150.0 | sharpe_ratio：1.4790487093729008
+
+            'base_ratio': 1.0,
+            'target_profit': 0.35,
+            'hard_stop_loss': -0.14,
+            'max_hold_days': 15,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数30":   {  # 测试&验证集表现： 回报率:5.618757192406428 倍  |  最大回撤： -0.1801588726414506 | 胜率：0.6388888888888888 | 总交易数：36.0 | sharpe_ratio：1.41890800089061
+
+            'base_ratio': 1.0,
+            'target_profit': 0.3,
+            'hard_stop_loss': -0.14,
+            'max_hold_days': 30,
+            'max_positions': 3,
+            'min_probability': 0.65,
+        },
+     "参数31":   {  # 测试&验证集表现： 回报率:5.618587493896484 倍  |  最大回撤： -0.2913717031478882 | 胜率：0.5277777777777778 | 总交易数：216.0 | sharpe_ratio：1.705361428716547
+
+            'base_ratio': 0.86,
+            'target_profit': 0.3,
+            'hard_stop_loss': -0.14,
+            'max_hold_days': 20,
+            'max_positions': 5,
+            'min_probability': 0.5,
+        },
+     "参数32":   {  # 测试&验证集表现： 回报率:5.536756038665772 倍  |  最大回撤： -0.2570503354072571 | 胜率：0.5304878048780488 | 总交易数：164.0 | sharpe_ratio：1.4375484725830396
+
+            'base_ratio': 1.0,
+            'target_profit': 0.35,
+            'hard_stop_loss': -0.1,
+            'max_hold_days': 15,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数33":   {  # 测试&验证集表现： 回报率:5.517695834641043 倍  |  最大回撤： -0.182530643540699 | 胜率：0.6571428571428571 | 总交易数：35.0 | sharpe_ratio：1.4148078431808098
+
+            'base_ratio': 1.0,
+            'target_profit': 0.35,
+            'hard_stop_loss': -0.12,
+            'max_hold_days': 30,
+            'max_positions': 3,
+            'min_probability': 0.65,
+        },
+     "参数34":   {  # 测试&验证集表现： 回报率:5.4419941902160645 倍  |  最大回撤： -0.258291482925415 | 胜率：0.4899328859060403 | 总交易数：149.0 | sharpe_ratio：1.717501604490905
+
+            'base_ratio': 0.86,
+            'target_profit': 0.3,
+            'hard_stop_loss': -0.1,
+            'max_hold_days': 20,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数35":   {  # 测试&验证集表现： 回报率:5.382510185241699 倍  |  最大回撤： -0.3607107698917389 | 胜率：0.4556962025316455 | 总交易数：158.0 | sharpe_ratio：1.5697724146929428
+
+            'base_ratio': 0.86,
+            'target_profit': 0.3,
+            'hard_stop_loss': -0.08,
+            'max_hold_days': 20,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数36":   {  # 测试&验证集表现： 回报率:5.354336166034942 倍  |  最大回撤： -0.1799795163030758 | 胜率：0.6388888888888888 | 总交易数：36.0 | sharpe_ratio：1.39551849403822
+
+            'base_ratio': 1.0,
+            'target_profit': 0.25,
+            'hard_stop_loss': -0.14,
+            'max_hold_days': 30,
+            'max_positions': 3,
+            'min_probability': 0.65,
+        },
+     "参数37":   {  # 测试&验证集表现： 回报率:5.345534270056252 倍  |  最大回撤： -0.1822984456624478 | 胜率：0.6571428571428571 | 总交易数：35.0 | sharpe_ratio：1.393885942127982
+
+            'base_ratio': 1.0,
+            'target_profit': 0.35,
+            'hard_stop_loss': -0.14,
+            'max_hold_days': 30,
+            'max_positions': 3,
+            'min_probability': 0.65,
+        },
+     "参数38":   {  # 测试&验证集表现： 回报率:5.318344593048096 倍  |  最大回撤： -0.3765435218811035 | 胜率：0.5 | 总交易数：120.0 | sharpe_ratio：1.2897402362857218
+
+            'base_ratio': 1.0,
+            'target_profit': 0.25,
+            'hard_stop_loss': -0.12,
+            'max_hold_days': 30,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数39":   {  # 测试&验证集表现： 回报率:5.315167427062988 倍  |  最大回撤： -0.3726497590541839 | 胜率：0.5333333333333333 | 总交易数：135.0 | sharpe_ratio：1.4375303307635152
+
+            'base_ratio': 1.0,
+            'target_profit': 0.25,
+            'hard_stop_loss': -0.14,
+            'max_hold_days': 20,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数40":   {  # 测试&验证集表现： 回报率:5.302205805428808 倍  |  最大回撤： -0.1614791516942697 | 胜率：0.6486486486486487 | 总交易数：37.0 | sharpe_ratio：1.3974162966385852
+
+            'base_ratio': 1.0,
+            'target_profit': 0.25,
+            'hard_stop_loss': -0.12,
+            'max_hold_days': 30,
+            'max_positions': 3,
+            'min_probability': 0.65,
+        },
+     "参数41":   {  # 测试&验证集表现： 回报率:5.264245986938477 倍  |  最大回撤： -0.3697632551193237 | 胜率：0.4615384615384615 | 总交易数：143.0 | sharpe_ratio：1.3300631396708735
+
+            'base_ratio': 0.86,
+            'target_profit': 0.35,
+            'hard_stop_loss': -0.12,
+            'max_hold_days': 20,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数42":   {  # 测试&验证集表现： 回报率:5.209444046020508 倍  |  最大回撤： -0.3779636919498443 | 胜率：0.4683544303797468 | 总交易数：158.0 | sharpe_ratio：1.5400894528507127
+
+            'base_ratio': 1.0,
+            'target_profit': 0.25,
+            'hard_stop_loss': -0.08,
+            'max_hold_days': 20,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数43":   {  # 测试&验证集表现： 回报率:5.186557769775391 倍  |  最大回撤： -0.3730794787406921 | 胜率：0.5230769230769231 | 总交易数：130.0 | sharpe_ratio：1.4399082049654426
+
+            'base_ratio': 1.0,
+            'target_profit': 0.35,
+            'hard_stop_loss': -0.14,
+            'max_hold_days': 20,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数44":   {  # 测试&验证集表现： 回报率:5.059552192687988 倍  |  最大回撤： -0.275324285030365 | 胜率：0.5034013605442177 | 总交易数：147.0 | sharpe_ratio：1.6696473721187128
+
+            'base_ratio': 1.0,
+            'target_profit': 0.25,
+            'hard_stop_loss': -0.1,
+            'max_hold_days': 20,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数45":   {  # 测试&验证集表现： 回报率:5.005805015563965 倍  |  最大回撤： -0.2413773536682129 | 胜率：0.4829545454545454 | 总交易数：176.0 | sharpe_ratio：1.4901674064648256
+
+            'base_ratio': 0.86,
+            'target_profit': 0.3,
+            'hard_stop_loss': -0.08,
+            'max_hold_days': 15,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数46":   {  # 测试&验证集表现： 回报率:4.992498874664307 倍  |  最大回撤： -0.2945987284183502 | 胜率：0.5142857142857142 | 总交易数：210.0 | sharpe_ratio：1.5839634407017005
+
+            'base_ratio': 1.0,
+            'target_profit': 0.35,
+            'hard_stop_loss': -0.14,
+            'max_hold_days': 20,
+            'max_positions': 5,
+            'min_probability': 0.5,
+        },
+     "参数47":   {  # 测试&验证集表现： 回报率:4.981665134429932 倍  |  最大回撤： -0.3289549946784973 | 胜率：0.4678111587982833 | 总交易数：233.0 | sharpe_ratio：1.576454258870962
+
+            'base_ratio': 0.86,
+            'target_profit': 0.3,
+            'hard_stop_loss': -0.12,
+            'max_hold_days': 20,
+            'max_positions': 5,
+            'min_probability': 0.5,
+        },
+     "参数48":   {  # 测试&验证集表现： 回报率:4.966577053070068 倍  |  最大回撤： -0.3317374885082245 | 胜率：0.4678111587982833 | 总交易数：233.0 | sharpe_ratio：1.5724634119876977
+
+            'base_ratio': 1.0,
+            'target_profit': 0.3,
+            'hard_stop_loss': -0.12,
+            'max_hold_days': 20,
+            'max_positions': 5,
+            'min_probability': 0.5,
+        },
+     "参数49":   {  # 测试&验证集表现： 回报率:4.955350399017334 倍  |  最大回撤： -0.2559797465801239 | 胜率：0.5529411764705883 | 总交易数：170.0 | sharpe_ratio：1.688479405413035
+
+            'base_ratio': 1.0,
+            'target_profit': 0.2,
+            'hard_stop_loss': -0.1,
+            'max_hold_days': 15,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数50":   {  # 测试&验证集表现： 回报率:4.935972996789069 倍  |  最大回撤： -0.166561700803945 | 胜率：0.6388888888888888 | 总交易数：36.0 | sharpe_ratio：1.4645863332881202
+
+            'base_ratio': 0.86,
+            'target_profit': 0.3,
+            'hard_stop_loss': -0.12,
+            'max_hold_days': 30,
+            'max_positions': 3,
+            'min_probability': 0.65,
+        },
+     "参数51":   {  # 测试&验证集表现： 回报率:4.897202968597412 倍  |  最大回撤： -0.369759738445282 | 胜率：0.5 | 总交易数：120.0 | sharpe_ratio：1.237252771693475
+
+            'base_ratio': 0.86,
+            'target_profit': 0.25,
+            'hard_stop_loss': -0.12,
+            'max_hold_days': 30,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数52":   {  # 测试&验证集表现： 回报率:4.7900071144104 倍  |  最大回撤： -0.3666563332080841 | 胜率：0.5333333333333333 | 总交易数：135.0 | sharpe_ratio：1.3617558381435164
+
+            'base_ratio': 0.86,
+            'target_profit': 0.25,
+            'hard_stop_loss': -0.14,
+            'max_hold_days': 20,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数53":   {  # 测试&验证集表现： 回报率:4.785916765247902 倍  |  最大回撤： -0.1717947895444184 | 胜率：0.6571428571428571 | 总交易数：35.0 | sharpe_ratio：1.4478890334341994
+
+            'base_ratio': 0.86,
+            'target_profit': 0.35,
+            'hard_stop_loss': -0.12,
+            'max_hold_days': 30,
+            'max_positions': 3,
+            'min_probability': 0.65,
+        },
+     "参数54":   {  # 测试&验证集表现： 回报率:4.771627515833353 倍  |  最大回撤： -0.1884367296224533 | 胜率：0.6388888888888888 | 总交易数：36.0 | sharpe_ratio：1.439951951309507
+
+            'base_ratio': 0.86,
+            'target_profit': 0.3,
+            'hard_stop_loss': -0.14,
+            'max_hold_days': 30,
+            'max_positions': 3,
+            'min_probability': 0.65,
+        },
+     "参数55":   {  # 测试&验证集表现： 回报率:4.721324920654297 倍  |  最大回撤： -0.2945987284183502 | 胜率：0.5412844036697247 | 总交易数：218.0 | sharpe_ratio：1.5395479077575118
+
+            'base_ratio': 1.0,
+            'target_profit': 0.25,
+            'hard_stop_loss': -0.14,
+            'max_hold_days': 20,
+            'max_positions': 5,
+            'min_probability': 0.5,
+        },
+     "参数56":   {  # 测试&验证集表现： 回报率:4.692964553833008 倍  |  最大回撤： -0.3637036681175232 | 胜率：0.4683544303797468 | 总交易数：158.0 | sharpe_ratio：1.508121681984634
+
+            'base_ratio': 0.86,
+            'target_profit': 0.25,
+            'hard_stop_loss': -0.08,
+            'max_hold_days': 20,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数57":   {  # 测试&验证集表现： 回报率:4.625908858630486 倍  |  最大回撤： -0.1880084061451986 | 胜率：0.6571428571428571 | 总交易数：35.0 | sharpe_ratio：1.4231475109388056
+
+            'base_ratio': 0.86,
+            'target_profit': 0.35,
+            'hard_stop_loss': -0.14,
+            'max_hold_days': 30,
+            'max_positions': 3,
+            'min_probability': 0.65,
+        },
+     "参数58":   {  # 测试&验证集表现： 回报率:4.571394443511963 倍  |  最大回撤： -0.367202490568161 | 胜率：0.5230769230769231 | 总交易数：130.0 | sharpe_ratio：1.3846036927739545
+
+            'base_ratio': 0.86,
+            'target_profit': 0.35,
+            'hard_stop_loss': -0.14,
+            'max_hold_days': 20,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数59":   {  # 测试&验证集表现： 回报率:4.541333198547363 倍  |  最大回撤： -0.2416596859693527 | 胜率：0.5304878048780488 | 总交易数：164.0 | sharpe_ratio：1.4254372765983112
+
+            'base_ratio': 0.86,
+            'target_profit': 0.35,
+            'hard_stop_loss': -0.1,
+            'max_hold_days': 15,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数60":   {  # 测试&验证集表现： 回报率:4.519039154052734 倍  |  最大回撤： -0.3668621182441711 | 胜率：0.5533333333333333 | 总交易数：150.0 | sharpe_ratio：1.4387035410274238
+
+            'base_ratio': 0.86,
+            'target_profit': 0.35,
+            'hard_stop_loss': -0.14,
+            'max_hold_days': 15,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数61":   {  # 测试&验证集表现： 回报率:4.51566219329834 倍  |  最大回撤： -0.2405167669057846 | 胜率：0.5529411764705883 | 总交易数：170.0 | sharpe_ratio：1.6826908691405504
+
+            'base_ratio': 0.86,
+            'target_profit': 0.2,
+            'hard_stop_loss': -0.1,
+            'max_hold_days': 15,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数62":   {  # 测试&验证集表现： 回报率:4.509552823447044 倍  |  最大回撤： -0.1880928202830736 | 胜率：0.6388888888888888 | 总交易数：36.0 | sharpe_ratio：1.4102076440177411
+
+            'base_ratio': 0.86,
+            'target_profit': 0.25,
+            'hard_stop_loss': -0.14,
+            'max_hold_days': 30,
+            'max_positions': 3,
+            'min_probability': 0.65,
+        },
+     "参数63":   {  # 测试&验证集表现： 回报率:4.474770245366682 倍  |  最大回撤： -0.1652176979109628 | 胜率：0.6486486486486487 | 总交易数：37.0 | sharpe_ratio：1.4164804721004691
+
+            'base_ratio': 0.86,
+            'target_profit': 0.25,
+            'hard_stop_loss': -0.12,
+            'max_hold_days': 30,
+            'max_positions': 3,
+            'min_probability': 0.65,
+        },
+     "参数64":   {  # 测试&验证集表现： 回报率:4.45323657989502 倍  |  最大回撤： -0.3804577589035034 | 胜率：0.4435483870967742 | 总交易数：124.0 | sharpe_ratio：1.1531474141831173
+
+            'base_ratio': 1.0,
+            'target_profit': 0.3,
+            'hard_stop_loss': -0.12,
+            'max_hold_days': 30,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数65":   {  # 测试&验证集表现： 回报率:4.438129425048828 倍  |  最大回撤： -0.375484824180603 | 胜率：0.5688622754491018 | 总交易数：167.0 | sharpe_ratio：1.5761154545011455
 
             'base_ratio': 1.0,
             'target_profit': 0.2,
             'hard_stop_loss': -0.12,
-            'max_hold_days': 25,
-            'max_positions': 5,
-            'min_probability': 0.55,
+            'max_hold_days': 15,
+            'max_positions': 3,
+            'min_probability': 0.5,
         },
-        "参数51": {
-            # 测试&验证集表现： 回报率:3.118385199134094 倍  |  最大回撤： -0.2745721627666539 | 胜率：0.5792079207920792 | 总交易数：202.0 | sharpe_ratio：1.8092983086513577
+     "参数66":   {  # 测试&验证集表现： 回报率:4.42442798614502 倍  |  最大回撤： -0.332008421421051 | 胜率：0.4935064935064935 | 总交易数：231.0 | sharpe_ratio：1.5456469754343205
+
+            'base_ratio': 1.0,
+            'target_profit': 0.25,
+            'hard_stop_loss': -0.12,
+            'max_hold_days': 20,
+            'max_positions': 5,
+            'min_probability': 0.5,
+        },
+     "参数67":   {  # 测试&验证集表现： 回报率:4.396641254425049 倍  |  最大回撤： -0.258291482925415 | 胜率：0.5034013605442177 | 总交易数：147.0 | sharpe_ratio：1.622872342400167
+
+            'base_ratio': 0.86,
+            'target_profit': 0.25,
+            'hard_stop_loss': -0.1,
+            'max_hold_days': 20,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数68":   {  # 测试&验证集表现： 回报率:4.395993232727051 倍  |  最大回撤： -0.3288589715957641 | 胜率：0.4935064935064935 | 总交易数：231.0 | sharpe_ratio：1.5362132292817152
+
+            'base_ratio': 0.86,
+            'target_profit': 0.25,
+            'hard_stop_loss': -0.12,
+            'max_hold_days': 20,
+            'max_positions': 5,
+            'min_probability': 0.5,
+        },
+     "参数69":   {  # 测试&验证集表现： 回报率:4.3033223152160645 倍  |  最大回撤： -0.2740742862224579 | 胜率：0.4857142857142857 | 总交易数：175.0 | sharpe_ratio：1.3091040369393454
+
+            'base_ratio': 1.0,
+            'target_profit': 0.35,
+            'hard_stop_loss': -0.08,
+            'max_hold_days': 15,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数70":   {  # 测试&验证集表现： 回报率:4.24276065826416 倍  |  最大回撤： -0.3936936259269714 | 胜率：0.4415584415584415 | 总交易数：154.0 | sharpe_ratio：1.4120631036842364
+
+            'base_ratio': 1.0,
+            'target_profit': 0.35,
+            'hard_stop_loss': -0.08,
+            'max_hold_days': 20,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数71":   {  # 测试&验证集表现： 回报率:4.239380359649658 倍  |  最大回撤： -0.2916379570960998 | 胜率：0.5142857142857142 | 总交易数：210.0 | sharpe_ratio：1.5482562167371932
+
+            'base_ratio': 0.86,
+            'target_profit': 0.35,
+            'hard_stop_loss': -0.14,
+            'max_hold_days': 20,
+            'max_positions': 5,
+            'min_probability': 0.5,
+        },
+     "参数72":   {  # 测试&验证集表现： 回报率:4.214303016662598 倍  |  最大回撤： -0.3686795234680176 | 胜率：0.5688622754491018 | 总交易数：167.0 | sharpe_ratio：1.5633198171434572
 
             'base_ratio': 0.86,
             'target_profit': 0.2,
             'hard_stop_loss': -0.12,
+            'max_hold_days': 15,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数73":   {  # 测试&验证集表现： 回报率:4.204626083374023 倍  |  最大回撤： -0.275324285030365 | 胜率：0.5163398692810458 | 总交易数：153.0 | sharpe_ratio：1.575598294840682
+
+            'base_ratio': 1.0,
+            'target_profit': 0.2,
+            'hard_stop_loss': -0.1,
+            'max_hold_days': 20,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数74":   {  # 测试&验证集表现： 回报率:4.186824798583984 倍  |  最大回撤： -0.3700732886791229 | 胜率：0.4435483870967742 | 总交易数：124.0 | sharpe_ratio：1.1258724843726728
+
+            'base_ratio': 0.86,
+            'target_profit': 0.3,
+            'hard_stop_loss': -0.12,
+            'max_hold_days': 30,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数75":   {  # 测试&验证集表现： 回报率:4.102839946746826 倍  |  最大回撤： -0.3085469603538513 | 胜率：0.4267782426778242 | 总交易数：239.0 | sharpe_ratio：1.481441898097803
+
+            'base_ratio': 0.86,
+            'target_profit': 0.3,
+            'hard_stop_loss': -0.08,
             'max_hold_days': 25,
             'max_positions': 5,
-            'min_probability': 0.55,
+            'min_probability': 0.5,
         },
+     "参数76":   {  # 测试&验证集表现： 回报率:4.088455677032471 倍  |  最大回撤： -0.373075395822525 | 胜率：0.495575221238938 | 总交易数：113.0 | sharpe_ratio：1.24314097016932
+
+            'base_ratio': 1.0,
+            'target_profit': 0.3,
+            'hard_stop_loss': -0.14,
+            'max_hold_days': 30,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数77":   {  # 测试&验证集表现： 回报率:4.071984767913818 倍  |  最大回撤： -0.2903741002082824 | 胜率：0.5349794238683128 | 总交易数：243.0 | sharpe_ratio：1.5484673215462026
+
+            'base_ratio': 1.0,
+            'target_profit': 0.3,
+            'hard_stop_loss': -0.14,
+            'max_hold_days': 15,
+            'max_positions': 5,
+            'min_probability': 0.5,
+        },
+     "参数78":   {  # 测试&验证集表现： 回报率:4.048669815063477 倍  |  最大回撤： -0.3730648458003998 | 胜率：0.5309734513274337 | 总交易数：113.0 | sharpe_ratio：1.2887897934290882
+
+            'base_ratio': 1.0,
+            'target_profit': 0.25,
+            'hard_stop_loss': -0.14,
+            'max_hold_days': 30,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        },
+     "参数79":   {  # 测试&验证集表现： 回报率:4.031685829162598 倍  |  最大回撤： -0.2910231947898865 | 胜率：0.5412844036697247 | 总交易数：218.0 | sharpe_ratio：1.493501260312462
+
+            'base_ratio': 0.86,
+            'target_profit': 0.25,
+            'hard_stop_loss': -0.14,
+            'max_hold_days': 20,
+            'max_positions': 5,
+            'min_probability': 0.5,
+        },
+     "参数80":   {  # 测试&验证集表现： 回报率:4.031220436096191 倍  |  最大回撤： -0.2544674873352051 | 胜率：0.5055555555555555 | 总交易数：180.0 | sharpe_ratio：1.536547439294639
+
+            'base_ratio': 1.0,
+            'target_profit': 0.2,
+            'hard_stop_loss': -0.08,
+            'max_hold_days': 15,
+            'max_positions': 3,
+            'min_probability': 0.5,
+        }
     }
-    STRATEGY_PARAMS_V8 = STRATEGY_PARAMS_CANDIDATES_V8["参数7"]
+    STRATEGY_PARAMS_V8 = STRATEGY_PARAMS_CANDIDATES_V8["参数1"]
 
     STRATEGY_PARAMS_CANDIDATES_V6 = {
          "参数1":   {  # 测试&验证集表现： 回报率:2.047596549254404 倍  |  最大回撤： -0.3770660175339056 | 胜率：0.5326633165829145 | 总交易数：199.0 | sharpe_ratio：1.805274568297548
