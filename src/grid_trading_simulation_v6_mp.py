@@ -216,7 +216,7 @@ def finding_best_params_concurrent(initial_capital):
     """
     start_time = time.time()
     print("🚀 正在加载数据并进行模型预测...")
-    df_result = data_process(dataset_dir=DATASET_DIR, required_files=["validation_set.csv"])
+    df_result = data_process(dataset_dir=DATASET_DIR, required_files=["test_set.csv", "validation_set.csv"])
 
     # ==========================================
     # 参数优化部分 (并发)

@@ -333,7 +333,7 @@ def run_strategy_with_analysis(name, params, capital, full_data):
 
 def run_concurrent(init_capital, data):
     # 使用线程池并发执行
-    max_workers = 20  # 根据CPU核心数调整
+    max_workers = 8  # 根据CPU核心数调整
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
         # 准备任务
         futures = []
@@ -350,11 +350,11 @@ def run_concurrent(init_capital, data):
         for future in concurrent.futures.as_completed(futures):
             try:
                 strategy_name, analysis_result_txt, analysis_result_df = future.result()
-                # hold_analyzer(version="v8", param_suffix=strategy_name)
-                # profit_analyzer(version="v8", param_suffix=strategy_name)
-                # return_analyzer(version="v8", param_suffix=strategy_name)
-                # trades_analyzer(version="v8", param_suffix=strategy_name)
-                # correlation_analyzer(version="v8", param_suffix=strategy_name)
+                hold_analyzer(version="v8", param_suffix=strategy_name)
+                profit_analyzer(version="v8", param_suffix=strategy_name)
+                return_analyzer(version="v8", param_suffix=strategy_name)
+                trades_analyzer(version="v8", param_suffix=strategy_name)
+                correlation_analyzer(version="v8", param_suffix=strategy_name)
                 analysis_result_txt.append("*" * 60)
                 all_analysis_result.extend(analysis_result_txt)
                 analysis_df_list.append(analysis_result_df)

@@ -123,7 +123,7 @@ def concurrent_parameter_optimization(df_result, initial_capital):
     print(f"开始参数优化，共 {len(param_combinations)} 种组合...")
 
     # 设置进程数：建议使用 CPU 核心数减 1
-    num_workers = 32 #max(1, os.cpu_count() - 1)
+    num_workers = 20 #max(1, os.cpu_count() - 1)
     print(f"使用 {num_workers} 个进程进行并发回测...")
 
     results = []
@@ -217,61 +217,6 @@ def analyze_optimization_results(results_df):
 
     return best_composite
 
-def plot_optimization_results(results_df):
-    """
-    绘制参数优化结果
-    """
-    fig, axes = plt.subplots(2, 2, figsize=(15, 12))
-
-    # 收益率分布
-    axes[0, 0].hist(results_df['return_rate'] * 100, bins=30, alpha=0.7, color='skyblue')
-    axes[0, 0].set_xlabel('收益率 (%)')
-    axes[0, 0].set_ylabel('频次')
-    axes[0, 0].set_title('收益率分布')
-    axes[0, 0].grid(True, alpha=0.3)
-
-    # 胜率分布
-    axes[0, 1].hist(results_df['win_rate'] * 100, bins=30, alpha=0.7, color='lightgreen')
-    axes[0, 1].set_xlabel('胜率 (%)')
-    axes[0, 1].set_ylabel('频次')
-    axes[0, 1].set_title('胜率分布')
-    axes[0, 1].grid(True, alpha=0.3)
-
-    # 收益率 vs 最大回撤
-    scatter = axes[1, 0].scatter(results_df['return_rate'] * 100,
-                                 results_df['max_drawdown'] * 100,
-                                 c=results_df['win_rate'] * 100,
-                                 cmap='viridis', alpha=0.6)
-    axes[1, 0].set_xlabel('收益率 (%)')
-    axes[1, 0].set_ylabel('最大回撤 (%)')
-    axes[1, 0].set_title('收益率 vs 最大回撤 (颜色表示胜率)')
-    axes[1, 0].grid(True, alpha=0.3)
-    plt.colorbar(scatter, ax=axes[1, 0], label='胜率 (%)')
-
-    # 参数影响分析 - base_ratio 对收益率的影响
-    for base_ratio in results_df['base_ratio'].unique():
-        subset = results_df[results_df['base_ratio'] == base_ratio]
-        axes[1, 1].scatter(subset['target_profit'], subset['return_rate'] * 100,
-                           label=f'base_ratio={base_ratio}', alpha=0.6)
-    axes[1, 1].set_xlabel('目标收益')
-    axes[1, 1].set_ylabel('收益率 (%)')
-    axes[1, 1].set_title('目标收益 vs 收益率 (按底仓比例)')
-    axes[1, 1].legend()
-    axes[1, 1].grid(True, alpha=0.3)
-
-    plt.tight_layout()
-    plt.show()
-
-    # 显示前10名结果
-    logger.info(f"\n前10名参数组合:")
-    top_10 = results_df.nlargest(10, 'composite_score')[[
-        'return_rate', 'annual_return', 'max_drawdown', 'win_rate',
-        'sharpe_ratio', 'total_trades', 'composite_score',
-        'base_ratio', 'target_profit',
-        'hard_stop_loss', 'max_hold_days',
-    ]]
-    logger.info(top_10.round(4))
-
 
 def finding_best_params_concurrent(capital, data):
     """
@@ -290,7 +235,6 @@ def finding_best_params_concurrent(capital, data):
     # ==========================================
     if not optimization_results.empty:
         best_params = analyze_optimization_results(optimization_results)
-        plot_optimization_results(optimization_results)
 
         # 保存结果到文件
         output_file = 'parameter_optimization_results_concurrent_top_k_v7.csv'
@@ -317,6 +261,7 @@ if __name__ == "__main__":
     print("🚀 正在加载数据并进行模型预测...")
     df_result = data_process(required_files =
                              [
+                             str(DATASET_DIR / "test_set.csv"),
                              str(DATASET_DIR / "validation_set.csv"),
                              ])
     finding_best_params_concurrent(initial_capital,df_result)

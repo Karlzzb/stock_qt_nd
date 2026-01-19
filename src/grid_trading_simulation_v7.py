@@ -361,11 +361,11 @@ class TopKRankStrategy:
         self.daily_assets.append({'date': today, 'total': self.cash + mkt_val})
 
 from config.settings import MODEL_DIR, DATASET_DIR, RESULT_DIR,STOCK_DATA_DIR
-from comm_fun import model_config, label_encoding
+from comm_fun import model_config
+from predictor_model_v2 import PriceChangePredictor
 import os
-import predictor_model
-import glob
-from data_process import data_clean
+from data_process  import prepare_real_daily_features
+from feature_pipeline import load_price_data, convert_dict_to_dataframe_from_index
 # 设置日志
 import logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -418,21 +418,9 @@ def load_and_prepare_data(dataset_dir = DATASET_DIR, required_files=None, start_
     except Exception as e:
         logger.error(f"❌时间戳转换错误: {e}")
         return None
-    # 按时间戳排序
-    combined_df = combined_df.sort_values('timestamp').reset_index(drop=True)
-    logger.debug(f"✅数据时间范围: {combined_df['timestamp'].min()} 到 {combined_df['timestamp'].max()}")
-
 
     # BUGFIXED 这里没有对数据做预处理，导致模拟和真实场景不一致
-    combined_df = data_clean(combined_df)
-
-    # NOTE: 对ST、次新股和不能交易的进行过滤
-    combined_df, _ = label_encoding(combined_df)
-    st_df = pd.read_csv(DATASET_DIR / 'st_stocks_list.csv')
-    new_df = pd.read_csv(DATASET_DIR / 'new_stocks_list.csv')
-    combined_df = combined_df[combined_df['symbol'].str.match(r'^[60]')]
-    combined_df = combined_df[~combined_df['symbol'].isin(st_df['ts_code'])]
-    combined_df = combined_df[~combined_df['symbol'].isin(new_df['ts_code'])]
+    combined_df = prepare_real_daily_features(combined_df)
 
     # 时间过滤
     if start_date is not None:
@@ -459,70 +447,6 @@ def load_and_prepare_data(dataset_dir = DATASET_DIR, required_files=None, start_
 
     return combined_df
 
-def load_price_data(directory_path):
-    """
-    加载目录下所有 {symbol}_price_data.pkl 文件到内存中
-    """
-    # 构建文件匹配模式
-    pattern = os.path.join(directory_path, "*_price_data.pkl")
-
-    # 查找所有匹配的文件
-    file_paths = glob.glob(pattern)
-
-    # 存储所有DataFrame的字典
-    dataframes = {}
-
-    for file_path in file_paths:
-        try:
-            # 从文件名提取symbol
-            filename = os.path.basename(file_path)
-            symbol = filename.replace("_price_data.pkl", "")
-
-            # 加载pkl文件
-            df = pd.read_pickle(file_path)
-
-            # 不在这里计算技术指标，避免数据泄露
-            # 技术指标将在按日期处理时实时计算
-            dataframes[symbol] = df
-            logger.debug(f"成功加载: {filename}, 数据形状: {df.shape}")
-
-        except Exception as e:
-            logger.error(f"加载文件 {file_path} 时出错: {e}")
-
-    logger.debug(f"共加载 {len(dataframes)} 个股票数据文件")
-    return dataframes
-
-def convert_dict_to_dataframe_from_index(stock_dict):
-    logger.debug(f"正在合并 {len(stock_dict)} 只股票的数据 (时间在Index)...")
-    all_dfs = []
-
-    for symbol, sub_df in stock_dict.items():
-        # 1. 复制一份，以免修改原始数据
-        temp_df = sub_df.copy()
-
-        # 2. 【关键】把时间索引变成普通列
-        # reset_index() 会把原来的 index 变成一列，通常默认列名叫 'index'
-        temp_df = temp_df.reset_index()
-
-        # 3. 重命名该列为 'timestamp'，方便后续统一计算
-        # 你的 index 名字可能是 None，也可能是 'timestamp' 或 'trade_date'
-        # 我们统一把第一列（也就是刚刚 reset 出来的索引列）改名为 'timestamp'
-        temp_df.rename(columns={temp_df.columns[0]: 'timestamp'}, inplace=True)
-
-        # 4. 加上股票代码列
-        temp_df['symbol'] = symbol
-
-        all_dfs.append(temp_df)
-
-    # 5. 合并
-    big_df = pd.concat(all_dfs, axis=0, ignore_index=True)
-
-    # 确保是时间格式
-    big_df['timestamp'] = pd.to_datetime(big_df['timestamp'])
-    big_df.sort_values(by=['timestamp', 'symbol'], inplace=True)
-
-    logger.debug(f"合并完成！数据形状: {big_df.shape}")
-    return big_df
 
 def data_process(dataset_dir = DATASET_DIR, required_files=None):
     if required_files is None:
@@ -531,7 +455,7 @@ def data_process(dataset_dir = DATASET_DIR, required_files=None):
     raw_df = load_and_prepare_data(dataset_dir = dataset_dir, required_files = required_files)
     # 计算时间范围
     start_date = raw_df['timestamp'].min().strftime("%Y%m%d")
-    end_date = (raw_df['timestamp'].max() + pd.Timedelta(days=11)).strftime("%Y%m%d")
+    end_date = (raw_df['timestamp'].max() + pd.Timedelta(days=60)).strftime("%Y%m%d")
 
     # 检查 full_data_df 的重复情况
     df_duplicates = raw_df.duplicated(subset=['symbol', 'timestamp']).sum()
@@ -544,7 +468,7 @@ def data_process(dataset_dir = DATASET_DIR, required_files=None):
     logger.debug(f"去重前: {before_count_full} 条, 去重后: {after_count_full} 条, 移除: {before_count_full - after_count_full} 条重复数据")
 
     # 初始化预测器
-    predictor = predictor_model.PriceChangePredictor(model_dir=str(MODEL_DIR))
+    predictor = PriceChangePredictor(model_dir=str(MODEL_DIR))
     # 保存symbol列
     symbol_info = raw_df[
         'symbol'].copy() if 'symbol' in raw_df.columns else pd.Series(
@@ -563,7 +487,7 @@ def data_process(dataset_dir = DATASET_DIR, required_files=None):
 
     full_data_df = full_data_df[
         (full_data_df['timestamp'] >= pd.to_datetime(start_date))
-        # & (full_data_df['timestamp'] <= pd.to_datetime(end_date))
+        & (full_data_df['timestamp'] <= pd.to_datetime(end_date))
         ]
 
     # 检查 full_data_df 的重复情况

@@ -29,6 +29,9 @@ def extract_parameters_from_csv(input_file, sort_column, top_k, output_file=None
     # 取前top_k行
     top_params = df_sorted.head(top_k)
 
+    # 指定 过滤
+    top_params = top_params[(top_params['win_rate'] > 0.5) & (top_params['total_trades'] > 140) & (top_params['max_drawdown'] > -0.32)]
+
     # 生成格式化输出
     output_lines = ["{"]
 
@@ -40,6 +43,9 @@ def extract_parameters_from_csv(input_file, sort_column, top_k, output_file=None
         max_hold_days = int(row['max_hold_days'])
         max_positions = int(row['max_positions'])
         min_probability = row['min_probability']
+
+        if row['win_rate'] < 0.5 or row['total_trades'] < 140 or row['max_drawdown'] < -0.3:
+            continue
 
         # 添加注释行
         comment = f' "参数{i}":   {{  # 测试&验证集表现： 回报率:{row["return_rate"]} 倍  |  最大回撤： {row["max_drawdown"]} | 胜率：{row["win_rate"]} | 总交易数：{row["total_trades"]} | sharpe_ratio：{row["sharpe_ratio"]}'
