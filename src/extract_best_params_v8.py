@@ -29,10 +29,7 @@ def extract_parameters_from_csv(input_file, sort_column, top_k, output_file=None
     # 取前top_k行
     top_params = df_sorted.head(top_k)
 
-    # 指定 过滤
-    top_params = top_params[(top_params['win_rate'] > 0.5) & (top_params['total_trades'] > 140) & (top_params['max_drawdown'] > -0.32)]
-
-    # 生成格式化输出
+     # 生成格式化输出
     output_lines = ["{"]
 
     for i, (index, row) in enumerate(top_params.iterrows(), 1):
@@ -44,7 +41,7 @@ def extract_parameters_from_csv(input_file, sort_column, top_k, output_file=None
         max_positions = int(row['max_positions'])
         min_probability = row['min_probability']
 
-        if row['win_rate'] < 0.5 or row['total_trades'] < 140 or row['max_drawdown'] < -0.3:
+        if row['win_rate'] < 0.48 or row['total_trades'] < 140 or row['max_drawdown'] < -0.38:
             continue
 
         # 添加注释行
@@ -119,7 +116,7 @@ def main():
 from config.settings import RESULT_DIR
 
 if __name__ == "__main__":
-    extract_parameters_from_csv(str(RESULT_DIR / "parameter_optimization_results_concurrent_v8.csv"),
+    extract_parameters_from_csv(str(RESULT_DIR / "parameter_optimization_results_concurrent_v8_15d.csv"),
                                 'return_rate',80, str(RESULT_DIR / "best_params_v8.json")
 
          )

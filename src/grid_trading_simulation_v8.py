@@ -350,11 +350,11 @@ def run_concurrent(init_capital, data):
         for future in concurrent.futures.as_completed(futures):
             try:
                 strategy_name, analysis_result_txt, analysis_result_df = future.result()
-                hold_analyzer(version="v8", param_suffix=strategy_name)
-                profit_analyzer(version="v8", param_suffix=strategy_name)
-                return_analyzer(version="v8", param_suffix=strategy_name)
-                trades_analyzer(version="v8", param_suffix=strategy_name)
-                correlation_analyzer(version="v8", param_suffix=strategy_name)
+                # hold_analyzer(version="v8", param_suffix=strategy_name)
+                # profit_analyzer(version="v8", param_suffix=strategy_name)
+                # return_analyzer(version="v8", param_suffix=strategy_name)
+                # trades_analyzer(version="v8", param_suffix=strategy_name)
+                # correlation_analyzer(version="v8", param_suffix=strategy_name)
                 analysis_result_txt.append("*" * 60)
                 all_analysis_result.extend(analysis_result_txt)
                 analysis_df_list.append(analysis_result_df)
@@ -376,8 +376,8 @@ def run_concurrent(init_capital, data):
 if __name__ == "__main__":
     processed_data = data_process(dataset_dir=DATASET_DIR,
                              required_files=[
-                                 "train_set.csv",
-                                 "test_set.csv",
+                                 # "train_set.csv",
+                                 # "test_set.csv",
                                  "validation_set.csv",
                              ])
     run_concurrent(248526, processed_data)
