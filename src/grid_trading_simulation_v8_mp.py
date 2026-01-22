@@ -105,7 +105,7 @@ def concurrent_parameter_optimization(df_result, init_capital):
         'base_ratio': [0.86, 1.0],
         'target_profit': [0.15, 0.2, 0.25, 0.3, 0.35],
         'hard_stop_loss': [-0.08, -0.1, -0.12, -0.14],
-        'max_hold_days': [5, 7, 10, 15, 20, 25, 30],
+        'max_hold_days': [15, 16, 17, 18, 19, 20, 25, 30],
         'max_positions': [3, 5, 8, 10],
         'min_probability': [0.5, 0.55, 0.65, 0.75, 0.8],
     }
