@@ -7,14 +7,11 @@ import os
 from datetime import datetime, timedelta
 import json
 from typing import Optional, Dict, List
-from predictor_model_v2 import PriceChangePredictor
-from config.settings import STOCK_DATA_DIR
+
+from  predictor_model_v2 import PriceChangePredictor
 import glob
 # 设置日志
 import logging
-
-from src.data_process import prepare_real_daily_features
-
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 import matplotlib.pyplot as plt
@@ -22,7 +19,7 @@ import matplotlib.pyplot as plt
 plt.rcParams['font.sans-serif'] = ['SimHei']
 plt.rcParams['axes.unicode_minus'] = False
 
-from config.settings import MODEL_DIR, REAL_TRADING_DIR, DAILY_FEATURE_DIR, DATASET_DIR
+from config.settings import STOCK_DATA_DIR, MODEL_DIR, REAL_TRADING_DIR, DAILY_FEATURE_DIR, DATASET_DIR
 from comm_fun import ALLOCATION_STRATEGY, PROBA_MEAN, PROBA_STD,model_config, label_encoding
 STRATEGY_PARAMS = model_config.STRATEGY_PARAMS_V8
 class PortfolioState:
@@ -314,7 +311,50 @@ class SmartSniperInvestor:
         combined_df = pd.concat(all_data, ignore_index=True)
         logger.debug(f"✅ 合并后总数据量: {len(combined_df)} 行")
 
-        return prepare_real_daily_features(combined_df)
+        # 检查必要列是否存在
+        required_columns = ['timestamp', model_config.LABEL_COL]
+        missing_columns = [col for col in required_columns if col not in combined_df.columns]
+        if missing_columns:
+            logger.error(f"❌缺少必要列: {missing_columns}")
+            return None
+
+        # 转换时间戳
+        try:
+            combined_df['timestamp'] = pd.to_datetime(combined_df['timestamp'])
+        except Exception as e:
+            logger.error(f"❌时间戳转换错误: {e}")
+            return None
+        # 按时间戳排序
+        combined_df = combined_df.sort_values('timestamp').reset_index(drop=True)
+        logger.debug(f"✅数据时间范围: {combined_df['timestamp'].min()} 到 {combined_df['timestamp'].max()}")
+
+        # BUGFIXED 这里没有对数据做预处理，导致模拟和真实场景不一致
+        # 1. 去重
+        before_count = len(combined_df)
+        combined_df = combined_df.sort_values(['timestamp', 'symbol', 'confirmation_score']).drop_duplicates(subset=['timestamp', 'symbol'], keep='last')
+        after_count = len(combined_df)
+        logger.info(f"已删除 {before_count - after_count} 重复行，剩余 {after_count} 行数据")
+
+        # 关键列数据无效剔除
+        key_columns = ['timestamp'] + model_config.OPTIMIZED_FEATURE_COLS
+        # 只删除关键列为 NaN 的行
+        before_count = len(combined_df)
+        combined_df = combined_df.dropna(subset=key_columns)
+        after_count = len(combined_df)
+        logger.info(f"已删除 {before_count - after_count} 个包含关键列 NaN 的行，剩余 {after_count} 行数据")
+
+        # NOTE: 对ST、次新股和不能交易的进行过滤
+        combined_df, _ = label_encoding(combined_df)
+        full_len = len(combined_df)
+        st_df = pd.read_csv(DATASET_DIR / 'st_stocks_list.csv')
+        new_df = pd.read_csv(DATASET_DIR / 'new_stocks_list.csv')
+        combined_df = combined_df[combined_df['symbol'].str.match(r'^[60]')]
+        combined_df = combined_df[~combined_df['symbol'].isin(st_df['ts_code'])]
+        combined_df = combined_df[~combined_df['symbol'].isin(new_df['ts_code'])]
+        logger.info(
+            f"原始数据量: {full_len} 过滤后数据量: {len(combined_df)} 过滤后%: {(len(combined_df) / full_len) * 100:.2f}%")
+
+        return combined_df
 
     def prepare_realtime_data(self, target_date: datetime) -> Optional[pd.DataFrame]:
         """
@@ -439,7 +479,7 @@ class SmartSniperInvestor:
         # BUGFIX如果当天没有特征数据，不生成 买入建议，但要生成卖出建议啊！
         buy_suggestions = []
         if realtime_data is None or len(realtime_data) == 0:
-            logger.warning(f"❌ 无法获取{feature_date.strftime('%Y-%m-%d')}数据，不执行买入建议")
+            logger.error(f"❌ 无法获取{feature_date.strftime('%Y-%m-%d')}数据，停止执行")
         else:
             # 2. 生成交易建议（不实际执行）
             buy_suggestions = self._generate_buy_suggestions(realtime_data, predict_date)
@@ -843,7 +883,7 @@ def run(predict_date = datetime.now(), feature_date = datetime.now(), real_tradi
 
     # 初始化投资器
     investor = SmartSniperInvestor(
-        initial_capital=248526,
+        initial_capital=200000,
         max_positions=10,
         base_dir=real_trading_dir
     )
@@ -879,27 +919,19 @@ from feature_pipeline import load_price_data, feature_generator
 if __name__ == "__main__":
 
     # 定义常量
-    PREDICT_DATE = datetime(2020, 5, 29) # 预测日期
-    FEATURE_DATE = datetime(2020, 5, 28) # 特征数据日期
+    PREDICT_DATE = datetime(2026, 1, 26) # 预测日期
+    FEATURE_DATE = datetime(2026, 1, 23) # 特征数据日期
     FEATURE_DATE_STR = FEATURE_DATE.strftime("%Y-%m-%d")
 
     # 优化后的主流程
     logger.info(f"1.开始加载股票数据，特征日期: {FEATURE_DATE_STR}...")
 
     try:
-        # 1. 数据转换和特征生成（链式操作）
-        full_stocks_data = load_price_data(str(STOCK_DATA_DIR))
-
-        if not full_stocks_data:
-            raise ValueError("加载的股票数据为空")
-
-        logger.info(f"2.成功加载并处理 {len(full_stocks_data)} 只股票数据")
-
-        # 2. 生成特征
-        # features = feature_generator(full_stocks_data, FEATURE_DATE_STR)
+        # 1. 生成特征
+        # features = feature_generator(FEATURE_DATE_STR)
         features = pd.read_csv( DAILY_FEATURE_DIR / f"realistic_features_{FEATURE_DATE.strftime('%Y%m%d')}.csv")
 
-        # 3.开始运行策略
+        # 2.开始运行策略
         if features is not None:
             feature_count = len(features) if hasattr(features, '__len__') else "未知"
             logger.info(f"特征生成完成: {FEATURE_DATE_STR}, 生成 {feature_count} 个特征")
