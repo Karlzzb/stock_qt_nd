@@ -569,7 +569,7 @@ class Config:
             'min_probability': 0.5,
         },
     }
-    STRATEGY_PARAMS_V8 = STRATEGY_PARAMS_CANDIDATES_V8["参数1"]
+    STRATEGY_PARAMS_V8 = STRATEGY_PARAMS_CANDIDATES_V8["参数2"]
 
     STRATEGY_PARAMS_CANDIDATES_V6 = {
          "参数1":   {  # 测试&验证集表现： 回报率:2.047596549254404 倍  |  最大回撤： -0.3770660175339056 | 胜率：0.5326633165829145 | 总交易数：199.0 | sharpe_ratio：1.805274568297548
