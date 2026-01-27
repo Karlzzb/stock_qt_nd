@@ -919,8 +919,8 @@ from feature_pipeline import load_price_data, feature_generator
 if __name__ == "__main__":
 
     # 定义常量
-    PREDICT_DATE = datetime(2026, 1, 27) # 预测日期
-    FEATURE_DATE = datetime(2026, 1, 26) # 特征数据日期
+    PREDICT_DATE = datetime(2026, 1, 28) # 预测日期
+    FEATURE_DATE = datetime(2026, 1, 27) # 特征数据日期
     FEATURE_DATE_STR = FEATURE_DATE.strftime("%Y-%m-%d")
 
     # 优化后的主流程
@@ -928,8 +928,8 @@ if __name__ == "__main__":
 
     try:
         # 1. 生成特征
-        features = feature_generator(FEATURE_DATE_STR)
-        # features = pd.read_csv( DAILY_FEATURE_DIR / f"realistic_features_{FEATURE_DATE.strftime('%Y%m%d')}.csv")
+        # features = feature_generator(FEATURE_DATE_STR)
+        features = pd.read_csv( DAILY_FEATURE_DIR / f"realistic_features_{FEATURE_DATE.strftime('%Y%m%d')}.csv")
 
         # 2.开始运行策略
         if features is not None:

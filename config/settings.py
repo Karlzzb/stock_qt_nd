@@ -29,6 +29,7 @@ MODEL_DIR = PROJECT_ROOT.parent / 'models'
 RESULT_DIR = PROJECT_ROOT.parent / 'output'
 REAL_TRADING_DIR = PROJECT_ROOT.parent / 'real_trading_data'
 REAL_TRADING_DIR_SIMULATION = PROJECT_ROOT.parent / 'real_trading_data_simulation' #tmp_simulation_realworld_v8.py用来模拟
+STOCK_DATA_PLK_DIR =  get_base_path().parent / 'stock_data'
 STOCK_DATA_DIR =  get_base_path().parent / 'stock_data/csv'
 DAILY_FEATURE_DIR = get_base_path().parent  / 'real_feature_data_daily'
 

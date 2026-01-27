@@ -1,11 +1,13 @@
 import tinyshare as ts
 import pandas as pd
 from datetime import datetime
-from config.settings import STOCK_DATA_DIR, DATASET_DIR
+from pathlib import Path
+from config.settings import DATASET_DIR
+
 
 # 1. 设置你的Tushare Token
 # 替换 '你的Tushare Token' 为你在官网获取的真实字符串
-token = "eSB3V16uqfii3t2QZa6RXqV4Xf5vVeaai5JXr2lv51mUVH0B0IXYx3tW56c04451"  # 去tushare.pro注册获取
+token = "cKHSze8x7OkbB6nc6JPpm1Wa4snHMf2gmi5maiNBv4Rmbg2K0P279QVWa577fc40"  # 去tushare.pro注册获取
 ts.set_token(token)
 
 # 2. 初始化Pro接口
@@ -35,6 +37,6 @@ print(f"找到 {len(new_stocks)} 只发行天数不足100天的新股")
 
 # 7. 保存到CSV文件
 new_stocks.to_csv(DATASET_DIR / 'new_stocks_list.csv', index=False, encoding='utf-8-sig')
-print(f"\n股票列表已保存到 'model_dataset/st_stocks_list.csv'")
+print(f"\n股票列表已保存到 '{DATASET_DIR}/st_stocks_list.csv'")
 st_stocks.to_csv(DATASET_DIR / 'st_stocks_list.csv', index=False, encoding='utf-8-sig')
-print("\n股票列表已保存到 'model_dataset/st_stocks_list.csv'")
+print(f"\n股票列表已保存到 '{DATASET_DIR}/st_stocks_list.csv'")

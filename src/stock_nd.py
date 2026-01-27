@@ -5,57 +5,8 @@ import tinyshare as ts
 import os
 import pickle
 import time
-from config.settings import STOCK_DATA_DIR
-
-def get_stock_data_akshare(symbol, start_date="20100101", end_date=None):
-    """
-    使用akshare获取A股数据
-    参数:
-        symbol: 股票代码 (如: '000001')
-        start_date: 开始日期 'YYYYMMDD'
-        end_date: 结束日期 'YYYYMMDD', 默认为今天
-    """
-    try:
-        if end_date is None:
-            end_date = datetime.now().strftime("%Y%m%d")
-
-        # 获取数据
-        stock_data = ak.stock_zh_a_hist(symbol=symbol, period="daily",
-                                        start_date=start_date, end_date=end_date)
-
-        if stock_data.empty:
-            print(f"未找到 {symbol} 的数据")
-            return None
-
-        # 格式化数据
-        stock_data['日期'] = pd.to_datetime(stock_data['日期'])
-        stock_data.set_index('日期', inplace=True)
-
-        # 选择需要的列并重命名
-        data = stock_data[['开盘', '最高', '最低', '收盘', '成交量']]
-        data.columns = ['open', 'high', 'low', 'close', 'volume']
-
-        print(f"成功获取 {symbol} 数据: {len(data)} 行")
-
-        return data
-
-    except Exception as e:
-        print(f"获取 {symbol} 数据时出错: {e}")
-        return None
-
-def get_all_a_stocks():
-    """
-    获取所有A股股票列表
-    """
-    try:
-        # 获取A股股票列表
-        stock_info_a_code_name = ak.stock_info_a_code_name()
-        print(f"获取到 {len(stock_info_a_code_name)} 只A股股票")
-        return stock_info_a_code_name
-    except Exception as e:
-        print(f"获取A股列表失败: {e}")
-        return None
-
+from config.settings import STOCK_DATA_DIR, STOCK_DATA_PLK_DIR
+import traceback
 
 def init_tushare(token):
     """初始化tushare"""
@@ -95,6 +46,7 @@ def get_all_stocks_tushare(pro):
         return stock_basic
     except Exception as e:
         print(f"获取股票列表失败: {e}")
+        traceback.print_exc()
         return None
 
 
@@ -187,7 +139,7 @@ def fetch_index_price_data(promision, symbol, start_date=None, end_date=None):
 
     return price_data
 
-def save_price_data(price_data, symbol, data_dir=str(STOCK_DATA_DIR)):
+def save_price_data(price_data, symbol, data_dir=str(STOCK_DATA_PLK_DIR)):
     """
     保存股票价格数据到文件
     """
@@ -203,7 +155,7 @@ def save_price_data(price_data, symbol, data_dir=str(STOCK_DATA_DIR)):
     return filename
 
 
-def save_price_data_csv(price_data, symbol, data_dir=str(STOCK_DATA_DIR / 'csv')):
+def save_price_data_csv(price_data, symbol, data_dir=str(STOCK_DATA_DIR)):
     """
     保存为CSV文件（可读性更好）
     """
@@ -271,7 +223,7 @@ def fetch_symbols(promision, sample_ratio=1.0, cache_dir='../cache', cache_hours
 def main():
     from tqdm import tqdm
     index_symbols = ["000001.SH","399001.SZ"]
-    token = "eSB3V16uqfii3t2QZa6RXqV4Xf5vVeaai5JXr2lv51mUVH0B0IXYx3tW56c04451"
+    token = "cKHSze8x7OkbB6nc6JPpm1Wa4snHMf2gmi5maiNBv4Rmbg2K0P279QVWa577fc40"
     pro = init_tushare(token)
     start_date = "20090101"
     sample_ratio=1.0
