@@ -919,8 +919,8 @@ from feature_pipeline import load_price_data, feature_generator
 if __name__ == "__main__":
 
     # 定义常量
-    PREDICT_DATE = datetime(2026, 1, 30) # 预测日期
-    FEATURE_DATE = datetime(2026, 1, 29) # 特征数据日期
+    PREDICT_DATE = datetime(2026, 2, 2) # 预测日期
+    FEATURE_DATE = datetime(2026, 1, 30) # 特征数据日期
     FEATURE_DATE_STR = FEATURE_DATE.strftime("%Y-%m-%d")
 
     # 优化后的主流程
