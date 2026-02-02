@@ -1,4 +1,3 @@
-import akshare as ak
 from datetime import datetime, timedelta
 import pandas as pd
 import tinyshare as ts
