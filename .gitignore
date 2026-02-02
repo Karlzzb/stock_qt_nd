@@ -18,16 +18,12 @@ __pycache__/
 *.log
 
 # 数据文件
-*.csv
-*.json
-*.pkl
 *.zip
 
 # 模型文件
 *.pth
 *.pt
 *.bin
-models/
 swanlog/
 output/
 data/
@@ -42,7 +38,6 @@ stock_data/
 feature_data/
 cache/
 summary/
-models*/
 real_feature_data/
 real_feature_data_daily/
 model_dataset*/
@@ -58,6 +53,3 @@ real_trading_data_simulation/
 !real_trading_data/**/*.csv
 !real_trading_data/**/*.json
 !grid_trading_simulation_v4/*.csv
-!real_features_processors_v2/simulation_results/*.csv
-!real_features_processors_v2/real_trading_data/**/*.csv
-!real_features_processors_v2/real_trading_data/**/*.json
