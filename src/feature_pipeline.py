@@ -2012,6 +2012,8 @@ def get_cached_dataset(dataset_name):
     with CACHE_LOCK:
         if dataset_name not in CACHE:
             CACHE[dataset_name] = load_price_data(str(STOCK_DATA_DIR))
+
+        logger.info(f"成功加载并处理 {len(CACHE[dataset_name])} 只股票数据")
         return CACHE[dataset_name]
 
 
