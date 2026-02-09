@@ -172,7 +172,7 @@ class DailyTradingExecutor:
             
             # 等待进程结束（最多1小时）
             try:
-                returncode = process.wait(timeout=3600)
+                returncode = process.wait(timeout=36000)
             except subprocess.TimeoutExpired:
                 process.kill()
                 logger.error(f"❌ {script_name} 执行超时（超过1小时）")
@@ -404,8 +404,8 @@ def main():
     try:
         # ==================== 参数设置 ====================
         # 跳过选项
-        skip_st_filter = False   # True=跳过ST股票过滤, False=执行ST股票过滤
-        skip_stock_data = False  # True=跳过股票数据加载, False=执行股票数据加载
+        skip_st_filter = True   # True=跳过ST股票过滤, False=执行ST股票过滤
+        skip_stock_data = True  # True=跳过股票数据加载, False=执行股票数据加载
         
         # 日期设置（None表示使用默认值）
         feature_date = None # 特征日期，None=今天，或指定如: datetime(2026, 2, 6)
