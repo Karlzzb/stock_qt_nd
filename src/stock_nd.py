@@ -222,7 +222,7 @@ def fetch_symbols(promision, sample_ratio=1.0, cache_dir='../cache', cache_hours
 def main():
     from tqdm import tqdm
     index_symbols = ["000001.SH","399001.SZ"]
-    token = "cKHSze8x7OkbB6nc6JPpm1Wa4snHMf2gmi5maiNBv4Rmbg2K0P279QVWa577fc40"
+    token = "3Q4RY56w8deQac5uQkcba5wzoaUf8XBdiLvBti22gv5jTstJ4d0ywZKU247ade48"
     pro = init_tushare(token)
     start_date = "20090101"
     sample_ratio=1.0

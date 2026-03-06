@@ -135,6 +135,19 @@ class DailyTradingExecutor:
         logger.info(f"{'='*60}")
         
         try:
+            # 设置环境变量，添加项目根目录到PYTHONPATH
+            import os
+            env = os.environ.copy()
+            project_root = str(self.script_dir.parent)
+            
+            # 添加项目根目录到PYTHONPATH
+            if 'PYTHONPATH' in env:
+                env['PYTHONPATH'] = f"{project_root}{os.pathsep}{env['PYTHONPATH']}"
+            else:
+                env['PYTHONPATH'] = project_root
+            
+            logger.info(f"设置 PYTHONPATH: {project_root}")
+            
             # 使用Popen实现实时输出
             # -u 参数：强制Python使用无缓冲模式，确保输出立即显示
             process = subprocess.Popen(
@@ -145,7 +158,8 @@ class DailyTradingExecutor:
                 text=True,
                 encoding='utf-8',
                 bufsize=1,  # 行缓冲
-                universal_newlines=True
+                universal_newlines=True,
+                env=env  # 传递修改后的环境变量
             )
             
             # 实时读取并输出stdout
@@ -404,8 +418,8 @@ def main():
     try:
         # ==================== 参数设置 ====================
         # 跳过选项
-        skip_st_filter = True   # True=跳过ST股票过滤, False=执行ST股票过滤
-        skip_stock_data = True  # True=跳过股票数据加载, False=执行股票数据加载
+        skip_st_filter = False   # True=跳过ST股票过滤, False=执行ST股票过滤
+        skip_stock_data = False  # True=跳过股票数据加载, False=执行股票数据加载
         
         # 日期设置（None表示使用默认值）
         feature_date = None # 特征日期，None=今天，或指定如: datetime(2026, 2, 6)

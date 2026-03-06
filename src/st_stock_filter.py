@@ -7,7 +7,7 @@ from config.settings import DATASET_DIR
 
 # 1. 设置你的Tushare Token
 # 替换 '你的Tushare Token' 为你在官网获取的真实字符串
-token = "cKHSze8x7OkbB6nc6JPpm1Wa4snHMf2gmi5maiNBv4Rmbg2K0P279QVWa577fc40"  # 去tushare.pro注册获取
+token = "3Q4RY56w8deQac5uQkcba5wzoaUf8XBdiLvBti22gv5jTstJ4d0ywZKU247ade48"  # 去tushare.pro注册获取
 ts.set_token(token)
 
 # 2. 初始化Pro接口

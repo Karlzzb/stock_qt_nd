@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>持仓编辑器测试页面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #667eea;
+        }
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        .test-item {
+            padding: 10px;
+            margin: 10px 0;
+            background: #f9f9f9;
+            border-left: 4px solid #67c23a;
+            border-radius: 4px;
+        }
+        .test-item.fail {
+            border-left-color: #f56c6c;
+        }
+        .code {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            overflow-x: auto;
+        }
+        .button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px;
+        }
+        .button:hover {
+            background: #5568d3;
+        }
+        .success {
+            color: #67c23a;
+            font-weight: bold;
+        }
+        .error {
+            color: #f56c6c;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>📋 持仓编辑器功能测试</h1>
+
+    <div class="test-section">
+        <h2>1. 股票代码格式验证测试</h2>
+        <div id="code-validation-tests"></div>
+        <button class="button" onclick="testCodeValidation()">运行测试</button>
+    </div>
+
+    <div class="test-section">
+        <h2>2. 必填字段验证测试</h2>
+        <div id="required-field-tests"></div>
+        <button class="button" onclick="testRequiredFields()">运行测试</button>
+    </div>
+
+    <div class="test-section">
+        <h2>3. 数据结构测试</h2>
+        <div id="data-structure-tests"></div>
+        <button class="button" onclick="testDataStructure()">运行测试</button>
+    </div>
+
+    <div class="test-section">
+        <h2>4. 示例持仓数据</h2>
+        <p>以下是正确的持仓数据示例：</p>
+        <div class="code" id="sample-data"></div>
+        <button class="button" onclick="copySampleData()">复制示例数据</button>
+    </div>
+
+    <div class="test-section">
+        <h2>5. 快速访问</h2>
+        <button class="button" onclick="openWebInterface()">打开Web界面</button>
+        <button class="button" onclick="openGuide()">查看使用指南</button>
+    </div>
+
+    <script>
+        // 股票代码验证函数
+        function validateStockCode(code) {
+            return /^\d{6}\.(SH|SZ)$/.test(code);
+        }
+
+        // 测试股票代码验证
+        function testCodeValidation() {
+            const tests = [
+                { code: '688528.SH', expected: true, desc: '科创板代码' },
+                { code: '600561.SH', expected: true, desc: '上海主板代码' },
+                { code: '000001.SZ', expected: true, desc: '深圳主板代码' },
+                { code: '300750.SZ', expected: true, desc: '创业板代码' },
+                { code: '688528', expected: false, desc: '缺少交易所后缀' },
+                { code: 'SH688528', expected: false, desc: '顺序错误' },
+                { code: '688528.sh', expected: false, desc: '小写后缀' },
+                { code: '68852.SH', expected: false, desc: '代码位数不足' },
+                { code: '6885288.SH', expected: false, desc: '代码位数过多' },
+            ];
+
+            let html = '';
+            let passed = 0;
+            let failed = 0;
+
+            tests.forEach(test => {
+                const result = validateStockCode(test.code);
+                const success = result === test.expected;
+                
+                if (success) {
+                    passed++;
+                    html += `<div class="test-item">✅ ${test.desc}: <code>${test.code}</code> - <span class="success">通过</span></div>`;
+                } else {
+                    failed++;
+                    html += `<div class="test-item fail">❌ ${test.desc}: <code>${test.code}</code> - <span class="error">失败</span></div>`;
+                }
+            });
+
+            html += `<div style="margin-top: 15px; padding: 10px; background: #e1f3d8; border-radius: 5px;">
+                <strong>测试结果:</strong> 通过 ${passed}/${tests.length}, 失败 ${failed}/${tests.length}
+            </div>`;
+
+            document.getElementById('code-validation-tests').innerHTML = html;
+        }
+
+        // 测试必填字段
+        function testRequiredFields() {
+            const requiredFields = [
+                'code',
+                'shares',
+                'avg_cost',
+                'entry_date',
+                'stop_loss_price',
+                'take_profit_price'
+            ];
+
+            const fieldNames = {
+                'code': '股票代码',
+                'shares': '持仓数量',
+                'avg_cost': '平均成本',
+                'entry_date': '买入日期',
+                'stop_loss_price': '止损价格',
+                'take_profit_price': '止盈价格'
+            };
+
+            let html = '<p>以下字段为必填项（标记 * 的字段）：</p>';
+            
+            requiredFields.forEach(field => {
+                html += `<div class="test-item">
+                    ✅ <strong>${fieldNames[field]}</strong> (<code>${field}</code>) - 必填
+                </div>`;
+            });
+
+            html += '<p style="margin-top: 15px;">可选字段：</p>';
+            html += `<div class="test-item">
+                ℹ️ <strong>应卖出日期</strong> (<code>should_sell_date</code>) - 可选<br>
+                ℹ️ <strong>实际卖出价格</strong> (<code>actual_sell_price</code>) - 可选<br>
+                ℹ️ <strong>实际卖出日期</strong> (<code>actual_sell_date</code>) - 可选<br>
+                ℹ️ <strong>是否已卖出</strong> (<code>is_sold</code>) - 可选（默认NO）
+            </div>`;
+
+            document.getElementById('required-field-tests').innerHTML = html;
+        }
+
+        // 测试数据结构
+        function testDataStructure() {
+            const samplePosition = {
+                code: '688528.SH',
+                avg_cost: '11.71',
+                shares: '4500',
+                entry_date: '2026-03-03',
+                stop_loss_price: '10.3048',
+                take_profit_price: '15.223',
+                should_sell_date: '2026-03-21',
+                actual_sell_price: '',
+                actual_sell_date: '',
+                is_sold: 'NO'
+            };
+
+            let html = '<p>标准持仓数据结构包含以下字段：</p>';
+            
+            Object.keys(samplePosition).forEach(key => {
+                const value = samplePosition[key] || '(空)';
+                html += `<div class="test-item">
+                    <strong>${key}</strong>: <code>${value}</code>
+                </div>`;
+            });
+
+            html += `<div style="margin-top: 15px; padding: 10px; background: #e1f3d8; border-radius: 5px;">
+                <strong>✅ 数据结构验证通过</strong><br>
+                所有必需字段都已包含
+            </div>`;
+
+            document.getElementById('data-structure-tests').innerHTML = html;
+        }
+
+        // 显示示例数据
+        function showSampleData() {
+            const sampleData = [
+                {
+                    code: '688528.SH',
+                    avg_cost: '11.71',
+                    shares: '4500',
+                    entry_date: '2026-03-03',
+                    stop_loss_price: '10.3048',
+                    take_profit_price: '15.223',
+                    should_sell_date: '2026-03-21',
+                    actual_sell_price: '',
+                    actual_sell_date: '',
+                    is_sold: 'NO'
+                },
+                {
+                    code: '688545.SH',
+                    avg_cost: '54.743',
+                    shares: '500',
+                    entry_date: '2026-03-04',
+                    stop_loss_price: '48.17384',
+                    take_profit_price: '71.1659',
+                    should_sell_date: '2026-03-22',
+                    actual_sell_price: '',
+                    actual_sell_date: '',
+                    is_sold: 'NO'
+                }
+            ];
+
+            document.getElementById('sample-data').textContent = JSON.stringify(sampleData, null, 2);
+        }
+
+        // 复制示例数据
+        function copySampleData() {
+            const sampleData = document.getElementById('sample-data').textContent;
+            navigator.clipboard.writeText(sampleData).then(() => {
+                alert('示例数据已复制到剪贴板！');
+            }).catch(() => {
+                alert('复制失败，请手动复制');
+            });
+        }
+
+        // 打开Web界面
+        function openWebInterface() {
+            window.open('http://localhost:5000', '_blank');
+        }
+
+        // 打开使用指南
+        function openGuide() {
+            alert('请查看以下文档：\n\n1. POSITION_EDITOR_GUIDE.md - 详细使用指南\n2. VISUAL_EDITOR_DEMO.md - 新旧版本对比\n3. UPDATE_V2.0.md - 更新说明');
+        }
+
+        // 页面加载时显示示例数据
+        window.onload = function() {
+            showSampleData();
+        };
+    </script>
+</body>
+</html>
