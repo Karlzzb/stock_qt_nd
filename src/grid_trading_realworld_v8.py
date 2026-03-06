@@ -4,6 +4,13 @@ SmartSniper 实盘投资脚本 - 人工执行版本
 """
 import pandas as pd
 import os
+import sys
+
+# 获取当前脚本的绝对路径，并找到项目根目录（src的父目录）
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
 from datetime import datetime, timedelta
 import json
 from typing import Optional, Dict, List
@@ -917,19 +924,51 @@ def run(predict_date = datetime.now(), feature_date = datetime.now(), real_tradi
 from feature_pipeline import load_price_data, feature_generator
 
 if __name__ == "__main__":
-
-    # 定义常量
-    PREDICT_DATE = datetime(2026, 3, 6) # 预测日期
-    FEATURE_DATE = datetime(2026, 3, 5) # 特征数据日期
+    # 设置环境变量，添加项目根目录到PYTHONPATH
+    import argparse
+    
+    # 创建参数解析器
+    parser = argparse.ArgumentParser(description='SmartSniper 实盘投资脚本')
+    parser.add_argument('--predict-date', type=str, help='预测日期 (格式: YYYY-MM-DD)', default=None)
+    parser.add_argument('--feature-date', type=str, help='特征数据日期 (格式: YYYY-MM-DD)', default=None)
+    
+    args = parser.parse_args()
+    
+    # 解析日期参数
+    if args.predict_date:
+        try:
+            PREDICT_DATE = datetime.strptime(args.predict_date, '%Y-%m-%d')
+        except ValueError:
+            logger.error(f"预测日期格式错误: {args.predict_date}，应为 YYYY-MM-DD")
+            exit(1)
+    else:
+        PREDICT_DATE = datetime.now()  # 默认今天
+    
+    if args.feature_date:
+        try:
+            FEATURE_DATE = datetime.strptime(args.feature_date, '%Y-%m-%d')
+        except ValueError:
+            logger.error(f"特征日期格式错误: {args.feature_date}，应为 YYYY-MM-DD")
+            exit(1)
+    else:
+        FEATURE_DATE = datetime.now() - timedelta(days=1)  # 默认昨天
+    
     FEATURE_DATE_STR = FEATURE_DATE.strftime("%Y-%m-%d")
 
+    # 1. 先导入两个脚本
+    logger.info(f"1.开始更新过滤股票数据...")
+    import st_stock_filter
+    import stock_nd as sn
+    logger.info(f"2.开始加载股票数据: {FEATURE_DATE_STR}...")
+    sn.main()  # 有main就调用main
+
     # 优化后的主流程
-    logger.info(f"1.开始加载股票数据，特征日期: {FEATURE_DATE_STR}...")
+    logger.info(f"3.开始特征工程: {FEATURE_DATE_STR}...")
 
     try:
         # 1. 生成特征
-        # features = feature_generator(FEATURE_DATE_STR)
-        features = pd.read_csv( DAILY_FEATURE_DIR / f"realistic_features_{FEATURE_DATE.strftime('%Y%m%d')}.csv")
+        features = feature_generator(FEATURE_DATE_STR)
+        # features = pd.read_csv( DAILY_FEATURE_DIR / f"realistic_features_{FEATURE_DATE.strftime('%Y%m%d')}.csv")
 
         # 2.开始运行策略
         if features is not None:

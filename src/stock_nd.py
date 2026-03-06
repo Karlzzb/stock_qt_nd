@@ -5,7 +5,10 @@ import os
 import pickle
 import time
 from config.settings import STOCK_DATA_DIR, STOCK_DATA_PLK_DIR
-import traceback
+# 设置日志
+import logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 def init_tushare(token):
     """初始化tushare"""
@@ -27,7 +30,7 @@ def get_stock_data_tushare(pro, symbol, start_date='20100101', end_date=None):
         df = df.sort_values('trade_date').set_index('trade_date')
         return df[['open', 'high', 'low', 'close', 'vol']].rename(columns={'vol': 'volume'})
     except Exception as e:
-        print(f"Tushare获取{symbol}失败: {e}")
+        logger.info(f"Tushare获取{symbol}失败: {e}")
         return None
 
 def get_all_stocks_tushare(pro):
@@ -41,11 +44,10 @@ def get_all_stocks_tushare(pro):
             list_status='L',
             fields='ts_code,symbol,name,area,industry,list_date'
         )
-        print(f"获取到 {len(stock_basic)} 只A股股票")
+        logger.info(f"获取到 {len(stock_basic)} 只A股股票")
         return stock_basic
     except Exception as e:
-        print(f"获取股票列表失败: {e}")
-        traceback.print_exc()
+        logger.error(f"获取股票列表失败: {e}")
         return None
 
 
@@ -64,7 +66,7 @@ def fetch_stock_price_data(promision, symbol, start_date=None, end_date=None):
     price_data = None
 
     # 强制更新，从API获取
-    print(f"从API获取数据: {symbol}")
+    logger.info(f"从API获取数据: {symbol}")
     retry = 0
     try:
         while retry < 800:
@@ -81,10 +83,10 @@ def fetch_stock_price_data(promision, symbol, start_date=None, end_date=None):
             retry += 1
             sleep_time = min(retry*15,120)
             # sleep_time = random.uniform(retry, 10*retry)  # 随机等待2到4秒
-            print(f"retry:第{retry}次, 等待 {sleep_time:.2f} 秒...")
+            logger.info(f"retry:第{retry}次, 等待 {sleep_time:.2f} 秒...")
             time.sleep(sleep_time)
     except Exception as e:
-        print(f"获取 {symbol} 数据时出错: {e}")
+        logger.error(f"获取 {symbol} 数据时出错: {e}")
 
     return price_data
 
@@ -104,7 +106,7 @@ def fetch_index_price_data(promision, symbol, start_date=None, end_date=None):
     price_data = None
 
     # 强制更新，从API获取
-    print(f"从API获取数据: {symbol}")
+    logger.info(f"从API获取数据: {symbol}")
     retry = 0
     try:
         while retry < 4:
@@ -131,10 +133,10 @@ def fetch_index_price_data(promision, symbol, start_date=None, end_date=None):
             retry += 1
             sleep_time = retry*15
             # sleep_time = random.uniform(retry, 10*retry)  # 随机等待2到4秒
-            print(f"retry:第{retry}次, 等待 {sleep_time:.2f} 秒...")
+            logger.warning(f"retry:第{retry}次, 等待 {sleep_time:.2f} 秒...")
             time.sleep(sleep_time)
     except Exception as e:
-        print(f"获取 {symbol} 数据时出错: {e}")
+        logger.error(f"获取 {symbol} 数据时出错: {e}")
 
     return price_data
 
@@ -150,7 +152,7 @@ def save_price_data(price_data, symbol, data_dir=str(STOCK_DATA_PLK_DIR)):
     with open(filename, 'wb') as f:
         pickle.dump(price_data, f)
 
-    print(f"价格数据已保存: {filename}")
+    # logger.info(f"价格数据已保存: {filename}")
     return filename
 
 
@@ -163,7 +165,7 @@ def save_price_data_csv(price_data, symbol, data_dir=str(STOCK_DATA_DIR)):
     filename = f"{data_dir}/{symbol}_price_data.csv"
     price_data.to_csv(filename)
 
-    print(f"CSV数据已保存: {filename}")
+    logger.info(f"CSV数据已保存: {filename}")
     return filename
 
 def fetch_symbols(promision, sample_ratio=1.0, cache_dir='../cache', cache_hours=240):
@@ -185,23 +187,23 @@ def fetch_symbols(promision, sample_ratio=1.0, cache_dir='../cache', cache_hours
     if os.path.exists(cache_file):
         file_time = datetime.fromtimestamp(os.path.getmtime(cache_file))
         if datetime.now() - file_time < timedelta(hours=cache_hours):
-            print(f"从缓存加载股票数据，采样率: {sample_ratio}")
+            logger.info(f"从缓存加载股票数据，采样率: {sample_ratio}")
             with open(cache_file, 'rb') as f:
                 cached_data = pickle.load(f)
                 return cached_data['sampled_stocks']['ts_code'].tolist()
 
     # 如果没有缓存或已过期，重新获取数据
-    print("正在获取股票数据...")
+    logger.info("正在获取股票数据...")
     all_stocks = get_all_stocks_tushare(promision)
 
     # 随机采样一部分股票
     if sample_ratio < 1.0:
         sample_size = int(len(all_stocks) * sample_ratio)
         sampled_stocks = all_stocks.sample(n=sample_size, random_state=42)
-        print(f"随机采样 {sample_size} 只股票进行处理")
+        logger.info(f"随机采样 {sample_size} 只股票进行处理")
     else:
         sampled_stocks = all_stocks
-        print(f"处理全部 {len(sampled_stocks)} 只股票")
+        logger.info(f"处理全部 {len(sampled_stocks)} 只股票")
 
     # 保存到缓存文件
     cache_data = {
@@ -212,13 +214,13 @@ def fetch_symbols(promision, sample_ratio=1.0, cache_dir='../cache', cache_hours
 
     with open(cache_file, 'wb') as f:
         pickle.dump(cache_data, f)
-    print(f"股票数据已缓存到: {cache_file}")
+    logger.info(f"股票数据已缓存到: {cache_file}")
 
     return sampled_stocks['ts_code'].tolist()
 
 # 使用示例
 # data = get_stock_data_akshare('000001', start_date='20200101')
-# print(f"{data}")
+# logger.info(f"{data}")
 def main():
     from tqdm import tqdm
     index_symbols = ["000001.SH","399001.SZ"]
@@ -232,7 +234,7 @@ def main():
 
     # 指数信息获取
     for index_symbol in index_symbols:
-        index_data = fetch_index_price_data(pro, index_symbol, start_date)
+        fetch_index_price_data(pro, index_symbol, start_date)
 
     pbar = tqdm(symbols, desc="下载股票数据")
     for symbol in pbar:
@@ -243,12 +245,12 @@ def main():
                 success_count += 1
             else:
                 fail_count += 1
-                print(f"\n下载 {symbol} 失败")
+                logger.info(f"\n下载 {symbol} 失败")
         except Exception as e:
             fail_count += 1
-            print(f"\n下载 {symbol} 失败: {e}")
+            logger.info(f"\n下载 {symbol} 失败: {e}")
 
-    print(f"\n完成！成功: {success_count}, 失败: {fail_count}")
+    logger.info(f"\n完成！成功: {success_count}, 失败: {fail_count}")
 
 if __name__ == "__main__":
     main()

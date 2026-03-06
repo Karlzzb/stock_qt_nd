@@ -477,6 +477,22 @@
             <!-- 执行交易标签页 -->
             <div id="execute-tab" class="tab-content">
                 <div class="card-title">
+                    <span><span class="icon">📅</span>日期参数</span>
+                </div>
+                
+                <div class="input-group">
+                    <label>预测日期 (PREDICT_DATE)</label>
+                    <input type="date" id="predict-date-input" value="">
+                    <div style="font-size: 12px; color: #999; margin-top: 5px;">默认: 今天</div>
+                </div>
+                
+                <div class="input-group">
+                    <label>特征日期 (FEATURE_DATE)</label>
+                    <input type="date" id="feature-date-input" value="">
+                    <div style="font-size: 12px; color: #999; margin-top: 5px;">默认: 昨天</div>
+                </div>
+                
+                <div class="card-title" style="margin-top: 20px;">
                     <span><span class="icon">⚡</span>执行状态</span>
                 </div>
                 <div id="execution-status" class="status-bar">
@@ -987,10 +1003,27 @@
                 document.getElementById('execute-btn').style.display = 'none';
                 document.getElementById('stop-btn').style.display = 'block';
                 document.getElementById('status-text').textContent = '启动中...';
-                
-                const response = await fetch(API_BASE + '/api/execute', {
-                    method: 'POST'
-                });
+
+
+                // 获取今天和昨天的日期作为默认值
+                 const today = new Date();
+                 const tomorrow = new Date(today);
+                 tomorrow.setDate(today.getDate() + 1);
+                 // 格式化日期为 YYYY-MM-DD
+                 const formatDate = (date) => date.toISOString().split('T')[0];
+                 // 从输入框获取值，若无则使用默认值
+                 const predict_date = document.getElementById('predict-date-input').value || formatDate(tomorrow);
+                 const feature_date = document.getElementById('feature-date-input').value || formatDate(today);
+                 const response = await fetch(API_BASE + '/api/execute', {
+                     method: 'POST',
+                     headers: {
+                         'Content-Type': 'application/json', // 关键：声明 JSON 类型
+                     },
+                     body: JSON.stringify({
+                         predict_date: predict_date,
+                         feature_date: feature_date
+                     })
+                 });
                 
                 const result = await response.json();
                 
@@ -1192,6 +1225,28 @@
                 event.target.style.display = 'none';
             }
         };
+
+        // 页面加载完成后自动填充默认日期
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取今天和昨天的日期
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(today.getDate() + 1);
+
+            // 格式化日期为 YYYY-MM-DD（适配 date 输入框的格式）
+            const formatDate = (date) => date.toISOString().split('T')[0];
+
+            // 填充到输入框
+            const predictDateInput = document.getElementById('predict-date-input');
+            const featureDateInput = document.getElementById('feature-date-input');
+
+            if (predictDateInput) {
+                predictDateInput.value = formatDate(tomorrow);
+            }
+            if (featureDateInput) {
+                featureDateInput.value = formatDate(today);
+            }
+        });
     </script>
 </body>
 </html>

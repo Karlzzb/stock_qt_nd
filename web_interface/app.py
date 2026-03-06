@@ -20,7 +20,7 @@ CORS(app)
 BASE_DIR = Path(__file__).parent.parent
 CASH_FILE = BASE_DIR / "real_trading_data" / "investment_data" / "portfolio_cash.csv"
 POSITION_FILE = BASE_DIR / "real_trading_data" / "investment_data" / "portfolio_positions.csv"
-EXECUTOR_SCRIPT = BASE_DIR / "src" / "daily_trading_executor.py"
+EXECUTOR_SCRIPT = BASE_DIR / "src" / "grid_trading_realworld_v8.py"
 LOG_DIR = BASE_DIR / "web_interface" / "logs"
 REPORTS_DIR = BASE_DIR / "real_trading_data" / "investment_reports"
 
@@ -150,6 +150,22 @@ def execute_trading():
             return jsonify({"error": "脚本正在运行中"}), 400
         
         try:
+            # 获取日期参数
+            data = request.json or {}
+            predict_date = data.get('predict_date')
+            feature_date = data.get('feature_date')
+            
+            # 验证日期格式
+            if not predict_date or not feature_date:
+                return jsonify({"error": "缺少日期参数"}), 400
+            
+            try:
+                # 验证日期格式 YYYY-MM-DD
+                datetime.strptime(predict_date, '%Y-%m-%d')
+                datetime.strptime(feature_date, '%Y-%m-%d')
+            except ValueError:
+                return jsonify({"error": "日期格式错误，应为 YYYY-MM-DD"}), 400
+            
             # 创建日志文件
             timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
             log_file = LOG_DIR / f"execution_{timestamp}.log"
@@ -159,18 +175,22 @@ def execute_trading():
                 "start_time": datetime.now().isoformat(),
                 "log_file": str(log_file),
                 "progress": "启动中...",
-                "process": None
+                "process": None,
+                "predict_date": predict_date,
+                "feature_date": feature_date
             }
             
             # 在后台线程中执行
-            thread = threading.Thread(target=run_executor, args=(log_file,))
+            thread = threading.Thread(target=run_executor, args=(log_file, predict_date, feature_date))
             thread.daemon = True
             thread.start()
             
             return jsonify({
                 "success": True, 
                 "message": "脚本开始执行",
-                "log_file": str(log_file.name)
+                "log_file": str(log_file.name),
+                "predict_date": predict_date,
+                "feature_date": feature_date
             })
         except Exception as e:
             execution_status["running"] = False
@@ -217,15 +237,17 @@ def stop_execution():
     })
 
 
-def run_executor(log_file):
+def run_executor(log_file, predict_date, feature_date):
     """在后台运行执行脚本"""
     global execution_status
     
     try:
         with open(log_file, 'w', encoding='utf-8') as f:
-            f.write(f"=== 开始执行 {datetime.now()} ===\n\n")
+            f.write(f"=== 开始执行 {datetime.now()} ===\n")
+            f.write(f"预测日期 (PREDICT_DATE): {predict_date}\n")
+            f.write(f"特征日期 (FEATURE_DATE): {feature_date}\n\n")
             
-            # 执行Python脚本
+            # 执行Python脚本，传递日期参数
             # Windows下需要特殊处理编码
             import sys
             import locale
@@ -233,8 +255,16 @@ def run_executor(log_file):
             # 获取系统默认编码
             system_encoding = locale.getpreferredencoding()
             
+            # 构建命令，传递日期参数
+            cmd = [
+                'python', 
+                str(EXECUTOR_SCRIPT),
+                '--predict-date', predict_date,
+                '--feature-date', feature_date
+            ]
+            
             process = subprocess.Popen(
-                ['python', str(EXECUTOR_SCRIPT)],
+                cmd,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
                 cwd=str(BASE_DIR),
