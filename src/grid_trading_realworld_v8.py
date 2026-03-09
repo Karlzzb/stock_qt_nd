@@ -942,7 +942,7 @@ if __name__ == "__main__":
             logger.error(f"预测日期格式错误: {args.predict_date}，应为 YYYY-MM-DD")
             exit(1)
     else:
-        PREDICT_DATE = datetime.now()  # 默认今天
+        PREDICT_DATE = datetime.now() + timedelta(days=1)  # 昨天
     
     if args.feature_date:
         try:
@@ -951,16 +951,16 @@ if __name__ == "__main__":
             logger.error(f"特征日期格式错误: {args.feature_date}，应为 YYYY-MM-DD")
             exit(1)
     else:
-        FEATURE_DATE = datetime.now() - timedelta(days=1)  # 默认昨天
+        FEATURE_DATE = datetime.now() # 默认今天
     
     FEATURE_DATE_STR = FEATURE_DATE.strftime("%Y-%m-%d")
 
     # 1. 先导入两个脚本
-    logger.info(f"1.开始更新过滤股票数据...")
-    import st_stock_filter
-    import stock_nd as sn
-    logger.info(f"2.开始加载股票数据: {FEATURE_DATE_STR}...")
-    sn.main()  # 有main就调用main
+    # logger.info(f"1.开始更新过滤股票数据...")
+    # import st_stock_filter
+    # import stock_nd as sn
+    # logger.info(f"2.开始加载股票数据: {FEATURE_DATE_STR}...")
+    # sn.main()  # 有main就调用main
 
     # 优化后的主流程
     logger.info(f"3.开始特征工程: {FEATURE_DATE_STR}...")
