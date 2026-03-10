@@ -955,7 +955,7 @@ if __name__ == "__main__":
     
     FEATURE_DATE_STR = FEATURE_DATE.strftime("%Y-%m-%d")
 
-    # 1. 先导入两个脚本
+    #1. 先导入两个脚本
     # logger.info(f"1.开始更新过滤股票数据...")
     # import st_stock_filter
     # import stock_nd as sn

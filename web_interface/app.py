@@ -150,10 +150,11 @@ def execute_trading():
             return jsonify({"error": "脚本正在运行中"}), 400
         
         try:
-            # 获取日期参数
+            # 获取参数
             data = request.json or {}
             predict_date = data.get('predict_date')
             feature_date = data.get('feature_date')
+            update_data = data.get('update_data', False)  # 新增：是否更新数据
             
             # 验证日期格式
             if not predict_date or not feature_date:
@@ -177,11 +178,12 @@ def execute_trading():
                 "progress": "启动中...",
                 "process": None,
                 "predict_date": predict_date,
-                "feature_date": feature_date
+                "feature_date": feature_date,
+                "update_data": update_data
             }
             
             # 在后台线程中执行
-            thread = threading.Thread(target=run_executor, args=(log_file, predict_date, feature_date))
+            thread = threading.Thread(target=run_executor, args=(log_file, predict_date, feature_date, update_data))
             thread.daemon = True
             thread.start()
             
@@ -190,7 +192,8 @@ def execute_trading():
                 "message": "脚本开始执行",
                 "log_file": str(log_file.name),
                 "predict_date": predict_date,
-                "feature_date": feature_date
+                "feature_date": feature_date,
+                "update_data": update_data
             })
         except Exception as e:
             execution_status["running"] = False
@@ -237,7 +240,7 @@ def stop_execution():
     })
 
 
-def run_executor(log_file, predict_date, feature_date):
+def run_executor(log_file, predict_date, feature_date, update_data=False):
     """在后台运行执行脚本"""
     global execution_status
     
@@ -245,7 +248,8 @@ def run_executor(log_file, predict_date, feature_date):
         with open(log_file, 'w', encoding='utf-8') as f:
             f.write(f"=== 开始执行 {datetime.now()} ===\n")
             f.write(f"预测日期 (PREDICT_DATE): {predict_date}\n")
-            f.write(f"特征日期 (FEATURE_DATE): {feature_date}\n\n")
+            f.write(f"特征日期 (FEATURE_DATE): {feature_date}\n")
+            f.write(f"数据更新 (UPDATE_DATA): {update_data}\n\n")
             
             # 执行Python脚本，传递日期参数
             # Windows下需要特殊处理编码
@@ -262,6 +266,10 @@ def run_executor(log_file, predict_date, feature_date):
                 '--predict-date', predict_date,
                 '--feature-date', feature_date
             ]
+            
+            # 如果需要更新数据，添加参数
+            if update_data:
+                cmd.append('--update-data')
             
             process = subprocess.Popen(
                 cmd,

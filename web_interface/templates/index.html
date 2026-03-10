@@ -491,6 +491,20 @@
                     <input type="date" id="feature-date-input" value="">
                     <div style="font-size: 12px; color: #999; margin-top: 5px;">默认: 昨天</div>
                 </div>
+
+                <div class="card-title" style="margin-top: 20px;">
+                    <span><span class="icon">⚙️</span>执行选项</span>
+                </div>
+                
+                <div class="input-group">
+                    <label style="display: flex; align-items: center; cursor: pointer;">
+                        <input type="checkbox" id="update-data-checkbox" style="margin-right: 8px;">
+                        <span>执行数据更新脚本 (st_stock_filter 和 stock_nd)</span>
+                    </label>
+                    <div style="font-size: 12px; color: #999; margin-top: 5px;">
+                        ⚠️ 默认不执行，勾选后会先更新股票数据再进行分析（耗时较长）
+                    </div>
+                </div>
                 
                 <div class="card-title" style="margin-top: 20px;">
                     <span><span class="icon">⚡</span>执行状态</span>
@@ -994,7 +1008,11 @@
                 console.error('检查状态失败:', error);
             }
             
-            if (!confirm('确定要执行每日交易吗？\n\n这将:\n1. 下载最新股票数据\n2. 进行特征工程\n3. 生成预测\n4. 执行交易策略')) {
+            // 获取数据更新选项
+            const updateData = document.getElementById('update-data-checkbox').checked;
+            const updateDataText = updateData ? '\n4. 更新股票数据 (st_stock_filter 和 stock_nd)' : '';
+            
+            if (!confirm(`确定要执行每日交易吗？\n\n这将:\n1. 进行特征工程\n2. 生成预测\n3. 执行交易策略${updateDataText}`)) {
                 return;
             }
 
@@ -1021,7 +1039,8 @@
                      },
                      body: JSON.stringify({
                          predict_date: predict_date,
-                         feature_date: feature_date
+                         feature_date: feature_date,
+                         update_data: updateData
                      })
                  });
                 
