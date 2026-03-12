@@ -33,8 +33,18 @@ STOCK_DATA_PLK_DIR =  get_base_path().parent / 'stock_data'
 STOCK_DATA_DIR =  get_base_path().parent / 'stock_data/csv'
 DAILY_FEATURE_DIR = get_base_path().parent  / 'real_feature_data_daily'
 
+# 🆕 股票数据下载存储路径配置（可配置为外部绝对路径）
+# stock_nd.py 下载的股票数据存储目录
+STOCK_ND_DATA_DIR = Path(r'E:\stock_data\stock_nd')  # 修改为你想要的绝对路径
+STOCK_ND_PKL_DIR = STOCK_ND_DATA_DIR / 'pkl'
+STOCK_ND_CSV_DIR = STOCK_ND_DATA_DIR / 'csv'
+
+# st_stock_filter.py 下载的过滤数据存储目录
+ST_FILTER_DATA_DIR = Path(r'E:\stock_data\st_filter')  # 修改为你想要的绝对路径
+
 # 检查并创建必要目录
-for dir_path in [DATASET_DIR, LOG_DIR, CONFIG_DIR, MODEL_DIR, RESULT_DIR, REAL_TRADING_DIR, STOCK_DATA_DIR, DAILY_FEATURE_DIR]:
-    dir_path.mkdir(exist_ok=True)
+for dir_path in [DATASET_DIR, LOG_DIR, CONFIG_DIR, MODEL_DIR, RESULT_DIR, REAL_TRADING_DIR, STOCK_DATA_DIR, DAILY_FEATURE_DIR,
+                 STOCK_ND_DATA_DIR, STOCK_ND_PKL_DIR, STOCK_ND_CSV_DIR, ST_FILTER_DATA_DIR]:
+    dir_path.mkdir(parents=True, exist_ok=True)
 
 RANDOM_STATE = 42

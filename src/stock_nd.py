@@ -4,7 +4,7 @@ import tinyshare as ts
 import os
 import pickle
 import time
-from config.settings import STOCK_DATA_DIR, STOCK_DATA_PLK_DIR
+from config.settings import STOCK_ND_CSV_DIR, STOCK_ND_PKL_DIR
 # 设置日志
 import logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
