@@ -26,9 +26,29 @@ import matplotlib.pyplot as plt
 plt.rcParams['font.sans-serif'] = ['SimHei']
 plt.rcParams['axes.unicode_minus'] = False
 
-from config.settings import STOCK_DATA_DIR, MODEL_DIR, REAL_TRADING_DIR, DAILY_FEATURE_DIR, DATASET_DIR
+# 解析命令行参数 - 需要在导入config.settings之前执行
+import argparse
+import sys
+parser = argparse.ArgumentParser()
+parser.add_argument('--stock-data-dir', type=str, default=None)
+parser.add_argument('--st-stocks-list', type=str, default=None)
+parser.add_argument('--new-stocks-list', type=str, default=None)
+parser.add_argument('--predict-date', type=str, required=True)
+parser.add_argument('--feature-date', type=str, required=True)
+parser.add_argument('--update-data', action='store_true')
+args, unknown = parser.parse_known_args()
+
+# 如果传入了stock-data-dir，设置环境变量供config.settings和feature_pipeline.py使用
+if args.stock_data_dir:
+    os.environ['STOCK_DATA_DIR'] = args.stock_data_dir
+    logger.info(f"[CONFIG] 已设置STOCK_DATA_DIR={args.stock_data_dir}")
+
+# 现在导入配置，让它读取更新后的环境变量
+from config.settings import STOCK_DATA_DIR, MODEL_DIR, REAL_TRADING_DIR, DAILY_FEATURE_DIR, ST_FILTER_DATA_DIR
 from comm_fun import ALLOCATION_STRATEGY, PROBA_MEAN, PROBA_STD,model_config, label_encoding
 STRATEGY_PARAMS = model_config.STRATEGY_PARAMS_V8
+
+
 class PortfolioState:
     """投资组合状态管理器 - CSV版本，人工执行"""
 
@@ -353,8 +373,10 @@ class SmartSniperInvestor:
         # NOTE: 对ST、次新股和不能交易的进行过滤
         combined_df, _ = label_encoding(combined_df)
         full_len = len(combined_df)
-        st_df = pd.read_csv(DATASET_DIR / 'st_stocks_list.csv')
-        new_df = pd.read_csv(DATASET_DIR / 'new_stocks_list.csv')
+        st_list_path = args.st_stocks_list if args.st_stocks_list else str(ST_FILTER_DATA_DIR / 'st_stocks_list.csv')
+        new_list_path = args.new_stocks_list if args.new_stocks_list else str(ST_FILTER_DATA_DIR / 'new_stocks_list.csv')
+        st_df = pd.read_csv(st_list_path)
+        new_df = pd.read_csv(new_list_path)
         combined_df = combined_df[combined_df['symbol'].str.match(r'^[60]')]
         combined_df = combined_df[~combined_df['symbol'].isin(st_df['ts_code'])]
         combined_df = combined_df[~combined_df['symbol'].isin(new_df['ts_code'])]
@@ -954,13 +976,6 @@ if __name__ == "__main__":
         FEATURE_DATE = datetime.now() # 默认今天
     
     FEATURE_DATE_STR = FEATURE_DATE.strftime("%Y-%m-%d")
-
-    #1. 先导入两个脚本
-    # logger.info(f"1.开始更新过滤股票数据...")
-    # import st_stock_filter
-    # import stock_nd as sn
-    # logger.info(f"2.开始加载股票数据: {FEATURE_DATE_STR}...")
-    # sn.main()  # 有main就调用main
 
     # 优化后的主流程
     logger.info(f"3.开始特征工程: {FEATURE_DATE_STR}...")

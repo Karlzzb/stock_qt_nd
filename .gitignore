@@ -9,6 +9,9 @@ env/
 *.swp
 *.swo
 
+# AI
+.claude/
+
 # 缓存文件
 __pycache__/
 *.pyc

@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "read": ["*"],
+    "write": ["./**"],
+    "run": ["Node", "Npm", "Pnpm", "Python", "Pip", "Pytest", "Bash", "Sh"],
+    "deny": ["Git", "Sudo", "Rm", "Shutdown", "Reboot", "Docker", "Kubectl"]
+  },
+  "sandbox": {
+    "filesystem": {
+      "mode": "workspace"
+    },
+    "network": {
+      "enabled": true
+    }
+  }
+}

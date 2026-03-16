@@ -19,7 +19,10 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 
-from config.settings import DAILY_FEATURE_DIR, STOCK_DATA_DIR
+from config.settings import DAILY_FEATURE_DIR,  STOCK_ND_CSV_DIR
+from pathlib import Path
+DEFAULT_STOCK_DATA_DIR = Path(__file__).parent.parent / 'stock_data'
+STOCK_DATA_DIR = Path(os.environ.get('STOCK_DATA_DIR', DEFAULT_STOCK_DATA_DIR))
 
 # 大盘ID
 df_sh_symbol = "000001.SH"
@@ -605,6 +608,7 @@ class FeaturePipeline:
         try:
 
             # 1. 全量数据的特征计算
+            logger.info(f"开始全量数据的特征计算....")
             # 这里使用feature_used_df（最后100行），避免计算太久特征
             df_sorted = all_2_target_day_df.sort_values('timestamp')
             unique_dates = sorted(df_sorted['timestamp'].unique())
@@ -620,12 +624,14 @@ class FeaturePipeline:
             feature_used_df = self.generate_structure_features(feature_used_df)
             feature_used_df = self.generate_lag_features(feature_used_df)
             all_2_target_day_df = self._calculate_basic_technical_features(all_2_target_day_df) # 为计算背离所用的MACD等相关指标
+            logger.info(f"全量数据的特征计算完成")
 
             # 2. 取出预测日期的所有数据
             target_date = feature_used_df['timestamp'].dt.date.max()
             target_df = feature_used_df[feature_used_df['timestamp'].dt.date == target_date]
 
             # 3. 将大盘特征合并到目标数据（向量化操作，不需要循环）
+            logger.info(f"{target_date} 开始大盘特征计算....")
             market_features_df = self._calculate_market_features(
                 target_date,
                 df_sh=df_sh,
@@ -637,9 +643,10 @@ class FeaturePipeline:
                 right_index=True,
                 how='left'
             )
-            logger.debug(f"{target_date} 大盘特征计算")
+            logger.info(f"{target_date} 大盘特征计算完成")
 
             # 4、丰富目标日期的DF特征和背离点提取
+            logger.info(f"{target_date} 丰富目标日期的DF特征和背离点提取......")
             all_divergence_points = pd.DataFrame()
             enriched_points = pd.DataFrame()
             for _, row in tqdm(target_df.iterrows(), total=len(target_df), desc=f"{target_date.strftime('%Y%m%d')}丰富特征与计算背离"):
@@ -654,10 +661,13 @@ class FeaturePipeline:
             if all_divergence_points.empty:
                 logger.warning(f"{target_date.strftime('%Y%m%d')}无背离数据")
                 return None
+            logger.info(f"{target_date} 丰富目标日期的DF特征和背离点提取完成")
 
             # 5. 交叉特征添加
+            logger.info(f"{target_date} 交叉特征添加......")
             enriched_points = self._calculate_cross_features(enriched_points)
             enriched_points['is_quick_divergence'] = 1 if enriched_points.get('formation_period', 10) <= 3 else 0
+            logger.info(f"{target_date} 交叉特征添加完成")
 
             # 6. 背离点与特征INNER JOIN
             target_divergence_df = enriched_points.merge(
@@ -1240,7 +1250,7 @@ class FeaturePipeline:
         try:
             denoised = pywt.waverec(coeff_thresh, wavelet, mode='per')
         except Exception as e:
-            print(f"小波重构失败: {e}")
+            logger.error(f"小波重构失败: {e}")
             return series.copy()
 
         # 7. 确保输出长度与输入一致
@@ -1920,7 +1930,7 @@ def process_stocks_batch_parallel_optimized(full_stocks, batch_size=100, max_wor
         batch_dates = dates_to_process[batch_start:batch_end]
         batch_num = batch_start // batch_size + 1
 
-        print(f"\n处理批次 {batch_num} ({batch_start + 1}-{batch_end})...")
+        logger.debug(f"\n处理批次 {batch_num} ({batch_start + 1}-{batch_end})...")
 
         # 准备批处理参数
         params = []
@@ -1957,20 +1967,20 @@ def process_stocks_batch_parallel_optimized(full_stocks, batch_size=100, max_wor
         all_errors.extend(batch_errors)
 
         success_in_batch = len(batch_dates) - len(batch_errors)
-        print(f"  批次完成: {success_in_batch}/{len(batch_dates)} 成功")
+        logger.debug(f"  批次完成: {success_in_batch}/{len(batch_dates)} 成功")
         if batch_errors:
-            print(f"  本批次错误: {len(batch_errors)} 个")
+            logger.error(f"  本批次错误: {len(batch_errors)} 个")
             # 打印前几个错误
             for err in batch_errors[:3]:
-                print(f"    - {err}")
+                logger.error(f"    - {err}")
 
     # 打印最终结果
-    print(f"\n{'=' * 60}")
-    print(f"所有批次处理完成！")
-    print(f"总处理日期: {total_processed}")
-    print(f"成功: {total_processed - len(all_errors)}")
-    print(f"失败: {len(all_errors)}")
-    print('=' * 60)
+    logger.debug(f"\n{'=' * 60}")
+    logger.debug(f"所有批次处理完成！")
+    logger.debug(f"总处理日期: {total_processed}")
+    logger.debug(f"成功: {total_processed - len(all_errors)}")
+    logger.debug(f"失败: {len(all_errors)}")
+    logger.debug('=' * 60)
 
 
 def process_date_standalone(target_date):
@@ -2011,17 +2021,17 @@ def get_cached_dataset(dataset_name):
     """获取或创建数据集缓存"""
     with CACHE_LOCK:
         if dataset_name not in CACHE:
-            CACHE[dataset_name] = load_price_data(str(STOCK_DATA_DIR))
+            CACHE[dataset_name] = load_price_data(str(STOCK_ND_CSV_DIR))
 
-        logger.info(f"成功加载并处理 {len(CACHE[dataset_name])} 只股票数据")
+        logger.info(f"成功从 {STOCK_ND_CSV_DIR} 加载并处理 {len(CACHE[dataset_name])} 只股票数据")
         return CACHE[dataset_name]
 
 
 if __name__ == "__main__":
     full_stocks_data = get_cached_dataset(FULL_STOCK_DATA_KEY)
 
-    process_stocks_batch_parallel_optimized(full_stocks_data, 430, 10, start_date='2026-1-12')
+    # process_stocks_batch_parallel_optimized(full_stocks_data, 430, 10, start_date='2026-1-12')
 
 
     # 生成莫一天的特征
-    # feature_generator('2009-7-9')
+    feature_generator('2026-3-16')

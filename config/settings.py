@@ -21,7 +21,16 @@ def get_base_path():
 PROJECT_ROOT = get_base_path()
 BASE_DIR = PROJECT_ROOT  # 别名，和Django保持相似
 
-# 关键路径
+# 关键路径 - 支持环境变量覆盖
+# STOCK_DATA_DIR: 股票数据目录
+_stock_data_dir = os.environ.get('STOCK_DATA_DIR')
+if _stock_data_dir:
+    STOCK_DATA_DIR = Path(_stock_data_dir)
+    STOCK_DATA_PLK_DIR = Path(_stock_data_dir)
+else:
+    STOCK_DATA_DIR = get_base_path().parent / 'stock_data/csv'
+    STOCK_DATA_PLK_DIR = get_base_path().parent / 'stock_data'
+
 DATASET_DIR = PROJECT_ROOT.parent / 'data'
 LOG_DIR = PROJECT_ROOT.parent / 'logs'
 CONFIG_DIR = PROJECT_ROOT.parent / 'config'
@@ -35,12 +44,20 @@ DAILY_FEATURE_DIR = get_base_path().parent  / 'real_feature_data_daily'
 
 # 🆕 股票数据下载存储路径配置（可配置为外部绝对路径）
 # stock_nd.py 下载的股票数据存储目录
-STOCK_ND_DATA_DIR = Path(r'E:\stock_data\stock_nd')  # 修改为你想要的绝对路径
-STOCK_ND_PKL_DIR = STOCK_ND_DATA_DIR / 'pkl'
+_stock_nd_data_dir = os.environ.get('STOCK_ND_DATA_DIR')
+if _stock_nd_data_dir:
+    STOCK_ND_DATA_DIR = Path(_stock_nd_data_dir)
+else:
+    STOCK_ND_DATA_DIR = Path(r'E:\train_models\stock_qt\stock_data')  # 修改为你想要的绝对路径
+STOCK_ND_PKL_DIR = STOCK_ND_DATA_DIR
 STOCK_ND_CSV_DIR = STOCK_ND_DATA_DIR / 'csv'
 
 # st_stock_filter.py 下载的过滤数据存储目录
-ST_FILTER_DATA_DIR = Path(r'E:\stock_data\st_filter')  # 修改为你想要的绝对路径
+_st_filter_data_dir = os.environ.get('ST_FILTER_DATA_DIR')
+if _st_filter_data_dir:
+    ST_FILTER_DATA_DIR = Path(_st_filter_data_dir)
+else:
+    ST_FILTER_DATA_DIR = Path(r'E:\train_models\stock_qt\real_features_processors_v2\data')  # 修改为你想要的绝对路径
 
 # 检查并创建必要目录
 for dir_path in [DATASET_DIR, LOG_DIR, CONFIG_DIR, MODEL_DIR, RESULT_DIR, REAL_TRADING_DIR, STOCK_DATA_DIR, DAILY_FEATURE_DIR,

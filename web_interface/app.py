@@ -10,7 +10,9 @@ import json
 import subprocess
 import threading
 import time
-from datetime import datetime
+import logging
+import pandas as pd
+from datetime import datetime, timedelta
 from pathlib import Path
 
 app = Flask(__name__)
@@ -20,9 +22,15 @@ CORS(app)
 BASE_DIR = Path(__file__).parent.parent
 CASH_FILE = BASE_DIR / "real_trading_data" / "investment_data" / "portfolio_cash.csv"
 POSITION_FILE = BASE_DIR / "real_trading_data" / "investment_data" / "portfolio_positions.csv"
+ASSETS_FILE = BASE_DIR / "real_trading_data" / "investment_data" / "portfolio_assets.csv"
 EXECUTOR_SCRIPT = BASE_DIR / "src" / "grid_trading_realworld_v8.py"
 LOG_DIR = BASE_DIR / "web_interface" / "logs"
 REPORTS_DIR = BASE_DIR / "real_trading_data" / "investment_reports"
+REAL_TRADING_DIR = BASE_DIR / "real_trading_data"
+
+# 辅助脚本路径
+ST_FILTER_SCRIPT = BASE_DIR / "src" / "st_stock_filter.py"
+STOCK_ND_SCRIPT = BASE_DIR / "src" / "stock_nd.py"
 
 # 确保日志目录存在
 LOG_DIR.mkdir(parents=True, exist_ok=True)
@@ -30,14 +38,61 @@ LOG_DIR.mkdir(parents=True, exist_ok=True)
 # 全局变量存储执行状态
 execution_status = {
     "running": False,
+    "st_filter_running": False,
+    "stock_nd_running": False,
     "start_time": None,
     "log_file": None,
     "progress": "",
-    "process": None  # 存储进程对象，用于停止
+    "process": None,
+    "st_filter_process": None,
+    "st_filter_log": None,
+    "st_filter_progress": "",
+    "stock_nd_process": None,
+    "stock_nd_log": None,
+    "stock_nd_progress": ""
 }
 
 # 线程锁，保护execution_status
 status_lock = threading.Lock()
+
+
+# ========== 资产更新函数 ==========
+def update_portfolio_assets(cash):
+    """更新资产数据"""
+    try:
+        predict_date = datetime.now().strftime('%Y-%m-%d')
+
+        # 计算持仓市值
+        positions_value = 0
+        if POSITION_FILE.exists():
+            positions_df = pd.read_csv(POSITION_FILE)
+            active = positions_df[positions_df['is_sold'] == 'NO']
+            if not active.empty:
+                positions_value = (active['shares'] * active['avg_cost']).sum()
+
+        total = cash + positions_value
+
+        # 更新或创建资产文件
+        if ASSETS_FILE.exists():
+            assets_df = pd.read_csv(ASSETS_FILE)
+            new_record = pd.DataFrame([{
+                'predict_date': predict_date,
+                'total': total,
+                'cash': cash,
+                'positions_value': positions_value
+            }])
+            assets_df = pd.concat([assets_df, new_record], ignore_index=True)
+        else:
+            assets_df = pd.DataFrame([{
+                'predict_date': predict_date,
+                'total': total,
+                'cash': cash,
+                'positions_value': positions_value
+            }])
+
+        assets_df.to_csv(ASSETS_FILE, index=False)
+    except Exception as e:
+        logging.warning(f"更新资产文件失败: {e}")
 
 
 @app.route('/')
@@ -46,13 +101,14 @@ def index():
     return render_template('index.html')
 
 
+# ========== 原有 API ==========
 @app.route('/api/portfolio/cash', methods=['GET'])
 def get_cash():
     """获取资金信息"""
     try:
         if not CASH_FILE.exists():
             return jsonify({"error": "资金文件不存在"}), 404
-        
+
         with open(CASH_FILE, 'r', encoding='utf-8') as f:
             reader = csv.DictReader(f)
             data = list(reader)
@@ -69,11 +125,10 @@ def update_cash():
     try:
         data = request.json
         cash = data.get('cash')
-        
+
         if cash is None:
             return jsonify({"error": "缺少cash参数"}), 400
-        
-        # 读取现有数据
+
         existing_data = {}
         if CASH_FILE.exists():
             with open(CASH_FILE, 'r', encoding='utf-8') as f:
@@ -81,18 +136,16 @@ def update_cash():
                 rows = list(reader)
                 if rows:
                     existing_data = rows[0]
-        
-        # 更新数据
+
         existing_data['cash'] = cash
         existing_data['update_time'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        
-        # 写入文件
+
         with open(CASH_FILE, 'w', encoding='utf-8', newline='') as f:
             fieldnames = ['cash', 'last_run_date', 'update_time']
             writer = csv.DictWriter(f, fieldnames=fieldnames)
             writer.writeheader()
             writer.writerow(existing_data)
-        
+
         return jsonify({"success": True, "message": "资金更新成功"})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -104,10 +157,12 @@ def get_positions():
     try:
         if not POSITION_FILE.exists():
             return jsonify({"success": True, "data": []})
-        
+
         with open(POSITION_FILE, 'r', encoding='utf-8') as f:
             reader = csv.DictReader(f)
             data = list(reader)
+            # 只返回未卖出的持仓
+            data = [p for p in data if p.get('is_sold', 'NO') != 'YES']
             return jsonify({"success": True, "data": data})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -118,77 +173,317 @@ def update_positions():
     """更新持仓信息"""
     try:
         positions = request.json.get('positions', [])
-        
+
         if not positions:
-            # 如果为空，创建空文件
             with open(POSITION_FILE, 'w', encoding='utf-8', newline='') as f:
-                fieldnames = ['code', 'avg_cost', 'shares', 'entry_date', 
+                fieldnames = ['code', 'avg_cost', 'shares', 'entry_date',
                             'stop_loss_price', 'take_profit_price', 'should_sell_date',
                             'actual_sell_price', 'actual_sell_date', 'is_sold']
                 writer = csv.DictWriter(f, fieldnames=fieldnames)
                 writer.writeheader()
         else:
-            # 写入持仓数据
             with open(POSITION_FILE, 'w', encoding='utf-8', newline='') as f:
                 fieldnames = list(positions[0].keys())
                 writer = csv.DictWriter(f, fieldnames=fieldnames)
                 writer.writeheader()
                 writer.writerows(positions)
-        
+
         return jsonify({"success": True, "message": "持仓更新成功"})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 
+# ========== 手动交易 API ==========
+@app.route('/api/trading/sellable-stocks', methods=['GET'])
+def get_sellable_stocks():
+    """获取可卖出的股票列表"""
+    try:
+        if not POSITION_FILE.exists():
+            return jsonify({"success": True, "data": []})
+
+        positions_df = pd.read_csv(POSITION_FILE)
+        active_positions = positions_df[positions_df['is_sold'] == 'NO']
+
+        result = []
+        for _, row in active_positions.iterrows():
+            result.append({
+                "code": row['code'],
+                "shares": int(row['shares']),
+                "avg_cost": float(row['avg_cost']),
+                "entry_date": row.get('entry_date', '')
+            })
+
+        return jsonify({"success": True, "data": result})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route('/api/trading/buyable-stocks', methods=['GET'])
+def get_buyable_stocks():
+    """获取可买入的股票列表（过去N天的建议）"""
+    try:
+        days = int(request.args.get('days', 3))
+        today = datetime.now()
+        dates = [(today - timedelta(days=i)).strftime('%Y%m%d') for i in range(days)]
+
+        suggestions = []
+        for date in dates:
+            suggestion_file = REAL_TRADING_DIR / 'investment_data' / f'trade_suggestions_{date}.csv'
+            if suggestion_file.exists():
+                df = pd.read_csv(suggestion_file)
+                for _, row in df.iterrows():
+                    suggestions.append({
+                        "code": row.get('code', ''),
+                        "score": float(row.get('score', 0)),
+                        "predict_date": f"{date[:4]}-{date[4:6]}-{date[6:]}"
+                    })
+
+        seen = {}
+        for s in suggestions:
+            if s['code'] not in seen:
+                seen[s['code']] = s
+
+        return jsonify({"success": True, "data": list(seen.values())})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route('/api/trading/sell', methods=['POST'])
+def manual_sell():
+    """手动卖出"""
+    try:
+        data = request.json
+        stock_code = data.get('stock_code')
+        quantity = int(data.get('quantity', 0))
+        price = float(data.get('price', 0))
+
+        print(f"[SELL] 收到请求: stock={stock_code}, qty={quantity}, price={price}")
+        print(f"[SELL] CASH_FILE路径: {CASH_FILE}")
+        print(f"[SELL] CASH_FILE存在: {CASH_FILE.exists()}")
+
+        if not stock_code or quantity <= 0 or price <= 0:
+            return jsonify({"error": "参数错误"}), 400
+
+        if not POSITION_FILE.exists():
+            return jsonify({"error": "持仓文件不存在"}), 404
+
+        positions_df = pd.read_csv(POSITION_FILE)
+        mask = (positions_df['code'] == stock_code) & (positions_df['is_sold'] == 'NO')
+        if not mask.any():
+            return jsonify({"error": "股票不在持仓中"}), 404
+
+        idx = positions_df[mask].index[0]
+        current_shares = int(positions_df.loc[idx, 'shares'])
+
+        if quantity > current_shares:
+            return jsonify({"error": "卖出数量超过当前持仓"}), 400
+
+        sell_date = datetime.now().strftime('%Y-%m-%d')
+
+        if quantity == current_shares:
+            positions_df.loc[idx, 'is_sold'] = 'YES'
+            positions_df.loc[idx, 'actual_sell_price'] = price
+            positions_df.loc[idx, 'actual_sell_date'] = sell_date
+        else:
+            positions_df.loc[idx, 'shares'] = current_shares - quantity
+            sold_record = positions_df.loc[idx].copy()
+            sold_record['shares'] = quantity
+            sold_record['actual_sell_price'] = price
+            sold_record['actual_sell_date'] = sell_date
+            sold_record['is_sold'] = 'YES'
+            positions_df = pd.concat([positions_df, pd.DataFrame([sold_record])], ignore_index=True)
+
+        positions_df.to_csv(POSITION_FILE, index=False)
+        print(f"[SELL] 持仓已更新")
+
+        # 读取并更新现金 - 使用csv模块直接写入,避免pandas缓存问题
+        with open(CASH_FILE, 'r', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            rows = list(reader)
+
+        current_cash = float(rows[0]['cash'])
+        new_cash = current_cash + quantity * price
+        rows[0]['cash'] = str(new_cash)
+        rows[0]['update_time'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+        print(f"[SELL] 当前现金: {current_cash}, 卖出获得: {quantity * price}, 新现金: {new_cash}")
+
+        with open(CASH_FILE, 'w', encoding='utf-8', newline='') as f:
+            fieldnames = ['cash', 'last_run_date', 'update_time']
+            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            writer.writeheader()
+            writer.writerows(rows)
+
+        print(f"[SELL] 现金文件已保存到: {CASH_FILE}")
+
+        # 验证保存
+        with open(CASH_FILE, 'r', encoding='utf-8') as f:
+            content = f.read()
+            print(f"[SELL] 文件内容: {content[:100]}")
+
+        update_portfolio_assets(new_cash)
+
+        return jsonify({
+            "success": True,
+            "message": "卖出成功",
+            "data": {
+                "cash": new_cash,
+                "sold_quantity": quantity
+            }
+        })
+    except Exception as e:
+        import traceback
+        print(f"[SELL] 错误: {traceback.format_exc()}")
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route('/api/trading/buy', methods=['POST'])
+def manual_buy():
+    """手动买入"""
+    try:
+        data = request.json
+        stock_code = data.get('stock_code')
+        price = float(data.get('price', 0))
+        quantity = int(data.get('quantity', 0))
+
+        print(f"[BUY] 收到请求: stock={stock_code}, qty={quantity}, price={price}")
+        print(f"[BUY] CASH_FILE路径: {CASH_FILE}")
+
+        if not stock_code or price <= 0 or quantity <= 0:
+            return jsonify({"error": "参数错误"}), 400
+
+        cash_df = pd.read_csv(CASH_FILE)
+        print(f"[BUY] 读取现金文件: {cash_df.to_dict()}")
+        current_cash = float(cash_df.iloc[0]['cash'])
+        total_cost = price * quantity
+        print(f"[BUY] 当前现金: {current_cash}, 花费: {total_cost}")
+
+        if total_cost > current_cash:
+            return jsonify({"error": "现金不足"}), 400
+
+        if POSITION_FILE.exists():
+            positions_df = pd.read_csv(POSITION_FILE)
+        else:
+            positions_df = pd.DataFrame(columns=[
+                'code', 'avg_cost', 'shares', 'entry_date',
+                'stop_loss_price', 'take_profit_price', 'should_sell_date',
+                'actual_sell_price', 'actual_sell_date', 'is_sold'
+            ])
+
+        entry_date = datetime.now().strftime('%Y-%m-%d')
+
+        existing_mask = (positions_df['code'] == stock_code) & (positions_df['is_sold'] == 'NO')
+        if existing_mask.any():
+            idx = positions_df[existing_mask].index[0]
+            existing_shares = int(positions_df.loc[idx, 'shares'])
+            existing_avg_cost = float(positions_df.loc[idx, 'avg_cost'])
+
+            new_shares = existing_shares + quantity
+            new_avg_cost = (existing_shares * existing_avg_cost + quantity * price) / new_shares
+
+            positions_df.loc[idx, 'shares'] = new_shares
+            positions_df.loc[idx, 'avg_cost'] = new_avg_cost
+        else:
+            new_position = {
+                'code': stock_code,
+                'avg_cost': price,
+                'shares': quantity,
+                'entry_date': entry_date,
+                'stop_loss_price': '',
+                'take_profit_price': '',
+                'should_sell_date': '',
+                'actual_sell_price': '',
+                'actual_sell_date': '',
+                'is_sold': 'NO'
+            }
+            positions_df = pd.concat([positions_df, pd.DataFrame([new_position])], ignore_index=True)
+
+        positions_df.to_csv(POSITION_FILE, index=False)
+        print(f"[BUY] 持仓已更新")
+
+        # 使用csv模块直接写入,避免pandas缓存问题
+        with open(CASH_FILE, 'r', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            rows = list(reader)
+
+        new_cash = current_cash - total_cost
+        rows[0]['cash'] = str(new_cash)
+        rows[0]['update_time'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+        print(f"[BUY] 当前现金: {current_cash}, 花费: {total_cost}, 新现金: {new_cash}")
+
+        with open(CASH_FILE, 'w', encoding='utf-8', newline='') as f:
+            fieldnames = ['cash', 'last_run_date', 'update_time']
+            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            writer.writeheader()
+            writer.writerows(rows)
+
+        print(f"[BUY] 现金文件已保存到: {CASH_FILE}")
+
+        # 验证保存
+        with open(CASH_FILE, 'r', encoding='utf-8') as f:
+            content = f.read()
+            print(f"[BUY] 文件内容: {content[:100]}")
+
+        update_portfolio_assets(new_cash)
+
+        return jsonify({
+            "success": True,
+            "message": "买入成功",
+            "data": {
+                "cash": new_cash,
+                "new_position": {
+                    "code": stock_code,
+                    "shares": quantity,
+                    "avg_cost": price
+                }
+            }
+        })
+    except Exception as e:
+        import traceback
+        print(f"[BUY] 错误: {traceback.format_exc()}")
+        return jsonify({"error": str(e)}), 500
+
+
+# ========== 主交易脚本执行 API ==========
 @app.route('/api/execute', methods=['POST'])
 def execute_trading():
     """执行交易脚本"""
     global execution_status
-    
+
     with status_lock:
         if execution_status["running"]:
             return jsonify({"error": "脚本正在运行中"}), 400
-        
+        if execution_status["st_filter_running"] or execution_status["stock_nd_running"]:
+            return jsonify({"error": "辅助脚本运行中，无法执行主交易"}), 400
+
         try:
-            # 获取参数
             data = request.json or {}
             predict_date = data.get('predict_date')
             feature_date = data.get('feature_date')
-            update_data = data.get('update_data', False)  # 新增：是否更新数据
-            
-            # 验证日期格式
+            update_data = data.get('update_data', False)
+
             if not predict_date or not feature_date:
                 return jsonify({"error": "缺少日期参数"}), 400
-            
-            try:
-                # 验证日期格式 YYYY-MM-DD
-                datetime.strptime(predict_date, '%Y-%m-%d')
-                datetime.strptime(feature_date, '%Y-%m-%d')
-            except ValueError:
-                return jsonify({"error": "日期格式错误，应为 YYYY-MM-DD"}), 400
-            
-            # 创建日志文件
+
+            datetime.strptime(predict_date, '%Y-%m-%d')
+            datetime.strptime(feature_date, '%Y-%m-%d')
+
             timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
             log_file = LOG_DIR / f"execution_{timestamp}.log"
-            
-            execution_status = {
-                "running": True,
-                "start_time": datetime.now().isoformat(),
-                "log_file": str(log_file),
-                "progress": "启动中...",
-                "process": None,
-                "predict_date": predict_date,
-                "feature_date": feature_date,
-                "update_data": update_data
-            }
-            
-            # 在后台线程中执行
+
+            execution_status["running"] = True
+            execution_status["start_time"] = datetime.now().isoformat()
+            execution_status["log_file"] = str(log_file)
+            execution_status["progress"] = "启动中..."
+            execution_status["process"] = None
+
             thread = threading.Thread(target=run_executor, args=(log_file, predict_date, feature_date, update_data))
             thread.daemon = True
             thread.start()
-            
+
             return jsonify({
-                "success": True, 
+                "success": True,
                 "message": "脚本开始执行",
                 "log_file": str(log_file.name),
                 "predict_date": predict_date,
@@ -204,36 +499,25 @@ def execute_trading():
 def stop_execution():
     """停止执行脚本"""
     global execution_status
-    
+
     with status_lock:
         if not execution_status["running"]:
             return jsonify({"error": "没有正在运行的脚本"}), 400
-        
-        try:
-            # 设置停止标志
-            execution_status["running"] = False
-            execution_status["progress"] = "正在停止..."
-            
-            # 如果进程存在，尝试终止
-            process = execution_status.get("process")
-            
-        except Exception as e:
-            return jsonify({"error": str(e)}), 500
-    
-    # 在锁外部终止进程，避免死锁
+
+        execution_status["running"] = False
+        execution_status["progress"] = "正在停止..."
+        process = execution_status.get("process")
+
     if process:
         try:
             process.terminate()
-            # 等待进程结束
             try:
                 process.wait(timeout=5)
             except subprocess.TimeoutExpired:
-                # 如果5秒后还没结束，强制杀死
                 process.kill()
-                process.wait()
-        except Exception as e:
+        except:
             pass
-    
+
     return jsonify({
         "success": True,
         "message": "停止信号已发送"
@@ -243,53 +527,49 @@ def stop_execution():
 def run_executor(log_file, predict_date, feature_date, update_data=False):
     """在后台运行执行脚本"""
     global execution_status
-    
+
     try:
+        print(f"[EXECUTOR] 开始执行, log_file={log_file}")
         with open(log_file, 'w', encoding='utf-8') as f:
             f.write(f"=== 开始执行 {datetime.now()} ===\n")
             f.write(f"预测日期 (PREDICT_DATE): {predict_date}\n")
             f.write(f"特征日期 (FEATURE_DATE): {feature_date}\n")
             f.write(f"数据更新 (UPDATE_DATA): {update_data}\n\n")
-            
-            # 执行Python脚本，传递日期参数
-            # Windows下需要特殊处理编码
-            import sys
+            f.flush()
+
             import locale
-            
-            # 获取系统默认编码
             system_encoding = locale.getpreferredencoding()
-            
-            # 构建命令，传递日期参数
+
+            # 构建命令
             cmd = [
-                'python', 
+                'python',
                 str(EXECUTOR_SCRIPT),
                 '--predict-date', predict_date,
                 '--feature-date', feature_date
             ]
-            
-            # 如果需要更新数据，添加参数
+
             if update_data:
                 cmd.append('--update-data')
-            
+
+            # 设置环境变量
+            env = os.environ.copy()
+
             process = subprocess.Popen(
                 cmd,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
                 cwd=str(BASE_DIR),
-                # 不使用text模式，手动处理编码
+                env=env,
                 text=False
             )
-            
-            # 保存进程对象，用于停止
+
             with status_lock:
                 execution_status["process"] = process
-            
-            # 实时读取输出，处理编码问题
+
             for line in iter(process.stdout.readline, b''):
-                # 检查是否被请求停止
                 with status_lock:
                     should_stop = not execution_status["running"]
-                
+
                 if should_stop:
                     process.terminate()
                     try:
@@ -301,46 +581,38 @@ def run_executor(log_file, predict_date, feature_date, update_data=False):
                         execution_status["progress"] = "已停止"
                         execution_status["process"] = None
                     return
-                
+
                 try:
-                    # 尝试多种编码方式解码
                     try:
                         decoded_line = line.decode('utf-8')
                     except UnicodeDecodeError:
                         try:
                             decoded_line = line.decode('gbk')
                         except UnicodeDecodeError:
-                            try:
-                                decoded_line = line.decode(system_encoding)
-                            except:
-                                # 如果都失败，使用errors='ignore'
-                                decoded_line = line.decode('utf-8', errors='ignore')
-                    
+                            decoded_line = line.decode(system_encoding)
+
                     f.write(decoded_line)
                     f.flush()
-                    
-                    # 更新进度，移除特殊字符
+
                     progress_text = decoded_line.strip()
-                    # 移除emoji等特殊字符
                     progress_text = ''.join(char for char in progress_text if ord(char) < 0x10000)
                     with status_lock:
                         execution_status["progress"] = progress_text
-                    
+
                 except Exception as e:
-                    # 记录解码错误但继续执行
                     f.write(f"[编码错误: {str(e)}]\n")
                     f.flush()
-            
+
             process.wait()
-            
+
             f.write(f"\n\n=== 执行完成 {datetime.now()} ===\n")
             f.write(f"退出码: {process.returncode}\n")
-            
+
             with status_lock:
                 execution_status["running"] = False
                 execution_status["progress"] = "执行完成" if process.returncode == 0 else "执行失败"
                 execution_status["process"] = None
-            
+
     except Exception as e:
         try:
             with open(log_file, 'a', encoding='utf-8') as f:
@@ -353,16 +625,266 @@ def run_executor(log_file, predict_date, feature_date, update_data=False):
             execution_status["process"] = None
 
 
+# ========== 辅助脚本执行 API ==========
+@app.route('/api/execute/st-filter', methods=['POST'])
+def execute_st_filter():
+    """执行st_stock_filter脚本"""
+    global execution_status
+
+    with status_lock:
+        if execution_status["st_filter_running"]:
+            return jsonify({"error": "st_stock_filter 正在运行中"}), 400
+
+        try:
+            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+            log_file = LOG_DIR / f"st_filter_{timestamp}.log"
+
+            execution_status["st_filter_running"] = True
+            execution_status["st_filter_log"] = str(log_file.name)
+            execution_status["st_filter_progress"] = "启动中..."
+            execution_status["running"] = True
+
+            thread = threading.Thread(target=run_st_filter, args=(log_file,))
+            thread.daemon = True
+            thread.start()
+
+            return jsonify({
+                "success": True,
+                "message": "st_stock_filter 开始执行",
+                "log_file": str(log_file.name)
+            })
+        except Exception as e:
+            execution_status["st_filter_running"] = False
+            execution_status["running"] = False
+            return jsonify({"error": str(e)}), 500
+
+
+def run_st_filter(log_file):
+    """运行st_stock_filter脚本"""
+    global execution_status
+    try:
+        with open(log_file, 'w', encoding='utf-8') as f:
+            f.write(f"=== 开始执行 st_stock_filter {datetime.now()} ===\n\n")
+
+            cmd = ['python', str(ST_FILTER_SCRIPT)]
+            env = os.environ.copy()
+
+            f.write(f"[CONFIG] 命令: {' '.join(cmd)}\n\n")
+
+            process = subprocess.Popen(
+                cmd,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                cwd=str(BASE_DIR),
+                env=env,
+                text=False
+            )
+
+            with status_lock:
+                execution_status["st_filter_process"] = process
+
+            for line in iter(process.stdout.readline, b''):
+                try:
+                    decoded_line = line.decode('utf-8', errors='ignore')
+                except:
+                    decoded_line = line.decode('gbk', errors='ignore')
+
+                f.write(decoded_line)
+                f.flush()
+
+                with status_lock:
+                    execution_status["st_filter_progress"] = decoded_line.strip()[:100]
+
+            process.wait()
+            f.write(f"\n\n=== 执行完成 {datetime.now()} ===\n")
+            f.write(f"退出码: {process.returncode}\n")
+
+            with status_lock:
+                execution_status["st_filter_running"] = False
+                execution_status["st_filter_process"] = None
+                if not execution_status["stock_nd_running"]:
+                    execution_status["running"] = False
+                execution_status["st_filter_progress"] = "执行完成" if process.returncode == 0 else "执行失败"
+    except Exception as e:
+        with open(log_file, 'a', encoding='utf-8') as f:
+            f.write(f"\n\n错误: {str(e)}\n")
+        with status_lock:
+            execution_status["st_filter_running"] = False
+            execution_status["st_filter_process"] = None
+            if not execution_status["stock_nd_running"]:
+                execution_status["running"] = False
+            execution_status["st_filter_progress"] = f"错误: {str(e)}"
+
+
+@app.route('/api/execute/st-filter/stop', methods=['POST'])
+def stop_st_filter():
+    """停止st_stock_filter脚本"""
+    global execution_status
+
+    with status_lock:
+        if not execution_status["st_filter_running"]:
+            return jsonify({"error": "没有正在运行的st_stock_filter"}), 400
+
+        process = execution_status.get("st_filter_process")
+        execution_status["st_filter_running"] = False
+        execution_status["st_filter_progress"] = "正在停止..."
+
+    if process:
+        try:
+            process.terminate()
+            try:
+                process.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                process.kill()
+        except:
+            pass
+
+    with status_lock:
+        if not execution_status["stock_nd_running"]:
+            execution_status["running"] = False
+        execution_status["st_filter_progress"] = "已停止"
+
+    return jsonify({"success": True, "message": "停止信号已发送"})
+
+
+@app.route('/api/execute/stock-nd', methods=['POST'])
+def execute_stock_nd():
+    """执行stock_nd脚本"""
+    global execution_status
+
+    with status_lock:
+        if execution_status["stock_nd_running"]:
+            return jsonify({"error": "stock_nd 正在运行中"}), 400
+
+        try:
+            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+            log_file = LOG_DIR / f"stock_nd_{timestamp}.log"
+
+            execution_status["stock_nd_running"] = True
+            execution_status["stock_nd_log"] = str(log_file.name)
+            execution_status["stock_nd_progress"] = "启动中..."
+            execution_status["running"] = True
+
+            thread = threading.Thread(target=run_stock_nd, args=(log_file,))
+            thread.daemon = True
+            thread.start()
+
+            return jsonify({
+                "success": True,
+                "message": "stock_nd 开始执行",
+                "log_file": str(log_file.name)
+            })
+        except Exception as e:
+            execution_status["stock_nd_running"] = False
+            execution_status["running"] = False
+            return jsonify({"error": str(e)}), 500
+
+
+def run_stock_nd(log_file):
+    """运行stock_nd脚本"""
+    global execution_status
+    try:
+        with open(log_file, 'w', encoding='utf-8') as f:
+            f.write(f"=== 开始执行 stock_nd {datetime.now()} ===\n\n")
+
+            cmd = ['python', str(STOCK_ND_SCRIPT)]
+            env = os.environ.copy()
+
+            f.write(f"[CONFIG] 命令: {' '.join(cmd)}\n\n")
+
+            process = subprocess.Popen(
+                cmd,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                cwd=str(BASE_DIR),
+                env=env,
+                text=False
+            )
+
+            with status_lock:
+                execution_status["stock_nd_process"] = process
+
+            for line in iter(process.stdout.readline, b''):
+                try:
+                    decoded_line = line.decode('utf-8', errors='ignore')
+                except:
+                    decoded_line = line.decode('gbk', errors='ignore')
+
+                f.write(decoded_line)
+                f.flush()
+
+                with status_lock:
+                    execution_status["stock_nd_progress"] = decoded_line.strip()[:100]
+
+            process.wait()
+            f.write(f"\n\n=== 执行完成 {datetime.now()} ===\n")
+            f.write(f"退出码: {process.returncode}\n")
+
+            with status_lock:
+                execution_status["stock_nd_running"] = False
+                execution_status["stock_nd_process"] = None
+                if not execution_status["st_filter_running"]:
+                    execution_status["running"] = False
+                execution_status["stock_nd_progress"] = "执行完成" if process.returncode == 0 else "执行失败"
+    except Exception as e:
+        with open(log_file, 'a', encoding='utf-8') as f:
+            f.write(f"\n\n错误: {str(e)}\n")
+        with status_lock:
+            execution_status["stock_nd_running"] = False
+            execution_status["stock_nd_process"] = None
+            if not execution_status["st_filter_running"]:
+                execution_status["running"] = False
+            execution_status["stock_nd_progress"] = f"错误: {str(e)}"
+
+
+@app.route('/api/execute/stock-nd/stop', methods=['POST'])
+def stop_stock_nd():
+    """停止stock_nd脚本"""
+    global execution_status
+
+    with status_lock:
+        if not execution_status["stock_nd_running"]:
+            return jsonify({"error": "没有正在运行的stock_nd"}), 400
+
+        process = execution_status.get("stock_nd_process")
+        execution_status["stock_nd_running"] = False
+        execution_status["stock_nd_progress"] = "正在停止..."
+
+    if process:
+        try:
+            process.terminate()
+            try:
+                process.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                process.kill()
+        except:
+            pass
+
+    with status_lock:
+        if not execution_status["st_filter_running"]:
+            execution_status["running"] = False
+        execution_status["stock_nd_progress"] = "已停止"
+
+    return jsonify({"success": True, "message": "停止信号已发送"})
+
+
+# ========== 状态查询 API ==========
 @app.route('/api/status', methods=['GET'])
 def get_status():
     """获取执行状态"""
     with status_lock:
-        # 返回状态的副本，避免并发问题
+        print(f"[STATUS] running={execution_status['running']}, log_file={execution_status['log_file']}")
         return jsonify({
             "running": execution_status["running"],
             "start_time": execution_status["start_time"],
             "log_file": execution_status["log_file"],
-            "progress": execution_status["progress"]
+            "progress": execution_status["progress"],
+            "st_filter_running": execution_status["st_filter_running"],
+            "stock_nd_running": execution_status["stock_nd_running"],
+            "st_filter_progress": execution_status.get("st_filter_progress", ""),
+            "stock_nd_progress": execution_status.get("stock_nd_progress", ""),
+            "st_filter_log": execution_status.get("st_filter_log", ""),
+            "stock_nd_log": execution_status.get("stock_nd_log", "")
         })
 
 
@@ -373,10 +895,10 @@ def get_log(filename):
         log_file = LOG_DIR / filename
         if not log_file.exists():
             return jsonify({"error": "日志文件不存在"}), 404
-        
+
         with open(log_file, 'r', encoding='utf-8') as f:
             content = f.read()
-        
+
         return jsonify({"success": True, "content": content})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -424,10 +946,10 @@ def get_report(filename):
         report_file = REPORTS_DIR / filename
         if not report_file.exists():
             return jsonify({"error": "报告文件不存在"}), 404
-        
+
         with open(report_file, 'r', encoding='utf-8') as f:
             content = f.read()
-        
+
         return jsonify({"success": True, "content": content})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -435,6 +957,4 @@ def get_report(filename):
 
 if __name__ == '__main__':
     # 启动服务器
-    # host='0.0.0.0' 允许外部访问
-    # port=5000 端口号
     app.run(host='0.0.0.0', port=5000, debug=True)

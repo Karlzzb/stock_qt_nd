@@ -435,6 +435,21 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* 新增样式 */
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; color: #666; font-size: 14px; margin-bottom: 5px; }
+        .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; }
+        .tabs { margin-bottom: 15px; display: flex; gap: 10px; }
+        .tab-btn { padding: 8px 16px; border: none; background: #f0f0f0; cursor: pointer; border-radius: 5px; flex: 1; }
+        .tab-btn.active { background: #667eea; color: white; }
+        .tab-panel { padding: 10px 0; }
+        .status-text.running { color: orange; }
+        .script-status { margin-bottom: 15px; }
+        .button-group { display: flex; gap: 20px; }
+        #config-message, #sell-message, #buy-message, #data-prep-message { margin-top: 10px; padding: 10px; border-radius: 5px; }
+        #config-message.success, #sell-message.success, #buy-message.success { background: #f0f9ff; color: #67c23a; }
+        #config-message.error, #sell-message.error, #buy-message.error { background: #fef0f0; color: #f56c6c; }
     </style>
 </head>
 <body>
@@ -449,8 +464,10 @@
         <div class="card">
             <div class="tabs">
                 <div class="tab active" onclick="switchTab('portfolio')">💰 资金持仓</div>
-                <div class="tab" onclick="switchTab('execute')">🚀 执行交易</div>
+                <div class="tab" onclick="switchTab('execute')">🚀 执行策略</div>
                 <div class="tab" onclick="switchTab('reports')">📊 交易报告</div>
+                <div class="tab" onclick="switchTab('manual')">💵 手动交易</div>
+                <div class="tab" onclick="switchTab('dataprep')">📥 数据准备</div>
             </div>
 
             <!-- 资金持仓标签页 -->
@@ -479,13 +496,13 @@
                 <div class="card-title">
                     <span><span class="icon">📅</span>日期参数</span>
                 </div>
-                
+
                 <div class="input-group">
                     <label>预测日期 (PREDICT_DATE)</label>
                     <input type="date" id="predict-date-input" value="">
                     <div style="font-size: 12px; color: #999; margin-top: 5px;">默认: 今天</div>
                 </div>
-                
+
                 <div class="input-group">
                     <label>特征日期 (FEATURE_DATE)</label>
                     <input type="date" id="feature-date-input" value="">
@@ -493,31 +510,17 @@
                 </div>
 
                 <div class="card-title" style="margin-top: 20px;">
-                    <span><span class="icon">⚙️</span>执行选项</span>
-                </div>
-                
-                <div class="input-group">
-                    <label style="display: flex; align-items: center; cursor: pointer;">
-                        <input type="checkbox" id="update-data-checkbox" style="margin-right: 8px;">
-                        <span>执行数据更新脚本 (st_stock_filter 和 stock_nd)</span>
-                    </label>
-                    <div style="font-size: 12px; color: #999; margin-top: 5px;">
-                        ⚠️ 默认不执行，勾选后会先更新股票数据再进行分析（耗时较长）
-                    </div>
-                </div>
-                
-                <div class="card-title" style="margin-top: 20px;">
                     <span><span class="icon">⚡</span>执行状态</span>
                 </div>
                 <div id="execution-status" class="status-bar">
                     <div>状态: <span id="status-text">就绪</span></div>
                     <div id="progress-text" style="margin-top: 5px; font-size: 12px; color: #999;"></div>
                 </div>
-                
+
                 <button id="execute-btn" class="btn btn-primary" onclick="executeTrading()">
                     🚀 执行每日交易
                 </button>
-                
+
                 <button id="stop-btn" class="btn btn-danger" onclick="stopExecution()" style="display: none;">
                     ⛔ 停止执行
                 </button>
@@ -537,6 +540,84 @@
                 </div>
                 <div id="reports-list">
                     <div class="loading">加载中...</div>
+                </div>
+            </div>
+
+            <!-- 手动交易标签页 -->
+            <div id="manual-tab" class="tab-content">
+                <div class="card">
+                    <div class="card-title">手动交易</div>
+                    <div class="tabs">
+                        <button class="tab-btn active" onclick="showManualTab('sell')">卖出</button>
+                        <button class="tab-btn" onclick="showManualTab('buy')">买入</button>
+                    </div>
+
+                    <!-- 卖出面板 -->
+                    <div id="sell-panel" class="tab-panel">
+                        <div class="form-group">
+                            <label>选择股票:</label>
+                            <select id="sell-stock-select" onchange="updateSellAvailable()">
+                                <option value="">请选择...</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>可卖数量:</label>
+                            <span id="sell-available">-</span>
+                        </div>
+                        <div class="form-group">
+                            <label>卖出数量:</label>
+                            <input type="number" id="sell-quantity" placeholder="请输入数量">
+                        </div>
+                        <div class="form-group">
+                            <label>卖出价格:</label>
+                            <input type="number" id="sell-price" placeholder="请输入价格" step="0.01">
+                        </div>
+                        <button class="btn btn-danger" onclick="manualSell()">确认卖出</button>
+                        <div id="sell-message"></div>
+                    </div>
+
+                    <!-- 买入面板 -->
+                    <div id="buy-panel" class="tab-panel" style="display:none;">
+                        <div class="form-group">
+                            <label>选择股票(从建议中选择或手动输入):</label>
+                            <select id="buy-stock-select" onchange="updateBuyInfo()">
+                                <option value="">请选择...</option>
+                            </select>
+                            <input type="text" id="buy-stock-code" placeholder="或直接输入股票代码如: 600200.SH" style="margin-top:5px;">
+                        </div>
+                        <div class="form-group">
+                            <label>建议得分:</label>
+                            <span id="buy-score">-</span>
+                        </div>
+                        <div class="form-group">
+                            <label>买入价格:</label>
+                            <input type="number" id="buy-price" placeholder="请输入价格" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label>买入数量:</label>
+                            <input type="number" id="buy-quantity" placeholder="请输入数量">
+                        </div>
+                        <button class="btn btn-success" onclick="manualBuy()">确认买入</button>
+                        <div id="buy-message"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 数据准备标签页 -->
+            <div id="dataprep-tab" class="tab-content">
+                <div class="card">
+                    <div class="card-title">数据准备</div>
+                    <div class="button-group">
+                        <div class="script-status">
+                            <button class="btn" id="st-filter-btn" onclick="toggleStFilter()">执行ST股票过滤</button>
+                            <span id="st-filter-status" class="status-text">空闲</span>
+                        </div>
+                        <div class="script-status">
+                            <button class="btn" id="stock-nd-btn" onclick="toggleStockNd()">下载股票数据</button>
+                            <span id="stock-nd-status" class="status-text">空闲</span>
+                        </div>
+                    </div>
+                    <div id="data-prep-message"></div>
                 </div>
             </div>
         </div>
@@ -564,18 +645,18 @@
                 <div class="modal-title">编辑持仓</div>
                 <div class="modal-close" onclick="closePositionsModal()">×</div>
             </div>
-            
+
             <!-- 添加新持仓按钮 -->
             <div class="add-position-card" onclick="addNewPosition()">
                 <div class="add-position-icon">➕</div>
                 <div>添加新持仓</div>
             </div>
-            
+
             <!-- 持仓编辑器容器 -->
             <div id="positions-editor">
                 <div class="loading">加载中...</div>
             </div>
-            
+
             <button class="btn btn-success" onclick="savePositions()">💾 保存所有持仓</button>
         </div>
     </div>
@@ -604,13 +685,213 @@
             loadPositions();
             loadReports();
             startStatusPolling();
+            // 新功能初始化
+            loadSellableStocks();
+            loadBuyableStocks();
+            loadAuxScriptStatus();
         };
+
+        // ========== 手动交易 ==========
+        function loadSellableStocks() {
+            fetch('/api/trading/sellable-stocks')
+                .then(r => r.json())
+                .then(data => {
+                    const select = document.getElementById('sell-stock-select');
+                    select.innerHTML = '<option value="">请选择...</option>';
+                    if (data.success) {
+                        data.data.forEach(stock => {
+                            const opt = document.createElement('option');
+                            opt.value = stock.code;
+                            opt.textContent = stock.code + ' (成本:' + stock.avg_cost + ', 数量:' + stock.shares + ')';
+                            opt.dataset.shares = stock.shares;
+                            select.appendChild(opt);
+                        });
+                    }
+                });
+        }
+
+        function updateSellAvailable() {
+            const select = document.getElementById('sell-stock-select');
+            const opt = select.options[select.selectedIndex];
+            document.getElementById('sell-available').textContent = opt.dataset.shares || '-';
+        }
+
+        function loadBuyableStocks() {
+            fetch('/api/trading/buyable-stocks?days=3')
+                .then(r => r.json())
+                .then(data => {
+                    const select = document.getElementById('buy-stock-select');
+                    select.innerHTML = '<option value="">请选择...</option>';
+                    if (data.success) {
+                        data.data.forEach(stock => {
+                            const opt = document.createElement('option');
+                            opt.value = stock.code;
+                            opt.textContent = stock.code + ' (得分:' + stock.score + ')';
+                            opt.dataset.score = stock.score;
+                            select.appendChild(opt);
+                        });
+                    }
+                });
+        }
+
+        function updateBuyInfo() {
+            const select = document.getElementById('buy-stock-select');
+            const opt = select.options[select.selectedIndex];
+            document.getElementById('buy-score').textContent = opt.dataset.score || '-';
+        }
+
+        function manualSell() {
+            const stock_code = document.getElementById('sell-stock-select').value;
+            const quantity = parseInt(document.getElementById('sell-quantity').value);
+            const price = parseFloat(document.getElementById('sell-price').value);
+
+            if (!stock_code || !quantity || !price) {
+                alert('请填写完整信息');
+                return;
+            }
+
+            fetch('/api/trading/sell', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({stock_code, quantity, price})
+            })
+            .then(r => r.json())
+            .then(data => {
+                const msg = document.getElementById('sell-message');
+                if (data.success) {
+                    msg.textContent = '卖出成功！';
+                    msg.className = 'success';
+                    loadSellableStocks();
+                    loadCashInfo();
+                } else {
+                    msg.textContent = data.error;
+                    msg.className = 'error';
+                }
+            });
+        }
+
+        function manualBuy() {
+            let stock_code = document.getElementById('buy-stock-code').value.trim();
+            if (!stock_code) {
+                stock_code = document.getElementById('buy-stock-select').value;
+            }
+            const price = parseFloat(document.getElementById('buy-price').value);
+            const quantity = parseInt(document.getElementById('buy-quantity').value);
+
+            if (!stock_code || !price || !quantity) {
+                alert('请填写股票代码、买入价格和数量');
+                return;
+            }
+
+            fetch('/api/trading/buy', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({stock_code, price, quantity})
+            })
+            .then(r => r.json())
+            .then(data => {
+                const msg = document.getElementById('buy-message');
+                if (data.success) {
+                    msg.textContent = '买入成功！';
+                    msg.className = 'success';
+                    loadSellableStocks();
+                    loadCashInfo();
+                } else {
+                    msg.textContent = data.error;
+                    msg.className = 'error';
+                }
+            });
+        }
+
+        // ========== 手动交易子Tab切换 ==========
+        function showManualTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-panel').forEach(panel => panel.style.display = 'none');
+
+            if (tab === 'sell') {
+                document.querySelector('.tab-btn:nth-child(1)').classList.add('active');
+                document.getElementById('sell-panel').style.display = 'block';
+            } else {
+                document.querySelector('.tab-btn:nth-child(2)').classList.add('active');
+                document.getElementById('buy-panel').style.display = 'block';
+            }
+        }
+
+        // ========== 辅助脚本 ==========
+        let stFilterRunning = false;
+        let stockNdRunning = false;
+
+        function loadAuxScriptStatus() {
+            fetch('/api/status')
+                .then(r => r.json())
+                .then(data => {
+                    stFilterRunning = data.st_filter_running;
+                    stockNdRunning = data.stock_nd_running;
+
+                    updateAuxButton('st-filter', stFilterRunning, data.st_filter_progress);
+                    updateAuxButton('stock-nd', stockNdRunning, data.stock_nd_progress);
+
+                    const execBtn = document.getElementById('execute-btn');
+                    if (execBtn) {
+                        if (stFilterRunning || stockNdRunning) {
+                            execBtn.disabled = true;
+                            execBtn.textContent = '辅助脚本运行中...';
+                        } else {
+                            execBtn.disabled = false;
+                            execBtn.textContent = '开始执行';
+                        }
+                    }
+                });
+        }
+
+        function updateAuxButton(id, running, progress) {
+            const btn = document.getElementById(id + '-btn');
+            const status = document.getElementById(id + '-status');
+
+            if (btn && status) {
+                if (running) {
+                    btn.textContent = '停止';
+                    btn.className = 'btn btn-danger';
+                    status.textContent = progress || '运行中...';
+                    status.className = 'status-text running';
+                } else {
+                    btn.textContent = id === 'st-filter' ? '执行ST股票过滤' : '下载股票数据';
+                    btn.className = 'btn';
+                    status.textContent = progress || '空闲';
+                    status.className = 'status-text';
+                }
+            }
+        }
+
+        function toggleStFilter() {
+            if (stFilterRunning) {
+                fetch('/api/execute/st-filter/stop', {method: 'POST'});
+            } else {
+                fetch('/api/execute/st-filter', {method: 'POST'});
+            }
+        }
+
+        function toggleStockNd() {
+            if (stockNdRunning) {
+                fetch('/api/execute/stock-nd/stop', {method: 'POST'});
+            } else {
+                fetch('/api/execute/stock-nd', {method: 'POST'});
+            }
+        }
+
+        // 定时检查辅助脚本状态
+        setInterval(loadAuxScriptStatus, 2000);
 
         // 切换标签页
         function switchTab(tabName) {
             // 更新标签样式
             document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-            event.target.classList.add('active');
+            // 找到对应的tab并激活
+            const tabs = document.querySelectorAll('.tab');
+            const tabMap = {'portfolio': 0, 'execute': 1, 'reports': 2, 'manual': 3, 'dataprep': 4};
+            if (tabs[tabMap[tabName]]) {
+                tabs[tabMap[tabName]].classList.add('active');
+            }
 
             // 显示对应内容
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
@@ -619,6 +900,11 @@
             // 加载对应数据
             if (tabName === 'reports') {
                 loadReports();
+            } else if (tabName === 'manual') {
+                loadSellableStocks();
+                loadBuyableStocks();
+            } else if (tabName === 'dataprep') {
+                loadAuxScriptStatus();
             }
         }
 
@@ -627,9 +913,11 @@
             try {
                 const response = await fetch(API_BASE + '/api/portfolio/cash');
                 const result = await response.json();
-                
+                console.log('Cash info response:', result);
+
                 if (result.success) {
                     const data = result.data;
+                    console.log('Cash value:', data.cash);
                     document.getElementById('cash-info').innerHTML = `
                         <div class="info-row">
                             <span class="info-label">可用资金</span>
@@ -1008,11 +1296,7 @@
                 console.error('检查状态失败:', error);
             }
             
-            // 获取数据更新选项
-            const updateData = document.getElementById('update-data-checkbox').checked;
-            const updateDataText = updateData ? '\n4. 更新股票数据 (st_stock_filter 和 stock_nd)' : '';
-            
-            if (!confirm(`确定要执行每日交易吗？\n\n这将:\n1. 进行特征工程\n2. 生成预测\n3. 执行交易策略${updateDataText}`)) {
+            if (!confirm(`确定要执行每日交易吗？\n\n这将:\n1. 进行特征工程\n2. 生成预测\n3. 执行交易策略`)) {
                 return;
             }
 
@@ -1039,8 +1323,7 @@
                      },
                      body: JSON.stringify({
                          predict_date: predict_date,
-                         feature_date: feature_date,
-                         update_data: updateData
+                         feature_date: feature_date
                      })
                  });
                 
@@ -1152,18 +1435,23 @@
         let currentLogFile = null;
         function startLogPolling() {
             if (logInterval) clearInterval(logInterval);
-            
+
             logInterval = setInterval(async () => {
                 try {
                     const statusResponse = await fetch(API_BASE + '/api/status');
                     const status = await statusResponse.json();
-                    
+
+                    console.log('[LOG] Status:', status);
+
                     if (status.log_file) {
                         const logFile = status.log_file.split(/[/\\]/).pop();
-                        
+                        console.log('[LOG] Log file:', logFile);
+
                         const logResponse = await fetch(API_BASE + '/api/logs/' + logFile);
                         const logResult = await logResponse.json();
-                        
+
+                        console.log('[LOG] Log result:', logResult);
+
                         if (logResult.success) {
                             const logDiv = document.getElementById('log-content');
                             logDiv.textContent = logResult.content;
