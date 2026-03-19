@@ -23,14 +23,6 @@ BASE_DIR = PROJECT_ROOT  # 别名，和Django保持相似
 
 # 关键路径 - 支持环境变量覆盖
 # STOCK_DATA_DIR: 股票数据目录
-_stock_data_dir = os.environ.get('STOCK_DATA_DIR')
-if _stock_data_dir:
-    STOCK_DATA_DIR = Path(_stock_data_dir)
-    STOCK_DATA_PLK_DIR = Path(_stock_data_dir)
-else:
-    STOCK_DATA_DIR = get_base_path().parent / 'stock_data/csv'
-    STOCK_DATA_PLK_DIR = get_base_path().parent / 'stock_data'
-
 DATASET_DIR = PROJECT_ROOT.parent / 'data'
 LOG_DIR = PROJECT_ROOT.parent / 'logs'
 CONFIG_DIR = PROJECT_ROOT.parent / 'config'
@@ -38,8 +30,8 @@ MODEL_DIR = PROJECT_ROOT.parent / 'models'
 RESULT_DIR = PROJECT_ROOT.parent / 'output'
 REAL_TRADING_DIR = PROJECT_ROOT.parent / 'real_trading_data'
 REAL_TRADING_DIR_SIMULATION = PROJECT_ROOT.parent / 'real_trading_data_simulation' #tmp_simulation_realworld_v8.py用来模拟
-STOCK_DATA_PLK_DIR =  get_base_path().parent / 'stock_data'
-STOCK_DATA_DIR =  get_base_path().parent / 'stock_data/csv'
+STOCK_DATA_PLK_DIR =  Path(r'E:\train_models\stock_qt\stock_data') / 'stock_data'
+STOCK_DATA_DIR =  Path(r'E:\train_models\stock_qt') / 'stock_data/csv'
 DAILY_FEATURE_DIR = get_base_path().parent  / 'real_feature_data_daily'
 
 # 🆕 股票数据下载存储路径配置（可配置为外部绝对路径）

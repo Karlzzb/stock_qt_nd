@@ -33,8 +33,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--stock-data-dir', type=str, default=None)
 parser.add_argument('--st-stocks-list', type=str, default=None)
 parser.add_argument('--new-stocks-list', type=str, default=None)
-parser.add_argument('--predict-date', type=str, required=True)
-parser.add_argument('--feature-date', type=str, required=True)
+parser.add_argument('--predict-date', type=str, required=False)
+parser.add_argument('--feature-date', type=str, required=False)
 parser.add_argument('--update-data', action='store_true')
 args, unknown = parser.parse_known_args()
 
@@ -44,7 +44,7 @@ if args.stock_data_dir:
     logger.info(f"[CONFIG] 已设置STOCK_DATA_DIR={args.stock_data_dir}")
 
 # 现在导入配置，让它读取更新后的环境变量
-from config.settings import STOCK_DATA_DIR, MODEL_DIR, REAL_TRADING_DIR, DAILY_FEATURE_DIR, ST_FILTER_DATA_DIR
+from config.settings import MODEL_DIR, REAL_TRADING_DIR, DAILY_FEATURE_DIR, ST_FILTER_DATA_DIR, STOCK_ND_CSV_DIR
 from comm_fun import ALLOCATION_STRATEGY, PROBA_MEAN, PROBA_STD,model_config, label_encoding
 STRATEGY_PARAMS = model_config.STRATEGY_PARAMS_V8
 
@@ -404,7 +404,7 @@ class SmartSniperInvestor:
             # 特征不存在，继续用真实数据跑逻辑
             if raw_df is None or len(raw_df) < 1:
                 from grid_trading_simulation_v8 import load_price_data
-                full_data_dict = load_price_data(str(STOCK_DATA_DIR))
+                full_data_dict = load_price_data(str(STOCK_ND_CSV_DIR))
                 from grid_trading_simulation_v8 import convert_dict_to_dataframe_from_index
                 full_data_df = convert_dict_to_dataframe_from_index(full_data_dict)
 
@@ -447,7 +447,7 @@ class SmartSniperInvestor:
             df_proba['symbol'] = symbol_info
 
             from grid_trading_simulation_v8 import load_price_data
-            full_data_dict = load_price_data(str(STOCK_DATA_DIR))
+            full_data_dict = load_price_data(str(STOCK_ND_CSV_DIR))
             from grid_trading_simulation_v8 import convert_dict_to_dataframe_from_index
             full_data_df = convert_dict_to_dataframe_from_index(full_data_dict)
 
@@ -846,6 +846,7 @@ class SmartSniperInvestor:
                         current_price = stock_row['close']
                     else:
                         current_price = pos['avg_cost']
+                        logger.warning(f"{code} 的最新价格没找到")
 
                     market_value = current_price * pos['shares']
                     cost_value = pos['avg_cost'] * pos['shares']
@@ -912,7 +913,7 @@ def run(predict_date = datetime.now(), feature_date = datetime.now(), real_tradi
 
     # 初始化投资器
     investor = SmartSniperInvestor(
-        initial_capital=200000,
+        initial_capital=189872,
         max_positions=10,
         base_dir=real_trading_dir
     )
@@ -947,14 +948,14 @@ from feature_pipeline import load_price_data, feature_generator
 
 if __name__ == "__main__":
     # 设置环境变量，添加项目根目录到PYTHONPATH
-    import argparse
+    # import argparse
     
     # 创建参数解析器
-    parser = argparse.ArgumentParser(description='SmartSniper 实盘投资脚本')
-    parser.add_argument('--predict-date', type=str, help='预测日期 (格式: YYYY-MM-DD)', default=None)
-    parser.add_argument('--feature-date', type=str, help='特征数据日期 (格式: YYYY-MM-DD)', default=None)
+    # parser = argparse.ArgumentParser(description='SmartSniper 实盘投资脚本')
+    # parser.add_argument('--predict-date', required=False, type=str, help='预测日期 (格式: YYYY-MM-DD)')
+    # parser.add_argument('--feature-date', required=False, type=str, help='特征数据日期 (格式: YYYY-MM-DD)')
     
-    args = parser.parse_args()
+    # args = parser.parse_args()
     
     # 解析日期参数
     if args.predict_date:
@@ -982,8 +983,8 @@ if __name__ == "__main__":
 
     try:
         # 1. 生成特征
-        features = feature_generator(FEATURE_DATE_STR)
-        # features = pd.read_csv( DAILY_FEATURE_DIR / f"realistic_features_{FEATURE_DATE.strftime('%Y%m%d')}.csv")
+        # features = feature_generator(FEATURE_DATE_STR)
+        features = pd.read_csv( DAILY_FEATURE_DIR / f"realistic_features_{FEATURE_DATE.strftime('%Y%m%d')}.csv")
 
         # 2.开始运行策略
         if features is not None:
