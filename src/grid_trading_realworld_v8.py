@@ -983,8 +983,8 @@ if __name__ == "__main__":
 
     try:
         # 1. 生成特征
-        # features = feature_generator(FEATURE_DATE_STR)
-        features = pd.read_csv( DAILY_FEATURE_DIR / f"realistic_features_{FEATURE_DATE.strftime('%Y%m%d')}.csv")
+        features = feature_generator(FEATURE_DATE_STR)
+        # features = pd.read_csv( DAILY_FEATURE_DIR / f"realistic_features_{FEATURE_DATE.strftime('%Y%m%d')}.csv")
 
         # 2.开始运行策略
         if features is not None:
