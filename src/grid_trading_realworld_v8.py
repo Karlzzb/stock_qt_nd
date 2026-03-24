@@ -913,7 +913,7 @@ def run(predict_date = datetime.now(), feature_date = datetime.now(), real_tradi
 
     # 初始化投资器
     investor = SmartSniperInvestor(
-        initial_capital=189872,
+        initial_capital=99817,
         max_positions=10,
         base_dir=real_trading_dir
     )

@@ -1,2 +1,0 @@
-predict_date,code,action,reason,suggested_price,current_price,shares,suggested_stop_loss,suggested_take_profit,prediction_probability,required_capital,avg_cost,days_held
-2026-03-03,688528.SH,BUY,SIGNAL,11.710000038146973,11.710000038146973,4500,10.304800033569336,15.223000049591064,0.5025745961359792,52695.00017166138,0.0,0
