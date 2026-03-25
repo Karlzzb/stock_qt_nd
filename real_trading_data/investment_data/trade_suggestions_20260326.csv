@@ -1,0 +1,2 @@
+predict_date,code,action,reason,suggested_price,current_price,shares,suggested_stop_loss,suggested_take_profit,prediction_probability,required_capital,avg_cost,days_held
+2026-03-26,002377.SZ,BUY,SIGNAL,3.4600000381469727,3.4600000381469727,7900,3.044800033569336,4.498000049591065,0.5609830830277863,27334.000301361084,0.0,0
