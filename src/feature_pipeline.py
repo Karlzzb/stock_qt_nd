@@ -649,7 +649,9 @@ class FeaturePipeline:
             logger.info(f"{target_date} 丰富目标日期的DF特征和背离点提取......")
             all_divergence_points = pd.DataFrame()
             enriched_points = pd.DataFrame()
-            for _, row in tqdm(target_df.iterrows(), total=len(target_df), desc=f"{target_date.strftime('%Y%m%d')}丰富特征与计算背离"):
+            process_id = 0
+            report_interval = 10
+            for _, row in target_df.iterrows():
                 symbol = row['symbol']
                 enriched_point = row.to_dict()
                 data_with_indicators = all_2_target_day_df[all_2_target_day_df['symbol'] == symbol].set_index('timestamp')
@@ -657,6 +659,10 @@ class FeaturePipeline:
                 divergence_points_df = self.divergence_detector.detect_daily_divergence(data_with_indicators,symbol,target_date)
                 if len(divergence_points_df) > 0:
                     all_divergence_points = pd.concat([all_divergence_points, divergence_points_df],ignore_index=True)
+                process_id += 1
+                # 阶段性报告进度
+                if (process_id + 1) % report_interval == 0:
+                    logger.info(f"{target_date.strftime('%Y%m%d')}丰富特征与计算背离:: {process_id + 1}/{len(target_df)}")
 
             if all_divergence_points.empty:
                 logger.warning(f"{target_date.strftime('%Y%m%d')}无背离数据")
