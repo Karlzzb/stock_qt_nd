@@ -120,7 +120,8 @@ def data_clean(raw_data):
     numeric_cols = data.select_dtypes(include=[np.number]).columns
     # print(f"numeric_cols: {[col for col in numeric_cols]}")
     print(f"已删除 {before_count - after_count} 重复行，剩余 {after_count} 行数据")
-    key_columns = ['timestamp', model_config.LABEL_COL] + model_config.FULL_FEATURE_COLS
+    # key_columns = ['timestamp', model_config.LABEL_COL] + model_config.FULL_FEATURE_COLS
+    key_columns = ['timestamp'] + model_config.FULL_FEATURE_COLS
 
 
     # 2.  缺失值 统计与处理

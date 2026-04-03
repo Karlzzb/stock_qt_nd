@@ -90,14 +90,16 @@ def load_and_prepare_data(dataset_dir = DATASET_DIR, required_files=None, start_
     return combined_df
 
 
-def data_process(dataset_dir = DATASET_DIR, required_files=None):
+def data_process(dataset_dir = DATASET_DIR, required_files=None, start_date=None, end_date=None):
     if required_files is None:
         required_files = ["test_set.csv", "validation_set.csv"]
     logger.info("正在加载数据...")
-    raw_df = load_and_prepare_data(dataset_dir = dataset_dir, required_files = required_files)
+    raw_df = load_and_prepare_data(dataset_dir = dataset_dir, required_files = required_files, start_date = start_date)
     # 计算时间范围
-    start_date = raw_df['timestamp'].min().strftime("%Y%m%d")
-    end_date = (raw_df['timestamp'].max() + pd.Timedelta(days=60)).strftime("%Y%m%d")
+    if start_date is None:
+        start_date = raw_df['timestamp'].min().strftime("%Y%m%d")
+    if end_date is None:
+        end_date = (raw_df['timestamp'].max() + pd.Timedelta(days=60)).strftime("%Y%m%d")
 
     # 检查 full_data_df 的重复情况
     df_duplicates = raw_df.duplicated(subset=['symbol', 'timestamp']).sum()
@@ -377,7 +379,8 @@ if __name__ == "__main__":
     processed_data = data_process(dataset_dir=DATASET_DIR,
                              required_files=[
                                  # "train_set.csv",
-                                 "test_set.csv",
+                                 # "test_set.csv",
                                  "validation_set.csv",
-                             ])
-    run_concurrent(248526, processed_data)
+                             ], start_date="20260106")
+    # run_concurrent(248526, processed_data)
+    simple_run(initial_capital=248526,strategy_name ="参数1", strategy_params=model_config.STRATEGY_PARAMS_CANDIDATES_V8["参数55"],full_data=processed_data)
