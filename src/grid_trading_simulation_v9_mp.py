@@ -1,4 +1,4 @@
-# run_concurrent_opt.py
+# grid_trading_simulation_v9_mp.py
 import pandas as pd
 import numpy as np
 import os
@@ -13,7 +13,7 @@ from config.settings import DATASET_DIR, RESULT_DIR
 # ----------------------------------------------------
 # 步骤 1: 导入原文件中的类和函数
 # 为了确保能正确导入，需要将原文件所在的目录添加到系统路径
-# 假设 run_concurrent_opt.py 和 1_grid_trading_simulation_5.py 在同一目录
+# 假设 grid_trading_simulation_v9_mp.py 和 grid_trading_simulation_v9.py 在同一目录
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 try:
@@ -132,7 +132,7 @@ def concurrent_parameter_optimization(df_result, init_capital):
     print(f"开始参数优化，共 {len(param_combinations)} 种组合...")
 
     # 设置进程数：建议使用 CPU 核心数减 1
-    num_workers = 18 #max(1, os.cpu_count() - 1)
+    num_workers = max(1, os.cpu_count() - 1)
     print(f"使用 {num_workers} 个进程进行并发回测...")
 
     results = []
@@ -265,9 +265,7 @@ def finding_best_params_concurrent(init_capital):
     # (可选) 使用最佳参数运行最终回测 - 沿用原文件逻辑
     if best_params is not None:
         print(f"\n使用最佳参数运行最终回测...")
-        # 你的原文件中没有 final_asset_curve 的定义，这里需要根据原文件逻辑修改
-        # 简单起见，我们只打印最佳参数
-        pass
+        print(f"最佳参数: {best_params.to_dict()}")
 
 
 if __name__ == "__main__":
