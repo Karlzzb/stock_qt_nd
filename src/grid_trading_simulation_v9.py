@@ -323,7 +323,7 @@ from tools.hold_analysis import hold_analyzer
 from tools.profit_analysis import profit_analyzer
 from tools.return_analysis import return_analyzer
 from tools.trades_analysis import trades_analyzer
-from tools.return_prob_correlation_anlaysis import correlation_analyzer
+from tools.return_prob_correlation_analysis import correlation_analyzer
 
 import concurrent.futures
 
