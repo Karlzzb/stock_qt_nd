@@ -8,12 +8,12 @@ from src.comm_fun import model_config, ALLOCATION_STRATEGY, PROBA_MEAN, PROBA_ST
 import logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
-import matplotlib.pyplot as plt
-# 设置中文字体
-plt.rcParams['font.sans-serif'] = ['SimHei']
-plt.rcParams['axes.unicode_minus'] = False
 
 class SmartSniperStrategyV9:
+    # 最小买入Lot和现金阈值常量
+    MIN_BUY_LOT = 100
+    MIN_CASH_THRESHOLD = 100
+
     def __init__(self, initial_capital=1000000, max_positions=10):
         self.initial_capital = initial_capital
         self.cash = initial_capital
@@ -67,8 +67,8 @@ class SmartSniperStrategyV9:
         df['date'] = pd.to_datetime(df['date'])
         dates = sorted(df['date'].unique())
 
-        # V9 Fix: store full historical df for _calc_recent_rise
-        self._historical_df = df
+        # V9 Fix: Precompute recent_rise cache to avoid storing full historical df
+        self._recent_rise_cache = self._precompute_recent_rise(df)
 
         logger.debug(f"--- 启动狙击回测 ---")
         logger.debug(f"底仓比例: {self.base_ratio:.0%}")
@@ -94,13 +94,23 @@ class SmartSniperStrategyV9:
         return pd.DataFrame(self.history), pd.DataFrame(self.daily_assets)
 
     def _calc_recent_rise(self, code, today):
-        """计算股票近N天涨幅（使用历史数据）"""
-        stock_data = self._historical_df[self._historical_df['code'] == code].sort_values('date')
-        cutoff_date = today - pd.Timedelta(days=self.recent_rise_n)
-        recent = stock_data[stock_data['date'] >= cutoff_date]
-        if len(recent) < 2:
-            return 0
-        return (recent['close'].iloc[-1] / recent['close'].iloc[0]) - 1
+        """计算股票近N天涨幅（使用预计算的缓存）"""
+        return self._recent_rise_cache.get((code, today), 0)
+
+    def _precompute_recent_rise(self, df):
+        """预计算每个股票在每个日期的近N天涨幅，避免存储完整历史DataFrame"""
+        cache = {}
+        for code in df['code'].unique():
+            stock_data = df[df['code'] == code].sort_values('date')
+            closes = stock_data['close'].values
+            dates = stock_data['date'].values
+            for i, today in enumerate(dates):
+                start_idx = max(0, i - self.recent_rise_n + 1)
+                if i - start_idx < 1:
+                    cache[(code, today)] = 0
+                else:
+                    cache[(code, today)] = (closes[i] / closes[start_idx]) - 1
+        return cache
 
     def _manage_positions(self, daily_data, today):
         # RQ 动态阈值 (V9新增)
@@ -212,7 +222,7 @@ class SmartSniperStrategyV9:
 
             # 可用于分配的真实可用现金 = 当前现金 - 已冻结资金
             available_cash = self.cash - total_frozen
-            if available_cash < 100:  # 现金太少，跳出
+            if available_cash < self.MIN_CASH_THRESHOLD:  # 现金太少，跳出
                 break
 
             signal_price = row['close']
@@ -276,11 +286,11 @@ class SmartSniperStrategyV9:
 
             # 以 signal_price 作为限价挂单价格（挂单阶段不知道 next_open）
             planned_shares = int(budget / signal_price / 100) * 100
-            if planned_shares <= 100:
+            if planned_shares <= self.MIN_BUY_LOT:
                 # 如果本slot预算买不到100股，尝试把整个剩余可用现金用在这个slot（若只剩1个slot）
                 if remaining_slots == 1:
                     planned_shares = int(available_cash / signal_price / 100) * 100
-                    if planned_shares <= 100:
+                    if planned_shares <= self.MIN_BUY_LOT:
                         continue
                 else:
                     continue
@@ -288,7 +298,7 @@ class SmartSniperStrategyV9:
             # 再次安全检查：如果剩余可用现金不够，降级planned_shares
             if required_cash > available_cash:
                 max_shares = int(available_cash / signal_price / 100) * 100
-                if max_shares < 100:
+                if max_shares < self.MIN_BUY_LOT:
                     continue
                 planned_shares = max_shares
 
@@ -343,9 +353,6 @@ class SmartSniperStrategyV9:
             # 条件3: 如果第二天没开盘也不买入，匹配真实场景TODO
             if next_day is None:
                 logger.warning(f"在{today}，无法买入{code},没有下一天数据了")
-                continue
-            if (order.get('entry_date') - next_day).days > 0:
-                logger.warning(f"在{today}，无法买入{code}，最近开盘日期{next_day}")
                 continue
 
             # NODE 成交价格规则（这里不知道，挂高后按照什么成交，所以按照高价成交逻辑模拟）
