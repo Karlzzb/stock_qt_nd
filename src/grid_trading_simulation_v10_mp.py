@@ -8,13 +8,11 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 from tqdm import tqdm
 import time
 import logging
-from config.settings import DATASET_DIR, RESULT_DIR
 
-# ----------------------------------------------------
-# 步骤 1: 导入原文件中的类和函数
-# 为了确保能正确导入，需要将原文件所在的目录添加到系统路径
-# 假设 run_concurrent_opt.py 和 1_grid_trading_simulation_5.py 在同一目录
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+# Add project root to sys.path for config import
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from config.settings import DATASET_DIR, RESULT_DIR
 
 try:
     # 从原文件中导入策略类和数据加载函数

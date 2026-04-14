@@ -1,5 +1,11 @@
 import pandas as pd
 import numpy as np
+import os
+import sys
+
+# Add project root to sys.path for config import
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from strategies.smart_sniper_strategy_v10 import SmartSniperStrategyV10 as SmartSniperStrategy
 from comm_fun import model_config
 from config.settings import STOCK_DATA_DIR,MODEL_DIR, DATASET_DIR, RESULT_DIR
