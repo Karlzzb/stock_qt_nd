@@ -170,7 +170,7 @@ class SmartSniperStrategyV10:
 
             # 2. 移动止盈 (Trailing Take Profit)
             if curr_h > pos['avg_cost'] * (1 + self.trailing_offset):
-                new_trailing_stop = curr_price * (1 - self.trailing_pct)
+                new_trailing_stop = curr_h * (1 - self.trailing_pct)
                 pos['trailing_stop'] = max(pos.get('trailing_stop', 0), new_trailing_stop)
 
             # 3. 检查移动止盈是否触发
