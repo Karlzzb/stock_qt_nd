@@ -233,7 +233,7 @@ def finding_best_params_concurrent(init_capital):
     print("🚀 正在加载数据并进行模型预测...")
 
     # 内联 data_process 函数以避免 import V8
-    from src.comm_fun import data_process
+    from grid_trading_simulation_v10 import data_process
 
     df_result = data_process(dataset_dir=DATASET_DIR, required_files=["test_set.csv", "validation_set.csv"])
 
