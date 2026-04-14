@@ -67,6 +67,9 @@ class SmartSniperStrategyV9:
         df['date'] = pd.to_datetime(df['date'])
         dates = sorted(df['date'].unique())
 
+        # V9 Fix: store full historical df for _calc_recent_rise
+        self._historical_df = df
+
         logger.debug(f"--- 启动狙击回测 ---")
         logger.debug(f"底仓比例: {self.base_ratio:.0%}")
 
@@ -90,9 +93,9 @@ class SmartSniperStrategyV9:
 
         return pd.DataFrame(self.history), pd.DataFrame(self.daily_assets)
 
-    def _calc_recent_rise(self, code, today, df):
-        """计算股票近N天涨幅"""
-        stock_data = df[df['code'] == code].sort_values('date')
+    def _calc_recent_rise(self, code, today):
+        """计算股票近N天涨幅（使用历史数据）"""
+        stock_data = self._historical_df[self._historical_df['code'] == code].sort_values('date')
         cutoff_date = today - pd.Timedelta(days=self.recent_rise_n)
         recent = stock_data[stock_data['date'] >= cutoff_date]
         if len(recent) < 2:
@@ -203,7 +206,7 @@ class SmartSniperStrategyV9:
                 break
 
             # 2. 涨幅过滤 (V9新增)
-            recent_rise = self._calc_recent_rise(code, today, daily_data)
+            recent_rise = self._calc_recent_rise(code, today)
             if recent_rise > self.recent_rise_pct:
                 continue  # 跳过近期涨幅过大的股票
 
