@@ -165,7 +165,8 @@ def data_process(dataset_dir = DATASET_DIR, required_files=None, start_date=None
     df_result['entry_date'] = df_result.groupby('code')['date'].shift(-1)
 
     # 删除没有次日数据的行（最后一天）
-    # df_result = df_result.dropna(subset=['next_open'])
+    # 策略使用 is None 检查而非 pd.isna()，无法正确处理 NaN，故在此丢弃
+    df_result = df_result.dropna(subset=['next_open'])
 
     return df_result
 
@@ -320,7 +321,7 @@ def simple_run(initial_capital, strategy_name, strategy_params, full_data):
 
 from tools.hold_analysis import hold_analyzer
 from tools.profit_analysis import profit_analyzer
-from tools.return_anlaysis import return_analyzer
+from tools.return_analysis import return_analyzer
 from tools.trades_analysis import trades_analyzer
 from tools.return_prob_correlation_anlaysis import correlation_analyzer
 
