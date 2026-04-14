@@ -50,6 +50,7 @@ real_features_processors_v*/models
 real_features_processors_v*/data
 real_features_processors_v*/logs
 real_trading_data_simulation/
+docs/superpower
 
 # 只允许特定的csv文件
 !investment_plans/**/*.csv
