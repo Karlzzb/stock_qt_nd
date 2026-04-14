@@ -18,7 +18,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 try:
     # 从V9策略文件导入策略类
-    from strategies.smart_sniper_strategy_v9 import SmartSniperStrategy
+    from strategies.smart_sniper_strategy_v9 import SmartSniperStrategyV9 as SmartSniperStrategy
     # 从V9 simulation文件导入data_process
     from grid_trading_simulation_v9 import data_process
 except ImportError as e:

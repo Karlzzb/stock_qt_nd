@@ -18,7 +18,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 try:
     # 从原文件中导入策略类和数据加载函数
-    from strategies.smart_sniper_strategy_v10 import SmartSniperStrategy
+    from strategies.smart_sniper_strategy_v10 import SmartSniperStrategyV10 as SmartSniperStrategy
 except ImportError as e:
     print(f"导入 strategies.smart_sniper_strategy_v10 失败。请检查文件是否在同一目录。错误: {e}")
     sys.exit(1)

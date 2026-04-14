@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from strategies.smart_sniper_strategy_v9 import SmartSniperStrategy
+from strategies.smart_sniper_strategy_v9 import SmartSniperStrategyV9 as SmartSniperStrategy
 from comm_fun import model_config
 from config.settings import STOCK_DATA_DIR,MODEL_DIR, DATASET_DIR, RESULT_DIR
 import os
