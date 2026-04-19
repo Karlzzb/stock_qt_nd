@@ -450,9 +450,9 @@ if __name__ == "__main__":
     processed_data = data_process(dataset_dir=DATASET_DIR,
                              required_files=[
                                  # "train_set.csv",
-                                 # "test_set.csv",
+                                 "test_set.csv",
                                  "validation_set.csv",
-                             ], start_date="20260106")
+                             ])
     # run_concurrent(248526, processed_data)
 
     # 使用V10默认参数运行单个测试

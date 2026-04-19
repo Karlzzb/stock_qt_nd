@@ -327,9 +327,9 @@ def simple_run(initial_capital, strategy_name, strategy_params, full_data):
 
 from tools.hold_analysis import hold_analyzer
 from tools.profit_analysis import profit_analyzer
-from tools.return_analysis import return_analyzer
+from tools.return_anlaysis import return_analyzer
 from tools.trades_analysis import trades_analyzer
-from tools.return_prob_correlation_analysis import correlation_analyzer
+from tools.return_prob_correlation_anlaysis import correlation_analyzer
 
 import concurrent.futures
 
@@ -405,8 +405,8 @@ if __name__ == "__main__":
     processed_data = data_process(dataset_dir=DATASET_DIR,
                              required_files=[
                                  # "train_set.csv",
-                                 # "test_set.csv",
+                                 "test_set.csv",
                                  "validation_set.csv",
-                             ], start_date="20260106")
+                             ])
     # run_concurrent(248526, processed_data)
     simple_run(initial_capital=248526,strategy_name ="参数1", strategy_params=model_config.STRATEGY_PARAMS_CANDIDATES_V9["参数55"],full_data=processed_data)
