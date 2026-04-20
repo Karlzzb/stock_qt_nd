@@ -64,10 +64,12 @@ def load_and_prepare_data(dataset_dir = DATASET_DIR, required_files=None, start_
     # BUGFIXED 这里没有对数据做预处理，导致模拟和真实场景不一致
     combined_df = prepare_real_daily_features(combined_df)
 
-    # NOTE: 对ST、次新股和不能交易的进行过滤
+    # 创业版没有办法交易
+    # combined_df = combined_df[combined_df['symbol'].str.match(r'^[60]')]
+
+    # NOTE: 对ST、次新股和不能交易的进行过滤（模拟过程中这些信息无法实时获取）
     # st_df = pd.read_csv(DATASET_DIR / 'st_stocks_list.csv')
     # new_df = pd.read_csv(DATASET_DIR / 'new_stocks_list.csv')
-    # combined_df = combined_df[combined_df['symbol'].str.match(r'^[60]')]
     # combined_df = combined_df[~combined_df['symbol'].isin(st_df['ts_code'])]
     # combined_df = combined_df[~combined_df['symbol'].isin(new_df['ts_code'])]
 
@@ -359,10 +361,10 @@ def run_concurrent(init_capital, data):
         for future in concurrent.futures.as_completed(futures):
             try:
                 strategy_name, analysis_result_txt, analysis_result_df = future.result()
-                hold_analyzer(version="v8", param_suffix=strategy_name)
-                profit_analyzer(version="v8", param_suffix=strategy_name)
-                return_analyzer(version="v8", param_suffix=strategy_name)
-                trades_analyzer(version="v8", param_suffix=strategy_name)
+                # hold_analyzer(version="v8", param_suffix=strategy_name)
+                # profit_analyzer(version="v8", param_suffix=strategy_name)
+                # return_analyzer(version="v8", param_suffix=strategy_name)
+                # trades_analyzer(version="v8", param_suffix=strategy_name)
                 # correlation_analyzer(version="v8", param_suffix=strategy_name)
                 analysis_result_txt.append("*" * 60)
                 all_analysis_result.extend(analysis_result_txt)
@@ -370,11 +372,6 @@ def run_concurrent(init_capital, data):
                 print(f"参数组 {strategy_name} 测试完成")
             except Exception as e:
                 print(f"参数组执行出错: {e}")
-        if len(all_analysis_result) > 0:
-            analysis_txt = RESULT_DIR / f'strategy_compare_v8_full_analysis.txt'
-            os.makedirs(RESULT_DIR, exist_ok=True)
-            with open(analysis_txt, 'w', encoding='utf-8') as f:
-                f.write('\n'.join(all_analysis_result))
         if len(analysis_df_list) > 0:
             final_df = pd.concat(analysis_df_list, ignore_index=True)
             analysis_df = RESULT_DIR / f'strategy_compare_v8_full_analysis.csv'

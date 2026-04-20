@@ -47,6 +47,7 @@ if args.stock_data_dir:
 from config.settings import MODEL_DIR, REAL_TRADING_DIR, DAILY_FEATURE_DIR, ST_FILTER_DATA_DIR, STOCK_ND_CSV_DIR
 from comm_fun import ALLOCATION_STRATEGY, PROBA_MEAN, PROBA_STD,model_config, label_encoding
 STRATEGY_PARAMS = model_config.STRATEGY_PARAMS_V8
+from stock_eligibility_filter import StockEligibilityFilter
 
 
 class PortfolioState:
@@ -310,6 +311,9 @@ class SmartSniperInvestor:
             self.portfolio_state.cash = initial_capital
             logger.info(f"💰 初始化投资组合，起始资金: ¥{initial_capital:,.2f}")
 
+        # 统一股票过滤器
+        self.stock_filter = StockEligibilityFilter()
+
 
     @staticmethod
     def _load_prepare_data(file_pattern):
@@ -369,19 +373,6 @@ class SmartSniperInvestor:
         combined_df = combined_df.dropna(subset=key_columns)
         after_count = len(combined_df)
         logger.info(f"已删除 {before_count - after_count} 个包含关键列 NaN 的行，剩余 {after_count} 行数据")
-
-        # NOTE: 对ST、次新股和不能交易的进行过滤
-        combined_df, _ = label_encoding(combined_df)
-        full_len = len(combined_df)
-        st_list_path = args.st_stocks_list if args.st_stocks_list else str(ST_FILTER_DATA_DIR / 'st_stocks_list.csv')
-        new_list_path = args.new_stocks_list if args.new_stocks_list else str(ST_FILTER_DATA_DIR / 'new_stocks_list.csv')
-        st_df = pd.read_csv(st_list_path)
-        new_df = pd.read_csv(new_list_path)
-        combined_df = combined_df[combined_df['symbol'].str.match(r'^[60]')]
-        combined_df = combined_df[~combined_df['symbol'].isin(st_df['ts_code'])]
-        combined_df = combined_df[~combined_df['symbol'].isin(new_df['ts_code'])]
-        logger.info(
-            f"原始数据量: {full_len} 过滤后数据量: {len(combined_df)} 过滤后%: {(len(combined_df) / full_len) * 100:.2f}%")
 
         return combined_df
 
@@ -625,6 +616,10 @@ class SmartSniperInvestor:
             # FIXED BUG  这里过滤，而不在数据预处理过滤，避免simulation与 real_world 执行不一致的问题。
             (daily_data['close'] <= model_config.AFFORDABLE_PRICE)
             ].copy()
+
+        # 统一过滤：主板 + ST + 次新股
+        trade_date = predict_date.strftime('%Y%m%d')
+        candidates = self.stock_filter.filter(candidates, trade_date)
 
         if candidates.empty:
             return buy_suggestions

@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 # 设置中文字体
 plt.rcParams['font.sans-serif'] = ['SimHei']
 plt.rcParams['axes.unicode_minus'] = False
+from src.stock_eligibility_filter import StockEligibilityFilter
 
 class SmartSniperStrategy:
     def __init__(self, initial_capital=1000000, max_positions=10):
@@ -36,6 +37,9 @@ class SmartSniperStrategy:
         self.positions = {}
         self.history = []
         self.daily_assets = []
+
+        # 统一股票过滤器
+        self.stock_filter = StockEligibilityFilter()
 
     def _current_budget(self):
         return self.cash / max(1, (self.max_positions - len(self.positions)))
@@ -146,6 +150,13 @@ class SmartSniperStrategy:
             # FIXED BUG  这里过滤，而不在数据预处理过滤，避免simulation与 real_world 执行不一致的问题。
             (daily_data['close'] <= model_config.AFFORDABLE_PRICE)
             ].copy()
+
+        if candidates.empty:
+            return
+
+        # 统一过滤：主板 + ST + 次新股
+        trade_date = today.strftime('%Y%m%d')
+        candidates = self.stock_filter.filter(candidates, trade_date)
 
         if candidates.empty:
             return
