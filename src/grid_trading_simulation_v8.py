@@ -64,6 +64,13 @@ def load_and_prepare_data(dataset_dir = DATASET_DIR, required_files=None, start_
     # BUGFIXED 这里没有对数据做预处理，导致模拟和真实场景不一致
     combined_df = prepare_real_daily_features(combined_df)
 
+    # NOTE: 对ST、次新股和不能交易的进行过滤
+    # st_df = pd.read_csv(DATASET_DIR / 'st_stocks_list.csv')
+    # new_df = pd.read_csv(DATASET_DIR / 'new_stocks_list.csv')
+    # combined_df = combined_df[combined_df['symbol'].str.match(r'^[60]')]
+    # combined_df = combined_df[~combined_df['symbol'].isin(st_df['ts_code'])]
+    # combined_df = combined_df[~combined_df['symbol'].isin(new_df['ts_code'])]
+
     # 时间过滤
     if start_date is not None:
         if isinstance(start_date, str):
@@ -335,7 +342,7 @@ def run_strategy_with_analysis(name, params, capital, full_data):
 
 def run_concurrent(init_capital, data):
     # 使用线程池并发执行
-    max_workers = 8  # 根据CPU核心数调整
+    max_workers = 16  # 根据CPU核心数调整
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
         # 准备任务
         futures = []
@@ -379,8 +386,11 @@ if __name__ == "__main__":
     processed_data = data_process(dataset_dir=DATASET_DIR,
                              required_files=[
                                  # "train_set.csv",
-                                 # "test_set.csv",
+                                 "test_set.csv",
                                  "validation_set.csv",
-                             ], start_date="20260106")
-    # run_concurrent(248526, processed_data)
-    simple_run(initial_capital=248526,strategy_name ="参数1", strategy_params=model_config.STRATEGY_PARAMS_CANDIDATES_V8["参数55"],full_data=processed_data)
+                             ],
+
+                                  # start_date="20260106"
+                                  )
+    run_concurrent(248526, processed_data)
+    # simple_run(initial_capital=248526,strategy_name ="参数55", strategy_params=model_config.STRATEGY_PARAMS_CANDIDATES_V8["参数55"],full_data=processed_data)
