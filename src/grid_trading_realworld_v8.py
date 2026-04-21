@@ -365,6 +365,7 @@ class SmartSniperInvestor:
         combined_df = combined_df.sort_values(['timestamp', 'symbol', 'confirmation_score']).drop_duplicates(subset=['timestamp', 'symbol'], keep='last')
         after_count = len(combined_df)
         logger.info(f"已删除 {before_count - after_count} 重复行，剩余 {after_count} 行数据")
+        combined_df, _ = label_encoding(combined_df)
 
         # 关键列数据无效剔除
         key_columns = ['timestamp'] + model_config.OPTIMIZED_FEATURE_COLS
@@ -960,8 +961,9 @@ if __name__ == "__main__":
             logger.error(f"预测日期格式错误: {args.predict_date}，应为 YYYY-MM-DD")
             exit(1)
     else:
-        PREDICT_DATE = datetime.now() + timedelta(days=1)  # 昨天
-    
+        # PREDICT_DATE = datetime.now() + timedelta(days=1)
+        PREDICT_DATE = datetime.now()
+
     if args.feature_date:
         try:
             FEATURE_DATE = datetime.strptime(args.feature_date, '%Y-%m-%d')
@@ -969,7 +971,7 @@ if __name__ == "__main__":
             logger.error(f"特征日期格式错误: {args.feature_date}，应为 YYYY-MM-DD")
             exit(1)
     else:
-        FEATURE_DATE = datetime.now() # 默认今天
+        FEATURE_DATE = datetime.now() + timedelta(days=-1)
     
     FEATURE_DATE_STR = FEATURE_DATE.strftime("%Y-%m-%d")
 
@@ -978,8 +980,8 @@ if __name__ == "__main__":
 
     try:
         # 1. 生成特征
-        features = feature_generator(FEATURE_DATE_STR)
-        # features = pd.read_csv( DAILY_FEATURE_DIR / f"realistic_features_{FEATURE_DATE.strftime('%Y%m%d')}.csv")
+        # features = feature_generator(FEATURE_DATE_STR)
+        features = pd.read_csv( DAILY_FEATURE_DIR / f"realistic_features_{FEATURE_DATE.strftime('%Y%m%d')}.csv")
 
         # 2.开始运行策略
         if features is not None:
