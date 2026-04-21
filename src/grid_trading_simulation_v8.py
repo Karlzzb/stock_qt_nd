@@ -344,7 +344,7 @@ def run_strategy_with_analysis(name, params, capital, full_data):
 
 def run_concurrent(init_capital, data):
     # 使用线程池并发执行
-    max_workers = 16  # 根据CPU核心数调整
+    max_workers = 8  # 根据CPU核心数调整
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
         # 准备任务
         futures = []
