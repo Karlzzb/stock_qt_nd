@@ -3,16 +3,15 @@
 功能：
 1. 自动判断是否为交易日
 2. 自动计算 FEATURE_DATE（今天）和 PREDICT_DATE（下一个交易日）
-3. 顺序执行：st_stock_filter_v2.py -> stock_v2.py -> grid_trading_realworld_v8.py
+3. 顺序执行：stock_nd.py -> grid_trading_realworld_v8.py
 4. 完整的错误处理和日志记录
 5. 支持跳过指定步骤（通过参数传递）
 
 使用方法：
     # 正常执行所有步骤
     python daily_trading_executor.py
-    
+
     # 在 main() 函数中修改参数：
-    skip_st_filter = True   # 跳过 ST股票过滤
     skip_stock_data = True  # 跳过 股票数据加载
 """
 
@@ -107,24 +106,21 @@ class TradingDayChecker:
 class DailyTradingExecutor:
     """每日交易执行器"""
     
-    def __init__(self, skip_st_filter=False, skip_stock_data=False):
+    def __init__(self, skip_stock_data=False):
         """
         初始化执行器
-        
+
         Args:
-            skip_st_filter: 是否跳过ST股票过滤步骤
             skip_stock_data: 是否跳过股票数据加载步骤
         """
         self.script_dir = Path(__file__).parent
         self.day_checker = TradingDayChecker()
-        
+
         # 脚本路径
-        self.st_filter_script = self.script_dir / 'st_stock_filter.py'
         self.stock_data_script = self.script_dir / 'stock_nd.py'
         self.trading_script = self.script_dir / 'grid_trading_realworld_v8.py'
-        
+
         # 跳过选项
-        self.skip_st_filter = skip_st_filter
         self.skip_stock_data = skip_stock_data
     
     def run_script(self, script_path: Path, script_name: str) -> bool:
@@ -282,12 +278,10 @@ class DailyTradingExecutor:
         logger.info("="*80)
         
         # 显示跳过选项
-        if self.skip_st_filter or self.skip_stock_data:
+        if self.skip_stock_data:
             logger.info("⚙️  执行选项:")
-            if self.skip_st_filter:
-                logger.info("   ⏭️  跳过 ST股票过滤 (st_stock_filter_v2.py)")
             if self.skip_stock_data:
-                logger.info("   ⏭️  跳过 股票数据加载 (stock_v2.py)")
+                logger.info("   ⏭️  跳过 股票数据加载 (stock_nd.py)")
             logger.info("")
         
         # 1. 确定日期
@@ -308,45 +302,30 @@ class DailyTradingExecutor:
         success = False
         
         try:
-            # 3. 执行 st_stock_filter_v2.py（可选）
-            if self.skip_st_filter:
-                logger.info("\n" + "="*80)
-                logger.info("步骤 1/3: ST股票过滤 [已跳过]")
-                logger.info("="*80)
-                logger.info("⏭️  根据配置跳过 ST股票过滤步骤")
-            else:
-                logger.info("\n" + "="*80)
-                logger.info("步骤 1/3: 执行 ST股票过滤")
-                logger.info("="*80)
-                
-                if not self.run_script(self.st_filter_script, "st_stock_filter_v2.py"):
-                    logger.error("❌ ST股票过滤失败，终止执行")
-                    return False
-            
-            # 4. 执行 stock_v2.py（可选）
+            # 3. 执行 stock_nd.py（可选）
             if self.skip_stock_data:
                 logger.info("\n" + "="*80)
-                logger.info("步骤 2/3: 股票数据加载 [已跳过]")
+                logger.info("步骤 1/2: 股票数据加载 [已跳过]")
                 logger.info("="*80)
                 logger.info("⏭️  根据配置跳过 股票数据加载步骤")
                 logger.info("⚠️  警告: 请确保股票数据已经是最新的！")
             else:
                 logger.info("\n" + "="*80)
-                logger.info("步骤 2/3: 执行股票数据加载")
+                logger.info("步骤 1/2: 执行股票数据加载")
                 logger.info("="*80)
                 
-                if not self.run_script(self.stock_data_script, "stock_v2.py"):
+                if not self.run_script(self.stock_data_script, "stock_nd.py"):
                     logger.error("❌ 股票数据加载失败，终止执行")
                     return False
-            
-            # 5. 检查股票数据是否加载完成（即使跳过加载也要检查）
+
+            # 4. 检查股票数据是否加载完成（即使跳过加载也要检查）
             if not self.check_stock_data_loaded():
                 logger.error("❌ 股票数据加载不完整，终止执行")
                 return False
-            
-            # 6. 修改 grid_trading_realworld_v8.py 的日期参数并执行
+
+            # 5. 修改 grid_trading_realworld_v8.py 的日期参数并执行
             logger.info("\n" + "="*80)
-            logger.info("步骤 3/3: 执行网格交易策略")
+            logger.info("步骤 2/2: 执行网格交易策略")
             logger.info("="*80)
             
             # 读取原始脚本
@@ -408,9 +387,8 @@ class DailyTradingExecutor:
 def main():
     """
     主函数
-    
+
     在这里修改参数来控制执行行为：
-    - skip_st_filter: 是否跳过 ST股票过滤步骤
     - skip_stock_data: 是否跳过 股票数据加载步骤
     - feature_date: 特征日期（默认为今天）
     - predict_date: 预测日期（默认为下一个交易日）
@@ -418,17 +396,15 @@ def main():
     try:
         # ==================== 参数设置 ====================
         # 跳过选项
-        skip_st_filter = True   # True=跳过ST股票过滤, False=执行ST股票过滤
         skip_stock_data = True  # True=跳过股票数据加载, False=执行股票数据加载
-        
+
         # 日期设置（None表示使用默认值）
         feature_date = None # 特征日期，None=今天，或指定如: datetime(2026, 2, 6)
         predict_date = None  # 预测日期，None=下一个交易日，或指定如: datetime(2026, 2, 9)
         # =================================================
-        
+
         # 创建执行器
         executor = DailyTradingExecutor(
-            skip_st_filter=skip_st_filter,
             skip_stock_data=skip_stock_data
         )
         
