@@ -312,7 +312,7 @@ class SmartSniperInvestor:
             logger.info(f"💰 初始化投资组合，起始资金: ¥{initial_capital:,.2f}")
 
         # 统一股票过滤器
-        self.stock_filter = StockEligibilityFilter()
+        self.stock_filter = StockEligibilityFilter(filter_main_board= False,filter_st = False,filter_new_stock = False)
 
 
     @staticmethod

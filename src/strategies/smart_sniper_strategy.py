@@ -15,7 +15,9 @@ plt.rcParams['axes.unicode_minus'] = False
 from src.stock_eligibility_filter import StockEligibilityFilter
 
 class SmartSniperStrategy:
-    def __init__(self, initial_capital=1000000, max_positions=10):
+    def __init__(self, initial_capital=1000000, max_positions=10,
+                 filter_main_board=False, filter_st=False, filter_new_stock=False,
+                 disable_tqdm=False, st_preloaded=None):
         self.initial_capital = initial_capital
         self.cash = initial_capital
         self.max_positions = max_positions
@@ -38,8 +40,14 @@ class SmartSniperStrategy:
         self.history = []
         self.daily_assets = []
 
-        # 统一股票过滤器
-        self.stock_filter = StockEligibilityFilter()
+        # 统一股票过滤器（支持外部传入过滤条件）
+        self.stock_filter = StockEligibilityFilter(
+            filter_main_board=filter_main_board,
+            filter_st=filter_st,
+            filter_new_stock=filter_new_stock,
+            st_preloaded=st_preloaded,
+        )
+        self.disable_tqdm = disable_tqdm
 
     def _current_budget(self):
         return self.cash / max(1, (self.max_positions - len(self.positions)))
@@ -59,7 +67,7 @@ class SmartSniperStrategy:
         logger.debug(f"--- 启动狙击回测 ---")
         logger.debug(f"底仓比例: {self.base_ratio:.0%}")
 
-        for i, today in enumerate(tqdm(dates)):
+        for i, today in enumerate(tqdm(dates, disable=self.disable_tqdm)):
             if i + 1 < len(dates):
                 next_day = dates[i + 1]
             else:

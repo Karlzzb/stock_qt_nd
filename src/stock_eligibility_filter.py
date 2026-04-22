@@ -21,17 +21,23 @@ class StockEligibilityFilter:
     """
 
     def __init__(self,
-                 filter_main_board: bool = True,
-                 filter_st: bool = True,
-                 filter_new_stock: bool = True):
+                 filter_main_board: bool = False,
+                 filter_st: bool = False,
+                 filter_new_stock: bool = False,
+                 st_preloaded: dict[str, set[str]] | None = None):
+        """
+        Args:
+            st_preloaded: 预加载的 ST 缓存，格式 {trade_date: set of ts_codes}，
+                          用于 Phase2 批量回测，避免每个实例重复调 API。
+        """
         self.filter_main_board = filter_main_board
         self.filter_st = filter_st
         self.filter_new_stock = filter_new_stock
 
         # 一次性缓存：{symbol: list_date}
         self._stock_basic: dict[str, str] = {}
-        # 按日缓存：{trade_date: set of symbols}
-        self._st_cache: dict[str, set[str]] = {}
+        # 按日缓存：{trade_date: set of symbols}，可传入预加载数据
+        self._st_cache: dict[str, set[str]] = dict(st_preloaded) if st_preloaded else {}
 
         self._init_stock_basic()
 
@@ -95,7 +101,8 @@ class StockEligibilityFilter:
 
         if self.filter_main_board:
             result = result[result.index.str.match(r'^[60]')]
-            symbols = result.index
+        else:
+            result = result[result.index.str.match(r'^[630]')]
 
         if self.filter_st:
             st_set = self._get_st_stocks(trade_date)

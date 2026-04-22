@@ -41,11 +41,11 @@ def extract_parameters_from_csv(input_file, sort_column, top_k, output_file=None
         max_positions = int(row['max_positions'])
         min_probability = row['min_probability']
 
-        if row['win_rate'] < 0.5 or row['total_trades'] < 110 or row['max_drawdown'] < -0.29:
+        if row['win_rate'] < 0.49 or row['total_trades'] < 90 or row['max_drawdown'] < -0.30:
             continue
 
         # 添加注释行
-        comment = f' "参数{i}":   {{  # 测试&验证集表现： 回报率:{row["return_rate"]} 倍  |  最大回撤： {row["max_drawdown"]} | 胜率：{row["win_rate"]} | 总交易数：{row["total_trades"]} | sharpe_ratio：{row["sharpe_ratio"]}'
+        comment = f' "参数{i}":   {{  # 回报率:{row["return_rate"]:.4f} | 最大回撤:{row["max_drawdown"]:.4f} | 胜率:{row["win_rate"]:.4f} | 夏普:{row["sharpe_ratio"]:.4f} | 交易数:{int(row["total_trades"])}'
         output_lines.append(comment)
 
         # 添加参数字典
@@ -117,6 +117,6 @@ from config.settings import RESULT_DIR
 
 if __name__ == "__main__":
     extract_parameters_from_csv(str(RESULT_DIR / "parameter_optimization_results_concurrent_v8.csv"),
-                                'return_rate',30, str(RESULT_DIR / "best_params_v8.json")
+                                'return_rate',50, str(RESULT_DIR / "best_params_v8.json")
 
          )
