@@ -26,9 +26,11 @@ from comm_fun import model_config
 OUTPUT_DIR = RESULT_DIR / 'simple_run_log_v12'
 
 # ============ V12 参数网格配置 ============
-# 使用 V8 候选参数集中的 TOP N（按参数名排序后的前N个）
-# 设为 None 则使用全部 V8 候选参数
-V8_TOP_N = None  # None = 全部，或指定数字如 10, 20, 35
+# V8 基础参数列表（用户指定）
+V8_BASE_KEYS = [
+    'param29', 'param35', 'param21', 'param31', 'param54', 'param59',
+    'param24', 'param42', 'param5', 'param26', 'param55', 'param20', 'param50',
+]
 # ===========================================
 
 
@@ -43,23 +45,17 @@ def _generate_param_grid():
     """
     from comm_fun import model_config
 
-    # 使用 V8 候选参数集（支持 TOP N 筛选）
     v8_candidates = model_config.STRATEGY_PARAMS_CANDIDATES_V8
 
-    # 按 key 排序后取前 N 个
-    sorted_keys = sorted(v8_candidates.keys())
-    if V8_TOP_N is not None:
-        sorted_keys = sorted_keys[:V8_TOP_N]
-        logger.info(f"使用 V8 TOP {V8_TOP_N} 参数（其余被过滤）")
-    else:
-        logger.info(f"使用全部 V8 {len(sorted_keys)} 个参数")
-
     base_configs = []
-    for key in sorted_keys:
-        params = v8_candidates[key]
-        p = params.copy()
-        p['name'] = f'v8_{key}'
-        base_configs.append(p)
+    for key in V8_BASE_KEYS:
+        if key in v8_candidates:
+            params = v8_candidates[key]
+            p = params.copy()
+            p['name'] = f'v8_{key}'
+            base_configs.append(p)
+
+    logger.info(f"使用 V8 {len(base_configs)} 个基础参数")
 
     # 波动率参数网格（扩展版，覆盖更多波动率场景）
     vol_lookbacks = [7, 10, 14, 21]
