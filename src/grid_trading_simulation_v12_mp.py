@@ -26,14 +26,6 @@ from comm_fun import model_config
 OUTPUT_DIR = RESULT_DIR / 'simple_run_log_v12'
 
 # ============ V12 参数网格配置 ============
-# V8 基础参数列表（用户指定）
-V8_BASE_KEYS = [
-    'param29', 'param35', 'param21', 'param31', 'param54', 'param59',
-    'param24', 'param42', 'param5', 'param26', 'param55', 'param20', 'param50',
-]
-# ===========================================
-
-
 def _generate_param_grid():
     """
     生成 V12 参数网格
@@ -48,7 +40,11 @@ def _generate_param_grid():
     v8_candidates = model_config.STRATEGY_PARAMS_CANDIDATES_V8
 
     base_configs = []
-    for key in V8_BASE_KEYS:
+    # V8 基础参数列表（用户指定）
+    for key in [
+        'param29', 'param35', 'param21', 'param31', 'param20',
+        'param24', 'param42', 'param5', 'param26', 'param1',
+    ]:
         if key in v8_candidates:
             params = v8_candidates[key]
             p = params.copy()
@@ -97,7 +93,12 @@ def _generate_param_grid():
 
 
 def _run_single_param(param_dict, initial_capital, full_data, prices_df):
-    """在子进程中运行单组参数"""
+    """在子进程中运行单组参数（静默模式）"""
+    # 完全静默子进程输出
+    import logging as _logging
+    _logging.basicConfig(level=_logging.CRITICAL)
+    _logging.getLogger().setLevel(_logging.CRITICAL)
+
     name = param_dict.pop('name')
     try:
         result_df = simple_run(
@@ -111,8 +112,7 @@ def _run_single_param(param_dict, initial_capital, full_data, prices_df):
             result_df[f'param_{k}'] = v
         result_df['param_name'] = name
         return result_df
-    except Exception as e:
-        logger.error(f"参数组 {name} 执行出错: {e}")
+    except Exception:
         return pd.DataFrame()
 
 
@@ -149,16 +149,23 @@ def main():
 
     # ===== 第三步：并行执行 =====
     num_workers = 22
-    logger.info(f"使用 {num_workers} 个进程并行搜索...")
+    total_params = len(param_list)
+    logger.info(f"使用 {num_workers} 个进程并行搜索，共 {total_params} 组参数...")
 
-    # 使用 multiprocessing Pool
-    ctx = mp.get_context('spawn')  # spawn 模式更安全
+    ctx = mp.get_context('spawn')
     with ctx.Pool(processes=num_workers) as pool:
         worker_fn = partial(_run_single_param,
                             initial_capital=initial_capital,
                             full_data=full_data,
                             prices_df=prices_df)
-        results = pool.map(worker_fn, param_list)
+        results = []
+        completed = 0
+        for r in pool.imap(worker_fn, param_list, chunksize=8):
+            results.append(r)
+            completed += 1
+            if completed % 500 == 0 or completed == total_params:
+                logger.info(f"进度: {completed}/{total_params} ({completed*100//total_params}%)")
+
 
     # ===== 第四步：合并结果 =====
     all_results = [r for r in results if not r.empty]
