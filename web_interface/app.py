@@ -210,7 +210,9 @@ def get_sellable_stocks():
                 "code": row['code'],
                 "shares": int(row['shares']),
                 "avg_cost": float(row['avg_cost']),
-                "entry_date": row.get('entry_date', '')
+                "entry_date": row.get('entry_date', ''),
+                "stop_loss_price": float(row.get('stop_loss_price') or 0),
+                "take_profit_price": float(row.get('take_profit_price') or 0)
             })
 
         return jsonify({"success": True, "data": result})
@@ -234,8 +236,12 @@ def get_buyable_stocks():
                 for _, row in df.iterrows():
                     suggestions.append({
                         "code": row.get('code', ''),
-                        "score": float(row.get('score', 0)),
-                        "predict_date": f"{date[:4]}-{date[4:6]}-{date[6:]}"
+                        "score": float(row.get('prediction_probability', 0)) * 100,
+                        "predict_date": f"{date[:4]}-{date[4:6]}-{date[6:]}",
+                        "suggested_price": float(row.get('suggested_price', 0)),
+                        "suggested_shares": int(row.get('shares', 0)),
+                        "stop_loss_price": float(row.get('suggested_stop_loss', 0)),
+                        "take_profit_price": float(row.get('suggested_take_profit', 0))
                     })
 
         seen = {}
