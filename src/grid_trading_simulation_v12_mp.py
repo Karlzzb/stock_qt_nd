@@ -25,46 +25,49 @@ from comm_fun import model_config
 
 OUTPUT_DIR = RESULT_DIR / 'simple_run_log_v12'
 
+# ============ V12 参数网格配置 ============
+# 使用 V8 候选参数集中的 TOP N（按参数名排序后的前N个）
+# 设为 None 则使用全部 V8 候选参数
+V8_TOP_N = None  # None = 全部，或指定数字如 10, 20, 35
+# ===========================================
+
 
 def _generate_param_grid():
     """
     生成 V12 参数网格
     分为两部分：
-    1. 基础参数（继承 V8 候选参数集的优秀参数）
+    1. 基础参数（使用 V8 候选参数集的全部参数）
     2. 波动率自适应参数（新）
 
     使用 comm_fun.model_config.STRATEGY_PARAMS_CANDIDATES_V8 作为基础参数集
     """
     from comm_fun import model_config
 
-    # 从 V8 候选参数集中选取表现最好的几个作为基础配置
+    # 使用 V8 候选参数集（支持 TOP N 筛选）
     v8_candidates = model_config.STRATEGY_PARAMS_CANDIDATES_V8
 
-    # 选取 V8 param35（最优参数）, param2, param38, param55
-    base_keys = ['param35', 'param2', 'param38', 'param55']
+    # 按 key 排序后取前 N 个
+    sorted_keys = sorted(v8_candidates.keys())
+    if V8_TOP_N is not None:
+        sorted_keys = sorted_keys[:V8_TOP_N]
+        logger.info(f"使用 V8 TOP {V8_TOP_N} 参数（其余被过滤）")
+    else:
+        logger.info(f"使用全部 V8 {len(sorted_keys)} 个参数")
+
     base_configs = []
-    for key in base_keys:
-        if key in v8_candidates:
-            p = v8_candidates[key].copy()
-            p['name'] = f'v8_{key}'
-            base_configs.append(p)
+    for key in sorted_keys:
+        params = v8_candidates[key]
+        p = params.copy()
+        p['name'] = f'v8_{key}'
+        base_configs.append(p)
 
-    # 如果找不到配置的V8参数，使用默认值备选
-    if not base_configs:
-        base_configs = [
-            {
-                'name': 'v8_param35_fallback',
-                'base_ratio': 1.0, 'target_profit': 0.25, 'hard_stop_loss': -0.14,
-                'max_hold_days': 16, 'max_positions': 3, 'min_probability': 0.50,
-            },
-        ]
-
-    # 波动率参数网格（精简版，避免参数爆炸）
-    vol_lookbacks = [10, 14]
-    vol_high_thresholds = [2.0, 2.5]
-    vol_low_thresholds = [0.5, 0.7]
-    vol_profit_mults = [1.3, 1.5]
-    vol_stop_mults = [1.2, 1.4]
+    # 波动率参数网格（扩展版，覆盖更多波动率场景）
+    vol_lookbacks = [7, 10, 14, 21]
+    vol_high_thresholds = [1.8, 2.0, 2.5, 3.0]
+    vol_low_thresholds = [0.4, 0.6, 0.8]
+    vol_profit_mults = [1.2, 1.5, 2.0]
+    vol_stop_mults = [1.1, 1.3, 1.5]
+    low_vol_profit_mults = [0.6, 0.8, 1.0]
 
     param_list = []
 
@@ -74,15 +77,16 @@ def _generate_param_grid():
                 for low_thresh in vol_low_thresholds:
                     for profit_mult in vol_profit_mults:
                         for stop_mult in vol_stop_mults:
-                            p = base.copy()
-                            p['vol_lookback'] = lookback
-                            p['vol_high_thresh'] = high_thresh
-                            p['vol_low_thresh'] = low_thresh
-                            p['vol_profit_mult'] = profit_mult
-                            p['vol_stop_mult'] = stop_mult
-                            p['low_vol_profit_mult'] = 0.80
-                            p['use_volatility_adaptive'] = True
-                            param_list.append(p)
+                            for low_profit_mult in low_vol_profit_mults:
+                                p = base.copy()
+                                p['vol_lookback'] = lookback
+                                p['vol_high_thresh'] = high_thresh
+                                p['vol_low_thresh'] = low_thresh
+                                p['vol_profit_mult'] = profit_mult
+                                p['vol_stop_mult'] = stop_mult
+                                p['low_vol_profit_mult'] = low_profit_mult
+                                p['use_volatility_adaptive'] = True
+                                param_list.append(p)
 
     # 加上不启用波动率自适应的基准组
     for base in base_configs:
@@ -148,7 +152,7 @@ def main():
     param_list = _generate_param_grid()
 
     # ===== 第三步：并行执行 =====
-    num_workers = 12
+    num_workers = 22
     logger.info(f"使用 {num_workers} 个进程并行搜索...")
 
     # 使用 multiprocessing Pool
