@@ -58,3 +58,4 @@ docs/superpower
 !real_trading_data/**/*.json
 !grid_trading_simulation_v4/*.csv
 .worktrees/
+/参数过滤两阶段优化框架.md
