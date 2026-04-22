@@ -940,8 +940,6 @@ def run(predict_date = datetime.now(), feature_date = datetime.now(), real_tradi
     logger.debug("🤖 智能狙击手投资系统结束")
     logger.debug("=" * 60)
 
-from feature_pipeline import load_price_data, feature_generator
-
 if __name__ == "__main__":
     # 设置环境变量，添加项目根目录到PYTHONPATH
     # import argparse
@@ -980,8 +978,9 @@ if __name__ == "__main__":
 
     try:
         # 1. 生成特征
-        # features = feature_generator(FEATURE_DATE_STR)
-        features = pd.read_csv( DAILY_FEATURE_DIR / f"realistic_features_{FEATURE_DATE.strftime('%Y%m%d')}.csv")
+        from feature_pipeline import feature_generator
+        features = feature_generator(FEATURE_DATE_STR)
+        # features = pd.read_csv( DAILY_FEATURE_DIR / f"realistic_features_{FEATURE_DATE.strftime('%Y%m%d')}.csv")
 
         # 2.开始运行策略
         if features is not None:
