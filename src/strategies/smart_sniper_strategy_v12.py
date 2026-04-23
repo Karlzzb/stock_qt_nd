@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import time
 from tqdm import tqdm
 import random
 from src.comm_fun import model_config, ALLOCATION_STRATEGY, PROBA_MEAN, PROBA_STD
@@ -170,13 +171,14 @@ class SmartSniperStrategyV12:
     def _current_budget(self):
         return self.cash / max(1, (self.max_positions - len(self.positions)))
 
-    def run(self, df, prices_df=None):
+    def run(self, df, prices_df=None, _timing_hook=None):
         """
         运行回测
 
         参数:
             df: 主数据DataFrame，包含 date, code, open, high, low, close, y_pred_proba 等列
             prices_df: 价格数据字典 {symbol: DataFrame}，用于计算ATR。如果为None，使用df中的数据计算。
+            _timing_hook: 计时回调 (day_idx, today, step_name, elapsed_ms)，用于性能分析。
         """
         random.seed(42)
         np.random.seed(42)
@@ -205,24 +207,42 @@ class SmartSniperStrategyV12:
                 next_day = None
 
             # 获取当日切片
+            t = time.time()
             daily_data = df[df['date'] == today].set_index('code')
+            if _timing_hook:
+                _timing_hook(i, today, 'filter', time.time() - t)
 
             # 0. 预计算当日全市场ATR均值（作为波动率比较基准）
+            t = time.time()
             self.market_avg_atr = self._precompute_market_atr(today, prices_df)
+            if _timing_hook:
+                _timing_hook(i, today, 'atr', time.time() - t)
 
             # 1. 更新持仓的波动率倍数（每日更新一次）
+            t = time.time()
             for code, pos in self.positions.items():
                 vol_mult = self._get_volatility_multiplier(code, today, prices_df)
                 pos['volatility_mult'] = vol_mult
+            if _timing_hook:
+                _timing_hook(i, today, 'vol_upd', time.time() - t)
 
-            # 1. 卖出/管理持仓
+            # 2. 卖出/管理持仓
+            t = time.time()
             self._manage_positions(daily_data, today)
+            if _timing_hook:
+                _timing_hook(i, today, 'manage', time.time() - t)
 
-            # 2. 买入新仓
+            # 3. 买入新仓
+            t = time.time()
             self._open_new_positions(daily_data, today, next_day, prices_df)
+            if _timing_hook:
+                _timing_hook(i, today, 'open', time.time() - t)
 
-            # 3. 结算当日资产
+            # 4. 结算当日资产
+            t = time.time()
             self._record_daily_asset(today, daily_data)
+            if _timing_hook:
+                _timing_hook(i, today, 'record', time.time() - t)
 
         return pd.DataFrame(self.history), pd.DataFrame(self.daily_assets)
 
