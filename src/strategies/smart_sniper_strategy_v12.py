@@ -92,7 +92,7 @@ class SmartSniperStrategyV12:
         tr3 = abs(low - prev_close)
 
         tr = pd.concat([tr1, tr2, tr3], axis=1).max(axis=1)
-        atr = tr.rolling(window=window).mean()
+        atr = tr.rolling(window=int(window)).mean()
 
         return atr.iloc[-1] if not atr.empty else None
 
