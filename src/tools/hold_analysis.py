@@ -12,7 +12,7 @@ from config.settings import RESULT_DIR
 
 def hold_analyzer(version = "v5", param_suffix = "参数1"):
     # 1. 读取数据
-    file_path = str(RESULT_DIR / f'simple_run_log/simple_run_grid_{version}_trade_log_{param_suffix}.csv')
+    file_path = str(RESULT_DIR / f'simple_run_log_v12/simple_run_grid_{version}_trade_log_{param_suffix}.csv')
     df = pd.read_csv(file_path)
     output_dir = str(RESULT_DIR / f"portfolio_analysis_charts_{version}_{param_suffix}")
     os.makedirs(output_dir, exist_ok=True)

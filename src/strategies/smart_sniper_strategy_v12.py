@@ -66,7 +66,10 @@ class SmartSniperStrategyV12:
         self._market_atr_cache: dict = {}  # 预计算的每日市场ATR均值缓存
 
         # 统一股票过滤器
-        self.stock_filter = StockEligibilityFilter()
+        self.stock_filter = StockEligibilityFilter(
+            filter_main_board=True,
+            filter_st=True,
+            filter_new_stock=True)
 
     def _compute_atr(self, prices_df, symbol, current_date, window=14):
         """计算个股ATR（Average True Range）
@@ -200,7 +203,11 @@ class SmartSniperStrategyV12:
         logger.debug(f"波动率自适应: {self.use_volatility_adaptive}, 窗口: {self.vol_lookback}日")
         logger.debug(f"高波动倍数阈值: {self.vol_high_thresh}, 止盈放大系数: {self.vol_profit_mult}, 止损放宽系数: {self.vol_stop_mult}")
 
-        for i, today in enumerate(dates):
+        for i, today in tqdm(enumerate(dates), total=len(dates), desc="任务执行中"):
+        # for i, today in enumerate(dates):
+
+            # logger.info(f"任务执行进度: {i / len(dates):.2%}")
+
             if i + 1 < len(dates):
                 next_day = dates[i + 1]
             else:

@@ -240,7 +240,7 @@ def run_strategy_with_analysis(name, params, capital, full_data, prices_df=None)
 
 def run_concurrent(init_capital, data, prices_df=None):
     """并发执行所有V12参数组"""
-    max_workers = min(18, len(model_config.STRATEGY_PARAMS_CANDIDATES_V12))
+    max_workers = 16 #min(16, len(model_config.STRATEGY_PARAMS_CANDIDATES_V12))
     # 使用进程池替代线程池，绕过Python GIL限制，实现真正并行
     with concurrent.futures.ProcessPoolExecutor(max_workers=max_workers) as executor:
         futures = []
@@ -256,7 +256,7 @@ def run_concurrent(init_capital, data, prices_df=None):
         for future in concurrent.futures.as_completed(futures):
             try:
                 strategy_name, result_df = future.result()
-                hold_analyzer(version="v12", param_suffix=strategy_name)
+                # hold_analyzer(version="v12", param_suffix=strategy_name)
                 profit_analyzer(version="v12", param_suffix=strategy_name)
                 return_analyzer(version="v12", param_suffix=strategy_name)
                 trades_analyzer(version="v12", param_suffix=strategy_name)
@@ -283,5 +283,10 @@ if __name__ == "__main__":
                              ],
                                   # start_date="20251001"
                                   )
-    # simple_run(initial_capital=248526,strategy_name ="V12_参数76_2", strategy_params=model_config.STRATEGY_PARAMS_CANDIDATES_V12["V12_参数76_2"],full_data=processed_data)
-    run_concurrent(init_capital=248526, data=processed_data)
+    selected_param = "param1"
+    result_df = simple_run(initial_capital=248526,strategy_name =selected_param, strategy_params=model_config.STRATEGY_PARAMS_CANDIDATES_V12[selected_param],full_data=processed_data)
+    analysis_df = RESULT_DIR / f'strategy_{selected_param}_v12_full_analysis.csv'
+    os.makedirs(RESULT_DIR, exist_ok=True)
+    result_df.to_csv(analysis_df, index=False, encoding='utf-8-sig')
+
+    # run_concurrent(init_capital=248526, data=processed_data)
