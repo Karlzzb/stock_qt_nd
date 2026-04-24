@@ -256,10 +256,10 @@ def run_concurrent(init_capital, data, prices_df=None):
         for future in concurrent.futures.as_completed(futures):
             try:
                 strategy_name, result_df = future.result()
-                # hold_analyzer(version="v12", param_suffix=strategy_name)
-                # profit_analyzer(version="v12", param_suffix=strategy_name)
-                # return_analyzer(version="v12", param_suffix=strategy_name)
-                # trades_analyzer(version="v12", param_suffix=strategy_name)
+                hold_analyzer(version="v12", param_suffix=strategy_name)
+                profit_analyzer(version="v12", param_suffix=strategy_name)
+                return_analyzer(version="v12", param_suffix=strategy_name)
+                trades_analyzer(version="v12", param_suffix=strategy_name)
                 # correlation_analyzer(version="v12", param_suffix=strategy_name)
                 all_result_dfs.append(result_df)
                 print(f"参数组 {strategy_name} 测试完成")
