@@ -182,16 +182,10 @@ def _init_worker(full_data, prices_df, st_preloaded, atr_cache, initial_capital)
     _worker_atr_cache = atr_cache  # PrecomputedATR 实例，查表代替每日循环
     _worker_initial_capital = initial_capital
 
-    # 完全静默子进程输出（logging + tqdm）
+    # 完全静默子进程（logging 已由主进程统一配置，tqdm 由 TQDM_DISABLE 环境变量禁用）
     import logging as _logging
     _logging.basicConfig(level=_logging.CRITICAL)
     _logging.getLogger().setLevel(_logging.CRITICAL)
-    # 禁用子进程中所有 tqdm 进度条
-    try:
-        from tqdm import tqdm as _tqdm
-        _tqdm.disable = True
-    except ImportError:
-        pass
 
 
 # ============ V12 参数网格配置 ============

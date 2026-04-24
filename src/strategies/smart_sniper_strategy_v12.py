@@ -200,7 +200,7 @@ class SmartSniperStrategyV12:
         logger.debug(f"波动率自适应: {self.use_volatility_adaptive}, 窗口: {self.vol_lookback}日")
         logger.debug(f"高波动倍数阈值: {self.vol_high_thresh}, 止盈放大系数: {self.vol_profit_mult}, 止损放宽系数: {self.vol_stop_mult}")
 
-        for i, today in enumerate(tqdm(dates)):
+        for i, today in enumerate(dates):
             if i + 1 < len(dates):
                 next_day = dates[i + 1]
             else:
