@@ -77,12 +77,12 @@ def _generate_param_grid():
     }
 
     # --- 维度 1：资金与选股 ---
-    min_probs = [0.35, 0.40, 0.45]      # 选股下探深度
+    min_probs = [0.35, 0.40, 0.50]      # 选股下探深度
     max_positions = [3, 5, 8]           # 仓位集中度
     base_ratios = [0.8, 1.0]       # 阶梯仓位总油门
 
     # --- 维度 2：基础风控 ---
-    hard_stop_losses = [-0.08, -0.10, -0.12, -0.14]   # 硬止损
+    hard_stop_losses = [-0.10, -0.12, -0.14]   # 硬止损
     target_profits = [0.25, 0.35, 0.55]       # 基础硬止盈（测试及时落袋 vs 靠移动止盈放飞）
     max_hold_days_list = [15, 18, 20]       # 持仓耐心
 
