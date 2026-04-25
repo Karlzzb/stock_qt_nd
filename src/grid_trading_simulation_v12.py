@@ -191,8 +191,8 @@ def simple_run(initial_capital, strategy_name, strategy_params, full_data, price
                 if len(action_trades) > 0:
                     action_win_count = len(action_trades[action_trades['profit'] > 0])
                     action_win_rate = action_win_count / len(action_trades)
-                    result[f'{action}_trades'] =  [len(action_trades)]
-                    result[f'{action}_win_rate'] = [action_win_rate]
+                    result[f'{action}_trades'] =  len(action_trades)
+                    result[f'{action}_win_rate'] = action_win_rate
 
 
     return pd.DataFrame([result])
