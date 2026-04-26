@@ -293,29 +293,28 @@ if __name__ == "__main__":
     st_preloaded = _preload_st_cache(trade_dates)
     atr_cache = PrecomputedATR(prices_df_dict, trade_dates, lookbacks=[7, 10, 14, 21])
 
-    # # 4. 执行并发回测
-    # run_concurrent_v12(
-    #     init_capital=248526,
-    #     data=processed_data,
-    #     prices_df=prices_df_dict,
-    #     atr_cache=atr_cache,
-    #     st_preloaded=st_preloaded
-    # )
-    #
-    # logger.info("多线程并发运行完美对齐结束")
-
-
-    selected_param = "param2"
-    result_df = simple_run(
-        initial_capital=248526,
-        strategy_name=selected_param,
-        strategy_params=model_config.STRATEGY_PARAMS_CANDIDATES_V12[selected_param],
-        full_data=processed_data,
+    # # 4.1 执行并发回测
+    run_concurrent_v12(
+        init_capital=248526,
+        data=processed_data,
         prices_df=prices_df_dict,
         atr_cache=atr_cache,
         st_preloaded=st_preloaded
     )
-    analysis_df = RESULT_DIR / f'strategy_{selected_param}_v12_full_analysis.csv'
-    os.makedirs(RESULT_DIR, exist_ok=True)
-    result_df.to_csv(analysis_df, index=False, encoding='utf-8-sig')
-    logger.info("单进程运行完美对齐结束")
+    logger.info("多线程并发运行完美对齐结束")
+
+    # # 4.2 执行单参数回测
+    # selected_param = "param2"
+    # result_df = simple_run(
+    #     initial_capital=248526,
+    #     strategy_name=selected_param,
+    #     strategy_params=model_config.STRATEGY_PARAMS_CANDIDATES_V12[selected_param],
+    #     full_data=processed_data,
+    #     prices_df=prices_df_dict,
+    #     atr_cache=atr_cache,
+    #     st_preloaded=st_preloaded
+    # )
+    # analysis_df = RESULT_DIR / f'strategy_{selected_param}_v12_full_analysis.csv'
+    # os.makedirs(RESULT_DIR, exist_ok=True)
+    # result_df.to_csv(analysis_df, index=False, encoding='utf-8-sig')
+    # logger.info("单进程运行完美对齐结束")
