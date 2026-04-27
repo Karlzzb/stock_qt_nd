@@ -62,6 +62,65 @@ def _init_worker(full_data, prices_df, st_preloaded, atr_cache, initial_capital)
 
 def _generate_param_grid():
     """
+    V13 极速精简版参数网格 (降维打击)
+    剔除了冗余参数，并通过逻辑判断跳过必亏组合，总计约 800 ~ 1000 组。
+    """
+    param_list = []
+
+    # --- 锁定边际效用极低的次要参数 ---
+    fixed_params = {
+        'use_volatility_adaptive': True,
+        'use_trailing_stop': True,
+        'base_ratio': 1.0,  # 靠内部S/A/B/C分级即可
+        'target_profit': 0.25,  # 让移动止盈去做主力，这里只做极端暴涨的兜底
+        'vol_lookback': 14,  # 统一看两周波动率
+        'vol_low_thresh': 0.6,
+        'vol_high_thresh': 2.5,
+        'low_vol_profit_mult': 0.8,
+        'vol_profit_mult': 1.5,
+        'vol_stop_mult': 1.2  # 止损稍微放宽一点点即可
+    }
+
+    # --- 核心战场：只搜索决定生死的关键维度 ---
+    min_probs = [0.35, 0.40, 0.45]  # 进场门槛
+    max_positions = [3, 5, 8]  # 集中度
+    hard_stop_losses = [-0.06, -0.08, -0.10]  # 铁底止损（高胜率模型不扛深套）
+    max_hold_days_list = [5, 8, 12]  # 时间止损（绝不能恋战）
+
+    # 移动止盈核心锁
+    trailing_activations = [0.08, 0.12, 0.15]  # 利润激活点
+    trailing_stop_pcts = [0.04, 0.06, 0.08]  # 回撤容忍度
+
+    param_id = 1
+    for min_p in min_probs:
+        for max_pos in max_positions:
+            for stop_loss in hard_stop_losses:
+                for hold_days in max_hold_days_list:
+                    for t_act in trailing_activations:
+                        for t_stop in trailing_stop_pcts:
+
+                            # 【核心防绞肉机机制】：如果回撤容忍度太接近激活点，会导致保不住本金
+                            # 至少要求：激活涨幅 - 回撤跌幅 > 3% 的绝对安全垫
+                            if t_act - t_stop < 0.03:
+                                continue  # 直接抛弃这种傻瓜组合，不浪费算力
+
+                            p = fixed_params.copy()
+                            p.update({
+                                'name': f'V13_Fast_{param_id:04d}',
+                                'min_probability': min_p,
+                                'max_positions': max_pos,
+                                'hard_stop_loss': stop_loss,
+                                'max_hold_days': hold_days,
+                                'trailing_activation': t_act,
+                                'trailing_stop_pct': t_stop
+                            })
+                            param_list.append(p)
+                            param_id += 1
+
+    return param_list
+
+def _generate_param_grid_full():
+    """
     V13 纯净版全排列参数网格 (解开束缚，寻找全局最优)
     组合总数: 3*3*3(资金与选股) * 2*2*2(基础风控) * 2*2(移动止盈) * 2*2*2*2(波动率倍数) = 13,824 组
     22 核并发预计耗时: 1 ~ 2 小时
