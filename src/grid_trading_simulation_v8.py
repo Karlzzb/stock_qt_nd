@@ -387,7 +387,7 @@ if __name__ == "__main__":
                                  "validation_set.csv",
                              ],
 
-                                  # start_date="20260106"
+                                  # start_date="20251001"
                                   )
     run_concurrent(248526, processed_data)
-    # simple_run(initial_capital=248526,strategy_name ="参数55", strategy_params=model_config.STRATEGY_PARAMS_CANDIDATES_V8["参数55"],full_data=processed_data)
+    # simple_run(initial_capital=248526,strategy_name ="param35", strategy_params=model_config.STRATEGY_PARAMS_CANDIDATES_V8["param35"],full_data=processed_data)
