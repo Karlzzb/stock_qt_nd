@@ -100,9 +100,9 @@ class StockEligibilityFilter:
         symbols = result.index  # symbol 在 index 中
 
         if self.filter_main_board:
-            result = result[result.index.str.match(r'^[60]')]
+            result = result[result.index.astype(str).str.match(r'^[60]')]
         else:
-            result = result[result.index.str.match(r'^[630]')]
+            result = result[result.index.astype(str).str.match(r'^[630]')]
 
         if self.filter_st:
             st_set = self._get_st_stocks(trade_date)
