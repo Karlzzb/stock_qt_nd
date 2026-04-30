@@ -620,10 +620,10 @@ class SmartSniperInvestor:
 
         # 统一过滤：主板 + ST + 次新股
         trade_date = predict_date.strftime('%Y%m%d')
-        candidates = self.stock_filter.filter(candidates, trade_date)
-
-        if candidates.empty:
-            return buy_suggestions
+        candidates_filter = candidates.set_index('code')
+        candidates = self.stock_filter.filter(candidates_filter, trade_date)
+        if not candidates.empty: candidates = candidates.reset_index()
+        if candidates.empty: return buy_suggestions
 
         # 排序选择
         top_candidates = candidates.sort_values(

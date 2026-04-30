@@ -193,7 +193,8 @@ def simple_run(initial_capital, strategy_name, strategy_params, full_data):
 
     # 初始化策略
     # {initial_capital}万本金，最多持仓 {max_positions} 只 (这意味着每只股票重仓 20万，极度聚焦)
-    strategy = SmartSniperStrategy(initial_capital=initial_capital, max_positions=5)
+    strategy = SmartSniperStrategy(initial_capital=initial_capital, max_positions=5,
+                                   filter_main_board=True, filter_st=True, filter_new_stock=True)
 
     # 这里的参数可以根据你的风险偏好微调：
     strategy.max_positions = strategy_params['max_positions'] #最大持仓
@@ -383,11 +384,11 @@ if __name__ == "__main__":
     processed_data = data_process(dataset_dir=DATASET_DIR,
                              required_files=[
                                  # "train_set.csv",
-                                 "test_set.csv",
+                                 # "test_set.csv",
                                  "validation_set.csv",
                              ],
 
-                                  # start_date="20251001"
+                                  start_date="20251001"
                                   )
-    run_concurrent(248526, processed_data)
-    # simple_run(initial_capital=248526,strategy_name ="param35", strategy_params=model_config.STRATEGY_PARAMS_CANDIDATES_V8["param35"],full_data=processed_data)
+    # run_concurrent(248526, processed_data)
+    simple_run(initial_capital=248526,strategy_name ="param35", strategy_params=model_config.STRATEGY_PARAMS_CANDIDATES_V8["param35"],full_data=processed_data)

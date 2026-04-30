@@ -29,8 +29,8 @@ logger.debug(f"full_data_df 中 (symbol, timestamp) 重复数量: {full_duplicat
 trading_dates = sorted(full_data_df['timestamp'].unique())
 
 # 找到起始日期范围内的交易日
-start_date_str = "20251022"
-end_date_str = "20260122"
+start_date_str = "20251013"
+end_date_str = "20260408"
 start_date = datetime.strptime(start_date_str, "%Y%m%d")
 end_date = datetime.strptime(end_date_str, "%Y%m%d")
 # 筛选在时间范围内的交易日
