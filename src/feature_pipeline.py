@@ -1207,7 +1207,7 @@ class FeaturePipeline:
         import pywt
 
         # 1. 输入验证
-        series = np.asarray(series)
+        series = np.array(series, copy=True)
         if len(series) < 2 ** level:
             raise ValueError(f"序列长度({len(series)})不足以进行{level}层小波分解")
 
@@ -2040,4 +2040,4 @@ if __name__ == "__main__":
 
 
     # 生成莫一天的特征
-    feature_generator('2026-3-16')
+    feature_generator('2025-10-10')

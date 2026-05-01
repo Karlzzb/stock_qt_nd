@@ -1,0 +1,52 @@
+# Stock Trading Model Dependencies
+# Python 3.10 or 3.11 recommended (for TA-Lib binary wheel compatibility)
+# Python 3.12 can use pandas-ta as a pure-Python alternative (see below)
+
+# Core Data
+pandas>=2.0.0
+numpy>=1.24.0
+
+# Machine Learning
+scikit-learn>=1.3.0
+lightgbm>=4.0.0
+joblib>=1.3.0
+shap>=0.42.0
+
+# Technical Analysis
+# ---- Option A: TA-Lib (requires TA-Lib C library installed) ----
+#   Windows: download TA-Lib C library from https://sourceforge.net/projects/ta-lib/
+#   Then: pip install TA-Lib
+TA-Lib>=0.4.0
+
+# ---- Option B: pure Python (no C library needed) ----
+#   pip install pandas-ta
+#   Note: pandas-ta API differs from talib; wrapper/adapter code may be needed
+
+# Statistics & Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+scipy>=1.10.0
+statsmodels>=0.14.0
+
+# Data Sources
+tushare>=1.3.0
+
+# Web Framework
+Flask>=3.0.0
+flask-cors>=4.0.0
+
+# Utilities
+tqdm>=4.65.0
+requests>=2.31.0
+newspaper3k>=0.2.0
+regex>=2023.0.0
+python-dotenv>=1.0.0
+lxml_html_clean>=0.4.0   # required by newspaper3k
+
+# Optional: Jupyter for development
+jupyter>=1.0.0
+ipykernel>=6.0.0
+
+# DIY
+tinyshare
+PyWavelets
