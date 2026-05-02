@@ -551,13 +551,26 @@ class FeaturePipeline:
         return df
 
     def _calculate_basic_technical_features(self, df):
-        """【修复】严格按股票隔离的底层指标计算"""
+        """【修复】严格按股票隔离的底层指标计算，并防止次新股导致列名丢失"""
         try:
             if len(df) < 100: return None
             df = df.sort_values(by=['symbol', 'timestamp']).reset_index(drop=True)
 
+            # ====== 【核心修复】提前初始化所有指标列的坑位 ======
+            # 强行锁定表头，防止某只股票数据不足 35 天时触发 return g，导致 Pandas 推断丢失全表列名
+            indicator_cols = [
+                'macd', 'macd_signal', 'macd_hist', 'rsi_6', 'rsi_14', 'rsi_24',
+                'ma_5', 'ma_20', 'ma_60', 'bb_upper', 'bb_middle', 'bb_lower',
+                'volume_ma_20', 'obv', 'atr', 'slowk', 'slowd'
+            ]
+            for col in indicator_cols:
+                if col not in df.columns:
+                    df[col] = np.nan
+
+            # ====================================================
+
             def calc_talib(g):
-                if len(g) < 35: return g
+                if len(g) < 35: return g  # 现在直接返回也很安全，因为表头(NaN)已经存在了
                 g = g.copy()
                 g['macd'], g['macd_signal'], g['macd_hist'] = talib.MACD(g['close'])
                 g['rsi_6'] = talib.RSI(g['close'], timeperiod=6)
@@ -1071,29 +1084,29 @@ if __name__ == "__main__":
     # ==========================================
     # 模式 A: 跑历史回测（批处理模式）
     # ==========================================
-    # process_stocks_batch_parallel_optimized(
-    #     full_stocks=full_stocks_data,
-    #
-    #     # 【参数调优建议】
-    #     # batch_size: 每次打包分发的天数。设太大主进程切片会卡顿，设太小进度条刷新太快。100~200 是甜点区间。
-    #     batch_size=160,
-    #
-    #     # max_workers: 进程数。
-    #     # 强烈建议设置为：你的 CPU 物理核心数 - 1（留一个核心给操作系统和其他软件，防止电脑彻底卡死）。
-    #     # 如果你是 16 核机器，建议设为 12-14。
-    #     max_workers=18,
-    #
-    #     # start_date / end_date: 控制回测区间。格式必须是 'YYYY-MM-DD'
-    #     # 如果你要跑全量，两个都设为 None 即可。
-    #     start_date='2013-09-02',
-    # )
+    process_stocks_batch_parallel_optimized(
+        full_stocks=full_stocks_data,
+
+        # 【参数调优建议】
+        # batch_size: 每次打包分发的天数。设太大主进程切片会卡顿，设太小进度条刷新太快。100~200 是甜点区间。
+        batch_size=200,
+
+        # max_workers: 进程数。
+        # 强烈建议设置为：你的 CPU 物理核心数 - 1（留一个核心给操作系统和其他软件，防止电脑彻底卡死）。
+        # 如果你是 16 核机器，建议设为 12-14。
+        max_workers=24,
+
+        # start_date / end_date: 控制回测区间。格式必须是 'YYYY-MM-DD'
+        # 如果你要跑全量，两个都设为 None 即可。
+        start_date='2010-02-10',
+    )
 
     # ==========================================
     # 模式 B: 跑指定单日（实盘/测试模式）
     # ==========================================
-    target_today = '2025-10-10'  # 或者使用 datetime.now().strftime('%Y-%m-%d') 获取今天日期
-
-    generate_single_day_features(
-        full_stocks=full_stocks_data,
-        target_date_str=target_today
-    )
+    # target_today = '2025-10-10'  # 或者使用 datetime.now().strftime('%Y-%m-%d') 获取今天日期
+    #
+    # generate_single_day_features(
+    #     full_stocks=full_stocks_data,
+    #     target_date_str=target_today
+    # )
