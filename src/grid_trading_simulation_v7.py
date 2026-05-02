@@ -360,7 +360,7 @@ class TopKRankStrategy:
             mkt_val += price * pos['shares']
         self.daily_assets.append({'date': today, 'total': self.cash + mkt_val})
 
-from config.settings import MODEL_DIR, DATASET_DIR, RESULT_DIR,STOCK_DATA_DIR
+from config.settings import MODEL_DIR, DATASET_DIR, RESULT_DIR,STOCK_ND_CSV_DIR
 from comm_fun import model_config
 from predictor_model_v2 import PriceChangePredictor
 import os
@@ -481,7 +481,7 @@ def data_process(dataset_dir = DATASET_DIR, required_files=None):
     # 恢复symbol信息
     df_proba['symbol'] = symbol_info
 
-    full_data_dict = load_price_data(str(STOCK_DATA_DIR))
+    full_data_dict = load_price_data(str(STOCK_ND_CSV_DIR))
 
     full_data_df = convert_dict_to_dataframe_from_index(full_data_dict)
 

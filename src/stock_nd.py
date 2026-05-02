@@ -1,12 +1,15 @@
-from datetime import datetime, timedelta
-import pandas as pd
-import tinyshare as ts
+# 设置日志
+import logging
 import os
 import pickle
 import time
+from datetime import datetime, timedelta
+
+import pandas as pd
+import tinyshare as ts
+
 from config.settings import STOCK_ND_CSV_DIR, STOCK_ND_PKL_DIR
-# 设置日志
-import logging
+
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
@@ -30,7 +33,7 @@ def get_stock_data_tushare(pro, symbol, start_date='20100101', end_date=None):
         df = df.sort_values('trade_date').set_index('trade_date')
         return df[['open', 'high', 'low', 'close', 'vol']].rename(columns={'vol': 'volume'})
     except Exception as e:
-        logger.info(f"Tushare获取{symbol}失败: {e}")
+        logger.error(f"Tushare获取{symbol}失败: {e}")
         return None
 
 def get_all_stocks_tushare(pro):
@@ -66,7 +69,7 @@ def fetch_stock_price_data(promision, symbol, start_date=None, end_date=None):
     price_data = None
 
     # 强制更新，从API获取
-    logger.info(f"从API获取数据: {symbol}")
+    logger.debug(f"从API获取数据: {symbol}")
     retry = 0
     try:
         while retry < 800:
@@ -140,7 +143,7 @@ def fetch_index_price_data(promision, symbol, start_date=None, end_date=None):
 
     return price_data
 
-def save_price_data(price_data, symbol, data_dir=str(STOCK_DATA_PLK_DIR)):
+def save_price_data(price_data, symbol, data_dir=str(STOCK_ND_PKL_DIR)):
     """
     保存股票价格数据到文件
     """
@@ -156,7 +159,7 @@ def save_price_data(price_data, symbol, data_dir=str(STOCK_DATA_PLK_DIR)):
     return filename
 
 
-def save_price_data_csv(price_data, symbol, data_dir=str(STOCK_DATA_DIR)):
+def save_price_data_csv(price_data, symbol, data_dir=str(STOCK_ND_CSV_DIR)):
     """
     保存为CSV文件（可读性更好）
     """
@@ -165,7 +168,7 @@ def save_price_data_csv(price_data, symbol, data_dir=str(STOCK_DATA_DIR)):
     filename = f"{data_dir}/{symbol}_price_data.csv"
     price_data.to_csv(filename)
 
-    logger.info(f"CSV数据已保存: {filename}")
+    logger.debug(f"CSV数据已保存: {filename}")
     return filename
 
 def fetch_symbols(promision, sample_ratio=1.0, cache_dir='../cache', cache_hours=240):
@@ -222,7 +225,6 @@ def fetch_symbols(promision, sample_ratio=1.0, cache_dir='../cache', cache_hours
 # data = get_stock_data_akshare('000001', start_date='20200101')
 # logger.info(f"{data}")
 def main():
-    from tqdm import tqdm
     index_symbols = ["000001.SH","399001.SZ"]
     token = "3Q4RY56w8deQac5uQkcba5wzoaUf8XBdiLvBti22gv5jTstJ4d0ywZKU247ade48"
     pro = init_tushare(token)
@@ -236,19 +238,20 @@ def main():
     for index_symbol in index_symbols:
         fetch_index_price_data(pro, index_symbol, start_date)
 
-    pbar = tqdm(symbols, desc="下载股票数据")
-    for symbol in pbar:
-        pbar.set_postfix(成功=success_count, 失败=fail_count, 当前股票=symbol)
+    # 每100只股票报告一次进度
+    report_interval = 50
+    for i, symbol in enumerate(symbols):
         try:
             price_data = fetch_stock_price_data(pro, symbol, start_date)
             if price_data is not None:
                 success_count += 1
             else:
                 fail_count += 1
-                logger.info(f"\n下载 {symbol} 失败")
         except Exception as e:
             fail_count += 1
-            logger.info(f"\n下载 {symbol} 失败: {e}")
+        # 阶段性报告进度
+        if (i + 1) % report_interval == 0:
+            logger.info(f"进度: {i+1}/{len(symbols)}, 成功: {success_count}, 失败: {fail_count}")
 
     logger.info(f"\n完成！成功: {success_count}, 失败: {fail_count}")
 
