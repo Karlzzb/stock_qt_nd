@@ -2,14 +2,13 @@
 股票AI量化交易系统 - Web操作界面
 Flask后端服务
 """
-from flask import Flask, render_template, jsonify, request, send_from_directory
+from flask import Flask, render_template, jsonify, request
 from flask_cors import CORS
 import os
 import csv
-import json
+import sys
 import subprocess
 import threading
-import time
 import logging
 import pandas as pd
 from datetime import datetime, timedelta
@@ -548,7 +547,7 @@ def run_executor(log_file, predict_date, feature_date, update_data=False):
 
             # 构建命令
             cmd = [
-                'python',
+                sys.executable,
                 str(EXECUTOR_SCRIPT),
                 '--predict-date', predict_date,
                 '--feature-date', feature_date
@@ -672,7 +671,7 @@ def run_st_filter(log_file):
         with open(log_file, 'w', encoding='utf-8') as f:
             f.write(f"=== 开始执行 st_stock_filter {datetime.now()} ===\n\n")
 
-            cmd = ['python', str(ST_FILTER_SCRIPT)]
+            cmd = [sys.executable, str(ST_FILTER_SCRIPT)]
             env = os.environ.copy()
 
             f.write(f"[CONFIG] 命令: {' '.join(cmd)}\n\n")
@@ -793,7 +792,7 @@ def run_stock_nd(log_file):
         with open(log_file, 'w', encoding='utf-8') as f:
             f.write(f"=== 开始执行 stock_nd {datetime.now()} ===\n\n")
 
-            cmd = ['python', str(STOCK_ND_SCRIPT)]
+            cmd = [sys.executable, str(STOCK_ND_SCRIPT)]
             env = os.environ.copy()
 
             f.write(f"[CONFIG] 命令: {' '.join(cmd)}\n\n")

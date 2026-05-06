@@ -14,7 +14,7 @@ import logging
 
 from strategies.smart_sniper_strategy_v12 import SmartSniperStrategyV12, PrecomputedATR
 from comm_fun import model_config
-from config.settings import STOCK_DATA_DIR, MODEL_DIR, DATASET_DIR, RESULT_DIR
+from config.settings import STOCK_ND_CSV_DIR, MODEL_DIR, DATASET_DIR, RESULT_DIR
 from data_process import prepare_real_daily_features
 from predictor_model_v2 import PriceChangePredictor
 from feature_pipeline import load_price_data, convert_dict_to_dataframe_from_index
@@ -96,7 +96,7 @@ def data_process(dataset_dir=DATASET_DIR, required_files=None, start_date=None, 
     df_proba['y_pred_proba'] = pred_probabilities
     df_proba['symbol'] = symbol_info
 
-    full_data_dict = load_price_data(str(STOCK_DATA_DIR))
+    full_data_dict = load_price_data(str(STOCK_ND_CSV_DIR))
     full_data_df = convert_dict_to_dataframe_from_index(full_data_dict)
     full_data_df = full_data_df[
         (full_data_df['timestamp'] >= pd.to_datetime(start_date))

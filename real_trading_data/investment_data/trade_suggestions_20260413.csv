@@ -1,4 +1,0 @@
-predict_date,code,action,reason,suggested_price,current_price,shares,suggested_stop_loss,suggested_take_profit,prediction_probability,required_capital,avg_cost,days_held
-2026-04-13,688670.SH,SELL,TIME_EXIT,16.924599999999998,17.27,1700,15.543,22.451,0.0,0.0,17.27,19
-2026-04-13,688067.SH,SELL,TIME_EXIT,25.99058,26.521,1000,23.8689,34.4773,0.0,0.0,26.521,19
-2026-04-13,002377.SZ,SELL,TIME_EXIT,3.39374,3.463,7900,3.1167000000000002,4.5019,0.0,0.0,3.463,18

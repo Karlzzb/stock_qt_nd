@@ -6,9 +6,9 @@ import os
 import pandas as pd
 import tushare as ts
 from sklearn.preprocessing import LabelEncoder
-from config.settings import STOCK_DATA_DIR, DATASET_DIR
+from config.settings import STOCK_ND_CSV_DIR, DATASET_DIR
 import numpy as np
-def load_price_data_for_symbol(symbol, start_date=None, end_date=None, data_folder_path=str(STOCK_DATA_DIR)):
+def load_price_data_for_symbol(symbol, start_date=None, end_date=None, data_folder_path=str(STOCK_ND_CSV_DIR)):
     """
     根据股票代码和日期范围加载价格数据
 

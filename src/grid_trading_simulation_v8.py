@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from strategies.smart_sniper_strategy import SmartSniperStrategy
 from comm_fun import model_config
-from config.settings import STOCK_DATA_DIR,MODEL_DIR, DATASET_DIR, RESULT_DIR
+from config.settings import STOCK_ND_CSV_DIR,MODEL_DIR, DATASET_DIR, RESULT_DIR
 import os
 from data_process import prepare_real_daily_features
 from predictor_model_v2 import PriceChangePredictor
@@ -134,7 +134,7 @@ def data_process(dataset_dir = DATASET_DIR, required_files=None, start_date=None
     # 恢复symbol信息
     df_proba['symbol'] = symbol_info
 
-    full_data_dict = load_price_data(str(STOCK_DATA_DIR))
+    full_data_dict = load_price_data(str(STOCK_ND_CSV_DIR))
 
     full_data_df = convert_dict_to_dataframe_from_index(full_data_dict)
 
@@ -384,11 +384,11 @@ if __name__ == "__main__":
     processed_data = data_process(dataset_dir=DATASET_DIR,
                              required_files=[
                                  # "train_set.csv",
-                                 # "test_set.csv",
+                                 "test_set.csv",
                                  "validation_set.csv",
                              ],
 
-                                  start_date="20251001"
+                                  # start_date="20251001"
                                   )
-    # run_concurrent(248526, processed_data)
-    simple_run(initial_capital=248526,strategy_name ="param35", strategy_params=model_config.STRATEGY_PARAMS_CANDIDATES_V8["param35"],full_data=processed_data)
+    run_concurrent(248526, processed_data)
+    # simple_run(initial_capital=248526,strategy_name ="param35", strategy_params=model_config.STRATEGY_PARAMS_CANDIDATES_V8["param35"],full_data=processed_data)

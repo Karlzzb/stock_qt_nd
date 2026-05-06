@@ -12,12 +12,12 @@ plt.rcParams['font.sans-serif'] = ['SimHei']
 plt.rcParams['axes.unicode_minus'] = False
 import pandas as pd
 import os
-from config.settings import STOCK_DATA_DIR, REAL_TRADING_DIR_SIMULATION
+from config.settings import STOCK_ND_CSV_DIR, REAL_TRADING_DIR_SIMULATION
 
 # 加载所有股票的行情数据
 from grid_trading_simulation_v8 import load_price_data
 
-full_data_dict = load_price_data(str(STOCK_DATA_DIR))
+full_data_dict = load_price_data(str(STOCK_ND_CSV_DIR))
 from grid_trading_simulation_v8 import convert_dict_to_dataframe_from_index
 
 full_data_df = convert_dict_to_dataframe_from_index(full_data_dict)

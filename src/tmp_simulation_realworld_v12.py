@@ -7,12 +7,12 @@ logger = logging.getLogger(__name__)
 
 import pandas as pd
 import os
-from config.settings import STOCK_DATA_DIR, REAL_TRADING_DIR_SIMULATION
+from config.settings import STOCK_ND_CSV_DIR, REAL_TRADING_DIR_SIMULATION
 from grid_trading_simulation_v12 import load_price_data, convert_dict_to_dataframe_from_index
 
 # 核心优化：只在最外层加载一次庞大的价格库，传入给实盘模拟跑循环，拒绝每天重复卡顿
 logger.info("⏳ 正在加载全局基础行情数据...")
-full_data_dict = load_price_data(str(STOCK_DATA_DIR))
+full_data_dict = load_price_data(str(STOCK_ND_CSV_DIR))
 full_data_df = convert_dict_to_dataframe_from_index(full_data_dict)
 
 prices_df_dict = {}
