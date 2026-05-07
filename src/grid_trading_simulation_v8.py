@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 plt.rcParams['font.sans-serif'] = ['SimHei']
 plt.rcParams['axes.unicode_minus'] = False
 
-OUTPUT_DIR = RESULT_DIR / 'simple_run_log'
+OUTPUT_DIR = RESULT_DIR / 'simple_run_log_v8'
 def load_and_prepare_data(dataset_dir = DATASET_DIR, required_files=None, start_date=None, end_date=None):
     """加载所有文件数据并按时间戳排序"""
     if required_files is None:
@@ -363,9 +363,9 @@ def run_concurrent(init_capital, data):
             try:
                 strategy_name, analysis_result_txt, analysis_result_df = future.result()
                 # hold_analyzer(version="v8", param_suffix=strategy_name)
-                # profit_analyzer(version="v8", param_suffix=strategy_name)
-                # return_analyzer(version="v8", param_suffix=strategy_name)
-                # trades_analyzer(version="v8", param_suffix=strategy_name)
+                profit_analyzer(version="v8", param_suffix=strategy_name)
+                return_analyzer(version="v8", param_suffix=strategy_name)
+                trades_analyzer(version="v8", param_suffix=strategy_name)
                 # correlation_analyzer(version="v8", param_suffix=strategy_name)
                 analysis_result_txt.append("*" * 60)
                 all_analysis_result.extend(analysis_result_txt)
@@ -389,6 +389,7 @@ if __name__ == "__main__":
                              ],
 
                                   # start_date="20251001"
+                                  end_date="20251231"
                                   )
     run_concurrent(248526, processed_data)
     # simple_run(initial_capital=248526,strategy_name ="param35", strategy_params=model_config.STRATEGY_PARAMS_CANDIDATES_V8["param35"],full_data=processed_data)
