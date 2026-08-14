@@ -24,27 +24,26 @@ SRC = REPO_ROOT / "src"
 # ---------------------------------------------------------------------------
 
 class TestTinyshareAuth:
-    def test_raises_when_token_missing(self, no_tinyshare_token, monkeypatch):
+    def test_raises_when_token_missing(self, no_tinyshare_token, monkeypatch, tmp_path):
         """TINYSHARE_TOKEN 缺失时应抛出 EnvironmentError。"""
-        # 确保 src 在路径中，直接 import
         if str(SRC) not in sys.path:
             sys.path.insert(0, str(SRC))
-        # 用 importlib 以便每次测试都重新执行模块级代码
         import tinyshare_auth
-        importlib.reload(tinyshare_auth)
+        # 不 reload——reload 会重置 _ENV_PATH；直接 patch 即可
+        monkeypatch.setattr(tinyshare_auth, "_ENV_PATH", tmp_path / "nonexistent.env")
         with pytest.raises(EnvironmentError) as exc_info:
             tinyshare_auth.get_pro_api()
         msg = str(exc_info.value)
         assert "TINYSHARE_TOKEN" in msg, "错误消息应包含环境变量名"
-        assert "export" in msg or ".env" in msg, "错误消息应包含设置指引"
+        assert ".env" in msg, "错误消息应包含 .env 设置指引"
 
-    def test_raises_when_token_blank(self, monkeypatch):
+    def test_raises_when_token_blank(self, monkeypatch, tmp_path):
         """TINYSHARE_TOKEN 设为空字符串时同样应抛出 EnvironmentError。"""
         monkeypatch.setenv("TINYSHARE_TOKEN", "   ")
         if str(SRC) not in sys.path:
             sys.path.insert(0, str(SRC))
         import tinyshare_auth
-        importlib.reload(tinyshare_auth)
+        # blank token 优先于 .env，无需 patch _ENV_PATH
         with pytest.raises(EnvironmentError):
             tinyshare_auth.get_pro_api()
 
