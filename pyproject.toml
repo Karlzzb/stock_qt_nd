@@ -33,6 +33,7 @@ dependencies = [
     "regex>=2023.0.0",
     "python-dotenv>=1.0.0",
     "lxml-html-clean>=0.4.0",
+    "pyarrow>=25.0.1",
 ]
 
 [dependency-groups]
