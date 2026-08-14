@@ -253,7 +253,7 @@ if __name__ == "__main__":
 
     selected_param = "param1"
     # 在 V13 中，我们优先拉低 min_probability 让分级仓位起作用
-    test_params = model_config.STRATEGY_PARAMS_CANDIDATES_V13.get(selected_param, {}).copy()
+    test_params = model_config.STRATEGY_PARAMS_CANDIDATES_V12.get(selected_param, {}).copy()
     test_params['min_probability'] = 0.35
     test_params['max_positions'] = 5
 

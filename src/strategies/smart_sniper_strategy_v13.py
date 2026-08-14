@@ -324,7 +324,7 @@ class SmartSniperStrategyV13:
             planned_shares = int(budget / signal_price / 100) * 100
             
             # 如果重仓额度太大导致剩余资金买不了后续股，保护机制会修正它
-            if required_cash := planned_shares * signal_price > available_cash:
+            if (required_cash := planned_shares * signal_price) > available_cash:
                 planned_shares = int(available_cash / signal_price / 100) * 100
                 
             if planned_shares < 100: continue

@@ -41,62 +41,45 @@ logger = logging.getLogger(__name__)
 
 
 class TradingDayChecker:
-    """交易日检查器"""
-    
+    """交易日检查器，从 tinyshare 交易日历接口获取数据，按年懒加载并缓存。"""
+
     def __init__(self):
-        self.holidays_2026 = [
-            # 元旦
-            '2026-01-01', '2026-01-02', '2026-01-03',
-            # 春节
-            '2026-02-16', '2026-02-17', '2026-02-18', '2026-02-19', '2026-02-20', '2026-02-21', '2026-02-22',
-            # 清明节
-            '2026-04-04', '2026-04-05', '2026-04-06',
-            # 劳动节
-            '2026-05-01', '2026-05-02', '2026-05-03', '2026-05-04', '2026-05-05',
-            # 端午节
-            '2026-06-25', '2026-06-26', '2026-06-27',
-            # 中秋节
-            '2026-10-01', '2026-10-02', '2026-10-03',
-            # 国庆节
-            '2026-10-01', '2026-10-02', '2026-10-03', '2026-10-04', '2026-10-05', '2026-10-06', '2026-10-07', '2026-10-08',
-        ]
-        
-        # 调休工作日（周末需要上班的日子）
-        self.workdays_2026 = [
-            '2026-02-15',  # 春节调休
-            '2026-02-28',  # 春节调休
-            '2026-09-27',  # 国庆调休
-            '2026-10-10',  # 国庆调休
-        ]
-    
+        # cal_date (YYYYMMDD str) -> is_open (1=交易日, 0=非交易日)
+        self._calendar: dict[str, int] = {}
+        self._loaded_years: set[int] = set()
+
+    def _ensure_year_loaded(self, year: int) -> None:
+        """按需拉取指定年份的交易日历，同一年份只请求一次。"""
+        if year in self._loaded_years:
+            return
+        import sys
+        sys.path.insert(0, str(Path(__file__).parent))
+        from tinyshare_auth import get_pro_api
+        pro = get_pro_api()
+        df = pro.trade_cal(
+            exchange='SSE',
+            start_date=f'{year}0101',
+            end_date=f'{year}1231',
+        )
+        for _, row in df.iterrows():
+            self._calendar[str(row['cal_date'])] = int(row['is_open'])
+        self._loaded_years.add(year)
+        logger.info(f"交易日历已加载: {year} 年，共 {len(df)} 条记录")
+
     def is_trading_day(self, date: datetime) -> bool:
-        """判断是否为交易日"""
-        date_str = date.strftime('%Y-%m-%d')
-        
-        # 1. 如果是调休工作日，是交易日
-        if date_str in self.workdays_2026:
-            return True
-        
-        # 2. 如果是法定节假日，不是交易日
-        if date_str in self.holidays_2026:
-            return False
-        
-        # 3. 如果是周末，不是交易日
-        if date.weekday() >= 5:  # 5=周六, 6=周日
-            return False
-        
-        # 4. 其他情况是交易日
-        return True
-    
+        """判断是否为交易日（从数据源接口获取，不依赖硬编码假期表）。"""
+        self._ensure_year_loaded(date.year)
+        return self._calendar.get(date.strftime('%Y%m%d'), 0) == 1
+
     def get_next_trading_day(self, date: datetime) -> datetime:
-        """获取下一个交易日"""
+        """获取下一个交易日。"""
         next_day = date + timedelta(days=1)
         while not self.is_trading_day(next_day):
             next_day += timedelta(days=1)
         return next_day
-    
+
     def get_previous_trading_day(self, date: datetime) -> datetime:
-        """获取上一个交易日"""
+        """获取上一个交易日。"""
         prev_day = date - timedelta(days=1)
         while not self.is_trading_day(prev_day):
             prev_day -= timedelta(days=1)
