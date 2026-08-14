@@ -12,8 +12,8 @@
 
 用法
 ----
-    export TINYSHARE_TOKEN="<your_token>"
     uv run python scripts/fetch_daily_data.py [选项]
+    （token 从项目根目录 .env 文件读取，无需 export）
 
 常用选项
 --------
@@ -352,11 +352,11 @@ def main() -> int:
     parser.add_argument("--dry-run",      action="store_true",      help="只构建股票池，不拉日线")
     args = parser.parse_args()
 
-    # 检查 token
-    token = os.environ.get("TINYSHARE_TOKEN", "").strip()
-    if not token:
-        print("[ERROR] 环境变量 TINYSHARE_TOKEN 未设置。")
-        print("  请执行：export TINYSHARE_TOKEN='<your_token>'")
+    # 检查 token（通过 get_pro_api 读取，后者自动加载 .env）
+    try:
+        pro = get_pro_api()
+    except EnvironmentError as e:
+        print(f"[ERROR] {e}")
         return 1
 
     print("=" * 60)
@@ -366,7 +366,6 @@ def main() -> int:
     print(f"  并发数：{args.workers}")
     print("=" * 60)
 
-    pro = get_pro_api()
     session = FetchSession(
         data_root  = Path(args.data_root),
         start_date = args.start_date,

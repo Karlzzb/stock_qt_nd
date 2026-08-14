@@ -6,8 +6,8 @@
 此脚本是 go/no-go 门：任何接口不可用都应上报用户，不得跳过进入数据层重建。
 
 用法：
-    export TINYSHARE_TOKEN="<your_token>"
     uv run python scripts/probe_data_sources.py [--report-dir ./reports]
+    （token 从项目根目录 .env 文件读取，无需 export）
 
 脚本不进 CI 默认路径，需要真实 token 与网络，手动执行。
 """
@@ -383,13 +383,14 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    # 检查 token
-    token = os.environ.get("TINYSHARE_TOKEN", "").strip()
-    if not token:
-        print("[ERROR] 环境变量 TINYSHARE_TOKEN 未设置。")
-        print("  请执行：export TINYSHARE_TOKEN='<your_token>'")
+    # 检查 token（通过 get_pro_api 读取，后者自动加载 .env）
+    try:
+        pro = get_pro_api()
+    except EnvironmentError as e:
+        print(f"[ERROR] {e}")
         return 1
 
+    token = os.environ.get("TINYSHARE_TOKEN", "")
     token_masked = token[-6:] if len(token) >= 6 else "***"
 
     print("=" * 60)
