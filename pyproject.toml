@@ -1,0 +1,62 @@
+[project]
+name = "stock-qt-nd"
+version = "0.1.0"
+description = "A 股日频量化选股系统:底背离信号池 + LightGBM stacking 打分 + 网格策略回测"
+requires-python = ">=3.11,<3.12"
+dependencies = [
+    # Core data
+    "pandas>=2.0.0",
+    "numpy>=1.24.0",
+    # Machine learning
+    "scikit-learn>=1.3.0",
+    "lightgbm>=4.0.0",
+    "joblib>=1.3.0",
+    "shap>=0.42.0",
+    # Technical analysis
+    "ta-lib>=0.4.0",
+    "pywavelets>=1.4.0",
+    # Statistics & visualization
+    "matplotlib>=3.7.0",
+    "seaborn>=0.12.0",
+    "scipy>=1.10.0",
+    "statsmodels>=0.14.0",
+    # Data sources (tinyshare 经自定义 index 安装,见 [tool.uv.index])
+    "tushare>=1.3.0",
+    "tinyshare>=0.1036.0",
+    # Web
+    "flask>=3.0.0",
+    "flask-cors>=4.0.0",
+    # Utilities
+    "tqdm>=4.65.0",
+    "requests>=2.31.0",
+    "newspaper3k>=0.2.0",
+    "regex>=2023.0.0",
+    "python-dotenv>=1.0.0",
+    "lxml-html-clean>=0.4.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0.0",
+]
+notebook = [
+    "jupyter>=1.0.0",
+    "ipykernel>=6.0.0",
+]
+
+[tool.uv]
+package = false
+
+# tinyshare 只存在于该自定义源(已被 PyPI 隔离,用户知情并接受风险,见 PRD)。
+# explicit = true 保证该源只用于显式指定的包,不污染其余依赖解析。
+[[tool.uv.index]]
+name = "tinyshare"
+url = "https://minidoc.pages.dev/simple/"
+explicit = true
+
+[tool.uv.sources]
+tinyshare = { index = "tinyshare" }
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

@@ -31,11 +31,9 @@ OUTPUT_DIR = RESULT_DIR / 'simple_run_log_v12'
 
 
 def _preload_st_cache(trade_dates: list[str]) -> dict[str, set[str]]:
-    import tinyshare as ts
+    from tinyshare_auth import get_pro_api
     logger.info(">>> [ST预加载] 开始获取 ST 数据...")
-    token = "3Q4RY56w8deQac5uQkcba5wzoaUf8XBdiLvBti22gv5jTstJ4d0ywZKU247ade48"
-    ts.set_token(token)
-    pro = ts.pro_api()
+    pro = get_pro_api()
 
     st_cache: dict[str, set[str]] = {}
     for date in trade_dates:

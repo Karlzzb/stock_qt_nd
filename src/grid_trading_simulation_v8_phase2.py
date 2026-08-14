@@ -20,8 +20,6 @@ from config.settings import STOCK_ND_CSV_DIR, MODEL_DIR, DATASET_DIR, RESULT_DIR
 from data_process import prepare_real_daily_features
 from predictor_model_v2 import PriceChangePredictor
 from feature_pipeline import load_price_data, convert_dict_to_dataframe_from_index
-import tinyshare as ts
-
 import logging
 logging.basicConfig(
     level=logging.INFO,
@@ -53,9 +51,8 @@ def preload_st_cache(trade_dates: list[str]) -> dict[str, set[str]]:
     Returns: {trade_date: set of ts_codes}
     """
     print(">>> [ST预加载] 开始从 Tushare 获取 ST 数据，", flush=True)
-    token = "3Q4RY56w8deQac5uQkcba5wzoaUf8XBdiLvBti22gv5jTstJ4d0ywZKU247ade48"
-    ts.set_token(token)
-    pro = ts.pro_api()
+    from tinyshare_auth import get_pro_api
+    pro = get_pro_api()
 
     st_cache: dict[str, set[str]] = {}
     total = len(trade_dates)

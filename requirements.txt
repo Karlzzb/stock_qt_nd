@@ -1,3 +1,7 @@
+# DEPRECATED: 此文件已废弃，以 pyproject.toml 为准。
+# 请使用 `uv sync` 安装依赖，而不是 `pip install -r requirements.txt`。
+# 保留此文件仅作历史参考，不保证与 pyproject.toml 同步。
+#
 # Stock Trading Model Dependencies
 # Python 3.10 or 3.11 recommended (for TA-Lib binary wheel compatibility)
 # Python 3.12 can use pandas-ta as a pure-Python alternative (see below)

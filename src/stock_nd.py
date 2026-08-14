@@ -226,8 +226,8 @@ def fetch_symbols(promision, sample_ratio=1.0, cache_dir='../cache', cache_hours
 # logger.info(f"{data}")
 def main():
     index_symbols = ["000001.SH","399001.SZ"]
-    token = "3Q4RY56w8deQac5uQkcba5wzoaUf8XBdiLvBti22gv5jTstJ4d0ywZKU247ade48"
-    pro = init_tushare(token)
+    from tinyshare_auth import get_pro_api
+    pro = get_pro_api()
     start_date = "20090101"
     sample_ratio=1.0
     symbols = fetch_symbols(pro,sample_ratio)

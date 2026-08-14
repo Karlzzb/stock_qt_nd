@@ -1,13 +1,13 @@
-import tinyshare as ts
 import pandas as pd
 from datetime import datetime
 from typing import Optional
 
+from tinyshare_auth import get_pro_api
 
-# Tushare Token 配置（与 st_stock_filter_v2.py 保持一致）
-token = "3Q4RY56w8deQac5uQkcba5wzoaUf8XBdiLvBti22gv5jTstJ4d0ywZKU247ade48"
-ts.set_token(token)
-pro = ts.pro_api()
+
+def _get_pro():
+    """延迟初始化 pro API，避免模块导入时因环境变量缺失而崩溃。"""
+    return get_pro_api()
 
 
 class StockEligibilityFilter:
@@ -43,6 +43,7 @@ class StockEligibilityFilter:
 
     def _init_stock_basic(self):
         """初始化时调用一次，加载所有股票基础信息"""
+        pro = _get_pro()
         df = pro.stock_basic(
             exchange='',
             list_status='L',
@@ -58,6 +59,7 @@ class StockEligibilityFilter:
         trade_date: YYYYMMDD 格式
         """
         if trade_date not in self._st_cache:
+            pro = _get_pro()
             df = pro.stock_st(trade_date=trade_date)
             if df is not None and len(df) > 0:
                 # stock_st 返回 ts_code 列（如 "000001.SZ"）
