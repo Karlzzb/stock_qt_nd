@@ -1,0 +1,19 @@
+{
+  "schema_version": "1",
+  "description": "背离检测器确定性回归基准。锚点漂移修复导致的预期变化须通过显式运行 scripts/update_test_baselines.py 更新。",
+  "generated_at": "2026-08-14",
+  "fixture": "tests/fixtures/daily/div_trigger.parquet",
+  "symbol": "SYNTH",
+  "target_date": "2020-08-20",
+  "abs_tol": 1e-05,
+  "expected_count_min": 1,
+  "first_divergence": {
+    "close_current": 6.84078316,
+    "close_previous": 7.05235378,
+    "macd_current": -0.14198787,
+    "macd_previous": -0.26635349,
+    "price_decline_pct": -0.03,
+    "macd_increase_pct": 0.46691941,
+    "divergence_strength": 0.72
+  }
+}

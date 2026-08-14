@@ -646,7 +646,12 @@ class FeaturePipeline:
                 return g
 
             logger.debug("正在严格按股票分组计算 TA-Lib 指标...")
-            return df.groupby('symbol', group_keys=False).apply(calc_talib)
+            symbol_series = df['symbol'].copy()
+            result = df.groupby('symbol', group_keys=False).apply(calc_talib)
+            # pandas 3.x groupby.apply 会丢弃分组键列，需要手动恢复
+            if 'symbol' not in result.columns:
+                result['symbol'] = symbol_series.values
+            return result
         except Exception as e:
             logger.error(f"计算技术指标时出错: {e}")
             return None

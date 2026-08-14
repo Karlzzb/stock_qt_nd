@@ -1,0 +1,75 @@
+{
+  "schema_version": "1",
+  "description": "特征管线确定性回归基准。泄露修复导致的预期数值变化须通过显式运行 scripts/update_test_baselines.py 更新，不得放宽断言。",
+  "generated_at": "2026-08-14",
+  "fixture": "tests/fixtures/daily/000001.SZ.parquet",
+  "symbol": "000001.SZ",
+  "target_date": "2021-12-31",
+  "abs_tol": 0.0001,
+  "assertions": [
+    {
+      "feature": "rsi_14",
+      "value": 27.81219621
+    },
+    {
+      "feature": "macd",
+      "value": -0.34898621
+    },
+    {
+      "feature": "ma_20",
+      "value": 17.6185
+    },
+    {
+      "feature": "obv",
+      "value": -22477544.86
+    },
+    {
+      "feature": "atr",
+      "value": 0.37456948
+    },
+    {
+      "feature": "volume_ratio",
+      "value": 1.5095923
+    },
+    {
+      "feature": "pct_change",
+      "value": -0.02021403
+    },
+    {
+      "feature": "clv",
+      "value": 0.16
+    },
+    {
+      "feature": "vol_divergence",
+      "value": 0.3362687
+    },
+    {
+      "feature": "vol_gk",
+      "value": 0.01581837
+    },
+    {
+      "feature": "illiq",
+      "value": 0.0
+    },
+    {
+      "feature": "ret_overnight",
+      "value": 0.00237812
+    },
+    {
+      "feature": "ret_intraday",
+      "value": -0.02253855
+    },
+    {
+      "feature": "close_lag_5",
+      "value": 17.31
+    },
+    {
+      "feature": "volume_lag_10",
+      "value": 602369.67
+    },
+    {
+      "feature": "return_lag_1",
+      "value": 0.0041791
+    }
+  ]
+}
