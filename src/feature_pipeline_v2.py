@@ -1,4 +1,6 @@
 import glob
+import hashlib
+import json
 import logging
 import os
 import re
@@ -7,10 +9,62 @@ import traceback
 import talib
 import numpy as np
 import pandas as pd
+from pathlib import Path
 from scipy import stats
 from scipy.stats import percentileofscore, linregress
 
 from src.comm_fun import model_config, EPS
+
+# ============================================================
+# 缓存指纹版本号
+# 修改特征逻辑、关键参数含义或数据格式时，手动递增此值，
+# 以确保所有旧缓存自动失效重算。
+# ============================================================
+FEATURE_PIPELINE_VERSION = "2.0.0"
+
+
+def _build_fingerprint_params() -> dict:
+    """返回影响特征输出的关键参数字典，用于构造缓存指纹。"""
+    return {
+        "version": FEATURE_PIPELINE_VERSION,
+        "return_periods": list(model_config.RETURN_PERIODS),
+        "windows_volatility": list(model_config.WINDOWS_VOLATILITY),
+        "lag_periods": list(model_config.LAG_PERIODS),
+        "feature_need_max_days": model_config.FEATURE_NEED_MAX_DAYS,
+        "expected_profit": model_config.EXPECTED_PROFIT,
+        "expected_loss": model_config.EXPECTED_LOSS,
+    }
+
+
+def compute_cache_fingerprint() -> str:
+    """计算当前特征管线的缓存指纹（SHA-256 hex 取前 16 位）。"""
+    serialized = json.dumps(_build_fingerprint_params(), sort_keys=True)
+    return hashlib.sha256(serialized.encode()).hexdigest()[:16]
+
+
+def _fp_path(csv_path) -> Path:
+    """返回 CSV 文件对应的指纹 sidecar 文件路径（.fp 后缀）。"""
+    return Path(str(csv_path) + ".fp")
+
+
+def is_cache_valid(csv_path, fingerprint: str) -> bool:
+    """
+    校验缓存是否有效。
+    有效条件：CSV 存在 + 同名 .fp 文件存在 + 指纹完全匹配。
+    任一条件不满足均返回 False，触发重算。
+    """
+    csv_path = Path(csv_path)
+    if not csv_path.exists():
+        return False
+    fp_file = _fp_path(csv_path)
+    if not fp_file.exists():
+        return False
+    return fp_file.read_text().strip() == fingerprint
+
+
+def write_cache_fingerprint(csv_path, fingerprint: str) -> None:
+    """在 CSV 同目录写入 .fp 指纹 sidecar 文件。"""
+    _fp_path(csv_path).write_text(fingerprint)
 
 logger = logging.getLogger(__name__)
 warnings.filterwarnings('ignore')
@@ -501,8 +555,13 @@ class FeaturePipeline:
     def save_to_csv(self, df, file_path):
         try:
             directory = os.path.dirname(file_path)
-            if directory and not os.path.exists(directory): os.makedirs(directory)
-            df.to_csv(file_path, index=True if df.index.name else False)
+            if directory and not os.path.exists(directory):
+                os.makedirs(directory)
+            # 落盘时降精度（float64 → float32），不影响内存中的计算精度
+            disk_df = optimize_dtypes(df)
+            disk_df.to_csv(file_path, index=True if disk_df.index.name else False)
+            # 写入指纹 sidecar，使后续缓存校验有效
+            write_cache_fingerprint(file_path, compute_cache_fingerprint())
             logger.debug(f"数据已保存到: {file_path}")
         except Exception as e:
             logger.error(f"保存CSV文件失败: {e}")
@@ -855,13 +914,20 @@ class FeaturePipeline:
         return df
 
 
-def optimize_dtypes(df):
-    if df is None or len(df) == 0: return df
-    float_cols = df.select_dtypes(include=['float64']).columns
+def optimize_dtypes(df: pd.DataFrame) -> pd.DataFrame:
+    """落盘专用：将 float64 列降精度为 float32（保留 4 位小数）。
+
+    返回新 DataFrame，不修改传入的对象。
+    仅在写入磁盘前调用；特征计算全程应使用 float64 原始精度。
+    """
+    if df is None or len(df) == 0:
+        return df
+    df = df.copy()
+    float_cols = df.select_dtypes(include=["float64"]).columns
     for col in float_cols:
         try:
             df[col] = df[col].round(4).astype(np.float32)
-        except:
+        except Exception:
             pass
     return df
 
@@ -883,7 +949,7 @@ def load_price_data(directory_path, start_date='2009-01-01', end_date=None):
             df = pd.read_csv(file_path, encoding='gb2312', index_col=0, dtype={'symbol': str})
             df.columns = ['open', 'high', 'low', 'close', 'volume']
             df['symbol'] = symbol
-            df = optimize_dtypes(df)
+            # 原始行情保持 float64，全程参与特征计算；降精度仅在落盘时执行
             df = ensure_datetime_index(df)
             df = df.sort_index(ascending=True)
 
@@ -996,14 +1062,16 @@ def process_stocks_batch_parallel_optimized(full_stocks, batch_size=100, max_wor
         except ValueError:
             pass
 
+    current_fp = compute_cache_fingerprint()
     dates_to_process = []
     for target_date in filtered_dates:
         date_obj = datetime.strptime(target_date, '%Y-%m-%d')
         filename = str(DAILY_FEATURE_DIR / f"realistic_features_{date_obj.strftime('%Y%m%d')}.csv")
-        if not os.path.exists(filename): dates_to_process.append(target_date)
+        if not is_cache_valid(filename, current_fp):
+            dates_to_process.append(target_date)
 
     if not dates_to_process:
-        logger.info("所有日期都已处理完成！(提示：如果想重跑，请先删除旧的CSV文件)")
+        logger.info("所有日期缓存均有效（指纹匹配），无需重算。")
         return
 
     logger.info(f"总待处理天数: {len(dates_to_process)} | 进程数: {max_workers}")
