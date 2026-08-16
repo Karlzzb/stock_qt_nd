@@ -293,6 +293,20 @@ def main() -> None:
     sterile_start = proto.sterile_start
     final_mask = data["timestamp"].dt.date < sterile_start
     final_train = data[final_mask].copy()
+
+    # 断言：无菌终审段未参与训练
+    sterile_mask = data["timestamp"].dt.date >= sterile_start
+    sterile_count = sterile_mask.sum()
+    if sterile_count > 0:
+        logger.warning(
+            f"数据集包含 {sterile_count} 行终审段数据（>= {sterile_start}），"
+            "但最终模型训练已排除。"
+        )
+    assert len(final_train) > 0, "最终训练集为空，请检查 sterile_start 与数据日期范围"
+    assert (final_train["timestamp"].dt.date >= sterile_start).sum() == 0, (
+        f"最终训练集中仍有 >= {sterile_start} 的行！终审段泄露检测失败。"
+    )
+
     logger.info(
         f"\n最终模型训练数据：{len(final_train)} 行（截止 {sterile_start} 之前）"
     )

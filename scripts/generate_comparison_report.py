@@ -57,16 +57,15 @@ OLD_BASELINE: dict = {
 }
 
 _METRIC_LABELS = {
-    "return_rate":   "总收益率",
-    "annual_return": "年化收益率",
-    "max_drawdown":  "最大回撤",
-    "sharpe_ratio":  "夏普比率",
-    "win_rate":      "胜率",
-    "total_trades":  "总交易数",
+    "return_rate":  "总收益率",
+    "max_drawdown": "最大回撤",
+    "sharpe_ratio": "夏普比率",
+    "win_rate":     "胜率",
+    "total_trades": "总交易数",
 }
 
 
-def _fmt(val: object, key: str) -> str:
+def _fmt(val: object, metric_key: str) -> str:
     """格式化数值为可读字符串。"""
     if val is None or val == "N/A":
         return "—"
@@ -74,11 +73,11 @@ def _fmt(val: object, key: str) -> str:
         f = float(val)
     except (TypeError, ValueError):
         return str(val)
-    if key in ("return_rate", "annual_return", "max_drawdown", "win_rate"):
+    if metric_key in ("return_rate", "max_drawdown", "win_rate"):
         return f"{f:.2%}"
-    if key == "sharpe_ratio":
+    if metric_key == "sharpe_ratio":
         return f"{f:.4f}"
-    if key == "total_trades":
+    if metric_key == "total_trades":
         return str(int(round(f)))
     return f"{f:.4f}"
 
@@ -114,19 +113,19 @@ def build_version_section(
 
     higher_better = {
         "return_rate": True,
-        "annual_return": True,
         "max_drawdown": False,   # 越接近 0 越好
         "sharpe_ratio": True,
         "win_rate": True,
         "total_trades": None,    # 中性
     }
-    for key, label in _METRIC_LABELS.items():
-        old_val = old.get(key)
-        new_val = new.get(key)
-        hib = higher_better.get(key)
+    # _METRIC_LABELS 中不含 annual_return，higher_better 不需要该项
+    for metric_key, label in _METRIC_LABELS.items():
+        old_val = old.get(metric_key)
+        new_val = new.get(metric_key)
+        hib = higher_better.get(metric_key)
         delta = _delta_arrow(new_val, old_val, hib) if hib is not None else ""
         lines.append(
-            f"| {label} | {_fmt(old_val, key)} | {_fmt(new_val, key)} | {delta} |"
+            f"| {label} | {_fmt(old_val, metric_key)} | {_fmt(new_val, metric_key)} | {delta} |"
         )
 
     if "error" in new:
