@@ -1823,10 +1823,10 @@ def convert_dict_to_dataframe_from_index(stock_dict):
     logger.debug(f"合并完成！数据形状: {big_df.shape}")
     return big_df
 
-from src.divergence_detector import DivergenceDetector
+from src.divergence_detector_v2 import DivergenceDetectorV2
 
 
-def feature_generator(target_date, divergence_detector = DivergenceDetector()):
+def feature_generator(target_date, divergence_detector=DivergenceDetectorV2()):
     """
     特征生成
     """

@@ -223,3 +223,66 @@ class TestDivergenceDetectorRegression:
                         check_names=False,
                         rtol=1e-10,
                     )
+
+
+# ---------------------------------------------------------------------------
+# 锚点漂移回归测试（Issue #9 验收标准）
+# 直接针对 v1 的锚点漂移 bug：同一历史日期的信号不随数据加载区间变化。
+# ---------------------------------------------------------------------------
+
+class TestDivergenceAnchorStability:
+    """验证 v2 检测器的低点锚点不随加载起始日期漂移。
+
+    做法：对同一个 fixture，分别从两个不同的起始行截断输入，
+    对相同的 target_date 调用检测器，断言两次结果的每个字段逐值相同。
+    这直接回归 v1 中"滑动窗口 argmin 随新数据漂移"的 bug。
+    """
+
+    def test_anchor_stable_across_load_windows(self, divergence_data, baseline):
+        """不同加载起始日期，同一 target_date 的检测结果完全一致。"""
+        from src.divergence_detector_v2 import DivergenceDetectorV2
+
+        detector = DivergenceDetectorV2()
+        target_date = pd.Timestamp(baseline["target_date"]).date()
+        symbol = baseline["symbol"]
+
+        # 构建两个不同起始偏移的子集：full vs. 去掉前 30 行
+        # 两者都包含 target_date，只是加载起点不同
+        full_df = divergence_data
+        trimmed_df = divergence_data.iloc[30:].copy()
+
+        # target_date 必须在两个子集内才有意义
+        assert pd.Timestamp(target_date) in full_df.index, (
+            f"target_date {target_date} 不在 fixture 中"
+        )
+        assert pd.Timestamp(target_date) in trimmed_df.index, (
+            f"target_date {target_date} 在截断后 fixture 中不存在，请增大 fixture 或减小偏移量"
+        )
+
+        result_full = detector.detect_daily_divergence(full_df, symbol, target_date)
+        result_trimmed = detector.detect_daily_divergence(trimmed_df, symbol, target_date)
+
+        assert len(result_full) == len(result_trimmed), (
+            f"锚点漂移：不同加载起点导致背离点数量不同（full={len(result_full)}, "
+            f"trimmed={len(result_trimmed)}）"
+        )
+
+        if len(result_full) == 0:
+            return  # 都为空视为一致
+
+        compare_cols = [
+            "close_current", "close_previous",
+            "macd_current", "macd_previous",
+            "price_decline_pct", "macd_increase_pct",
+        ]
+        for col in compare_cols:
+            if col not in result_full.columns:
+                continue
+            pd.testing.assert_series_equal(
+                result_full[col].reset_index(drop=True),
+                result_trimmed[col].reset_index(drop=True),
+                check_names=False,
+                rtol=1e-9,
+                atol=1e-9,
+                obj=f"锚点漂移·字段 {col!r}",
+            )

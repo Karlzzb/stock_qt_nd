@@ -1037,8 +1037,8 @@ def process_date_standalone_optimized(target_date):
         df_sh = feature_calc_data.get(df_sh_symbol)
         df_sz = feature_calc_data.get(df_sz_symbol)
 
-        from src.divergence_detector import DivergenceDetector
-        detector = DivergenceDetector()
+        from src.divergence_detector_v2 import DivergenceDetectorV2
+        detector = DivergenceDetectorV2()
         features_pipeline = FeaturePipeline(detector, small_context_data)
         feature_df = features_pipeline.enrich(filtered_stock_data_df, df_sh, df_sz)
 
