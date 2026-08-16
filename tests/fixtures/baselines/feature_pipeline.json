@@ -1,7 +1,7 @@
 {
   "schema_version": "1",
   "description": "特征管线确定性回归基准。泄露修复导致的预期数值变化须通过显式运行 scripts/update_test_baselines.py 更新，不得放宽断言。",
-  "generated_at": "2026-08-14",
+  "generated_at": "2026-08-16",
   "fixture": "tests/fixtures/daily/000001.SZ.parquet",
   "symbol": "000001.SZ",
   "target_date": "2021-12-31",

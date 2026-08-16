@@ -20,7 +20,7 @@ from src.comm_fun import model_config, EPS
 # 修改特征逻辑、关键参数含义或数据格式时，手动递增此值，
 # 以确保所有旧缓存自动失效重算。
 # ============================================================
-FEATURE_PIPELINE_VERSION = "2.0.0"
+FEATURE_PIPELINE_VERSION = "2.1.0"  # issue #10: 删泄露、修 3 bug、去前视
 
 
 def _build_fingerprint_params() -> dict:
@@ -479,7 +479,11 @@ class FeaturePipeline:
 
             logger.debug(f"{target_date} 交叉特征添加......")
             enriched_points = self._calculate_cross_features(enriched_points)
-            enriched_points['is_quick_divergence'] = 1 if enriched_points.get('formation_period', 10) <= 3 else 0
+            # 【修复】DataFrame.get() 返回 Series，if Series <= 3 永远走 else 分支导致恒为 0
+            if 'formation_period' in enriched_points.columns:
+                enriched_points['is_quick_divergence'] = (enriched_points['formation_period'] <= 3).astype(int)
+            else:
+                enriched_points['is_quick_divergence'] = 0
 
             # ====== 【核心修复】强行对齐时间列的数据类型并防止列名冲突 ======
             enriched_points['timestamp'] = pd.to_datetime(enriched_points['timestamp'])
@@ -524,18 +528,20 @@ class FeaturePipeline:
             return None
 
     def _filter_valid_rows_apply(self, target_divergence_df):
+        """过滤掉无法查到历史行情数据的背离信号行。
+
+        只使用信号日当日及之前的已知信息（symbol 存在、timestamp 在数据范围内）。
+        原先"偷看次日最低价以判断买单是否成交"的前视过滤已移除——
+        可成交性由 _calculate_future_return 通过标签 NaN 处理，训练时再过滤 NaN 行。
+        """
         def is_valid_row(row):
             symbol = row['symbol']
             timestamp = row['timestamp']
-            price = row['close_current']
 
-            if symbol not in self.full_stocks_data: return False
+            if symbol not in self.full_stocks_data:
+                return False
             df = self.full_stocks_data[symbol]
-            if timestamp not in df.index: return False
-
-            pos = df.index.get_loc(timestamp)
-            if pos + 1 >= len(df): return True
-            return df['low'].iat[pos + 1] <= price
+            return timestamp in df.index
 
         mask = target_divergence_df.apply(is_valid_row, axis=1)
         return target_divergence_df[mask].reset_index(drop=True)
@@ -882,7 +888,9 @@ class FeaturePipeline:
 
         # 4. MACD 补充
         df['macd_signal_distance'] = df['macd'] - df['macd_signal']
-        df['macd_golden_cross'] = np.where(df['macd_signal_distance'] > 0, 1, 0)
+        # 【修复】原代码用 macd_golden_cross 覆盖了 macd_features_rolling() 里的真实金叉检测信号。
+        # 此处语义是"MACD 线在信号线之上"，改名为 macd_above_signal，避免覆盖。
+        df['macd_above_signal'] = np.where(df['macd_signal_distance'] > 0, 1, 0)
 
         # 5. 成交量特征补充 【修复】
         df['volume_ma20'] = df.groupby('symbol')['volume'].transform(

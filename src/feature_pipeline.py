@@ -11,6 +11,19 @@ from scipy import stats
 import re
 logger = logging.getLogger(__name__)
 
+# ============================================================
+# ⚠️  已废弃：请使用 feature_pipeline_v2.py
+# v1 管线存在跨股票全局统计泄露（boxcox_atr 全窗口 lambda、
+# 量能背离全面板均值），以及 close_wavelet/close_d0.4 前向泄露源。
+# 此文件仅为兼容旧脚本保留，新代码禁止引用。
+# ============================================================
+warnings.warn(
+    "feature_pipeline (v1) 已废弃，请改用 feature_pipeline_v2。"
+    "v1 存在已确认的数据泄露，不得用于训练或评估。",
+    DeprecationWarning,
+    stacklevel=2,
+)
+
 warnings.filterwarnings('ignore')
 
 # 设置日志
