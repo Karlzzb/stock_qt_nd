@@ -49,6 +49,25 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
+def _log_result_summary(label: str, result: dict) -> None:
+    """安全打印回测结果摘要（容忍 missing key）。"""
+    def _f(key: str) -> str:
+        v = result.get(key)
+        if v is None:
+            return "N/A"
+        try:
+            return f"{float(v):.4f}"
+        except (TypeError, ValueError):
+            return str(v)
+
+    logger.info(
+        f"{label} → 收益率={_f('return_rate')}  "
+        f"回撤={_f('max_drawdown')}  "
+        f"夏普={_f('sharpe_ratio')}  "
+        f"交易数={result.get('total_trades', 'N/A')}"
+    )
+
+
 def run_v8(
     capital: float,
     start_date: str | None,
@@ -90,12 +109,7 @@ def run_v8(
     with open(out_file, "w", encoding="utf-8") as f:
         json.dump(result, f, ensure_ascii=False, indent=2, default=str)
     logger.info(f"v8 结果已保存至 {out_file}")
-    logger.info(
-        f"v8 param35 → 收益率={result.get('return_rate', 'N/A'):.4f}  "
-        f"回撤={result.get('max_drawdown', 'N/A'):.4f}  "
-        f"夏普={result.get('sharpe_ratio', 'N/A'):.4f}  "
-        f"交易数={result.get('total_trades', 'N/A')}"
-    )
+    _log_result_summary("v8 param35", result)
     return result
 
 
@@ -106,7 +120,6 @@ def run_v12(
     output_dir: Path,
 ) -> dict:
     """跑 v12 param2 回测，返回结果 dict。"""
-    import time
     from config.settings import DATASET_DIR
     from comm_fun import model_config
     from grid_trading_simulation_v12 import (
@@ -159,12 +172,7 @@ def run_v12(
     with open(out_file, "w", encoding="utf-8") as f:
         json.dump(result, f, ensure_ascii=False, indent=2, default=str)
     logger.info(f"v12 结果已保存至 {out_file}")
-    logger.info(
-        f"v12 param2 → 收益率={result.get('return_rate', 'N/A'):.4f}  "
-        f"回撤={result.get('max_drawdown', 'N/A'):.4f}  "
-        f"夏普={result.get('sharpe_ratio', 'N/A'):.4f}  "
-        f"交易数={result.get('total_trades', 'N/A')}"
-    )
+    _log_result_summary("v12 param2", result)
     return result
 
 

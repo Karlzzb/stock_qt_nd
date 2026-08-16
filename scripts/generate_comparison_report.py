@@ -105,7 +105,7 @@ def build_version_section(
 ) -> list[str]:
     """构建单个策略版本的对照表 Markdown。"""
     lines: list[str] = []
-    lines.append(f"\n### {version.upper()} — param{old['param_key'].lstrip('param')}")
+    lines.append(f"\n### {version.upper()} — {old['param_key']}")
     lines.append("")
     lines.append(f"> 旧基线说明：{old.get('note', '')}")
     lines.append("")
