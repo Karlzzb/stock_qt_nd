@@ -11,7 +11,7 @@ import numpy as np
 import pandas as pd
 from pathlib import Path
 from scipy import stats
-from scipy.stats import percentileofscore, linregress
+from numpy.lib.stride_tricks import sliding_window_view
 
 from src.comm_fun import model_config, EPS
 
@@ -140,13 +140,18 @@ def calculate_volume_features_vectorized(df):
     result = pd.DataFrame(index=df.index)
 
     def rolling_slope_1d(series, window):
-        slopes = np.zeros(len(series))
-        vals = series.values
-        for i in range(window - 1, len(vals)):
-            x = np.arange(window)
-            y = vals[i - window + 1:i + 1]
-            slope, _, _, _, _ = linregress(x, y)
-            slopes[i] = slope
+        # 向量化实现：sliding_window_view + 解析公式，替代逐窗口 linregress 调用
+        vals = series.values.astype(np.float64)
+        n = len(vals)
+        slopes = np.zeros(n)
+        if n < window:
+            return slopes
+        x = np.arange(window, dtype=np.float64)
+        x_c = x - x.mean()
+        denom = (x_c ** 2).sum()
+        wins = sliding_window_view(vals, window)  # (n-window+1, window)
+        y_c = wins - wins.mean(axis=1, keepdims=True)
+        slopes[window - 1:] = (x_c * y_c).sum(axis=1) / denom
         return slopes
 
     def rolling_cv_1d(series, window):
@@ -245,11 +250,19 @@ def calculate_macd_percentile_vectorized(df, window=100):
     """向量化计算MACD百分位数特征"""
 
     def macd_pct_1d(series):
-        res = np.full(len(series), 50.0)
-        vals = series.values
-        for i in range(window, len(vals)):
-            historical = vals[i - window:i]
-            res[i] = percentileofscore(historical, vals[i], kind='rank')
+        # 向量化实现：sliding_window_view 替代逐位 percentileofscore 调用
+        vals = series.values.astype(np.float64)
+        n = len(vals)
+        res = np.full(n, 50.0)
+        if n <= window:
+            return res
+        # vals[:-1] 长度 n-1；sliding_window_view → shape (n-window, window)
+        # sw[j] = vals[j:j+window] = 第 (window+j) 位的历史窗口
+        sw = sliding_window_view(vals[:-1], window)   # (n-window, window)
+        current = vals[window:]                        # (n-window,)
+        below = np.sum(sw < current[:, np.newaxis], axis=1)
+        equal = np.sum(sw == current[:, np.newaxis], axis=1)
+        res[window:] = (below + 0.5 * equal) / window * 100
         return res
 
     return df.groupby('symbol')['macd'].transform(macd_pct_1d)
@@ -456,22 +469,27 @@ class FeaturePipeline:
             logger.debug(f"{target_date} 大盘特征计算完成")
 
             logger.debug(f"{target_date} 丰富目标日期的DF特征和背离点提取......")
-            all_divergence_points = pd.DataFrame()
-            enriched_points = pd.DataFrame()
-            process_id = 0
+            # 向量化替代 iterrows + 逐行 pd.concat：预构建符号到历史数据的索引
+            symbol_data_index = {
+                sym: grp.set_index('timestamp')
+                for sym, grp in all_2_target_day_df.groupby('symbol')
+            }
+            enriched_points = target_df.copy()
 
-            for _, row in target_df.iterrows():
-                symbol = row['symbol']
-                enriched_point = row.to_dict()
-                data_with_indicators = all_2_target_day_df[all_2_target_day_df['symbol'] == symbol].set_index(
-                    'timestamp')
-                enriched_points = pd.concat([enriched_points, pd.DataFrame(enriched_point, index=[0])],
-                                            ignore_index=True)
-                divergence_points_df = self.divergence_detector.detect_daily_divergence(data_with_indicators, symbol,
-                                                                                        target_date)
+            divergence_list: list = []
+            for symbol in target_df['symbol'].unique():
+                data_with_indicators = symbol_data_index.get(symbol, pd.DataFrame())
+                if data_with_indicators.empty:
+                    continue
+                divergence_points_df = self.divergence_detector.detect_daily_divergence(
+                    data_with_indicators, symbol, target_date
+                )
                 if len(divergence_points_df) > 0:
-                    all_divergence_points = pd.concat([all_divergence_points, divergence_points_df], ignore_index=True)
-                process_id += 1
+                    divergence_list.append(divergence_points_df)
+
+            all_divergence_points = (
+                pd.concat(divergence_list, ignore_index=True) if divergence_list else pd.DataFrame()
+            )
 
             if all_divergence_points.empty:
                 logger.warning(f"{target_date.strftime('%Y%m%d')}无背离数据")
@@ -818,32 +836,36 @@ class FeaturePipeline:
 
     def generate_lag_features(self, df):
         if len(df) < 100: return None
-        for lag in model_config.LAG_PERIODS:
-            df[f'close_lag_{lag}'] = df.groupby('symbol')['close'].shift(lag)
-            df[f'open_lag_{lag}'] = df.groupby('symbol')['open'].shift(lag)
-            df[f'high_lag_{lag}'] = df.groupby('symbol')['high'].shift(lag)
-            df[f'low_lag_{lag}'] = df.groupby('symbol')['low'].shift(lag)
-            df[f'volume_lag_{lag}'] = df.groupby('symbol')['volume'].shift(lag)
 
-        df['daily_return'] = df.groupby('symbol')['close'].pct_change()
-        for lag in [1, 2, 3, 5, 10, 20]: df[f'return_lag_{lag}'] = df.groupby('symbol')['daily_return'].shift(lag)
+        # 批量 shift：一次 groupby，避免逐列碎片化赋值引起 PerformanceWarning
+        sym_grp = df.groupby('symbol')
+
+        lag_cols: dict = {}
+        for lag in model_config.LAG_PERIODS:
+            for col in ('close', 'open', 'high', 'low', 'volume'):
+                lag_cols[f'{col}_lag_{lag}'] = sym_grp[col].shift(lag)
+
+        df['daily_return'] = sym_grp['close'].pct_change()
+        for lag in [1, 2, 3, 5, 10, 20]:
+            lag_cols[f'return_lag_{lag}'] = sym_grp['daily_return'].shift(lag)
 
         df['amplitude'] = (df['high'] - df['low']) / df['low']
-        for lag in [1, 3, 5]: df[f'amplitude_lag_{lag}'] = df.groupby('symbol')['amplitude'].shift(lag)
+        for lag in [1, 3, 5]:
+            lag_cols[f'amplitude_lag_{lag}'] = sym_grp['amplitude'].shift(lag)
 
         for lag in [1, 3, 5, 10]:
-            df[f'vol_gk_lag_{lag}'] = df.groupby('symbol')['vol_gk'].shift(lag)
-            df[f'vol_gk_ratio_lag_{lag}'] = df.groupby('symbol')['vol_gk_ratio'].shift(lag)
+            lag_cols[f'vol_gk_lag_{lag}'] = sym_grp['vol_gk'].shift(lag)
+            lag_cols[f'vol_gk_ratio_lag_{lag}'] = sym_grp['vol_gk_ratio'].shift(lag)
 
         for lag in [1, 3, 5]:
-            df[f'illiq_lag_{lag}'] = df.groupby('symbol')['illiq'].shift(lag)
-            df[f'efficiency_ratio_lag_{lag}'] = df.groupby('symbol')['efficiency_ratio'].shift(lag)
-            df[f'smart_money_diff_lag_{lag}'] = df.groupby('symbol')['smart_money_diff'].shift(lag)
-            df[f'ret_overnight_lag_{lag}'] = df.groupby('symbol')['ret_overnight'].shift(lag)
-            df[f'ret_intraday_lag_{lag}'] = df.groupby('symbol')['ret_intraday'].shift(lag)
-            df[f'support_resistance_ratio_lag_{lag}'] = df.groupby('symbol')['support_resistance_ratio'].shift(lag)
+            for col in ('illiq', 'efficiency_ratio', 'smart_money_diff',
+                        'ret_overnight', 'ret_intraday', 'support_resistance_ratio'):
+                lag_cols[f'{col}_lag_{lag}'] = sym_grp[col].shift(lag)
 
-        for lag in [1, 2, 3]: df[f'intraday_pos_lag_{lag}'] = df.groupby('symbol')['intraday_pos'].shift(lag)
+        for lag in [1, 2, 3]:
+            lag_cols[f'intraday_pos_lag_{lag}'] = sym_grp['intraday_pos'].shift(lag)
+
+        df = pd.concat([df, pd.DataFrame(lag_cols, index=df.index)], axis=1)
         return df
 
     def _calculate_cross_features(self, final_features):
@@ -859,10 +881,20 @@ class FeaturePipeline:
         features = [c for c in final_features.columns if
                     c not in exclude and final_features[c].dtype in (np.float64, np.int64)]
         final_features['cs_n'] = final_features.groupby(ts_col)[ts_col].transform('count')
-        for f in features:
-            final_features[f + '_rankpct'] = final_features.groupby(ts_col)[f].rank(pct=True)
-            final_features[f + '_z'] = final_features.groupby(ts_col)[f].transform(
-                lambda x: (x - x.median()) / (x.std(ddof=0) + 1e-9))
+
+        # 向量化横截面特征：批量 rank + transform，替代逐列 432 次独立 groupby 调用
+        feat_grp = final_features.groupby(ts_col)[features]
+
+        rp = feat_grp.rank(pct=True)
+        rp.columns = [c + '_rankpct' for c in features]
+
+        def _cs_zscore(s: pd.Series) -> pd.Series:
+            return (s - s.median()) / (s.std(ddof=0) + 1e-9)
+
+        z = feat_grp.transform(_cs_zscore)
+        z.columns = [c + '_z' for c in features]
+
+        final_features = pd.concat([final_features, rp, z], axis=1)
         return final_features
 
     def _calculate_advance_technical_features(self, df):

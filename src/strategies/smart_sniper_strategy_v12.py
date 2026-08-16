@@ -222,6 +222,9 @@ class SmartSniperStrategyV12:
                     g = g.set_index('date')
                     prices_df[code] = g[['open', 'high', 'low', 'close', 'volume']]
 
+        # 预构建日期索引：O(N) 一次性代价，每日 O(1) 查找，替代每日全表 boolean 扫描
+        daily_index: dict = {d: grp.set_index('code') for d, grp in df.groupby('date')}
+
         logger.debug(f"--- 启动 V12 狙击回测（波动率自适应）---")
 
         # 恢复进度条支持，根据 show_progress 开关决定是否显示
@@ -236,7 +239,8 @@ class SmartSniperStrategyV12:
             else:
                 next_day = None
 
-            daily_data = df[df['date'] == today].set_index('code')
+            # O(1) 字典查找，替代 O(N) boolean 扫描
+            daily_data = daily_index[today]
             self.market_avg_atr = self._precompute_market_atr(today, prices_df)
 
             for code, pos in self.positions.items():
@@ -319,7 +323,8 @@ class SmartSniperStrategyV12:
         orders = []
         total_frozen = 0.0
 
-        for code, row in top_candidates.iterrows():
+        for row in top_candidates.itertuples(name='Row'):
+            code = row.Index
             remaining_slots = available_slots - len(orders)
             if remaining_slots <= 0:
                 break
@@ -328,11 +333,11 @@ class SmartSniperStrategyV12:
             if available_cash < 100:
                 break
 
-            signal_price = row['close']
-            entry_date = row.get('entry_date')
-            next_open = row.get('next_open')
-            next_low = row.get('next_low')
-            proba = row['y_pred_proba']
+            signal_price = row.close
+            entry_date = getattr(row, 'entry_date', None)
+            next_open = getattr(row, 'next_open', None)
+            next_low = getattr(row, 'next_low', None)
+            proba = row.y_pred_proba
 
             weight_factor = 1.0
             if ALLOCATION_STRATEGY == 'z_score':
@@ -381,7 +386,7 @@ class SmartSniperStrategyV12:
                 'frozen_cash': required_cash,
                 'next_open': next_open,
                 'next_low': next_low,
-                'proba': row['y_pred_proba'],
+                'proba': row.y_pred_proba,
                 'volatility_mult': vol_mult,
             })
 

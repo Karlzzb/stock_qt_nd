@@ -64,6 +64,9 @@ class SmartSniperStrategy:
         df['date'] = pd.to_datetime(df['date'])
         dates = sorted(df['date'].unique())
 
+        # 预构建日期索引：O(N) 一次性代价，每日 O(1) 查找，替代每日全表 boolean 扫描
+        daily_index: dict = {d: grp.set_index('code') for d, grp in df.groupby('date')}
+
         logger.debug(f"--- 启动狙击回测 ---")
         logger.debug(f"底仓比例: {self.base_ratio:.0%}")
 
@@ -73,8 +76,8 @@ class SmartSniperStrategy:
             else:
                 next_day = None  # 或者处理最后一个元素的情况
 
-            # 获取当日切片
-            daily_data = df[df['date'] == today].set_index('code')
+            # O(1) 字典查找，替代 O(N) boolean 扫描
+            daily_data = daily_index[today]
 
             # 1. 卖出/管理持仓
             self._manage_positions(daily_data, today)
@@ -178,7 +181,8 @@ class SmartSniperStrategy:
         orders = []
         total_frozen = 0.0
 
-        for code, row in top_candidates.iterrows():
+        for row in top_candidates.itertuples(name='Row'):
+            code = row.Index
             remaining_slots = available_slots - len(orders)
             if remaining_slots <= 0:
                 break
@@ -188,16 +192,15 @@ class SmartSniperStrategy:
             if available_cash < 100:  # 现金太少，跳出
                 break
 
-            signal_price = row['close']
-            entry_date = row.get('entry_date')
-
+            signal_price = row.close
+            entry_date = getattr(row, 'entry_date', None)
 
             # 不在挂单阶段使用 next_open/next_low 决策。但保存以便开盘结算使用
-            next_open = row.get('next_open')
-            next_low = row.get('next_low')
+            next_open = getattr(row, 'next_open', None)
+            next_low = getattr(row, 'next_low', None)
 
             # 获取预测概率 (确保列名正确)
-            proba = row['y_pred_proba']
+            proba = row.y_pred_proba
 
             # --------------------------------------------------------------------------
             # [新增核心逻辑] 计算资金分配权重系数
@@ -266,7 +269,7 @@ class SmartSniperStrategy:
                 'frozen_cash': required_cash,
                 'next_open': next_open,
                 'next_low': next_low,
-                'proba': row['y_pred_proba'],
+                'proba': row.y_pred_proba,
             })
 
             logger.debug(f"挂单: {code} 信号价{signal_price:.2f} 计划{planned_shares}股 冻结{required_cash:.2f}")
