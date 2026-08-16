@@ -362,16 +362,22 @@ def main():
         tracker.print_status()
         return
 
-    # 加载数据
+    # 加载数据 - 需要加载比目标日期更早的数据以支持特征计算
+    # 特征计算需要 FEATURE_NEED_MAX_DAYS (100) + 250 = 350 天历史
+    # 为了安全，再往前推 200 天，确保有足够的数据
+    earliest_target_date = datetime.strptime(dates_to_check[0], '%Y-%m-%d')
+    data_load_start = (earliest_target_date - timedelta(days=550)).strftime('%Y-%m-%d')
+
     logger.info(f"\n开始加载行情数据...")
     logger.info(f"  Parquet 目录: {DAILY_PARQUET_DIR}")
     logger.info(f"  Feature 目录: {DAILY_FEATURE_DIR}")
+    logger.info(f"  数据加载起始: {data_load_start} (目标日期 - 550天)")
     logger.info(f"  并发进程数: {args.workers}")
     logger.info(f"  批次大小: {args.batch_size}")
 
     full_stocks = load_price_data_from_parquet(
         DAILY_PARQUET_DIR,
-        start_date="2009-01-01",  # 加载足够历史数据
+        start_date=data_load_start,  # 动态计算加载起始日期
         end_date=None,
     )
 
