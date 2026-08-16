@@ -476,23 +476,46 @@ class FeaturePipeline:
             }
             enriched_points = target_df.copy()
 
+            # 【修复】检测最近N天内形成的所有背离，而不仅仅是当天
+            # 原因：v2背离检测需要右侧窗口确认低点，导致最近2-3天无法检测
+            # 解决：允许使用最近N天内确认的背离信号
+            DIVERGENCE_LOOKBACK_DAYS = 10  # 背离信号有效期
+
+            # 确保target_date是Timestamp类型，用于日期比较
+            target_date_ts = pd.Timestamp(target_date)
+
             divergence_list: list = []
             for symbol in target_df['symbol'].unique():
                 data_with_indicators = symbol_data_index.get(symbol, pd.DataFrame())
                 if data_with_indicators.empty:
                     continue
-                divergence_points_df = self.divergence_detector.detect_daily_divergence(
-                    data_with_indicators, symbol, target_date
+
+                # 检测所有历史背离
+                all_symbol_divergence = self.divergence_detector._detect_divergence_by_close_historical(
+                    data_with_indicators
                 )
-                if len(divergence_points_df) > 0:
-                    divergence_list.append(divergence_points_df)
+
+                if len(all_symbol_divergence) > 0:
+                    # 只保留最近N天内形成的背离（在目标日期可见）
+                    all_symbol_divergence['timestamp'] = pd.to_datetime(all_symbol_divergence['timestamp'])
+                    lookback_start = target_date_ts - pd.Timedelta(days=DIVERGENCE_LOOKBACK_DAYS)
+
+                    recent_divergence = all_symbol_divergence[
+                        (all_symbol_divergence['timestamp'] >= lookback_start) &
+                        (all_symbol_divergence['timestamp'] <= target_date_ts)
+                    ].copy()
+
+                    if len(recent_divergence) > 0:
+                        recent_divergence['symbol'] = symbol
+                        recent_divergence['detection_date'] = target_date  # 标记为在目标日期检测到
+                        divergence_list.append(recent_divergence)
 
             all_divergence_points = (
                 pd.concat(divergence_list, ignore_index=True) if divergence_list else pd.DataFrame()
             )
 
             if all_divergence_points.empty:
-                logger.warning(f"{target_date.strftime('%Y%m%d')}无背离数据")
+                logger.warning(f"{target_date.strftime('%Y%m%d')}无背离数据（最近{DIVERGENCE_LOOKBACK_DAYS}天）")
                 return None
 
             logger.debug(f"{target_date} 交叉特征添加......")
@@ -503,28 +526,27 @@ class FeaturePipeline:
             else:
                 enriched_points['is_quick_divergence'] = 0
 
-            # ====== 【核心修复】强行对齐时间列的数据类型并防止列名冲突 ======
+            # ====== 【核心修复】合并背离数据 ======
+            # 背离点的timestamp是历史低点日期，不是target_date
+            # 合并时只需要按symbol匹配，每只股票取最近的背离信号
             enriched_points['timestamp'] = pd.to_datetime(enriched_points['timestamp'])
+            all_divergence_points['timestamp'] = pd.to_datetime(all_divergence_points['timestamp'])
 
-            # 兼容检测：判断背离表里是用 detection_date 还是 timestamp 记录的信号日
-            if 'detection_date' in all_divergence_points.columns:
-                all_divergence_points['detection_date'] = pd.to_datetime(all_divergence_points['detection_date'])
+            # 按symbol合并，保留所有最近的背离信号
+            # 如果一只股票有多个背离信号，都保留（后续可以取最近的或最强的）
+            target_divergence_df = enriched_points.merge(
+                all_divergence_points.drop(columns=['detection_date'], errors='ignore'),
+                on='symbol',
+                how='inner',
+                suffixes=('', '_divergence')
+            )
 
-                # 【新增修复】：防止左右表都有 timestamp 导致合并后变成 timestamp_x
-                if 'timestamp' in all_divergence_points.columns:
-                    all_divergence_points.rename(columns={'timestamp': 'divergence_date'}, inplace=True)
-
-                target_divergence_df = enriched_points.merge(
-                    all_divergence_points,
-                    left_on=['symbol', 'timestamp'],
-                    right_on=['symbol', 'detection_date'],
-                    how='inner'
-                )
-            else:
-                all_divergence_points['timestamp'] = pd.to_datetime(all_divergence_points['timestamp'])
-                target_divergence_df = enriched_points.merge(
-                    all_divergence_points, on=['symbol', 'timestamp'], how='inner'
-                )
+            # 重命名：背离的timestamp改为divergence_date，避免混淆
+            if 'timestamp_divergence' in target_divergence_df.columns:
+                target_divergence_df.rename(columns={'timestamp_divergence': 'divergence_date'}, inplace=True)
+            elif 'timestamp' in all_divergence_points.columns:
+                # 如果没有后缀，说明只有divergence有timestamp，需要手动添加
+                target_divergence_df['divergence_date'] = target_divergence_df['timestamp']
             # ==================================================
 
             target_divergence_df = self._filter_valid_rows_apply(target_divergence_df)
