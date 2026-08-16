@@ -34,7 +34,7 @@ catboost_info/
 model_dataset/
 ._____temp/
 .lock
-
+.env
 
 # 自定义目录
 stock_data/
@@ -59,3 +59,6 @@ docs/superpower
 !grid_trading_simulation_v4/*.csv
 .worktrees/
 /参数过滤两阶段优化框架.md
+
+# 特征计算进度状态文件
+.feature_pipeline_state.json
