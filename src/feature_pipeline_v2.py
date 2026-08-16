@@ -764,7 +764,12 @@ class FeaturePipeline:
             {'hs_gq_sync_direction': 1, 'hs_gq_sync_strength': 0, 'hs_hc_sync_direction': 1, 'hs_hc_sync_strength': 0,
              'gq_hc_sync_direction': 1, 'gq_hc_sync_strength': 0, 'market_sentiment': 1, 'market_avg_change': 0,
              'market_avg_amplitude': 0.02, 'market_sync_score': 0.5})
-        return default_features
+
+        # Convert to DataFrame with timestamp index (consistent with _calculate_market_features happy path)
+        default_df = pd.DataFrame([default_features])
+        default_df['timestamp'] = timestamp
+        default_df.set_index('timestamp', inplace=True)
+        return default_df
 
     def get_weights_ffd(self, d, thres, lim):
         w, k = [1.], 1
