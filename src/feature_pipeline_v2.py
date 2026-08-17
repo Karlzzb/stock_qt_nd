@@ -479,7 +479,8 @@ class FeaturePipeline:
             # 【修复】检测最近N天内形成的所有背离，而不仅仅是当天
             # 原因：v2背离检测需要右侧窗口确认低点，导致最近2-3天无法检测
             # 解决：允许使用最近N天内确认的背离信号
-            DIVERGENCE_LOOKBACK_DAYS = 10  # 背离信号有效期
+            # 注意：市场可能几个月没有新背离（单边行情），需要较长窗口
+            DIVERGENCE_LOOKBACK_DAYS = 120  # 背离信号有效期（约4个月）
 
             # 确保target_date是Timestamp类型，用于日期比较
             target_date_ts = pd.Timestamp(target_date)
