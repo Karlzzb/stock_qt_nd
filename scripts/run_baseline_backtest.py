@@ -209,6 +209,7 @@ def main() -> None:
             results["v12"] = {"error": str(exc)}
 
     summary_path = output_dir / "summary.json"
+    output_dir.mkdir(parents=True, exist_ok=True)
     with open(summary_path, "w", encoding="utf-8") as f:
         json.dump(results, f, ensure_ascii=False, indent=2, default=str)
     logger.info(f"汇总结果已保存至 {summary_path}")

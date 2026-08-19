@@ -157,8 +157,15 @@ class PriceChangePredictor:
         return results
 
     def _prepare_features(self, data):
-        """准备特征"""
-        feature_cols = model_config.FULL_FEATURE_COLS
+        """准备特征
+
+        与训练管线（run_walk_forward_train.py / stock_model_Tflod_v2）对齐：
+        只取模型实际训练使用的 lgbm_feature_names（lgbm_features.json），
+        而不是 FULL_FEATURE_COLS——重训后的 imputer/lgb 模型均拟合于该列集，
+        传 FULL_FEATURE_COLS 会因列数不符直接报错，且其中部分列（sh_* 等）
+        已在特征重构后不再生成。
+        """
+        feature_cols = [c for c in self.lgbm_feature_names if c in data.columns]
         # 将特征列转换为低精度浮点数（float32）
         features = data[feature_cols].astype(np.float32)
 

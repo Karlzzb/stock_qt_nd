@@ -272,8 +272,11 @@ def meta_features_process(X, oof_preds, lgb_models, config, lgbm_feature_names,
 
     # C 类：少量稳态特征
     stable_feats = config.STABLE_FEATURES  # 你自己定义 5–10 个
-    X_stack[stable_feats] = X[stable_feats]
-    feature_names.extend(stable_feats)  # 记录特征名
+    # 只取 X 中实际存在的列
+    available_stable = [c for c in stable_feats if c in X.columns]
+    if available_stable:
+        X_stack[available_stable] = X[available_stable]
+        feature_names.extend(available_stable)  # 记录特征名
 
     # 标准化 + LR
     if scaler is None:

@@ -1,3 +1,6 @@
+import time
+from pathlib import Path
+
 import pandas as pd
 from datetime import datetime
 from typing import Optional
@@ -8,6 +11,49 @@ from tinyshare_auth import get_pro_api
 def _get_pro():
     """延迟初始化 pro API，避免模块导入时因环境变量缺失而崩溃。"""
     return get_pro_api()
+
+
+# 交易日之间 API 调用节流（秒）：tinyshare 有每分钟频次上限（429），
+# 0.3s ≈ 200 次/分钟，留有余量；触发 429 时另有指数退避重试兜底
+_API_THROTTLE_S = 0.3
+_429_MAX_RETRIES = 6
+
+
+def _st_cache_file(trade_date: str) -> Path:
+    """ST 列表磁盘缓存路径（按交易日一个文件，空集也落盘以区分"未拉取"）。"""
+    from config.settings import ST_FILTER_DATA_DIR
+    d = Path(ST_FILTER_DATA_DIR)
+    d.mkdir(parents=True, exist_ok=True)
+    return d / f"st_{trade_date}.csv"
+
+
+def _fetch_st_stocks(trade_date: str) -> set[str]:
+    """拉取某日 ST 集合：磁盘缓存优先，API 调用带节流 + 429 指数退避重试。
+
+    只有 API 成功返回才写缓存（空结果也写空文件），
+    避免把限流失败误存成"当日无 ST"。
+    """
+    cache_file = _st_cache_file(trade_date)
+    if cache_file.exists():
+        df = pd.read_csv(cache_file, dtype=str)
+        return set(df["ts_code"]) if "ts_code" in df.columns else set()
+
+    last_err: Exception | None = None
+    for attempt in range(_429_MAX_RETRIES):
+        try:
+            time.sleep(_API_THROTTLE_S)
+            df = _get_pro().stock_st(trade_date=trade_date)
+            codes = set(df["ts_code"]) if df is not None and len(df) > 0 else set()
+            pd.DataFrame({"ts_code": sorted(codes)}).to_csv(cache_file, index=False)
+            return codes
+        except Exception as e:  # noqa: BLE001 - 429 重试，其他异常直接抛
+            last_err = e
+            if "429" in str(e) and attempt < _429_MAX_RETRIES - 1:
+                time.sleep(10 * (attempt + 1))
+                continue
+            raise
+    raise last_err  # pragma: no cover
+
 
 
 class StockEligibilityFilter:
@@ -55,17 +101,11 @@ class StockEligibilityFilter:
 
     def _get_st_stocks(self, trade_date: str) -> set[str]:
         """
-        获取某日 ST 股票集合（日缓存）。
+        获取某日 ST 股票集合（日缓存 + 磁盘缓存 + 429 重试）。
         trade_date: YYYYMMDD 格式
         """
         if trade_date not in self._st_cache:
-            pro = _get_pro()
-            df = pro.stock_st(trade_date=trade_date)
-            if df is not None and len(df) > 0:
-                # stock_st 返回 ts_code 列（如 "000001.SZ"）
-                self._st_cache[trade_date] = set(df['ts_code'])
-            else:
-                self._st_cache[trade_date] = set()
+            self._st_cache[trade_date] = _fetch_st_stocks(trade_date)
         return self._st_cache[trade_date]
 
     def _is_new_stock(self, symbol: str, trade_date: str) -> bool:

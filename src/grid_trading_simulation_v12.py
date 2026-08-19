@@ -31,18 +31,17 @@ OUTPUT_DIR = RESULT_DIR / 'simple_run_log_v12'
 
 
 def _preload_st_cache(trade_dates: list[str]) -> dict[str, set[str]]:
-    from tinyshare_auth import get_pro_api
-    logger.info(">>> [ST预加载] 开始获取 ST 数据...")
-    pro = get_pro_api()
+    """预加载 ST 缓存：统一走 stock_eligibility_filter 的磁盘缓存 + 节流 + 429 重试。
 
+    旧实现 try/except 后记空集，会把限流失败静默吞成"当日无 ST"，污染回测。
+    """
+    from stock_eligibility_filter import _fetch_st_stocks
+    logger.info(">>> [ST预加载] 开始获取 ST 数据（磁盘缓存优先）...")
     st_cache: dict[str, set[str]] = {}
-    for date in trade_dates:
-        try:
-            df = pro.stock_st(trade_date=date)
-            st_cache[date] = set(df['ts_code']) if df is not None and len(df) > 0 else set()
-        except Exception:
-            st_cache[date] = set()
-        time.sleep(0.05)
+    for i, date in enumerate(trade_dates):
+        st_cache[date] = _fetch_st_stocks(date)
+        if (i + 1) % 100 == 0:
+            logger.info(f">>> [ST预加载] {i + 1}/{len(trade_dates)}")
     return st_cache
 
 
@@ -54,7 +53,12 @@ def load_and_prepare_data(dataset_dir=DATASET_DIR, required_files=None, start_da
     all_data = []
     for file_path in file_list:
         try:
-            df = pd.read_csv(file_path)
+            # float32 读取：test+val 合计 ~8.9M 行 × 139 数值列，
+            # 默认 float64 + concat 拷贝峰值超 62GB 会触发 OOM；
+            # 下游 _prepare_features 本就转 float32，无精度损失
+            _dtype = {c: np.float32 for c in pd.read_csv(file_path, nrows=0).columns
+                      if c not in ('timestamp', 'symbol')}
+            df = pd.read_csv(file_path, dtype=_dtype)
             df['source_file'] = os.path.basename(file_path)
             all_data.append(df)
         except Exception as e:

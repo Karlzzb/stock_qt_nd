@@ -33,7 +33,12 @@ def load_and_prepare_data(dataset_dir = DATASET_DIR, required_files=None, start_
 
     for file_path in file_list:
         try:
-            df = pd.read_csv(file_path)
+            # float32 读取：test+val 合计 ~8.9M 行 × 139 数值列，
+            # 默认 float64 + concat 拷贝峰值超 62GB 会触发 OOM；
+            # 下游 _prepare_features 本就转 float32，无精度损失
+            _dtype = {c: np.float32 for c in pd.read_csv(file_path, nrows=0).columns
+                      if c not in ('timestamp', 'symbol')}
+            df = pd.read_csv(file_path, dtype=_dtype)
             df['source_file'] = os.path.basename(file_path)
             all_data.append(df)
             logger.debug(f"✅ 成功加载: {file_path} ({len(df)} 行)")

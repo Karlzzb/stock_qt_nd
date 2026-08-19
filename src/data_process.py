@@ -115,13 +115,19 @@ def data_clean(raw_data):
     # 1. 去重
     data = raw_data.copy()
     before_count = len(data)
-    data = data.sort_values(['timestamp', 'symbol', 'confirmation_score']).drop_duplicates(subset=['timestamp', 'symbol'], keep='last')
+    # 兼容新旧数据：confirmation_score 列可能不存在
+    sort_cols = ['timestamp', 'symbol']
+    if 'confirmation_score' in data.columns:
+        sort_cols.append('confirmation_score')
+    data = data.sort_values(sort_cols).drop_duplicates(subset=['timestamp', 'symbol'], keep='last')
     after_count = len(data)
     numeric_cols = data.select_dtypes(include=[np.number]).columns
     # print(f"numeric_cols: {[col for col in numeric_cols]}")
     print(f"已删除 {before_count - after_count} 重复行，剩余 {after_count} 行数据")
     # key_columns = ['timestamp', model_config.LABEL_COL] + model_config.FULL_FEATURE_COLS
-    key_columns = ['timestamp'] + model_config.FULL_FEATURE_COLS
+    # 只检查实际存在的特征列，避免在特征生成前报错
+    existing_feature_cols = [col for col in model_config.FULL_FEATURE_COLS if col in data.columns]
+    key_columns = ['timestamp'] + existing_feature_cols
 
 
     # 2.  缺失值 统计与处理

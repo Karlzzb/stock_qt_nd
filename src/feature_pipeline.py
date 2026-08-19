@@ -1715,6 +1715,10 @@ def load_price_data(directory_path, start_date='2009-01-01', end_date=None):
     # 查找所有匹配的文件
     file_paths = glob.glob(pattern)
 
+    # 数据源已迁移为 parquet：csv 目录为空时回退到 {csv_dir}/../daily/{symbol}.parquet
+    if not file_paths:
+        return _load_price_data_parquet(directory_path, start_date, end_date)
+
     # 存储所有DataFrame的字典
     dataframes = {}
 
@@ -1804,6 +1808,50 @@ def ensure_datetime_index(data):
             raise
     return data
 # 股票字典数据转化为dataframe
+def _load_price_data_parquet(directory_path, start_date='2009-01-01', end_date=None):
+    """load_price_data 的 parquet 变体：读取 {csv_dir}/../daily/{symbol}.parquet。
+
+    返回结构与 CSV 版一致：dict[symbol] → DataFrame，
+    datetime 索引 + [open, high, low, close, volume, symbol] 列（vol→volume）。
+    """
+    parquet_dir = Path(directory_path).parent / "daily"
+    file_paths = sorted(parquet_dir.glob("*.parquet"))
+    if not file_paths:
+        logger.warning(f"未找到价格数据：{parquet_dir} 下无 parquet 文件")
+        return {}
+
+    if start_date is not None and isinstance(start_date, str):
+        start_date = pd.to_datetime(start_date)
+    if end_date is not None and isinstance(end_date, str):
+        end_date = pd.to_datetime(end_date)
+
+    dataframes = {}
+    for file_path in file_paths:
+        try:
+            symbol = file_path.stem
+            df = pd.read_parquet(
+                file_path, columns=["trade_date", "open", "high", "low", "close", "vol"]
+            )
+            if df.empty:
+                continue
+            df = df.rename(columns={"vol": "volume"})
+            df = df.set_index("trade_date").sort_index(ascending=True)
+            if start_date is not None:
+                df = df[df.index >= start_date]
+            if end_date is not None:
+                df = df[df.index <= end_date]
+            if df.empty:
+                continue
+            df["symbol"] = symbol
+            df = optimize_dtypes(df)
+            dataframes[symbol] = df
+        except Exception as e:
+            logger.error(f"加载文件 {file_path} 时出错: {e}")
+
+    logger.info(f"parquet 价格数据：共加载 {len(dataframes)} 只股票（{parquet_dir}）")
+    return dataframes
+
+
 def convert_dict_to_dataframe_from_index(stock_dict):
     logger.debug(f"正在合并 {len(stock_dict)} 只股票的数据 (时间在Index)...")
     all_dfs = []
