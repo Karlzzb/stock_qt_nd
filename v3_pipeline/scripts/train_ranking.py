@@ -45,6 +45,8 @@ def prepare_features(df: pd.DataFrame, exclude_patterns: list[str]) -> list[str]
         r".*_date$",  # Any date columns (prev_time, detection_date, etc.)
         r".*_signal$",  # Signal columns (volume_signal, etc.)
         r"^prev_",  # Previous values that are metadata
+        r"^rank_future_return_",  # Ranking labels (future information)
+        r"^future_return_",  # Raw future returns (future information)
     ]
 
     for col in all_cols:
@@ -91,13 +93,23 @@ def prepare_features(df: pd.DataFrame, exclude_patterns: list[str]) -> list[str]
 
 
 def prepare_ranking_dataset(
-    df: pd.DataFrame, features: list[str], rank_col: str
+    df: pd.DataFrame,
+    features: list[str],
+    rank_col: str,
+    imputer = None
 ) -> tuple[lgb.Dataset, np.ndarray]:
     """Prepare LightGBM Dataset with group information for ranking.
+
+    Args:
+        df: DataFrame with features and rank labels
+        features: List of feature column names
+        rank_col: Name of rank label column
+        imputer: Optional pre-fitted imputer. If None, creates and fits new imputer.
 
     Returns:
         lgb.Dataset: Training dataset with group sizes
         np.ndarray: Group sizes (number of stocks per day)
+        SimpleImputer: The imputer used (fitted if new, passed-through if provided)
     """
     # Sort by timestamp to ensure proper grouping
     df = df.sort_values("timestamp").copy()
@@ -106,6 +118,13 @@ def prepare_ranking_dataset(
     valid = df[rank_col].notna()
     df = df[valid].copy()
     logger.info(f"After filtering NaN ranks: {len(df)} rows ({valid.mean():.2%} coverage)")
+
+    # Remove duplicates - keep last occurrence per (timestamp, symbol)
+    before_dedup = len(df)
+    df = df.drop_duplicates(subset=['timestamp', 'symbol'], keep='last')
+    after_dedup = len(df)
+    if before_dedup > after_dedup:
+        logger.warning(f"Removed {before_dedup - after_dedup} duplicate (timestamp, symbol) pairs ({(before_dedup - after_dedup) / before_dedup:.1%})")
 
     # Get group sizes (stocks per day)
     group_sizes = df.groupby("timestamp").size().values
@@ -120,8 +139,14 @@ def prepare_ranking_dataset(
 
     # Handle missing values in features
     from sklearn.impute import SimpleImputer
-    imputer = SimpleImputer(strategy="median", copy=False)
-    X = imputer.fit_transform(X)
+
+    if imputer is None:
+        # Create and fit new imputer (training mode)
+        imputer = SimpleImputer(strategy="median", copy=False)
+        X = imputer.fit_transform(X)
+    else:
+        # Use pre-fitted imputer (validation/test mode)
+        X = imputer.transform(X)
 
     # Convert ranks to relevance labels for LambdaRank
     # LightGBM ranking expects integer labels representing relevance levels
@@ -172,7 +197,7 @@ def train_horizon(
     train_data, train_groups, imputer = prepare_ranking_dataset(train_df, features, rank_col)
 
     logger.info("Preparing validation dataset...")
-    val_data, val_groups, _ = prepare_ranking_dataset(val_df, features, rank_col)
+    val_data, val_groups, _ = prepare_ranking_dataset(val_df, features, rank_col, imputer=imputer)
 
     # Configure LightGBM parameters
     params = {
@@ -221,6 +246,14 @@ def train_horizon(
     # Generate predictions on validation set
     logger.info("Generating validation predictions...")
     val_clean = val_df[val_df[rank_col].notna()].copy()
+
+    # Remove duplicates - keep last occurrence (most recent data)
+    before_dedup = len(val_clean)
+    val_clean = val_clean.drop_duplicates(subset=['timestamp', 'symbol'], keep='last')
+    after_dedup = len(val_clean)
+    if before_dedup > after_dedup:
+        logger.warning(f"Removed {before_dedup - after_dedup} duplicate rows ({(before_dedup - after_dedup) / before_dedup:.1%})")
+
     X_val = val_clean[features].values
     X_val = imputer.transform(X_val)
 
