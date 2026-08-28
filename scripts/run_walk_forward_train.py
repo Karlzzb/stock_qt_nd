@@ -96,10 +96,103 @@ def _scan_to_pandas_f32(dataset, columns, filt, f32_cols) -> pd.DataFrame:
     batches = [b.cast(target_schema) for b in scanner.to_batches()]
     if not batches:
         return pd.DataFrame(columns=columns)
-    df = pa.Table.from_batches(batches).to_pandas()
+    table = pa.Table.from_batches(batches)
     del batches
+    # self_destruct=True：转换过程中逐个释放 Arrow 缓冲，
+    # 避免「全量 Arrow 表 + 全量 pandas 帧」双份驻留（2000 万行切分实测 OOM）。
+    # split_blocks=True：按列产出独立 block，配合 self_destruct 逐列归还内存。
+    df = table.to_pandas(split_blocks=True, self_destruct=True)
+    del table
     _release_memory()  # 归还 arrow 解码/cast 缓冲（jemalloc 池不自动归还）
     return df
+
+
+# ---------------------------------------------------------------------------
+# 缓存指纹：防止训练读到过期的 feature_cache_all.parquet
+# （2026-08-21 事故：91 个切分全部训自 8/19 旧缓存，白跑两天）
+# ---------------------------------------------------------------------------
+
+def _cache_sidecar_path(cache_path: Path) -> Path:
+    return Path(str(cache_path) + ".fp.json")
+
+
+def _compute_csv_manifest(feature_dir: Path) -> dict:
+    csv_files = sorted(feature_dir.glob("realistic_features_*.csv"))
+    if not csv_files:
+        raise FileNotFoundError(
+            f"DAILY_FEATURE_DIR ({feature_dir}) 中无 realistic_features_*.csv，"
+            "请先运行 scripts/run_feature_pipeline.py。"
+        )
+    return {
+        "csv_count": len(csv_files),
+        "csv_max_mtime_ns": max(f.stat().st_mtime_ns for f in csv_files),
+    }
+
+
+def _expected_cache_fingerprint(feature_dir: Path) -> dict:
+    from feature_pipeline_v2 import FEATURE_PIPELINE_VERSION, compute_cache_fingerprint
+    return {
+        "pipeline_version": FEATURE_PIPELINE_VERSION,
+        "daily_fingerprint": compute_cache_fingerprint(),
+        **_compute_csv_manifest(feature_dir),
+    }
+
+
+def _write_cache_fingerprint(cache_path: Path, feature_dir: Path) -> None:
+    payload = _expected_cache_fingerprint(feature_dir)
+    sidecar = _cache_sidecar_path(cache_path)
+    sidecar.write_text(json.dumps(payload, ensure_ascii=False, indent=2))
+    logger.info(f"缓存指纹已写入 {sidecar}：{payload}")
+
+
+def _validate_cache_fingerprint(cache_path: Path, feature_dir: Path) -> None:
+    """缓存必须与当前管线版本 + 当前日 CSV 集合一致，否则拒绝训练。"""
+    sidecar = _cache_sidecar_path(cache_path)
+    if not sidecar.exists():
+        raise RuntimeError(
+            f"特征缓存缺少指纹文件 {sidecar}，无法确认它与当前管线一致。"
+            f"请删除 {cache_path} 后重建缓存。"
+        )
+    saved = json.loads(sidecar.read_text())
+    expected = _expected_cache_fingerprint(feature_dir)
+    mismatches = {
+        k: {"cache": saved.get(k), "current": v}
+        for k, v in expected.items()
+        if saved.get(k) != v
+    }
+    if mismatches:
+        raise RuntimeError(
+            f"特征缓存已过期（{cache_path}），与当前管线/数据不一致：{mismatches}。"
+            "请删除缓存后重建。"
+        )
+    logger.info("缓存指纹校验通过（管线版本 + CSV 数量/最新修改时间一致）。")
+
+
+# ---------------------------------------------------------------------------
+# 全量特征池：不继承任何历史筛选清单（旧 OPTIMIZED/STABLE 清单系泄露管线
+# 产物，2026-08-22 起作废，筛选一律从全量池在新协议下重做）
+# ---------------------------------------------------------------------------
+
+# 原始行情列：非平稳价格/成交量原值不进特征池（其衍生特征已在池中）
+RAW_MARKET_COLS = {"open", "high", "low", "close", "volume"}
+# 标签族列：未来收益/止损收益/卖出日期，进池即前视
+LABEL_FAMILY_PREFIXES = ("future_", "stop_loss_")
+
+
+def build_full_feature_pool(cache_path: Path, label_col: str) -> list[str]:
+    """缓存中除元信息/原始行情/标签族外的全部数值列。"""
+    schema = pq.ParquetFile(cache_path).schema_arrow
+    pool = []
+    for field in schema:
+        c = field.name
+        if c in ("timestamp", "symbol", label_col) or c in RAW_MARKET_COLS:
+            continue
+        if c.startswith(LABEL_FAMILY_PREFIXES) or "sell_date" in c:
+            continue
+        if not (pa.types.is_floating(field.type) or pa.types.is_integer(field.type)):
+            continue  # 字符串日期等元数据列（prev_time/detection_date/...）
+        pool.append(c)
+    return pool
 
 
 def load_feature_csvs(feature_dir: Path, cache_path: Path = None) -> pd.DataFrame:
@@ -112,8 +205,9 @@ def load_feature_csvs(feature_dir: Path, cache_path: Path = None) -> pd.DataFram
     if cache_path is None:
         cache_path = feature_dir.parent / "feature_cache_all.parquet"
 
-    # 如果缓存存在，只加载需要的列
+    # 如果缓存存在，先校验指纹（管线版本 + CSV 集合），再按需加载需要的列
     if cache_path.exists():
+        _validate_cache_fingerprint(cache_path, feature_dir)
         logger.info(f"发现缓存文件 {cache_path}，按需列加载…")
         from comm_fun import model_config
         import pyarrow.parquet as _pq
@@ -181,39 +275,49 @@ def load_feature_csvs(feature_dir: Path, cache_path: Path = None) -> pd.DataFram
         cache_path.parent.mkdir(parents=True, exist_ok=True)
 
         # 流式合并：统一 schema 后逐个追加写入
-        writer = None
-        unified_schema = None
+        # 各日 CSV 的列集合可能不同（如 v2.3.0 新特征只存在于较新日期），
+        # 统一为全部文件的列并集；缺失列补 null（训练时按中位数填充）
+        union_fields: dict[str, pa.DataType] = {}
+        for temp_file in temp_parquets:
+            for field in pq.read_schema(str(temp_file)):
+                if field.name not in union_fields:
+                    t = pa.large_string() if field.type == pa.string() else field.type
+                    union_fields[field.name] = t
+        unified_schema = pa.schema([pa.field(n, t) for n, t in union_fields.items()])
+
+        writer = pq.ParquetWriter(str(cache_path), unified_schema, compression="snappy")
 
         for i, temp_file in enumerate(temp_parquets, 1):
             table = pq.read_table(str(temp_file))
 
-            # 第一个表：建立统一 schema（将所有 string → large_string）
-            if unified_schema is None:
-                fields = []
-                for field in table.schema:
-                    if field.type == pa.string():
-                        fields.append(pa.field(field.name, pa.large_string()))
-                    else:
-                        fields.append(field)
-                unified_schema = pa.schema(fields)
-                writer = pq.ParquetWriter(str(cache_path), unified_schema, compression="snappy")
-
-            # 统一当前表的 schema
+            # 补齐缺失列并对齐列序后统一 schema
+            for field in unified_schema:
+                if field.name not in table.column_names:
+                    table = table.append_column(
+                        field.name, pa.nulls(table.num_rows, type=field.type)
+                    )
             if table.schema != unified_schema:
-                table = table.cast(unified_schema)
+                table = table.select(unified_schema.names).cast(unified_schema)
 
             writer.write_table(table)
             del table
             if i % 10 == 0:
                 logger.info(f"  已合并 {i}/{len(temp_parquets)} 个文件")
 
-        if writer:
-            writer.close()
+        writer.close()
 
+        _write_cache_fingerprint(cache_path, feature_dir)
         logger.info(f"缓存保存完成：{total_rows} 行")
 
-        # 加载最终缓存
-        data = pd.read_parquet(cache_path)
+        # 只加载需要的列（全列加载 2200 万行 × 678 列 float64 必 OOM）
+        from comm_fun import model_config
+        available_cols = set(pq.ParquetFile(cache_path).schema_arrow.names)
+        needed_cols = [
+            c for c in
+            set(model_config.OPTIMIZED_FEATURE_COLS + ["timestamp", "symbol", model_config.LABEL_COL])
+            if c in available_cols
+        ]
+        data = pd.read_parquet(cache_path, columns=needed_cols)
 
     finally:
         # 清理临时目录
@@ -234,6 +338,13 @@ def build_dataset(data: pd.DataFrame) -> pd.DataFrame:
     if model_config.LABEL_COL not in data.columns:
         logger.error(f"缺少标签列 {model_config.LABEL_COL}，无法生成 label")
         raise ValueError(f"数据中缺少 {model_config.LABEL_COL}")
+
+    # 丢弃标签缺失行：v2 管线把"次日限价买不到"的样本 LABEL_COL 置 NaN，
+    # (NaN > 阈值)=False 会把它们错标成负样本（实测每日 1.3%~5.2% 的行）
+    n0 = len(data)
+    data = data.dropna(subset=[model_config.LABEL_COL])
+    if len(data) < n0:
+        logger.info(f"丢弃标签缺失行 {n0 - len(data)} 行（占比 {(n0 - len(data)) / n0:.2%}）")
 
     data["label"] = (data[model_config.LABEL_COL] > get_return_threshold(data)).astype(int)
 
@@ -260,7 +371,7 @@ def train_one_split(
     train_data: pd.DataFrame,
     score_data: pd.DataFrame,
     split_idx: int,
-    model_dir: Path,
+    split_dir: Path,
 ) -> tuple[pd.DataFrame, float]:
     """训练单切分：LightGBM + LR stacking，对打分窗口打分。"""
     from comm_fun import model_config
@@ -279,6 +390,17 @@ def train_one_split(
     if all_nan_cols:
         logger.warning(f"切分 {split_idx:02d} 训练集全 NaN 列，将剔除：{all_nan_cols}")
         lgbm_feats = [c for c in lgbm_feats if c not in all_nan_cols]
+        X_train_raw = X_train_raw[lgbm_feats]
+
+    # 死列过滤：训练段缺失率 >30% 的列剔除（全量池模式下早期年份缺新特征属正常，
+    # 缺失率过高的列对训练是噪声）
+    miss_rate = X_train_raw.isna().mean()
+    high_miss_cols = miss_rate[miss_rate > 0.3].index.tolist()
+    if high_miss_cols:
+        logger.warning(
+            f"切分 {split_idx:02d} 剔除训练段缺失率>30% 的列 {len(high_miss_cols)} 个"
+        )
+        lgbm_feats = [c for c in lgbm_feats if c not in high_miss_cols]
         X_train_raw = X_train_raw[lgbm_feats]
 
     # 逐列精确中位数（统计量与 SimpleImputer(strategy='median') 完全一致），
@@ -331,7 +453,6 @@ def train_one_split(
     )
 
     # 保存本切分模型
-    split_dir = model_dir / f"wf_split_{split_idx:02d}"
     split_dir.mkdir(parents=True, exist_ok=True)
     joblib.dump(lgb_models, split_dir / "lgb_models.pkl")
     joblib.dump(lr_meta, split_dir / "lr_meta.pkl")
@@ -408,6 +529,21 @@ def main() -> None:
     parser.add_argument("--min-train-quarters", type=int, default=4)
     parser.add_argument("--dry-run", action="store_true", help="仅打印切分计划")
     parser.add_argument(
+        "--single-split",
+        action="store_true",
+        help="协议 v2 单切分模式：训练 ≤--train-end，打分 [--score-start, --score-end]，"
+        "跳过最终模型训练（最终候选确定后再单独训练交付模型）",
+    )
+    parser.add_argument("--train-end", default="2021-12-31", help="单切分模式训练集截止日（含）")
+    parser.add_argument("--score-start", default="2022-01-01", help="单切分模式打分窗口起点（含）")
+    parser.add_argument("--score-end", default="2025-07-31", help="单切分模式打分窗口终点（含）")
+    parser.add_argument(
+        "--full-pool",
+        action="store_true",
+        help="LGBM 层用全量特征池（缓存全部数值列剔元信息/原始行情/标签族），"
+        "LR 层只用 pred_lgb；不继承任何历史特征清单",
+    )
+    parser.add_argument(
         "--splits",
         default=None,
         help="只跑指定切分，如 '63' 或 '63-70' 或 '63,65,67'。"
@@ -425,6 +561,14 @@ def main() -> None:
     import pyarrow as _pa
 
     cache_path = DAILY_FEATURE_DIR.parent / "feature_cache_all.parquet"
+
+    # 如果缓存不存在，通过 load_feature_csvs 创建它
+    if not cache_path.exists():
+        logger.info(f"缓存文件不存在，开始创建 {cache_path}...")
+        _ = load_feature_csvs(DAILY_FEATURE_DIR, cache_path=cache_path)
+        logger.info(f"缓存创建完成：{cache_path}")
+
+    _validate_cache_fingerprint(cache_path, DAILY_FEATURE_DIR)
     available_cols = set(_pq.ParquetFile(cache_path).schema_arrow.names)
 
     # 收窄 OPTIMIZED_FEATURE_COLS 和 STABLE_FEATURES 为缓存中存在的列
@@ -439,6 +583,15 @@ def main() -> None:
     if dropped_stable:
         logger.warning(f"STABLE_FEATURES 跳过缺失列：{dropped_stable}")
     model_config.STABLE_FEATURES = existing_stable
+
+    if args.full_pool:
+        pool = build_full_feature_pool(cache_path, model_config.LABEL_COL)
+        logger.info(
+            f"全量特征池模式：{len(pool)} 个特征"
+            "（缓存数值列剔元信息/原始行情/标签族；不继承历史清单）"
+        )
+        model_config.OPTIMIZED_FEATURE_COLS = pool
+        model_config.STABLE_FEATURES = []  # LR 层只用 pred_lgb，筛选后再回填
 
     needed_cols = list(set(
         model_config.OPTIMIZED_FEATURE_COLS
@@ -477,22 +630,46 @@ def main() -> None:
             del ts_col
             _release_memory()
 
-    proto = WalkForwardProtocol(
-        data_start=data_start_dt,
-        data_end=data_end_dt,
-        sterile_months=args.sterile_months,
-        min_train_quarters=args.min_train_quarters,
-    )
-    proto.validate()
+    if args.single_split:
+        from eval_protocol import WalkForwardSplit, _add_months
 
-    logger.info(repr(proto))
-    logger.info(f"无菌终审段起点：{proto.sterile_start}")
-    logger.info(f"有效切分数量：{len(proto.splits)}")
-    for i, s in enumerate(proto.splits):
-        logger.info(
-            f"  切分 {i:02d}：train_end={s.train_end}  "
-            f"score=[{s.score_start}, {s.score_end}]"
+        train_end = pd.to_datetime(args.train_end).date()
+        score_start = pd.to_datetime(args.score_start).date()
+        score_end = pd.to_datetime(args.score_end).date()
+        if not (train_end < score_start <= score_end):
+            raise ValueError(
+                f"单切分日期非法：train_end={train_end}, score=[{score_start}, {score_end}]"
+            )
+        sterile_start = _add_months(data_end_dt.replace(day=1), -args.sterile_months)
+        if score_end >= sterile_start:
+            raise ValueError(
+                f"打分终点 {score_end} 触及封存测试集（起点 {sterile_start}），拒绝执行"
+            )
+        splits = [
+            WalkForwardSplit(train_end=train_end, score_start=score_start, score_end=score_end)
+        ]
+        logger.info("=== 单切分模式（评估协议 v2）===")
+        logger.info(f"训练集：≤ {train_end}")
+        logger.info(f"验证集：[{score_start}, {score_end}]")
+        logger.info(f"测试集封存起点：{sterile_start}")
+    else:
+        proto = WalkForwardProtocol(
+            data_start=data_start_dt,
+            data_end=data_end_dt,
+            sterile_months=args.sterile_months,
+            min_train_quarters=args.min_train_quarters,
         )
+        proto.validate()
+
+        logger.info(repr(proto))
+        logger.info(f"无菌终审段起点：{proto.sterile_start}")
+        logger.info(f"有效切分数量：{len(proto.splits)}")
+        for i, s in enumerate(proto.splits):
+            logger.info(
+                f"  切分 {i:02d}：train_end={s.train_end}  "
+                f"score=[{s.score_start}, {s.score_end}]"
+            )
+        splits = proto.splits
 
     if args.dry_run:
         logger.info("--dry-run 模式，退出。")
@@ -510,18 +687,25 @@ def main() -> None:
                 selected.extend(range(int(a), int(b) + 1))
             else:
                 selected.append(int(part))
-        selected = [i for i in selected if 0 <= i < len(proto.splits)]
+        selected = [i for i in selected if 0 <= i < len(splits)]
         logger.info(f"--splits 模式：仅处理切分 {selected}")
     else:
-        selected = list(range(len(proto.splits)))
+        selected = list(range(len(splits)))
 
     oos_parts: list[pd.DataFrame] = []
     pr_aucs: list[float] = []
 
     for i in selected:
-        split = proto.splits[i]
+        split = splits[i]
         # 断点续跑：已完成的切分直接加载已保存的预测
-        split_dir = MODEL_DIR / f"wf_split_{i:02d}"
+        if args.single_split:
+            suffix = "_poolfull" if args.full_pool else ""
+            split_dir = (
+                MODEL_DIR
+                / f"single_{split.train_end}_{split.score_start}_{split.score_end}{suffix}"
+            )
+        else:
+            split_dir = MODEL_DIR / f"wf_split_{i:02d}"
         cached_pred = split_dir / "oos_predictions.parquet"
         if cached_pred.exists():
             scored_df = pd.read_parquet(cached_pred)
@@ -558,6 +742,18 @@ def main() -> None:
             logger.warning(f"切分 {i:02d} 数据不足，跳过。")
             continue
 
+        # 丢弃标签缺失行：v2 管线把"次日限价买不到"的样本 LABEL_COL 置 NaN，
+        # (NaN > 阈值)=False 会把它们错标成负样本（实测每日 1.3%~5.2% 的行）；
+        # 打分窗口中的缺失标签行同样无法评估，一并丢弃
+        n_train0, n_score0 = len(train_df), len(score_df)
+        train_df = train_df.dropna(subset=[model_config.LABEL_COL])
+        score_df = score_df.dropna(subset=[model_config.LABEL_COL])
+        if len(train_df) < n_train0 or len(score_df) < n_score0:
+            logger.info(
+                f"切分 {i:02d} 丢弃标签缺失行：训练 {n_train0 - len(train_df)} 行，"
+                f"打分 {n_score0 - len(score_df)} 行"
+            )
+
         # 加 label
         train_df["label"] = (
             train_df[model_config.LABEL_COL] > get_return_threshold(train_df)
@@ -573,7 +769,7 @@ def main() -> None:
         # train_one_split 内部 del train_data 才能真正释放基础帧
         holder = [(train_df, score_df)]
         del train_df, score_df
-        scored_df, pr_auc = train_one_split(*holder.pop(), i, MODEL_DIR)
+        scored_df, pr_auc = train_one_split(*holder.pop(), i, split_dir)
         oos_parts.append(scored_df)
         pr_aucs.append(pr_auc)
         _release_memory()
@@ -603,6 +799,11 @@ def main() -> None:
             logger.info(f"整体 OOS PR-AUC：{overall_auc:.4f}")
 
     # 5. 训练最终模型（全量非终审数据）
+    #    单切分模式只产出验证集 OOS 预测；交付模型待最终候选确定后单独训练
+    if args.single_split:
+        logger.info("单切分模式：跳过最终模型训练。")
+        logger.info("=== 单切分训练完成 ===")
+        return
     # 释放 OOS 中间结果，为 ~2000 万行全量训练腾内存
     if oos_parts:
         del oos_parts, oos_df
@@ -620,7 +821,10 @@ def main() -> None:
     ]
     final_train = _scan_to_pandas_f32(dataset, needed_cols, final_filter, feat_cols)
 
-    # 与切分循环一致：由 LABEL_COL（收益率）按阈值生成二分类 label
+    # 与切分循环一致：先丢弃标签缺失行，再由 LABEL_COL 按阈值生成二分类 label
+    n0 = len(final_train)
+    final_train = final_train.dropna(subset=[model_config.LABEL_COL])
+    logger.info(f"最终模型：丢弃标签缺失行 {n0 - len(final_train)} 行")
     final_train["label"] = (
         final_train[model_config.LABEL_COL] > get_return_threshold(final_train)
     ).astype(int)

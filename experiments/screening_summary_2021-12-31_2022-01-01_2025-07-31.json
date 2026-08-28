@@ -1,0 +1,27 @@
+{
+  "split_dir": "models/single_2021-12-31_2022-01-01_2025-07-31_poolfull",
+  "n_features_in": 552,
+  "n_selected": 12,
+  "null95": 0.00044768731009946704,
+  "years": [
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "min_years": 3,
+  "selected": [
+    "price_vs_ma60",
+    "atr_ratio",
+    "volatility_5d",
+    "volatility_15d",
+    "support_resistance_ratio",
+    "support_resistance_ratio_lag_5",
+    "market_avg_amplitude",
+    "market_sync_score",
+    "ma_arrangement_rankpct",
+    "bb_squeeze_rankpct",
+    "macd_zero_cross_rankpct",
+    "divergence_amount"
+  ]
+}

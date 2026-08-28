@@ -20,7 +20,7 @@ from src.comm_fun import model_config, EPS
 # 修改特征逻辑、关键参数含义或数据格式时，手动递增此值，
 # 以确保所有旧缓存自动失效重算。
 # ============================================================
-FEATURE_PIPELINE_VERSION = "2.2.0"  # issue #17/#18: 回退到 V1 背离检测器，修复样本分布问题
+FEATURE_PIPELINE_VERSION = "2.3.0"  # 新增7个流动性微观结构特征（向量化，无泄露）
 
 
 def _build_fingerprint_params() -> dict:
@@ -253,7 +253,7 @@ def calculate_macd_percentile_vectorized(df, window=100):
         # 向量化实现：sliding_window_view 替代逐位 percentileofscore 调用
         vals = series.values.astype(np.float64)
         n = len(vals)
-        res = np.full(n, 50.0)
+        res = np.full(n, np.nan)  # 修复：默认值改为 NaN，窗口不足时保持 NaN
         if n <= window:
             return res
         # vals[:-1] 长度 n-1；sliding_window_view → shape (n-window, window)
@@ -664,7 +664,7 @@ class FeaturePipeline:
             result = df.groupby('symbol', group_keys=False).apply(calc_talib)
             # pandas 3.x groupby.apply 会丢弃分组键列，需要手动恢复
             if 'symbol' not in result.columns:
-                result['symbol'] = symbol_series.values
+                result['symbol'] = symbol_series.reindex(result.index)
             return result
         except Exception as e:
             logger.error(f"计算技术指标时出错: {e}")
@@ -718,6 +718,9 @@ class FeaturePipeline:
     def _calculate_single_index_features(self, timestamp, df_index, prefix):
         features = {}
         try:
+            if not isinstance(timestamp, pd.Timestamp):
+                timestamp = pd.to_datetime(timestamp)
+
             index_hist = df_index[df_index.index <= timestamp]
             index_data = index_hist[index_hist.index == timestamp]
             if len(index_data) > 0:
@@ -951,6 +954,84 @@ class FeaturePipeline:
         volume_features = calculate_volume_features_vectorized(df)
         df = pd.concat([df, volume_features], axis=1)
         df = macd_features_rolling(df)
+
+        # 18. 流动性和微观结构特征（向量化版本，无数据泄露）
+        # 注意：所有特征仅使用当前及历史数据，不使用未来数据
+
+        # 18.1 Amihud Illiquidity（改进版）
+        # 衡量价格冲击：单位成交额导致的价格变化
+        # 无泄露：仅使用当日的 open/close/volume
+        intraday_return = np.abs(df['close'] / df['open'] - 1)
+        volume_yuan = df['volume'] * df['close']
+        df['amihud_illiq_intraday'] = np.where(
+            volume_yuan > 0,
+            intraday_return / volume_yuan,
+            0
+        )
+
+        # 18.2 High-Low Spread
+        # 日内波动幅度，反映流动性和价格发现效率
+        # 无泄露：仅使用当日的 high/low
+        df['hl_spread'] = np.where(
+            (df['high'] + df['low']) > 0,
+            (df['high'] - df['low']) / ((df['high'] + df['low']) / 2),
+            0
+        )
+
+        # 18.3 Effective Spread（有效价差估计）
+        # 基于日内振幅和成交量的流动性代理
+        # 无泄露：仅使用当日数据
+        daily_range = df['high'] - df['low']
+        df['effective_spread'] = np.where(
+            df['close'] > 0,
+            daily_range / df['close'],
+            0
+        )
+
+        # 18.4 WorldQuant Alpha#12（向量化版本）
+        # 成交量变化与价格变化的反向关系
+        # 无泄露：使用 groupby 确保不跨股票计算 diff
+        df['volume_diff_temp'] = df.groupby('symbol')['volume'].diff()
+        df['close_diff_temp'] = df.groupby('symbol')['close'].diff()
+        df['alpha12'] = np.sign(df['volume_diff_temp']) * (-1 * df['close_diff_temp'])
+        df.drop(['volume_diff_temp', 'close_diff_temp'], axis=1, inplace=True)
+
+        # 18.5 Price-Volume Divergence（价量背离）
+        # 价格新高但成交量萎缩，典型的顶部背离信号
+        # 无泄露：rolling 只看历史20天
+        is_price_high = df.groupby('symbol')['close'].transform(
+            lambda x: x == x.rolling(20, min_periods=1).max()
+        )
+        is_volume_low = df.groupby('symbol')['volume'].transform(
+            lambda x: x < x.rolling(20, min_periods=1).mean()
+        )
+        df['price_volume_divergence'] = (is_price_high & is_volume_low).astype(int)
+
+        # 18.6 Volume Momentum（成交量动量）
+        # 成交量的短期vs长期对比
+        # 无泄露：rolling 只看历史数据
+        volume_ma5 = df.groupby('symbol')['volume'].transform(
+            lambda x: x.rolling(5, min_periods=1).mean()
+        )
+        volume_ma20 = df.groupby('symbol')['volume'].transform(
+            lambda x: x.rolling(20, min_periods=1).mean()
+        )
+        df['volume_momentum'] = np.where(
+            volume_ma20 > 0,
+            (volume_ma5 - volume_ma20) / volume_ma20,
+            0
+        )
+
+        # 18.7 Price Impact（价格冲击）
+        # 成交量标准化的价格变化，衡量流动性深度
+        # 无泄露：仅使用当日数据
+        price_change = df['close'] - df['open']
+        df['price_impact'] = np.where(
+            df['volume'] > 0,
+            np.abs(price_change) / np.sqrt(df['volume']),
+            0
+        )
+
         return df
 
 
@@ -1002,6 +1083,29 @@ def load_price_data(directory_path, start_date='2009-01-01', end_date=None):
             if len(df) > 0: dataframes[symbol] = df
         except Exception as e:
             logger.error(f"加载文件出错: {e}")
+
+    # 加载大盘指数数据
+    for index_symbol in ['000001.SH', '399001.SZ']:
+        try:
+            index_path = Path(directory_path).parent / 'daily' / f'{index_symbol}.parquet'
+            if index_path.exists():
+                idx_df = pd.read_parquet(index_path)
+                idx_df['trade_date'] = pd.to_datetime(idx_df['trade_date'], format='%Y%m%d')
+                idx_df = idx_df.set_index('trade_date').sort_index()
+                idx_df = idx_df[['open', 'high', 'low', 'close', 'volume']]
+
+                if start_date or end_date:
+                    mask = pd.Series(True, index=idx_df.index)
+                    if start_date: mask &= (idx_df.index >= pd.to_datetime(start_date))
+                    if end_date: mask &= (idx_df.index <= pd.to_datetime(end_date))
+                    idx_df = idx_df[mask]
+
+                if len(idx_df) > 0:
+                    dataframes[index_symbol] = idx_df
+                    logger.info(f"已加载指数数据 {index_symbol}: {len(idx_df)} 行")
+        except Exception as e:
+            logger.warning(f"加载指数 {index_symbol} 失败: {e}")
+
     return dataframes
 
 

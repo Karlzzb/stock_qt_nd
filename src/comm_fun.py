@@ -234,7 +234,7 @@ class Config:
         'bb_middle', 'bb_lower', 'volume_ma_20', 'obv', 'atr', 'slowk', 'slowd', 'price_vs_ma5', 'price_vs_ma20',
         'price_vs_ma60', 'ma_arrangement', 'bb_position', 'bb_squeeze', 'rsi_oversold_6', 'rsi_oversold_14',
         'rsi_oversold_24', 'rsi_overbought_6', 'rsi_overbought_14', 'rsi_overbought_24', 'macd_signal_distance',
-        'macd_golden_cross', 'volume_ma20', 'volume_ratio', 'volume_spike', 'volume_dryup', 'atr_ratio',
+        'macd_above_signal', 'volume_ma20', 'volume_ratio', 'volume_spike', 'volume_dryup', 'atr_ratio',
         'hammer_pattern', 'downtrend', 'hammer_signal', 'doji_pattern', 'distance_to_support', 'distance_to_resistance',
         'stoch_oversold', 'stoch_overbought', 'macd_percentile', 'obv_trend', 'volatility_3d', 'volatility_5d',
         'volatility_10d', 'volatility_15d', 'volatility_20d', 'volatility_25d', 'volatility_30d', 'engulfing_pattern',
@@ -275,7 +275,7 @@ class Config:
         'rsi_oversold_6_z', 'rsi_oversold_14_rankpct', 'rsi_oversold_14_z', 'rsi_oversold_24_rankpct',
         'rsi_oversold_24_z', 'rsi_overbought_6_rankpct', 'rsi_overbought_6_z', 'rsi_overbought_14_rankpct',
         'rsi_overbought_14_z', 'rsi_overbought_24_rankpct', 'rsi_overbought_24_z', 'macd_signal_distance_rankpct',
-        'macd_signal_distance_z', 'macd_golden_cross_rankpct', 'macd_golden_cross_z', 'volume_ma20_rankpct',
+        'macd_signal_distance_z', 'macd_above_signal_rankpct', 'macd_above_signal_z', 'volume_ma20_rankpct',
         'volume_ma20_z', 'volume_ratio_rankpct', 'volume_ratio_z', 'volume_spike_rankpct', 'volume_spike_z',
         'volume_dryup_rankpct', 'volume_dryup_z', 'atr_ratio_rankpct', 'atr_ratio_z', 'hammer_pattern_rankpct',
         'hammer_pattern_z', 'doji_pattern_rankpct', 'doji_pattern_z', 'distance_to_support_rankpct',
@@ -375,7 +375,7 @@ class Config:
         'support_resistance_ratio_lag_5_rankpct', 'illiq_lag_1', 'support_resistance_ratio', 'dist_to_high_60_rankpct',
         'close_lag_25', 'sz_volume_ratio', 'close_lag_15_z', 'illiq_lag_3', 'amplitude_rankpct',
         'dist_to_high_60', 'ma_20', 'volume_spike_rankpct', 'high_lag_30', 'ma_60', 'ma_20_z',
-        'macd_percentile_rankpct', 'macd_golden_cross_rankpct', 'sz_price_change', 'sz_amplitude',
+        'macd_percentile_rankpct', 'macd_above_signal_rankpct', 'sz_price_change', 'sz_amplitude',
         'ret_intraday_lag_5_rankpct', 'ma_60_rankpct', 'rsi_turning_simple_rankpct', 'vol_divergence',
         'ret_intraday_lag_1', 'open_lag_20_z', 'close_lag_10', 'macd_death_cross_rankpct', 'illiq_lag_3_z',
         'sz_sentiment', 'rank_return_z', 'price_volume_divergence_rankpct', 'distance_to_resistance',
@@ -394,6 +394,9 @@ class Config:
         'macd_zero_cross_down_rankpct', 'vol_gk_z', 'open_lag_3_rankpct', 'close_lag_15', 'pv_corr_10',
         'dist_to_high_60_z', 'macd_signal_cross_rankpct', 'obv_rankpct', 'amplitude', 'body_strength_z',
         'rsi_oversold_24_rankpct', 'volume_lag_5_rankpct',
+        # v2.3.0 流动性微观结构特征（Issue #12 验证）
+        'amihud_illiq_intraday', 'hl_spread', 'effective_spread', 'alpha12',
+        'volume_momentum', 'price_impact',
     ]
 
 

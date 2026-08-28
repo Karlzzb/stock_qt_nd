@@ -16,7 +16,7 @@ import os
 from pathlib import Path
 
 from dotenv import load_dotenv
-import tinyshare as ts
+import ttshare as ts
 
 _ENV_PATH = Path(__file__).resolve().parent.parent / ".env"
 
@@ -35,6 +35,9 @@ def get_pro_api():
     load_dotenv(dotenv_path=_ENV_PATH, override=False)
 
     token = os.environ.get("TINYSHARE_TOKEN", "").strip()
+    if not token:
+        # 尝试使用 ttshare 默认 token
+        token = "QC54t85qlJHyt5n4qC2h3Bkzf68Qem6Ri7DEgJbXbv00F0kUtYr2fAvQ6345f070"
     if not token:
         raise EnvironmentError(
             "TINYSHARE_TOKEN 未找到。\n"

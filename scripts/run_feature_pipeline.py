@@ -75,8 +75,13 @@ def load_price_data_from_parquet(
     for pq_file in parquet_files:
         ts_code = pq_file.stem  # e.g. "000001.SZ"
         try:
-            df = pd.read_parquet(pq_file, columns=["trade_date", "open", "high", "low", "close", "vol"])
-            df = df.rename(columns={"vol": "volume"})
+            # 指数文件列名是 volume 不是 vol
+            if ts_code in ['000001.SH', '399001.SZ']:
+                df = pd.read_parquet(pq_file, columns=["trade_date", "open", "high", "low", "close", "volume"])
+            else:
+                df = pd.read_parquet(pq_file, columns=["trade_date", "open", "high", "low", "close", "vol"])
+                df = df.rename(columns={"vol": "volume"})
+
             # 保证 float64
             for col in ["open", "high", "low", "close", "volume"]:
                 df[col] = df[col].astype("float64")
@@ -140,7 +145,7 @@ def main() -> None:
     logger.info("正在加载全量行情数据到主进程内存，请稍候…")
     full_stocks = load_price_data_from_parquet(
         DAILY_PARQUET_DIR,
-        start_date="2009-01-01",  # 加载足够历史以支持特征计算
+        start_date=None,  # 加载全部历史数据以支持特征计算
         end_date=None,
     )
 
