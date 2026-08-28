@@ -1,0 +1,49 @@
+{
+  "config_hash": "cc86f424",
+  "timestamp": "2026-08-28T18:52:00",
+  "configuration": {
+    "n_positions": 10,
+    "rebalance_threshold": 0.7,
+    "label_horizon": "3d",
+    "commission_rate": 0.0003,
+    "slippage_rate": 0.001
+  },
+  "test_result": {
+    "annual_return": -0.7105,
+    "sharpe_ratio": -2.556,
+    "max_drawdown": -0.4649,
+    "win_rate": 0.4940,
+    "test_period": "2025-08-01 to 2026-08-14"
+  },
+  "validation_result": {
+    "annual_return": -0.5755,
+    "sharpe_ratio": -1.220,
+    "max_drawdown": -0.7753,
+    "win_rate": 0.4410
+  },
+  "validation_test_gap": {
+    "annual_return_gap": 0.135,
+    "sharpe_gap": 1.336,
+    "performance_degradation": true,
+    "flag_return_gap": false,
+    "flag_sharpe_gap": true
+  },
+  "v2_comparison": {
+    "v2_production_annual": 0.12,
+    "v2_backtest_annual": 0.41,
+    "v2_gap": 0.29,
+    "v3_validation_annual": -0.5755,
+    "v3_test_annual": -0.7105
+  },
+  "decision": {
+    "status": "NO-GO",
+    "reason": "Test set shows severe negative returns (-71.05% annual) and negative Sharpe (-2.56)",
+    "recommendation": "Model fails production criteria. V3 shows worse performance than V2 on both validation and test sets. Fundamental model issues need addressing.",
+    "criteria_failed": [
+      "Test set annual return < 0%",
+      "Test set Sharpe ratio < 0.5",
+      "Test set max drawdown < -30%",
+      "Performance degradation from validation to test"
+    ]
+  }
+}

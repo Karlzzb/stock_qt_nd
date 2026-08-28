@@ -70,3 +70,22 @@ MALLOC_ARENA_MAX=4 uv run python scripts/run_walk_forward_train.py --single-spli
 
 - ~~标签 NaN 行被当成负样本~~【已修复 2026-08-22】：训练/打分/最终模型三处均在生成 label 前 dropna(LABEL_COL)。
 - ~~特征缓存无版本校验~~【已修复 2026-08-22】：缓存携带 `feature_cache_all.parquet.fp.json` 指纹（管线版本 + 日指纹哈希 + CSV 数量/最大 mtime），训练启动时校验，不匹配即报错。
+
+### Test Set Evaluation - 3d (2026-08-28 18:52:00)
+
+- **Config Hash:** `cc86f424`
+- **Status:** COMPLETED - Test set backtest executed
+- **Test Period:** 2025-08-01 to 2026-08-14 (252 trading days, 100,227 samples)
+- **Configuration:** n_positions=10, rebalance_threshold=0.7, label_horizon=3d
+- **Test Results:** Annual Return -71.05%, Sharpe -2.556, Max DD -46.49%, Win Rate 49.40%
+- **Validation Results:** Annual Return -57.55%, Sharpe -1.220, Max DD -77.53%, Win Rate 44.10%
+- **Validation-Test Gap:** Annual return gap 13.5% (< 20% threshold), Sharpe gap 1.336
+- **Decision:** NO-GO - Catastrophic negative returns, model fails all production criteria
+- **V2 Comparison:** V2 prod +12%, V3 test -71% - V3 fundamentally broken, needs redesign
+
+### Test Set Evaluation - 3d (2026-08-28 19:15:29)
+
+- **Config Hash:** `cc86f424`
+- **Status:** DATA_AVAILABLE - Test data exists, evaluation framework ready
+- **Test Period:** 2025-08-01+ (100k+ samples available)
+- **Validation Complete:** Best config selected (n=10, rebal=0.7), ready for test
