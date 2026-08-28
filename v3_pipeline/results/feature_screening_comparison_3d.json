@@ -1,0 +1,61 @@
+{
+  "baseline": {
+    "n_features": 714,
+    "icir": 44.203,
+    "note": "Before feature screening"
+  },
+  "after_screening": {
+    "n_features": 100,
+    "metrics": {
+      "rank_ic": 0.029881867089402415,
+      "icir": 0.16923812938525779,
+      "ic_positive_rate": 0.5662368112543963,
+      "top5_excess_annual": 0.7112514345110558
+    },
+    "retention_rate": 0.003828657090814148
+  },
+  "all_tested_subsets": [
+    {
+      "n_features": 50,
+      "metrics": {
+        "rank_ic": 0.025302107104962057,
+        "icir": 0.14030646028799343,
+        "ic_positive_rate": 0.5404454865181711,
+        "top5_excess_annual": 0.4101986459474408
+      }
+    },
+    {
+      "n_features": 100,
+      "metrics": {
+        "rank_ic": 0.029881867089402415,
+        "icir": 0.16923812938525779,
+        "ic_positive_rate": 0.5662368112543963,
+        "top5_excess_annual": 0.7112514345110558
+      }
+    },
+    {
+      "n_features": 150,
+      "metrics": {
+        "rank_ic": 0.010753317893212924,
+        "icir": 0.061174074479170136,
+        "ic_positive_rate": 0.49824150058616645,
+        "top5_excess_annual": 0.41386505569911675
+      }
+    },
+    {
+      "n_features": 200,
+      "metrics": {
+        "rank_ic": 0.028544795929640602,
+        "icir": 0.1614443344252648,
+        "ic_positive_rate": 0.5451348182883939,
+        "top5_excess_annual": 0.7865266763931634
+      }
+    }
+  ],
+  "reduction": {
+    "features_removed": 614,
+    "reduction_rate": 0.8599439775910365,
+    "icir_change": -44.03376187061475,
+    "icir_change_pct": -99.61713429091859
+  }
+}
