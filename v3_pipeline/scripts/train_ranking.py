@@ -14,11 +14,13 @@ import argparse
 import logging
 import sys
 from pathlib import Path
+from typing import Optional
 
 import lightgbm as lgb
 import numpy as np
 import pandas as pd
 import yaml
+from sklearn.impute import SimpleImputer
 
 REPO_ROOT = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(REPO_ROOT))
@@ -26,11 +28,45 @@ sys.path.insert(0, str(REPO_ROOT))
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
+# Column name constants
+TIMESTAMP_COL = "timestamp"
+SYMBOL_COL = "symbol"
+DATE_COL = "date"
+
 
 def load_config(config_path: Path) -> dict:
     """Load YAML configuration."""
     with open(config_path) as f:
         return yaml.safe_load(f)
+
+
+def _deduplicate_and_log(
+    df: pd.DataFrame,
+    subset: list[str],
+    keep: str = "last"
+) -> pd.DataFrame:
+    """Remove duplicates and log the operation.
+
+    Args:
+        df: DataFrame to deduplicate
+        subset: Column names to identify duplicates
+        keep: Which duplicates to keep ('first', 'last', or False)
+
+    Returns:
+        Deduplicated DataFrame
+    """
+    before_dedup = len(df)
+    df_deduped = df.drop_duplicates(subset=subset, keep=keep)
+    after_dedup = len(df_deduped)
+
+    if before_dedup > after_dedup:
+        removed = before_dedup - after_dedup
+        pct = removed / before_dedup
+        logger.warning(
+            f"Removed {removed} duplicate {tuple(subset)} pairs ({pct:.1%})"
+        )
+
+    return df_deduped
 
 
 def prepare_features(df: pd.DataFrame, exclude_patterns: list[str]) -> list[str]:
@@ -51,7 +87,7 @@ def prepare_features(df: pd.DataFrame, exclude_patterns: list[str]) -> list[str]
 
     for col in all_cols:
         # Skip non-feature columns
-        if col in ["timestamp", "symbol", "date"]:
+        if col in [TIMESTAMP_COL, SYMBOL_COL, DATE_COL]:
             continue
 
         # Check system exclusion patterns
@@ -96,8 +132,8 @@ def prepare_ranking_dataset(
     df: pd.DataFrame,
     features: list[str],
     rank_col: str,
-    imputer = None
-) -> tuple[lgb.Dataset, np.ndarray]:
+    imputer: Optional[SimpleImputer] = None
+) -> tuple[lgb.Dataset, np.ndarray, SimpleImputer]:
     """Prepare LightGBM Dataset with group information for ranking.
 
     Args:
@@ -112,22 +148,18 @@ def prepare_ranking_dataset(
         SimpleImputer: The imputer used (fitted if new, passed-through if provided)
     """
     # Sort by timestamp to ensure proper grouping
-    df = df.sort_values("timestamp").copy()
+    df = df.sort_values(TIMESTAMP_COL).copy()
+
+    # Remove duplicates first - keep last occurrence per (timestamp, symbol)
+    df = _deduplicate_and_log(df, subset=[TIMESTAMP_COL, SYMBOL_COL], keep="last")
 
     # Filter out rows with missing rank labels
     valid = df[rank_col].notna()
     df = df[valid].copy()
     logger.info(f"After filtering NaN ranks: {len(df)} rows ({valid.mean():.2%} coverage)")
 
-    # Remove duplicates - keep last occurrence per (timestamp, symbol)
-    before_dedup = len(df)
-    df = df.drop_duplicates(subset=['timestamp', 'symbol'], keep='last')
-    after_dedup = len(df)
-    if before_dedup > after_dedup:
-        logger.warning(f"Removed {before_dedup - after_dedup} duplicate (timestamp, symbol) pairs ({(before_dedup - after_dedup) / before_dedup:.1%})")
-
     # Get group sizes (stocks per day)
-    group_sizes = df.groupby("timestamp").size().values
+    group_sizes = df.groupby(TIMESTAMP_COL).size().values
     logger.info(f"Groups: {len(group_sizes)} days, avg {group_sizes.mean():.1f} stocks/day")
 
     # Prepare feature matrix - select only numeric columns and handle inf/nan
@@ -138,8 +170,6 @@ def prepare_ranking_dataset(
     X = np.nan_to_num(X, nan=np.nan, posinf=np.nan, neginf=np.nan)
 
     # Handle missing values in features
-    from sklearn.impute import SimpleImputer
-
     if imputer is None:
         # Create and fit new imputer (training mode)
         imputer = SimpleImputer(strategy="median", copy=False)
@@ -179,16 +209,16 @@ def train_horizon(
     model_cfg = config["model"]
 
     # Prepare train/val split
-    train_mask = cache_df["timestamp"] <= train_cfg["train_end"]
-    val_mask = (cache_df["timestamp"] >= train_cfg["val_start"]) & (
-        cache_df["timestamp"] <= train_cfg["val_end"]
+    train_mask = cache_df[TIMESTAMP_COL] <= train_cfg["train_end"]
+    val_mask = (cache_df[TIMESTAMP_COL] >= train_cfg["val_start"]) & (
+        cache_df[TIMESTAMP_COL] <= train_cfg["val_end"]
     )
 
     train_df = cache_df[train_mask].copy()
     val_df = cache_df[val_mask].copy()
 
-    logger.info(f"Train: {len(train_df)} rows, {train_df['timestamp'].min()} to {train_df['timestamp'].max()}")
-    logger.info(f"Val: {len(val_df)} rows, {val_df['timestamp'].min()} to {val_df['timestamp'].max()}")
+    logger.info(f"Train: {len(train_df)} rows, {train_df[TIMESTAMP_COL].min()} to {train_df[TIMESTAMP_COL].max()}")
+    logger.info(f"Val: {len(val_df)} rows, {val_df[TIMESTAMP_COL].min()} to {val_df[TIMESTAMP_COL].max()}")
 
     rank_col = f"rank_future_return_{horizon}"
 
@@ -248,11 +278,7 @@ def train_horizon(
     val_clean = val_df[val_df[rank_col].notna()].copy()
 
     # Remove duplicates - keep last occurrence (most recent data)
-    before_dedup = len(val_clean)
-    val_clean = val_clean.drop_duplicates(subset=['timestamp', 'symbol'], keep='last')
-    after_dedup = len(val_clean)
-    if before_dedup > after_dedup:
-        logger.warning(f"Removed {before_dedup - after_dedup} duplicate rows ({(before_dedup - after_dedup) / before_dedup:.1%})")
+    val_clean = _deduplicate_and_log(val_clean, subset=[TIMESTAMP_COL, SYMBOL_COL], keep="last")
 
     X_val = val_clean[features].values
     X_val = imputer.transform(X_val)
@@ -261,8 +287,8 @@ def train_horizon(
 
     # Save predictions with metadata
     pred_df = pd.DataFrame({
-        "timestamp": val_clean["timestamp"].values,
-        "symbol": val_clean["symbol"].values,
+        TIMESTAMP_COL: val_clean[TIMESTAMP_COL].values,
+        SYMBOL_COL: val_clean[SYMBOL_COL].values,
         "prediction": predictions,
         "actual_rank": val_clean[rank_col].values,
         "actual_return": val_clean[f"future_return_{horizon}"].values,
@@ -324,7 +350,7 @@ def main() -> None:
     logger.info(f"Loading feature cache from {args.cache}")
     cache_df = pd.read_parquet(args.cache)
     logger.info(f"Loaded {len(cache_df)} rows × {len(cache_df.columns)} columns")
-    logger.info(f"Date range: {cache_df['timestamp'].min()} to {cache_df['timestamp'].max()}")
+    logger.info(f"Date range: {cache_df[TIMESTAMP_COL].min()} to {cache_df[TIMESTAMP_COL].max()}")
 
     # Prepare features
     exclude_patterns = config["features"]["exclude_patterns"]
