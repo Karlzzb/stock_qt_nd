@@ -1,0 +1,63 @@
+# V4 干净链路配置（里程碑 v4_0_0_clean）
+#
+# 与泄漏版的唯一实质区别：exclude_patterns 永久包含 ^stop_loss_return_，
+# 且训练数据为 v4_rebuild_clean_labels.py 重建的 cache（标签由原始日线纯
+# close-to-close 重算，21 个未来派生列已物理删除）。
+#
+# 训练命令（cache 路径由 CLI 指定，config 的 data 段仅作记录）：
+#   python v3_pipeline/scripts/train_ranking.py \
+#     --config v3_pipeline/configs/v4_0_0_clean.yaml \
+#     --cache v3_pipeline/feature_cache_v4_clean.parquet \
+#     --output v3_pipeline/models/v4_0_0_clean
+experiment_name: v4_0_0_clean
+version: v4.0.0
+
+data:
+  feature_cache: v3_pipeline/feature_cache_v4_clean.parquet
+
+features:
+  exclude_patterns:
+  - ^label_
+  - ^future_return_
+  - ^rank_future_return_
+  - ^stop_loss_return_   # 未来派生列，泄漏实锤（见 V4_MILESTONE_REPORT.md），永久排除
+
+training:
+  horizons:
+  - 3d
+  - 10d
+  - 30d
+  train_end: '2021-12-31'
+  val_start: '2022-01-01'
+  val_end: '2025-07-31'
+
+model:
+  objective: lambdarank
+  metric: ndcg
+  ndcg_eval_at: [5, 10, 20]
+  num_boost_round: 1000
+  early_stopping_rounds: 50
+  learning_rate: 0.05
+  num_leaves: 31
+  max_depth: -1
+  min_data_in_leaf: 100
+  feature_fraction: 0.8
+  bagging_fraction: 0.8
+  bagging_freq: 5
+  lambda_l1: 0.0
+  lambda_l2: 0.0
+  verbose: 10
+
+evaluation:
+  metrics:
+  - rank_ic
+  - rank_icir
+  - top5_excess_return
+  - top10_excess_return
+  - ndcg@5
+  - ndcg@10
+  # 口径说明：最终指标以 v3_pipeline/scripts/evaluate_honest.py 输出为准
+  # （不重叠窗口、正规 Sharpe、含 0.26%/期双边成本）。
+  success_threshold:
+    icir: 0.5
+    top5_excess: 0.0

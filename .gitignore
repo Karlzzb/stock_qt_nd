@@ -62,3 +62,12 @@ docs/superpower
 
 # 特征计算进度状态文件
 .feature_pipeline_state.json
+
+# 数据与模型产物（一律不入库；V4 里程碑起执行，历史已用 filter-repo 剥离）
+*.parquet
+*.pkl
+*.xlsx
+models/
+v3_pipeline/results/*.parquet
+# 例外：测试 fixture 等小数据
+!tests/fixtures/**
