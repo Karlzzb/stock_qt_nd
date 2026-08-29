@@ -1,0 +1,92 @@
+[
+  {
+    "config":"Long Top1",
+    "annual_return":61409.1426123191,
+    "sharpe":237562.2233712041,
+    "max_dd":-0.0939,
+    "win_rate":0.9942196532,
+    "avg_period_return":0.1406278613,
+    "capped_pct":87.1676300578
+  },
+  {
+    "config":"Long Top3",
+    "annual_return":26162.8847510353,
+    "sharpe":80917.2493337036,
+    "max_dd":-0.0939,
+    "win_rate":0.9919075145,
+    "avg_period_return":0.1293105973,
+    "capped_pct":87.1676300578
+  },
+  {
+    "config":"Long Top5",
+    "annual_return":12522.6768416021,
+    "sharpe":33857.5137077135,
+    "max_dd":-0.0939,
+    "win_rate":0.9919075145,
+    "avg_period_return":0.1196310674,
+    "capped_pct":87.1676300578
+  },
+  {
+    "config":"Long Top10",
+    "annual_return":3194.2330655595,
+    "sharpe":7455.9159009105,
+    "max_dd":-0.1149410442,
+    "win_rate":0.9780346821,
+    "avg_period_return":0.1018448691,
+    "capped_pct":87.1676300578
+  },
+  {
+    "config":"Long Top20",
+    "annual_return":558.2449974664,
+    "sharpe":1216.3512430682,
+    "max_dd":-0.1826489484,
+    "win_rate":0.9502890173,
+    "avg_period_return":0.0794006702,
+    "capped_pct":87.1676300578
+  },
+  {
+    "config":"Long Top50",
+    "annual_return":45.8331700993,
+    "sharpe":101.3530423936,
+    "max_dd":-0.2564969945,
+    "win_rate":0.8335260116,
+    "avg_period_return":0.0480176793,
+    "capped_pct":87.1676300578
+  },
+  {
+    "config":"L\/S Top1 vs Bot1",
+    "annual_return":118110.7367014245,
+    "sharpe":227354.536301964,
+    "max_dd":0.0,
+    "win_rate":0.9919075145,
+    "avg_period_return":0.1504999422,
+    "capped_pct":87.1676300578
+  },
+  {
+    "config":"L\/S Top5 vs Bot5",
+    "annual_return":10650.7626516289,
+    "sharpe":26899.764528784,
+    "max_dd":0.0,
+    "win_rate":0.9826589595,
+    "avg_period_return":0.1175601618,
+    "capped_pct":87.1676300578
+  },
+  {
+    "config":"L\/S Top10 vs Bot10",
+    "annual_return":2298.9712262423,
+    "sharpe":5949.7693964751,
+    "max_dd":0.0,
+    "win_rate":0.9664739884,
+    "avg_period_return":0.0973404798,
+    "capped_pct":87.1676300578
+  },
+  {
+    "config":"L\/S Top20 vs Bot20",
+    "annual_return":420.6258757093,
+    "sharpe":1153.1114581701,
+    "max_dd":0.0,
+    "win_rate":0.9375722543,
+    "avg_period_return":0.0753397861,
+    "capped_pct":87.1676300578
+  }
+]

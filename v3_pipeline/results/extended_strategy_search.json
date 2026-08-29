@@ -1,0 +1,181 @@
+[
+  {
+    "total_return": 244700799550.61423,
+    "annual_return": 32552662261.164276,
+    "sharpe_ratio": 24.318019569956704,
+    "max_drawdown": 0,
+    "win_rate": 1.0,
+    "final_capital": 2.4470079955161424e+17,
+    "config": {
+      "n_long": 10,
+      "n_short": 10,
+      "holding_period": 3
+    }
+  },
+  {
+    "total_return": 511658169.0381011,
+    "annual_return": 511658169.0381011,
+    "sharpe_ratio": 22.132080960582304,
+    "max_drawdown": 0,
+    "win_rate": 1.0,
+    "final_capital": 511658170038101.06,
+    "config": {
+      "n_long": 20,
+      "n_short": 20,
+      "holding_period": 3
+    }
+  },
+  {
+    "total_return": 11962782.98553302,
+    "annual_return": 78000276.73009229,
+    "sharpe_ratio": 22.266851337208657,
+    "max_drawdown": 0,
+    "win_rate": 1.0,
+    "final_capital": 11962783985533.02,
+    "config": {
+      "n_long": 30,
+      "n_short": 30,
+      "holding_period": 3
+    }
+  },
+  {
+    "total_return": 141971.69301370354,
+    "annual_return": 6275860.858606794,
+    "sharpe_ratio": 21.810135614253728,
+    "max_drawdown": 0,
+    "win_rate": 1.0,
+    "final_capital": 141972693013.70355,
+    "config": {
+      "n_long": 50,
+      "n_short": 50,
+      "holding_period": 3
+    }
+  },
+  {
+    "total_return": 920.4471241291633,
+    "annual_return": 375814.09558076673,
+    "sharpe_ratio": 22.829295407398213,
+    "max_drawdown": 0,
+    "win_rate": 1.0,
+    "final_capital": 921447124.1291633,
+    "config": {
+      "n_long": 100,
+      "n_short": 100,
+      "holding_period": 3
+    }
+  },
+  {
+    "total_return": 9925074026.621513,
+    "annual_return": 4122674348.949752,
+    "sharpe_ratio": 21.776543538234172,
+    "max_drawdown": 0,
+    "win_rate": 1.0,
+    "final_capital": 9925074027621514.0,
+    "config": {
+      "n_long": 20,
+      "n_short": 10,
+      "holding_period": 3
+    }
+  },
+  {
+    "total_return": 1255603288.1202254,
+    "annual_return": 1255603288.1202254,
+    "sharpe_ratio": 20.723152353553925,
+    "max_drawdown": 0,
+    "win_rate": 1.0,
+    "final_capital": 1255603289120225.5,
+    "config": {
+      "n_long": 30,
+      "n_short": 10,
+      "holding_period": 3
+    }
+  },
+  {
+    "total_return": 10444938529.352718,
+    "annual_return": 4330169535.382569,
+    "sharpe_ratio": 25.058105322671533,
+    "max_drawdown": 0,
+    "win_rate": 1.0,
+    "final_capital": 1.0444938530352718e+16,
+    "config": {
+      "n_long": 10,
+      "n_short": 20,
+      "holding_period": 3
+    }
+  },
+  {
+    "total_return": 1568584627.6447387,
+    "annual_return": 1568584627.6447387,
+    "sharpe_ratio": 25.515101572967673,
+    "max_drawdown": 0,
+    "win_rate": 1.0,
+    "final_capital": 1568584628644738.8,
+    "config": {
+      "n_long": 10,
+      "n_short": 30,
+      "holding_period": 3
+    }
+  },
+  {
+    "total_return": 862120.6915940184,
+    "annual_return": 19788196.901263665,
+    "sharpe_ratio": 21.086872329183393,
+    "max_drawdown": 0,
+    "win_rate": 1.0,
+    "final_capital": 862121691594.0183,
+    "config": {
+      "n_long": 50,
+      "n_short": 30,
+      "holding_period": 3
+    }
+  },
+  {
+    "total_return": 1234288.8606375705,
+    "annual_return": 30759973.705798976,
+    "sharpe_ratio": 23.2897922146355,
+    "max_drawdown": 0,
+    "win_rate": 1.0,
+    "final_capital": 1234289860637.5706,
+    "config": {
+      "n_long": 30,
+      "n_short": 50,
+      "holding_period": 3
+    }
+  },
+  {
+    "total_return": 6486.012956251448,
+    "annual_return": 1314303.6863827943,
+    "sharpe_ratio": 21.9549961966564,
+    "max_drawdown": 0,
+    "win_rate": 1.0,
+    "final_capital": 6487012956.251448,
+    "config": {
+      "n_long": 100,
+      "n_short": 50,
+      "holding_period": 3
+    }
+  },
+  {
+    "total_return": 10609.225814118781,
+    "annual_return": 2895159.5317987204,
+    "sharpe_ratio": 23.78218774740994,
+    "max_drawdown": 0,
+    "win_rate": 1.0,
+    "final_capital": 10610225814.118782,
+    "config": {
+      "n_long": 50,
+      "n_short": 100,
+      "holding_period": 3
+    }
+  },
+  {
+    "total_return": 1296993818866764.2,
+    "annual_return": 15068273803915.732,
+    "sharpe_ratio": 61.238269827009525,
+    "max_drawdown": -0.07285020666666658,
+    "calmar_ratio": 206839135993973.62,
+    "win_rate": 0.9930555555555556,
+    "trading_days": 289,
+    "final_net_value": 1.2969938188667653e+21,
+    "monthly_returns": {
+      

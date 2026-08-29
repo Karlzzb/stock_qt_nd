@@ -1,0 +1,58 @@
+{
+  "3d": {
+    "annual_return": 23837762842.112766,
+    "sharpe_ratio": 35.07724957909642,
+    "max_drawdown": -0.10137252199999999,
+    "win_rate": 0.9791666666666666,
+    "total_return": 795997344647.9637,
+    "trading_days": 289
+  },
+  "5d": {
+    "annual_return": 390354536752.5475,
+    "sharpe_ratio": 38.99212538088641,
+    "max_drawdown": -0.03141488599999994,
+    "win_rate": 0.9767441860465116,
+    "total_return": 90704483.17682475,
+    "trading_days": 173
+  },
+  "10d": {
+    "annual_return": 1904952726586.0505,
+    "sharpe_ratio": 41.65331490850599,
+    "max_drawdown": -0.012464286000000012,
+    "win_rate": 0.9767441860465116,
+    "total_return": 17356.36642821175,
+    "trading_days": 87
+  },
+  "15d": {
+    "annual_return": 119987143914020.64,
+    "sharpe_ratio": 109.533194869547,
+    "max_drawdown": 0.0,
+    "win_rate": 1.0,
+    "total_return": 1738.5454005778988,
+    "trading_days": 58
+  },
+  "20d": {
+    "annual_return": 17861384667308.96,
+    "sharpe_ratio": 56.004948153103875,
+    "max_drawdown": 0.0,
+    "win_rate": 1.0,
+    "total_return": 204.9806622717147,
+    "trading_days": 44
+  },
+  "25d": {
+    "annual_return": 198534710979598.25,
+    "sharpe_ratio": 87.01107116816254,
+    "max_drawdown": 0.0,
+    "win_rate": 1.0,
+    "total_return": 95.78557126523268,
+    "trading_days": 35
+  },
+  "30d": {
+    "annual_return": 821270660466050.2,
+    "sharpe_ratio": 504.2076716868175,
+    "max_drawdown": 0.0,
+    "win_rate": 1.0,
+    "total_return": 51.04147711470641,
+    "trading_days": 29
+  }
+}
