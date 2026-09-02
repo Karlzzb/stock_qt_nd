@@ -1,0 +1,22 @@
+{
+  "name": "w_legacy_v1_full",
+  "lows": {
+    "method": "legacy"
+  },
+  "entry": "close_T",
+  "labels": {
+    "fixed": [
+      5,
+      10,
+      30
+    ],
+    "sniper": {
+      "Ns": [
+        20
+      ],
+      "ks": [
+        2.0
+      ]
+    }
+  }
+}

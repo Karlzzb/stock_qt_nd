@@ -1,0 +1,6 @@
+{
+  "name": "smoke_legacy_v1",
+  "lows": {"method": "legacy"},
+  "entry": "close_T",
+  "labels": {"fixed": [5, 10, 30], "dynamic": {"c": 1.0, "cap": 60}, "mfe": [10]}
+}

@@ -1,0 +1,180 @@
+column,feature,layer,family,formula,inputs,event_only
+RET1,RET1,P0,反转,R (= pct_chg/100),pct_chg,False
+RET5,RET5,P0,反转,"CF/shift(CF,5)-1",pct_chg,False
+RET10,RET10,P0,反转,"CF/shift(CF,10)-1",pct_chg,False
+RET20,RET20,P0,反转,"CF/shift(CF,20)-1",pct_chg,False
+RET_ON,RET_ON,P0,隔夜/日内,O/PC - 1,open|pre_close,False
+RET_ID,RET_ID,P0,隔夜/日内,C/O - 1,open|close,False
+CUMON20,CUMON20,P0,隔夜/日内,"Sum(log1p(RET_ON), 20)",open|pre_close,False
+CUMID20,CUMID20,P0,隔夜/日内,"Sum(log1p(RET_ID), 20)",open|close,False
+VOL5,VOL5,P0,波动率,"Std(R,5)",pct_chg,False
+VOL15,VOL15,P0,波动率,"Std(R,15)",pct_chg,False
+VOL20,VOL20,P0,波动率,"Std(R,20)",pct_chg,False
+IVOL60,IVOL60,P0,波动率,60 日 R = a+b*R_idx OLS 残差的 std (指数 000001.SH),pct_chg|idx_close,False
+AMP1,AMP1,P0,波动率,(H-L)/PC,high|low|pre_close,False
+AMP20,AMP20,P0,波动率,"Mean((H-L)/PC, 20)",high|low|pre_close,False
+ATRN,ATRN,P0,波动率,"ATR14(H~,L~,C~)/C~ (Wilder 14)",high|low|close|pct_chg,False
+ILLIQ20,ILLIQ20,P0,流动性,"log(Mean(abs(R)/(A*1000), 20) + 1e-30)",pct_chg|amount,False
+AMT20,AMT20,P0,流动性,"log(Mean(A,20))",amount,False
+VR5_60,VR5_60,P0,量能,"Mean(V,5)/Mean(V,60)",vol,False
+VR1_20,VR1_20,P0,量能,"V/Mean(V,20)",vol,False
+VOL_MOM,VOL_MOM,P0,量能,"(Mean(V,5)-Mean(V,20))/Mean(V,20)",vol,False
+CPV10,CPV10,P0,量价相关,"Corr(C~, V, 10)",close|pct_chg|vol,False
+CPV20,CPV20,P0,量价相关,"Corr(C~, V, 20)",close|pct_chg|vol,False
+CPV_VWAP10,CPV_VWAP10,P0,量价相关,"-Corr(A/V, V, 10)",amount|vol,False
+HLV_DIV10,HLV_DIV10,P0,量价相关,"-Corr(H/L, V, 10)",high|low|vol,False
+MAX20,MAX20,P0,彩票,"Max(R,20)",pct_chg,False
+MIN20,MIN20,P0,彩票,"Min(R,20)",pct_chg,False
+MKT_RET20,MKT_RET20,P0,市场状态,"C_idx/shift(C_idx,20)-1",idx_close,False
+MKT_MA60,MKT_MA60,P0,市场状态,"C_idx/Mean(C_idx,60)-1",idx_close,False
+MKT_AVG_AMP,MKT_AVG_AMP,P0,市场状态,两指数 (H-L)/L 当日均值,idx_high|idx_low,False
+MKT_SYNC_SCORE,MKT_SYNC_SCORE,P0,市场状态,"1 - min(1, |pc_sh-pc_sz|/0.02), pc=(C-O)/O (v2 market_sync_score 口径)",idx_open|idx_close,False
+LIMITCNT20,LIMITCNT20,P0,制度,"Count(pct_chg >= limit-0.1, 20), limit 按板块 10/20/30",pct_chg|trade_date|ts_code,False
+LIMITDOWN_CNT20,LIMITDOWN_CNT20,P0,制度,"Count(pct_chg <= -(limit-0.1), 20)",pct_chg|trade_date|ts_code,False
+MACD_DIF_NORM,MACD_DIF_NORM,P0,技术指标,DIF/(C~*ATRp),close|pct_chg|high|low,False
+MACD_HIST,MACD_HIST,P0,技术指标,2*(DIF-DEA),close|pct_chg,False
+MACD_HIST_SLOPE5,MACD_HIST_SLOPE5,P0,技术指标,"Slope(MACD_HIST, 5)",close|pct_chg,False
+MACD_ZERO_CROSS,MACD_ZERO_CROSS,P0,技术指标,"DIF 穿零轴标记 (上穿+1/下穿-1, 仅穿越日非零)",close|pct_chg,False
+RSI6,RSI6,P0,技术指标,"Wilder RSI(C~,6)",close|pct_chg,False
+RSI14,RSI14,P0,技术指标,"Wilder RSI(C~,14)",close|pct_chg,False
+BIAS20,BIAS20,P0,技术指标,"C~/Mean(C~,20)-1",close|pct_chg,False
+BIAS60,BIAS60,P0,技术指标,"C~/Mean(C~,60)-1",close|pct_chg,False
+BOLL_SQUEEZE,BOLL_SQUEEZE,P0,技术指标,"1[(4*Std(C~,20))/Mean(C~,20) < 0.05]",close|pct_chg,False
+DIST_SUPPORT20,DIST_SUPPORT20,P0,位置结构,"(C~-Min(L~,20))/C~",close|low|pct_chg,False
+DIST_RESIST20,DIST_RESIST20,P0,位置结构,"(Max(H~,20)-C~)/C~",close|high|pct_chg,False
+SR_RATIO20,SR_RATIO20,P0,位置结构,"Mean(H~,20)/Mean(L~,20) (RSRS 思路)",high|low|pct_chg,False
+EFF_RATIO10,EFF_RATIO10,P0,位置结构,"abs(C~-shift(C~,10))/Sum(abs(dC~),10) (Kaufman)",close|pct_chg,False
+DIST_HIGH60,DIST_HIGH60,P0,位置结构,"C~/Max(H~,60) (取 high 口径, 并入 drawdown_60)",close|high|pct_chg,False
+CLOSE_VS_HIGH,CLOSE_VS_HIGH,P0,K线形态,"(H-C)/(H-L), 一字板置 0.5",open|high|low|close,False
+PRICE_TREND5,PRICE_TREND5,P0,位置结构,"Slope(C~,5)/C~",close|pct_chg,False
+MA_STACK,MA_STACK,P0,趋势,sign(C~-MA60)+sign(MA60-MA120)+sign(MA120-MA250) (加总),close|pct_chg,False
+TREND_SLOPE_120,TREND_SLOPE_120,P0,趋势,"Slope(log(C~),120)*120 / (Std(R,120)*sqrt(120)) (t 统计量口径)",close|pct_chg,False
+RET20_CSR,RET20_CSR,P0,反转×截面,cs_rank(RET20) 横截面百分位 (全 universe 当日),pct_chg,False
+RSI_DIV,RSI_DIV,P0,事件结构,1[L~[i2]<L~[i1] 且 RSI14[i2]>RSI14[i1]],open|high|low|close|pct_chg|vol,True
+DIV_COUNT_120,DIV_COUNT_120,P0,事件结构,"过去 120 交易日内同池同向底背离次数 (含本次), 窗口 (T-120, T]",open|high|low|close|pct_chg|vol,True
+DIV_HIST_AREA_SHRINK,DIV_HIST_AREA_SHRINK,P0,事件结构,"S2/S1, Sk = 第 k 低点前最近绿柱区间 Sum(HIST|HIST<0)",open|high|low|close|pct_chg|vol,True
+DIV_GOLDEN_CROSS_STATE,DIV_GOLDEN_CROSS_STATE,P0,事件结构,三值: 2=T 日金叉; 1=T 前 5 日内已金叉; 0=未金叉,open|high|low|close|pct_chg|vol,True
+REBOUND_FROM_L2,REBOUND_FROM_L2,P0,事件结构,(C~[T]-L~[i2])/ATR14[T],open|high|low|close|pct_chg|vol,True
+DIV_PRICE_NEWLOW_DEPTH,DIV_PRICE_NEWLOW_DEPTH,P0,事件结构,L~[i2]/L~[i1]-1,open|high|low|close|pct_chg|vol,True
+DIV_DIF_LIFT,DIV_DIF_LIFT,P0,事件结构,(DIF[i2]-DIF[i1])/ATR14[T],open|high|low|close|pct_chg|vol,True
+DIV_SPAN_BARS,DIV_SPAN_BARS,P0,事件结构,i2-i1 (= formation),open|high|low|close|pct_chg|vol,True
+DAYS_SINCE_L2,DAYS_SINCE_L2,P0,事件结构,T-i2 (= confirm_lag),open|high|low|close|pct_chg|vol,True
+RET60,RET60,P1,反转,"CF/shift(CF,60)-1",pct_chg,False
+RET120_20,RET120_20,P1,动量,"shift(CF,20)/shift(CF,240)-1 (剔除近 1 月的中期动量)",pct_chg,False
+GAP_MEAN20,GAP_MEAN20,P1,隔夜,"Mean(RET_ON,20)",open|pre_close,False
+GAP_VOL20,GAP_VOL20,P1,隔夜,"Std(RET_ON,20)",open|pre_close,False
+INFO_DISC20,INFO_DISC20,P1,反转,"sign(RET20)*(Count(R<0,20)-Count(R>0,20))/20 (Frog-in-the-Pan)",pct_chg,False
+T1_GAP,T1_GAP,P1,制度,"Mean(RET_ON[t] | RET_ID[t-1] < -2%, 20)",open|close|pre_close,False
+VOL60,VOL60,P1,波动率,"Std(R,60)",pct_chg,False
+DVOL,DVOL,P1,波动率,"Std(R,5)-Std(R,60)",pct_chg,False
+PARK20,PARK20,P1,波动率,"sqrt(Sum(log(H/L)^2,20)/(4*ln2*20)) (Parkinson)",high|low,False
+GK_VOL,GK_VOL,P1,波动率,"Mean20( sqrt(max(0.5*ln(H/L)^2-(2ln2-1)*ln(C/O)^2, 0)) ) (Garman-Klass)",open|high|low|close,False
+GK_VOL_RATIO,GK_VOL_RATIO,P1,波动率,"GK_VOL/Mean(GK_VOL,20)",open|high|low|close,False
+VOL_CONTRACTION60,VOL_CONTRACTION60,P1,波动率,"ATRp/shift(ATRp,60)",high|low|close|pct_chg,False
+BBW_PCTILE250,BBW_PCTILE250,P1,波动率,"pct_ts(4*Std(C~,20)/Mean(C~,20), 250)",close|pct_chg,False
+VMA5,VMA5,P1,量能,"V/Mean(V,5) (量比近似)",vol,False
+VSTD20,VSTD20,P1,量能,"Std(V,20)/(Mean(V,20)+1)",vol,False
+VOLUME_TREND10,VOLUME_TREND10,P1,量能,"Slope(V,10)/Mean(V,20)",vol,False
+OBV_TREND,OBV_TREND,P1,量能,"Slope(OBV,5)/Mean(V,20), OBV=sign(R)*V 累积",close|pct_chg|vol,False
+OBV_DIV,OBV_DIV,P1,量价背离,"zscore_ts(C~,20)-zscore_ts(OBV,20)",close|pct_chg|vol,False
+PVR20,PVR20,P1,量价背离,"Mean(V|R>0,20)/Mean(V|R<0,20) (最少 5 个上涨日否则 NaN)",pct_chg|vol,False
+VSHRINK,VSHRINK,P1,量价背离,"Mean(V|R<0,近10)/Mean(V|R<0,前10)",pct_chg|vol,False
+VOL_DRYUP_EXTREME,VOL_DRYUP_EXTREME,P1,量能,"1[Mean(V,5) < Quant(Mean(V,5),250,0.1)]",vol,False
+AMT_SHRINK_PEAK,AMT_SHRINK_PEAK,P1,量能,"Mean(A,5)/Max(Mean(A,5),120)",amount,False
+RVC20,RVC20,P1,量价相关,"Corr(R, V/shift(V,1)-1, 20)",pct_chg|vol,False
+CPV_TREND,CPV_TREND,P1,量价相关,"Slope(Corr(C~,V,10), 10)",close|pct_chg|vol,False
+DSR20,DSR20,P1,波动结构,"Sum(min(R,0)^2,20)/Sum(R^2,20)",pct_chg,False
+SJV60,SJV60,P1,波动结构,"Sum(R^2*1[R>th],60)-Sum(R^2*1[R<-th],60), th=2*Std(R,60)",pct_chg,False
+JUMPFREQ60,JUMPFREQ60,P1,波动结构,"Count(abs(R)>2*Std(R,60),60)/60",pct_chg,False
+MAX5_20,MAX5_20,P1,彩票,20 日内最大 5 个 R 的均值,pct_chg,False
+SKEW60,SKEW60,P1,高阶矩,"Skew(R,60)",pct_chg,False
+KURT60,KURT60,P1,高阶矩,"Kurt(R,60)",pct_chg,False
+IVOV60,IVOV60,P1,高阶矩,"Std(Std(R,5),60)",pct_chg,False
+CAL_MONTH_POS,CAL_MONTH_POS,P1,日历,"距月末交易日数 (同月内之后的工作日数, 静态工作日近似, 截断不变)",trade_date,False
+CAL_HOLIDAY,CAL_HOLIDAY,P1,日历,"春节/国庆前 10 个工作日、后 5 个工作日 dummy (静态节假日表+工作日近似, 截断不变)",trade_date,False
+MKT_VOL20_PCT,MKT_VOL20_PCT,P1,市场状态,"pct_ts(Std(R_idx,20),250)",idx_close,False
+MKT_DD120,MKT_DD120,P1,市场状态,"C_idx/Max(H_idx,120)-1",idx_close|idx_high,False
+MKT_RSI14,MKT_RSI14,P1,市场状态,"RSI(C_idx,14)",idx_close,False
+BREADTH_ADV5,BREADTH_ADV5,P1,市场宽度,universe 内 RET5>0 占比 (自算),pct_chg,False
+BREADTH_NEWLOW,BREADTH_NEWLOW,P1,市场宽度,"universe 内 L~=Min(L~,250) 占比 (自算)",low|pct_chg,False
+BREADTH_ABOVE_MA20,BREADTH_ABOVE_MA20,P1,市场宽度,"universe 内 C~>Mean(C~,20) 占比 (自算)",close|pct_chg,False
+MKT_MEDIAN_RET20,MKT_MEDIAN_RET20,P1,市场宽度,universe 内 RET20 中位数 (自算),pct_chg,False
+MKT_AMT_PCT,MKT_AMT_PCT,P1,市场情绪,全市场 amount 加总 20 日均值的 250 日时序分位,amount,False
+REGIME_CODE,REGIME_CODE,P1,市场状态,"全样本等权日收益累积指数 120 日滚动收益 -> unknown/sideways/up/down = -1/0/1/2 (divergence_lab build_market_regime 口径, universe 剔除 2 只指数文件)",pct_chg,False
+DIST_LIMIT,DIST_LIMIT,P1,制度,"clip(pct_chg/limit_pct, -1, 1), 1=收涨停 (近似口径)",pct_chg|trade_date|ts_code,False
+DISPOSAL60,DISPOSAL60,P1,制度,"C/(Sum(A,60)/Sum(V,60)) - 1 (现价对 60 日 VWAP 成本偏离)",close|amount|vol,False
+NEW_LISTING,NEW_LISTING,P1,制度,1[T - list_date < 250 交易日] (= 股内行号 < 250),trade_date|list_date,False
+PCTB,PCTB,P1,技术指标,"(C~-Mean(C~,20))/(2*Std(C~,20)) (%B)",close|pct_chg,False
+RSI_OVERSOLD_DAYS,RSI_OVERSOLD_DAYS,P1,技术指标,RSI14<30 连续天数,close|pct_chg,False
+RSV9,RSV9,P1,技术指标,"(C~-Min(L~,9))/(Max(H~,9)-Min(L~,9))",high|low|close|pct_chg,False
+CNTD20,CNTD20,P1,技术指标,"(Count(R>0,20)-Count(R<0,20))/20",pct_chg,False
+SUMD20,SUMD20,P1,技术指标,"(Sum(max(R,0),20)-Sum(max(-R,0),20))/Sum(abs(R),20)",pct_chg,False
+TSRANK20,TSRANK20,P1,位置,"TsRank(C~,20) (最新值在 20 日内分位)",close|pct_chg,False
+IMIN20,IMIN20,P1,位置,"IdxMin(L~,20)/20 (最值距今天数/20)",low|pct_chg,False
+IMXD20,IMXD20,P1,位置,"(IdxMax(H~,20)-IdxMin(L~,20))/20",high|low|pct_chg,False
+MACD_HIST_AMP20,MACD_HIST_AMP20,P1,技术指标,"Max(HIST,20)-Min(HIST,20)",close|pct_chg,False
+MACD_GOLDEN_CROSS,MACD_GOLDEN_CROSS,P1,技术指标,"DIF 上穿 DEA 标记 (日频, 非事件窗)",close|pct_chg,False
+UPPER_SHADOW_RATIO,UPPER_SHADOW_RATIO,P1,K线形态,"(H-max(O,C))/(H-L), 一字板置 0",open|high|low|close,False
+BODY_STRENGTH,BODY_STRENGTH,P1,K线形态,(C-O)/(H-L+1e-12),open|high|low|close,False
+DOJI,DOJI,P1,K线形态,1[abs(C-O) < 0.1*(H-L)],open|high|low|close,False
+ENGULFING,ENGULFING,P1,K线形态,前阴今阳/前阳今阴且实体吞没 (+1/-1/0),open|high|low|close,False
+POS_52W,POS_52W,P1,位置,"(C~-Min(L~,250))/(Max(H~,250)-Min(L~,250))",high|low|close|pct_chg,False
+DIST_52W_LOW,DIST_52W_LOW,P1,位置,"C~/Min(L~,250)-1",low|close|pct_chg,False
+DIST_52W_HIGH,DIST_52W_HIGH,P1,位置,"C~/Max(H~,250)-1",high|close|pct_chg,False
+AMIHUD_INTRADAY,AMIHUD_INTRADAY,P1,流动性,abs(C/O-1)/(V*C) (日内口径),open|close|vol,False
+HL_SPREAD,HL_SPREAD,P1,流动性,(H-L)/((H+L)/2),high|low,False
+PRICE_IMPACT,PRICE_IMPACT,P1,流动性,abs(C-O)/sqrt(V),open|close|vol,False
+LOG_PRICE,LOG_PRICE,P1,价格水平,"ln(C) (原始价, 除权失真标注: 仅作彩票/退市代理)",close,False
+CAL_DOW_0,CAL_DOW,P1,日历,信号日星期 one-hot (0=Mon..4=Fri),trade_date,False
+CAL_DOW_1,CAL_DOW,P1,日历,信号日星期 one-hot (0=Mon..4=Fri),trade_date,False
+CAL_DOW_2,CAL_DOW,P1,日历,信号日星期 one-hot (0=Mon..4=Fri),trade_date,False
+CAL_DOW_3,CAL_DOW,P1,日历,信号日星期 one-hot (0=Mon..4=Fri),trade_date,False
+CAL_DOW_4,CAL_DOW,P1,日历,信号日星期 one-hot (0=Mon..4=Fri),trade_date,False
+CAL_MONTH_1,CAL_MONTH,P1,日历,月份 one-hot,trade_date,False
+CAL_MONTH_2,CAL_MONTH,P1,日历,月份 one-hot,trade_date,False
+CAL_MONTH_3,CAL_MONTH,P1,日历,月份 one-hot,trade_date,False
+CAL_MONTH_4,CAL_MONTH,P1,日历,月份 one-hot,trade_date,False
+CAL_MONTH_5,CAL_MONTH,P1,日历,月份 one-hot,trade_date,False
+CAL_MONTH_6,CAL_MONTH,P1,日历,月份 one-hot,trade_date,False
+CAL_MONTH_7,CAL_MONTH,P1,日历,月份 one-hot,trade_date,False
+CAL_MONTH_8,CAL_MONTH,P1,日历,月份 one-hot,trade_date,False
+CAL_MONTH_9,CAL_MONTH,P1,日历,月份 one-hot,trade_date,False
+CAL_MONTH_10,CAL_MONTH,P1,日历,月份 one-hot,trade_date,False
+CAL_MONTH_11,CAL_MONTH,P1,日历,月份 one-hot,trade_date,False
+CAL_MONTH_12,CAL_MONTH,P1,日历,月份 one-hot,trade_date,False
+KDJ_K,KDJ_J,P1,技术指标,"RSV9 递推 K=EMA(RSV,1/3)",high|low|close|pct_chg,False
+KDJ_D,KDJ_J,P1,技术指标,"D=EMA(K,1/3)",high|low|close|pct_chg,False
+KDJ_J,KDJ_J,P1,技术指标,J=3K-2D (输出 K/D/J 三列),high|low|close|pct_chg,False
+MA200_RATIO,MA200_RATIO,P1,趋势,"C~/Mean(C~,200)-1",close|pct_chg,False
+MA200_ABOVE,MA200_RATIO,P1,趋势,1[C~ > MA200],close|pct_chg,False
+HAMMER,HAMMER,P1,K线形态,1[下影>=2*实体 且 上影<=0.5*实体 且 下影>=0.6*全长] (T 日),open|high|low|close,False
+DOWN_STREAK,DOWN_STREAK,P1,K线形态,T 日末连续 C<O 天数,open|close,False
+DOWN_DAY_PCT10,DOWN_STREAK,P1,K线形态,10 日阴线 (C<O) 占比,open|close,False
+LIMITUP_N_MKT,LIMITUP_N_MKT,P1,市场情绪,"全市场涨停家数 (pct_chg>=limit-0.1, 自算)",pct_chg|trade_date|ts_code,False
+LIMITUP_N_MKT_MA20,LIMITUP_N_MKT,P1,市场情绪,LIMITUP_N_MKT 的 20 日均值,pct_chg|trade_date|ts_code,False
+MKT_SH_PRICE_CHANGE,MKT_IDX_DAILY,P1,市场状态,上证指数 (C-O)/O,idx_open|idx_high|idx_low|idx_close|idx_volume,False
+MKT_SZ_PRICE_CHANGE,MKT_IDX_DAILY,P1,市场状态,深证成指 (C-O)/O,idx_open|idx_high|idx_low|idx_close|idx_volume,False
+MKT_SH_AMPLITUDE,MKT_IDX_DAILY,P1,市场状态,上证指数 (H-L)/L,idx_open|idx_high|idx_low|idx_close|idx_volume,False
+MKT_SZ_AMPLITUDE,MKT_IDX_DAILY,P1,市场状态,深证成指 (H-L)/L,idx_open|idx_high|idx_low|idx_close|idx_volume,False
+MKT_SH_VOLUME_RATIO,MKT_IDX_DAILY,P1,市场状态,上证指数量/20 日均量,idx_open|idx_high|idx_low|idx_close|idx_volume,False
+MKT_SZ_VOLUME_RATIO,MKT_IDX_DAILY,P1,市场状态,深证成指量/20 日均量,idx_open|idx_high|idx_low|idx_close|idx_volume,False
+MKT_SH_PRICE_CHANGE_ABS,MKT_IDX_DAILY,P1,市场状态,|MKT_SH_PRICE_CHANGE|,idx_open|idx_high|idx_low|idx_close|idx_volume,False
+MKT_SZ_PRICE_CHANGE_ABS,MKT_IDX_DAILY,P1,市场状态,|MKT_SZ_PRICE_CHANGE|,idx_open|idx_high|idx_low|idx_close|idx_volume,False
+MKT_SH_PRICE_WAVE_ABS,MKT_IDX_DAILY,P1,市场状态,上证指数振幅绝对值,idx_open|idx_high|idx_low|idx_close|idx_volume,False
+MKT_SZ_PRICE_WAVE_ABS,MKT_IDX_DAILY,P1,市场状态,深证成指振幅绝对值,idx_open|idx_high|idx_low|idx_close|idx_volume,False
+MKT_SH_SENTIMENT,MKT_IDX_DAILY,P1,市场状态,涨>1%且振幅<2%->2; 跌>1%且振幅>3%->0; 否则 1 (上证),idx_open|idx_high|idx_low|idx_close|idx_volume,False
+MKT_SZ_SENTIMENT,MKT_IDX_DAILY,P1,市场状态,同上 (深证),idx_open|idx_high|idx_low|idx_close|idx_volume,False
+MKT_SH_VOLUME_SIGNAL,MKT_IDX_DAILY,P1,市场状态,1[量比>1.2] (上证),idx_open|idx_high|idx_low|idx_close|idx_volume,False
+MKT_SZ_VOLUME_SIGNAL,MKT_IDX_DAILY,P1,市场状态,1[量比>1.2] (深证),idx_open|idx_high|idx_low|idx_close|idx_volume,False
+MKT_SH_SZ_SYNC_DIRECTION,MKT_IDX_DAILY,P1,市场状态,1[两指数 (C-O)/O 同号],idx_open|idx_high|idx_low|idx_close|idx_volume,False
+MKT_SH_SZ_SYNC_STRENGTH,MKT_IDX_DAILY,P1,市场状态,|pc_sh - pc_sz|,idx_open|idx_high|idx_low|idx_close|idx_volume,False
+MKT_SENTIMENT,MKT_IDX_DAILY,P1,市场状态,两指数均值版情绪 (规则同单指数),idx_open|idx_high|idx_low|idx_close|idx_volume,False
+MKT_AVG_CHANGE,MKT_IDX_DAILY,P1,市场状态,两指数 (C-O)/O 均值,idx_open|idx_high|idx_low|idx_close|idx_volume,False
+DIV_SPAN_VS_CYCLE,DIV_SPAN_VS_CYCLE,P1,事件结构,(i2-i1)/自 T 起最近一次 DIF 完整正负循环时长 (最后两个已完成异号 run 长度和),open|high|low|close|pct_chg|vol,True
+DIV_DIF_SLOPE,DIV_DIF_SLOPE,P1,事件结构,(DIF[i2]-DIF[i1])/(i2-i1)/ATR14[T],open|high|low|close|pct_chg|vol,True
+DIV_ZERO_AXIS_DEPTH,DIV_ZERO_AXIS_DEPTH,P1,事件结构,"max(DIF[T],DEA[T])/(C~[T]*ATRp[T])",open|high|low|close|pct_chg|vol,True
+DIV_DIF_LEVEL_L1,DIV_DIF_LEVEL_L1,P1,事件结构,DIF[i1]/(C~[i1]*ATRp[i1]),open|high|low|close|pct_chg|vol,True
+DIV_HIST_TROUGH_SHRINK,DIV_HIST_TROUGH_SHRINK,P1,事件结构,"min(HIST@i2 绿柱区)/min(HIST@i1 绿柱区) (负值之比, <1 为收缩)",open|high|low|close|pct_chg|vol,True
+REBOUND_DAY_T,REBOUND_DAY_T,P1,事件结构,(C~[T]-O~[T])/ATR14[T] (等价原始价口径 (C-O)/ATR),open|high|low|close|pct_chg|vol,True
+HAMMER_L2,HAMMER,P1,事件结构,HAMMER 形态在 i2 日的取值,open|high|low|close|pct_chg|vol,True
+LOWER_SHADOW_L2,LOWER_SHADOW_L2,P1,事件结构,"(min(O~,C~)-L~)[i2]/ATR14[i2]",open|high|low|close|pct_chg|vol,True

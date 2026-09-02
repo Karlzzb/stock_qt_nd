@@ -1,0 +1,7 @@
+pool,segment,n_events,f_st,f_suspend,f_limitup,limitup_not_evaluable_pre2007,d1_beyond_data_end,f_any
+main,test,1792,72,2,11,0,0,82
+main,embargo,302,4,0,2,0,0,5
+main,pre2001,78,4,1,0,78,0,5
+backup,test,8851,439,6,41,0,41,460
+backup,embargo,497,4,0,0,0,0,4
+backup,pre2001,426,12,1,0,426,0,13

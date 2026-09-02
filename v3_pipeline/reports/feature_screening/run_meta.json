@@ -1,0 +1,34 @@
+{
+ "main": {
+  "n_events_total": 8154,
+  "n_train": 2838,
+  "n_val": 3144,
+  "n_embargo_dropped": 302,
+  "n_pre2001_dropped": 78,
+  "n_post_2022_10_untouched": 1792,
+  "hit_rate_train": 0.6155743598937988,
+  "hit_rate_val": 0.5800191164016724,
+  "n_hit_nan_train": 0,
+  "n_hit_nan_val": 1,
+  "n_days_train": 88,
+  "n_days_val": 108,
+  "ret_h10_hit1": 0.06602596491575241,
+  "ret_h10_hit0": -0.045943643897771835
+ },
+ "backup": {
+  "n_events_total": 36986,
+  "n_train": 20125,
+  "n_val": 7087,
+  "n_embargo_dropped": 497,
+  "n_pre2001_dropped": 426,
+  "n_post_2022_10_untouched": 8851,
+  "hit_rate_train": 0.5351587533950806,
+  "hit_rate_val": 0.6050028204917908,
+  "n_hit_nan_train": 2,
+  "n_hit_nan_val": 11,
+  "n_days_train": 753,
+  "n_days_val": 364,
+  "ret_h10_hit1": 0.0681353509426117,
+  "ret_h10_hit0": -0.05757893621921539
+ }
+}

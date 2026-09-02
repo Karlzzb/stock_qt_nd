@@ -1,73 +1,55 @@
-# 虚拟环境
+# ===== 环境与密钥 =====
+.venv/
 venv/
 env/
-.venv/
+.env
 
-# IDE
+# ===== AI 工具 =====
+.claude/
+
+# ===== IDE =====
 .vscode/
 .idea/
 *.swp
 *.swo
 
-# AI
-.claude/
-
-# 缓存文件
+# ===== Python 缓存 =====
 __pycache__/
 *.pyc
 *.pyo
+.pytest_cache/
 
-# 日志文件
+# ===== 日志与临时 =====
 *.log
-
-# 数据文件
-*.zip
-
-# 模型文件
-*.pth
-*.pt
-*.bin
-swanlog/
-output/
-data/
-catboost_info/
-model_dataset/
-._____temp/
-.lock
-.env
-
-# 自定义目录
-stock_data/
-feature_data/
+logs/
+tmp/
 cache/
-summary/
+output/
+.lock
+
+# ===== 训练数据（一律不入库）=====
+stock_data/
+data/
+feature_data/
 real_feature_data/
 real_feature_data_daily/
 model_dataset*/
-tmp/
-logs/
-real_features_processors_v*/models
-real_features_processors_v*/data
-real_features_processors_v*/logs
-real_trading_data_simulation/
-docs/superpower
 
-# 只允许特定的csv文件
-!investment_plans/**/*.csv
-!real_trading_data/**/*.csv
-!real_trading_data/**/*.json
-!grid_trading_simulation_v4/*.csv
-.worktrees/
-/参数过滤两阶段优化框架.md
-
-# 特征计算进度状态文件
+# ===== 模型与数据产物（V4 里程碑起执行，历史已用 filter-repo 剥离）=====
+*.pth
+*.pt
+*.bin
+*.pkl
+*.parquet
+*.xlsx
+*.zip
+models/
 .feature_pipeline_state.json
 
-# 数据与模型产物（一律不入库；V4 里程碑起执行，历史已用 filter-repo 剥离）
-*.parquet
-*.pkl
-*.xlsx
-models/
-v3_pipeline/results/*.parquet
-# 例外：测试 fixture 等小数据
+# ===== 例外：允许入库的小数据 =====
+!real_trading_data/**/*.csv
+!real_trading_data/**/*.json
 !tests/fixtures/**
+
+# ===== 其他 =====
+.worktrees/

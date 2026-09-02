@@ -1,0 +1,2686 @@
+{
+  "config": {
+    "issue": 12,
+    "alpha_bonferroni": 0.00125,
+    "family_size": 40,
+    "min_kept_days": 30,
+    "val_retention": 0.5,
+    "segments": {
+      "train": "2001-01-01~2018-12-31",
+      "val": "2019-01-01~2022-10-31"
+    },
+    "test_segment": "2022-11 起封存, 本实验未触碰",
+    "rules": {
+      "s_above_ma20": [
+        "above_ma20"
+      ],
+      "s_above_ma60": [
+        "above_ma60"
+      ],
+      "s_above_ma250": [
+        "above_ma250"
+      ],
+      "s_below_ma250": [
+        "below_ma250"
+      ],
+      "s_slope_up": [
+        "slope_up"
+      ],
+      "s_slope_down": [
+        "slope_down"
+      ],
+      "s_vol_low": [
+        "vol_low"
+      ],
+      "s_vol_high": [
+        "vol_high"
+      ],
+      "s_dd_shallow": [
+        "dd_shallow"
+      ],
+      "s_dd_deep": [
+        "dd_deep"
+      ],
+      "s_rs1000_pos": [
+        "rs_pos"
+      ],
+      "s_rs1000_neg": [
+        "rs_neg"
+      ],
+      "c_aboveMA20_volLow": [
+        "above_ma20",
+        "vol_low"
+      ],
+      "c_aboveMA20_volHigh": [
+        "above_ma20",
+        "vol_high"
+      ],
+      "c_aboveMA60_volLow": [
+        "above_ma60",
+        "vol_low"
+      ],
+      "c_aboveMA60_volHigh": [
+        "above_ma60",
+        "vol_high"
+      ],
+      "c_aboveMA250_volLow": [
+        "above_ma250",
+        "vol_low"
+      ],
+      "c_aboveMA250_volHigh": [
+        "above_ma250",
+        "vol_high"
+      ],
+      "c_belowMA250_volLow": [
+        "below_ma250",
+        "vol_low"
+      ],
+      "c_belowMA250_volHigh": [
+        "below_ma250",
+        "vol_high"
+      ],
+      "c_aboveMA250_ddShallow": [
+        "above_ma250",
+        "dd_shallow"
+      ],
+      "c_aboveMA60_ddShallow": [
+        "above_ma60",
+        "dd_shallow"
+      ],
+      "c_aboveMA20_ddShallow": [
+        "above_ma20",
+        "dd_shallow"
+      ],
+      "c_belowMA250_ddShallow": [
+        "below_ma250",
+        "dd_shallow"
+      ],
+      "c_belowMA250_ddDeep": [
+        "below_ma250",
+        "dd_deep"
+      ],
+      "c_aboveMA20_slopeUp": [
+        "above_ma20",
+        "slope_up"
+      ],
+      "c_aboveMA60_slopeUp": [
+        "above_ma60",
+        "slope_up"
+      ],
+      "c_aboveMA250_slopeUp": [
+        "above_ma250",
+        "slope_up"
+      ],
+      "c_belowMA250_slopeDown": [
+        "below_ma250",
+        "slope_down"
+      ],
+      "c_volLow_ddShallow": [
+        "vol_low",
+        "dd_shallow"
+      ],
+      "c_volHigh_ddDeep": [
+        "vol_high",
+        "dd_deep"
+      ],
+      "c_volLow_ddDeep": [
+        "vol_low",
+        "dd_deep"
+      ],
+      "c_volHigh_ddShallow": [
+        "vol_high",
+        "dd_shallow"
+      ],
+      "c_rsPos_aboveMA20": [
+        "rs_pos",
+        "above_ma20"
+      ],
+      "c_rsPos_belowMA250": [
+        "rs_pos",
+        "below_ma250"
+      ],
+      "c_rsNeg_belowMA250": [
+        "rs_neg",
+        "below_ma250"
+      ],
+      "c_rsPos_volLow": [
+        "rs_pos",
+        "vol_low"
+      ],
+      "c_slopeUp_volLow": [
+        "slope_up",
+        "vol_low"
+      ],
+      "c_slopeDown_volHigh": [
+        "slope_down",
+        "vol_high"
+      ],
+      "c_rsNeg_volHigh": [
+        "rs_neg",
+        "vol_high"
+      ]
+    },
+    "baseline_selfcheck": {
+      "main_train": {
+        "dayw": 0.5321690440177917,
+        "days": 390,
+        "events": 2740
+      },
+      "main_val": {
+        "dayw": 0.5032867789268494,
+        "days": 292,
+        "events": 2961
+      },
+      "backup_train": {
+        "dayw": 0.492364764213562,
+        "days": 2025,
+        "events": 18833
+      },
+      "backup_val": {
+        "dayw": 0.5560504198074341,
+        "days": 702,
+        "events": 6711
+      }
+    },
+    "breadth_proxy": "中证1000(000852.SH) 相对沪深300 的 20 日相对强弱 (无成分股数据的代理)"
+  },
+  "survivors": {
+    "main": [],
+    "backup": []
+  },
+  "train_significant": {
+    "main": [],
+    "backup": []
+  },
+  "best_rule": {
+    "main": "c_rsNeg_belowMA250",
+    "backup": "c_aboveMA20_ddShallow"
+  },
+  "results": {
+    "main": {
+      "s_above_ma20": {
+        "train": {
+          "seg": "train",
+          "n_days": 390,
+          "n_kept": 268,
+          "baseline": 0.5321690440177917,
+          "gated": 0.5329967737197876,
+          "delta": 0.0008277297019958496,
+          "p_t": 0.48604512214660645,
+          "p_w": 0.47825074195861816,
+          "skip_share": 0.3128205128205128,
+          "events_kept": 1875.0,
+          "events_per_week": 1.9968051118210863,
+          "days_per_week": 0.2854100106496273
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 292,
+          "n_kept": 158,
+          "baseline": 0.5032867789268494,
+          "gated": 0.5036231875419617,
+          "delta": 0.0003364086151123047,
+          "p_t": 0.49598371982574463,
+          "p_w": 0.4931027293205261,
+          "skip_share": 0.45890410958904104,
+          "events_kept": 1481.0,
+          "events_per_week": 7.410293066476054,
+          "days_per_week": 0.7905646890636169
+        },
+        "verdict": "dead_train"
+      },
+      "s_above_ma60": {
+        "train": {
+          "seg": "train",
+          "n_days": 390,
+          "n_kept": 236,
+          "baseline": 0.5321690440177917,
+          "gated": 0.4991801083087921,
+          "delta": -0.032988935708999634,
+          "p_t": 0.8751616477966309,
+          "p_w": 0.9684739708900452,
+          "skip_share": 0.3948717948717949,
+          "events_kept": 1283.0,
+          "events_per_week": 1.3663471778487752,
+          "days_per_week": 0.25133120340788073
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 292,
+          "n_kept": 154,
+          "baseline": 0.5032867789268494,
+          "gated": 0.5298083424568176,
+          "delta": 0.02652156352996826,
+          "p_t": 0.2182554453611374,
+          "p_w": 0.09000995755195618,
+          "skip_share": 0.4726027397260274,
+          "events_kept": 1130.0,
+          "events_per_week": 5.654038598999285,
+          "days_per_week": 0.7705503931379557
+        },
+        "verdict": "dead_train"
+      },
+      "s_above_ma250": {
+        "train": {
+          "seg": "train",
+          "n_days": 390,
+          "n_kept": 212,
+          "baseline": 0.5321690440177917,
+          "gated": 0.5118991732597351,
+          "delta": -0.02026987075805664,
+          "p_t": 0.7367376089096069,
+          "p_w": 0.8432436585426331,
+          "skip_share": 0.45641025641025645,
+          "events_kept": 990.0,
+          "events_per_week": 1.0543130990415335,
+          "days_per_week": 0.22577209797657083
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 292,
+          "n_kept": 116,
+          "baseline": 0.5032867789268494,
+          "gated": 0.5366379618644714,
+          "delta": 0.03335118293762207,
+          "p_t": 0.23220735788345337,
+          "p_w": 0.10350251197814941,
+          "skip_share": 0.6027397260273972,
+          "events_kept": 811.0,
+          "events_per_week": 4.0578984989278055,
+          "days_per_week": 0.5804145818441744
+        },
+        "verdict": "dead_train"
+      },
+      "s_below_ma250": {
+        "train": {
+          "seg": "train",
+          "n_days": 390,
+          "n_kept": 164,
+          "baseline": 0.5321690440177917,
+          "gated": 0.5550201535224915,
+          "delta": 0.022851109504699707,
+          "p_t": 0.2888120412826538,
+          "p_w": 0.18642683327198029,
+          "skip_share": 0.5794871794871794,
+          "events_kept": 1734.0,
+          "events_per_week": 1.8466453674121406,
+          "days_per_week": 0.17465388711395102
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 292,
+          "n_kept": 176,
+          "baseline": 0.5032867789268494,
+          "gated": 0.48130542039871216,
+          "delta": -0.021981358528137207,
+          "p_t": 0.7677926421165466,
+          "p_w": 0.8964974880218506,
+          "skip_share": 0.3972602739726028,
+          "events_kept": 2150.0,
+          "events_per_week": 10.757684060042887,
+          "days_per_week": 0.8806290207290922
+        },
+        "verdict": "dead_train"
+      },
+      "s_slope_up": {
+        "train": {
+          "seg": "train",
+          "n_days": 390,
+          "n_kept": 259,
+          "baseline": 0.5321690440177917,
+          "gated": 0.5247365832328796,
+          "delta": -0.007432460784912109,
+          "p_t": 0.6169654130935669,
+          "p_w": 0.6820783615112305,
+          "skip_share": 0.3358974358974359,
+          "events_kept": 1816.0,
+          "events_per_week": 1.933972310969116,
+          "days_per_week": 0.27582534611288606
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 292,
+          "n_kept": 149,
+          "baseline": 0.5032867789268494,
+          "gated": 0.5147526860237122,
+          "delta": 0.011465907096862793,
+          "p_t": 0.37311601638793945,
+          "p_w": 0.2882775664329529,
+          "skip_share": 0.48972602739726023,
+          "events_kept": 1095.0,
+          "events_per_week": 5.478913509649749,
+          "days_per_week": 0.7455325232308792
+        },
+        "verdict": "dead_train"
+      },
+      "s_slope_down": {
+        "train": {
+          "seg": "train",
+          "n_days": 390,
+          "n_kept": 123,
+          "baseline": 0.5321690440177917,
+          "gated": 0.5580418705940247,
+          "delta": 0.02587282657623291,
+          "p_t": 0.30941471457481384,
+          "p_w": 0.21161271631717682,
+          "skip_share": 0.6846153846153846,
+          "events_kept": 915.0,
+          "events_per_week": 0.9744408945686901,
+          "days_per_week": 0.13099041533546327
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 292,
+          "n_kept": 143,
+          "baseline": 0.5032867789268494,
+          "gated": 0.4913398325443268,
+          "delta": -0.011946946382522583,
+          "p_t": 0.6268839836120605,
+          "p_w": 0.7117224335670471,
+          "skip_share": 0.5102739726027397,
+          "events_kept": 1866.0,
+          "events_per_week": 9.336669049320943,
+          "days_per_week": 0.7155110793423874
+        },
+        "verdict": "dead_train"
+      },
+      "s_vol_low": {
+        "train": {
+          "seg": "train",
+          "n_days": 390,
+          "n_kept": 201,
+          "baseline": 0.5321690440177917,
+          "gated": 0.48890239000320435,
+          "delta": -0.0432666540145874,
+          "p_t": 0.899503231048584,
+          "p_w": 0.9789071083068848,
+          "skip_share": 0.48461538461538467,
+          "events_kept": 1202.0,
+          "events_per_week": 1.2800851970181044,
+          "days_per_week": 0.21405750798722045
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 292,
+          "n_kept": 145,
+          "baseline": 0.5032867789268494,
+          "gated": 0.5240936279296875,
+          "delta": 0.020806849002838135,
+          "p_t": 0.2840522229671478,
+          "p_w": 0.16201633214950562,
+          "skip_share": 0.5034246575342466,
+          "events_kept": 1368.0,
+          "events_per_week": 6.844889206576125,
+          "days_per_week": 0.725518227305218
+        },
+        "verdict": "dead_train"
+      },
+      "s_vol_high": {
+        "train": {
+          "seg": "train",
+          "n_days": 390,
+          "n_kept": 81,
+          "baseline": 0.5321690440177917,
+          "gated": 0.46913349628448486,
+          "delta": -0.06303554773330688,
+          "p_t": 0.8349180221557617,
+          "p_w": 0.9256319403648376,
+          "skip_share": 0.7923076923076923,
+          "events_kept": 308.0,
+          "events_per_week": 0.32800851970181044,
+          "days_per_week": 0.08626198083067092
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 292,
+          "n_kept": 63,
+          "baseline": 0.5032867789268494,
+          "gated": 0.49865010380744934,
+          "delta": -0.004636675119400024,
+          "p_t": 0.5268598794937134,
+          "p_w": 0.5457132458686829,
+          "skip_share": 0.7842465753424658,
+          "events_kept": 1092.0,
+          "events_per_week": 5.4639027877055035,
+          "days_per_week": 0.3152251608291637
+        },
+        "verdict": "dead_train"
+      },
+      "s_dd_shallow": {
+        "train": {
+          "seg": "train",
+          "n_days": 390,
+          "n_kept": 74,
+          "baseline": 0.5321690440177917,
+          "gated": 0.5840988159179688,
+          "delta": 0.051929771900177,
+          "p_t": 0.24696357548236847,
+          "p_w": 0.13432537019252777,
+          "skip_share": 0.8102564102564103,
+          "events_kept": 267.0,
+          "events_per_week": 0.28434504792332266,
+          "days_per_week": 0.07880724174653887
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 292,
+          "n_kept": 67,
+          "baseline": 0.5032867789268494,
+          "gated": 0.5957924723625183,
+          "delta": 0.09250569343566895,
+          "p_t": 0.10055697709321976,
+          "p_w": 0.009347209706902504,
+          "skip_share": 0.7705479452054794,
+          "events_kept": 561.0,
+          "events_per_week": 2.8070050035739813,
+          "days_per_week": 0.33523945675482486
+        },
+        "verdict": "dead_train"
+      },
+      "s_dd_deep": {
+        "train": {
+          "seg": "train",
+          "n_days": 390,
+          "n_kept": 166,
+          "baseline": 0.5321690440177917,
+          "gated": 0.5558868646621704,
+          "delta": 0.023717820644378662,
+          "p_t": 0.2797156572341919,
+          "p_w": 0.1754762977361679,
+          "skip_share": 0.5743589743589743,
+          "events_kept": 1738.0,
+          "events_per_week": 1.8509052183173589,
+          "days_per_week": 0.17678381256656017
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 292,
+          "n_kept": 140,
+          "baseline": 0.5032867789268494,
+          "gated": 0.48936745524406433,
+          "delta": -0.013919323682785034,
+          "p_t": 0.6442791223526001,
+          "p_w": 0.7384883761405945,
+          "skip_share": 0.5205479452054795,
+          "events_kept": 1850.0,
+          "events_per_week": 9.256611865618298,
+          "days_per_week": 0.7005003573981415
+        },
+        "verdict": "dead_train"
+      },
+      "s_rs1000_pos": {
+        "train": {
+          "seg": "train",
+          "n_days": 390,
+          "n_kept": 242,
+          "baseline": 0.5321690440177917,
+          "gated": 0.5205340385437012,
+          "delta": -0.011635005474090576,
+          "p_t": 0.6636949777603149,
+          "p_w": 0.7487785816192627,
+          "skip_share": 0.37948717948717947,
+          "events_kept": 1854.0,
+          "events_per_week": 1.97444089456869,
+          "days_per_week": 0.2577209797657082
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 292,
+          "n_kept": 171,
+          "baseline": 0.5032867789268494,
+          "gated": 0.5250635147094727,
+          "delta": 0.02177673578262329,
+          "p_t": 0.23525787889957428,
+          "p_w": 0.11063799262046814,
+          "skip_share": 0.4143835616438356,
+          "events_kept": 1978.0,
+          "events_per_week": 9.897069335239456,
+          "days_per_week": 0.8556111508220157
+        },
+        "verdict": "dead_train"
+      },
+      "s_rs1000_neg": {
+        "train": {
+          "seg": "train",
+          "n_days": 390,
+          "n_kept": 129,
+          "baseline": 0.5321690440177917,
+          "gated": 0.547106146812439,
+          "delta": 0.014937102794647217,
+          "p_t": 0.38244983553886414,
+          "p_w": 0.31683680415153503,
+          "skip_share": 0.6692307692307693,
+          "events_kept": 864.0,
+          "events_per_week": 0.9201277955271565,
+          "days_per_week": 0.13738019169329074
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 292,
+          "n_kept": 121,
+          "baseline": 0.5032867789268494,
+          "gated": 0.47251150012016296,
+          "delta": -0.0307752788066864,
+          "p_t": 0.7647422552108765,
+          "p_w": 0.8893619775772095,
+          "skip_share": 0.5856164383561644,
+          "events_kept": 983.0,
+          "events_per_week": 4.918513223731236,
+          "days_per_week": 0.6054324517512509
+        },
+        "verdict": "dead_train"
+      },
+      "c_aboveMA20_volLow": {
+        "train": {
+          "seg": "train",
+          "n_days": 390,
+          "n_kept": 154,
+          "baseline": 0.5321690440177917,
+          "gated": 0.4890724718570709,
+          "delta": -0.043096572160720825,
+          "p_t": 0.8472021818161011,
+          "p_w": 0.9462509751319885,
+          "skip_share": 0.6051282051282052,
+          "events_kept": 1011.0,
+          "events_per_week": 1.0766773162939298,
+          "days_per_week": 0.16400425985090522
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 292,
+          "n_kept": 77,
+          "baseline": 0.5032867789268494,
+          "gated": 0.5048707127571106,
+          "delta": 0.0015839338302612305,
+          "p_t": 0.48940733075141907,
+          "p_w": 0.48115426301956177,
+          "skip_share": 0.7363013698630136,
+          "events_kept": 512.0,
+          "events_per_week": 2.5618298784846316,
+          "days_per_week": 0.38527519656897785
+        },
+        "verdict": "dead_train"
+      },
+      "c_aboveMA20_volHigh": {
+        "train": {
+          "seg": "train",
+          "n_days": 390,
+          "n_kept": 42,
+          "baseline": 0.5321690440177917,
+          "gated": 0.47942179441452026,
+          "delta": -0.052747249603271484,
+          "p_t": 0.7086219787597656,
+          "p_w": 0.7886425256729126,
+          "skip_share": 0.8923076923076922,
+          "events_kept": 161.0,
+          "events_per_week": 0.17145899893503727,
+          "days_per_week": 0.04472843450479233
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 292,
+          "n_kept": 26,
+          "baseline": 0.5032867789268494,
+          "gated": 0.4829998314380646,
+          "delta": -0.02028694748878479,
+          "p_t": 0.5732830762863159,
+          "p_w": 0.6264047622680664,
+          "skip_share": 0.910958904109589,
+          "events_kept": 624.0,
+          "events_per_week": 3.122230164403145,
+          "days_per_week": 0.13009292351679771
+        },
+        "verdict": "dead_train"
+      },
+      "c_aboveMA60_volLow": {
+        "train": {
+          "seg": "train",
+          "n_days": 390,
+          "n_kept": 143,
+          "baseline": 0.5321690440177917,
+          "gated": 0.4587244391441345,
+          "delta": -0.07344460487365723,
+          "p_t": 0.9531279802322388,
+          "p_w": 0.9951138496398926,
+          "skip_share": 0.6333333333333333,
+          "events_kept": 936.0,
+          "events_per_week": 0.9968051118210862,
+          "days_per_week": 0.15228966986155484
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 292,
+          "n_kept": 91,
+          "baseline": 0.5032867789268494,
+          "gated": 0.5379742980003357,
+          "delta": 0.03468751907348633,
+          "p_t": 0.2639094591140747,
+          "p_w": 0.13051223754882812,
+          "skip_share": 0.6883561643835616,
+          "events_kept": 563.0,
+          "events_per_week": 2.817012151536812,
+          "days_per_week": 0.45532523230879196
+        },
+        "verdict": "dead_train"
+      },
+      "c_aboveMA60_volHigh": {
+        "train": {
+          "seg": "train",
+          "n_days": 390,
+          "n_kept": 37,
+          "baseline": 0.5321690440177917,
+          "gated": 0.4590090811252594,
+          "delta": -0.07315996289253235,
+          "p_t": 0.7648985981941223,
+          "p_w": 0.8463465571403503,
+          "skip_share": 0.9051282051282051,
+          "events_kept": 89.0,
+          "events_per_week": 0.09478168264110756,
+          "days_per_week": 0.039403620873269436
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 292,
+          "n_kept": 18,
+          "baseline": 0.5032867789268494,
+          "gated": 0.48721843957901,
+          "delta": -0.016068339347839355,
+          "p_t": 0.5459611415863037,
+          "p_w": 0.5740079879760742,
+          "skip_share": 0.9383561643835616,
+          "events_kept": 244.0,
+          "events_per_week": 1.2208720514653324,
+          "days_per_week": 0.09006433166547534
+        },
+        "verdict": "dead_train"
+      },
+      "c_aboveMA250_volLow": {
+        "train": {
+          "seg": "train",
+          "n_days": 390,
+          "n_kept": 94,
+          "baseline": 0.5321690440177917,
+          "gated": 0.44141924381256104,
+          "delta": -0.09074980020523071,
+          "p_t": 0.9449620246887207,
+          "p_w": 0.9912371039390564,
+          "skip_share": 0.7589743589743589,
+          "events_kept": 510.0,
+          "events_per_week": 0.5431309904153354,
+          "days_per_week": 0.10010649627263046
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 292,
+          "n_kept": 54,
+          "baseline": 0.5032867789268494,
+          "gated": 0.5325097441673279,
+          "delta": 0.029222965240478516,
+          "p_t": 0.35525524616241455,
+          "p_w": 0.25893568992614746,
+          "skip_share": 0.815068493150685,
+          "events_kept": 326.0,
+          "events_per_week": 1.6311651179413866,
+          "days_per_week": 0.270192994996426
+        },
+        "verdict": "dead_train"
+      },
+      "c_aboveMA250_volHigh": {
+        "train": {
+          "seg": "train",
+          "n_days": 390,
+          "n_kept": 54,
+          "baseline": 0.5321690440177917,
+          "gated": 0.4403439164161682,
+          "delta": -0.09182512760162354,
+          "p_t": 0.8752880692481995,
+          "p_w": 0.9491229057312012,
+          "skip_share": 0.8615384615384616,
+          "events_kept": 184.0,
+          "events_per_week": 0.1959531416400426,
+          "days_per_week": 0.05750798722044728
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 292,
+          "n_kept": 19,
+          "baseline": 0.5032867789268494,
+          "gated": 0.5142068862915039,
+          "delta": 0.010920107364654541,
+          "p_t": 0.46908000111579895,
+          "p_w": 0.44904857873916626,
+          "skip_share": 0.934931506849315,
+          "events_kept": 247.0,
+          "events_per_week": 1.2358827734095783,
+          "days_per_week": 0.09506790564689063
+        },
+        "verdict": "dead_train"
+      },
+      "c_belowMA250_volLow": {
+        "train": {
+          "seg": "train",
+          "n_days": 390,
+          "n_kept": 101,
+          "baseline": 0.5321690440177917,
+          "gated": 0.5126333832740784,
+          "delta": -0.01953566074371338,
+          "p_t": 0.6326053142547607,
+          "p_w": 0.702645480632782,
+          "skip_share": 0.7410256410256411,
+          "events_kept": 685.0,
+          "events_per_week": 0.7294994675186368,
+          "days_per_week": 0.10756123535676251
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 292,
+          "n_kept": 91,
+          "baseline": 0.5032867789268494,
+          "gated": 0.5190994739532471,
+          "delta": 0.015812695026397705,
+          "p_t": 0.3838610351085663,
+          "p_w": 0.2969135046005249,
+          "skip_share": 0.6883561643835616,
+          "events_kept": 1042.0,
+          "events_per_week": 5.213724088634739,
+          "days_per_week": 0.45532523230879196
+        },
+        "verdict": "dead_train"
+      },
+      "c_belowMA250_volHigh": {
+        "train": {
+          "seg": "train",
+          "n_days": 390,
+          "n_kept": 27,
+          "baseline": 0.5321690440177917,
+          "gated": 0.5267127156257629,
+          "delta": -0.005456328392028809,
+          "p_t": 0.5170885324478149,
+          "p_w": 0.5261332988739014,
+          "skip_share": 0.9307692307692308,
+          "events_kept": 124.0,
+          "events_per_week": 0.13205537806176784,
+          "days_per_week": 0.02875399361022364
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 292,
+          "n_kept": 44,
+          "baseline": 0.5032867789268494,
+          "gated": 0.4919324219226837,
+          "delta": -0.01135435700416565,
+          "p_t": 0.5533415079116821,
+          "p_w": 0.589948296546936,
+          "skip_share": 0.8493150684931507,
+          "events_kept": 845.0,
+          "events_per_week": 4.228020014295925,
+          "days_per_week": 0.22015725518227305
+        },
+        "verdict": "dead_train"
+      },
+      "c_aboveMA250_ddShallow": {
+        "train": {
+          "seg": "train",
+          "n_days": 390,
+          "n_kept": 74,
+          "baseline": 0.5321690440177917,
+          "gated": 0.5840988159179688,
+          "delta": 0.051929771900177,
+          "p_t": 0.24696357548236847,
+          "p_w": 0.13432537019252777,
+          "skip_share": 0.8102564102564103,
+          "events_kept": 267.0,
+          "events_per_week": 0.28434504792332266,
+          "days_per_week": 0.07880724174653887
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 292,
+          "n_kept": 67,
+          "baseline": 0.5032867789268494,
+          "gated": 0.5957924723625183,
+          "delta": 0.09250569343566895,
+          "p_t": 0.10055697709321976,
+          "p_w": 0.009347209706902504,
+          "skip_share": 0.7705479452054794,
+          "events_kept": 561.0,
+          "events_per_week": 2.8070050035739813,
+          "days_per_week": 0.33523945675482486
+        },
+        "verdict": "dead_train"
+      },
+      "c_aboveMA60_ddShallow": {
+        "train": {
+          "seg": "train",
+          "n_days": 390,
+          "n_kept": 74,
+          "baseline": 0.5321690440177917,
+          "gated": 0.5840988159179688,
+          "delta": 0.051929771900177,
+          "p_t": 0.24696357548236847,
+          "p_w": 0.13432537019252777,
+          "skip_share": 0.8102564102564103,
+          "events_kept": 267.0,
+          "events_per_week": 0.28434504792332266,
+          "days_per_week": 0.07880724174653887
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 292,
+          "n_kept": 64,
+          "baseline": 0.5032867789268494,
+          "gated": 0.611821174621582,
+          "delta": 0.10853439569473267,
+          "p_t": 0.07582960277795792,
+          "p_w": 0.0037348726764321327,
+          "skip_share": 0.7808219178082192,
+          "events_kept": 516.0,
+          "events_per_week": 2.581844174410293,
+          "days_per_week": 0.32022873481057895
+        },
+        "verdict": "dead_train"
+      },
+      "c_aboveMA20_ddShallow": {
+        "train": {
+          "seg": "train",
+          "n_days": 390,
+          "n_kept": 68,
+          "baseline": 0.5321690440177917,
+          "gated": 0.6062251925468445,
+          "delta": 0.07405614852905273,
+          "p_t": 0.18068832159042358,
+          "p_w": 0.06476800888776779,
+          "skip_share": 0.8256410256410256,
+          "events_kept": 261.0,
+          "events_per_week": 0.2779552715654952,
+          "days_per_week": 0.0724174653887114
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 292,
+          "n_kept": 59,
+          "baseline": 0.5032867789268494,
+          "gated": 0.6121711134910583,
+          "delta": 0.10888433456420898,
+          "p_t": 0.0852518156170845,
+          "p_w": 0.004465450532734394,
+          "skip_share": 0.797945205479452,
+          "events_kept": 521.0,
+          "events_per_week": 2.6068620443173693,
+          "days_per_week": 0.2952108649035025
+        },
+        "verdict": "dead_train"
+      },
+      "c_belowMA250_ddShallow": {
+        "train": {
+          "seg": "train",
+          "n_days": 390,
+          "n_kept": 0,
+          "baseline": 0.5321690440177917,
+          "gated": NaN,
+          "delta": NaN,
+          "p_t": NaN,
+          "p_w": NaN,
+          "skip_share": 1.0,
+          "events_kept": 0,
+          "events_per_week": 0.0,
+          "days_per_week": 0.0
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 292,
+          "n_kept": 0,
+          "baseline": 0.5032867789268494,
+          "gated": NaN,
+          "delta": NaN,
+          "p_t": NaN,
+          "p_w": NaN,
+          "skip_share": 1.0,
+          "events_kept": 0,
+          "events_per_week": 0.0,
+          "days_per_week": 0.0
+        },
+        "verdict": "na"
+      },
+      "c_belowMA250_ddDeep": {
+        "train": {
+          "seg": "train",
+          "n_days": 390,
+          "n_kept": 140,
+          "baseline": 0.5321690440177917,
+          "gated": 0.5450897812843323,
+          "delta": 0.012920737266540527,
+          "p_t": 0.39086219668388367,
+          "p_w": 0.32865241169929504,
+          "skip_share": 0.641025641025641,
+          "events_kept": 1604.0,
+          "events_per_week": 1.7082002129925453,
+          "days_per_week": 0.14909478168264112
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 292,
+          "n_kept": 140,
+          "baseline": 0.5032867789268494,
+          "gated": 0.48936745524406433,
+          "delta": -0.013919323682785034,
+          "p_t": 0.6442791223526001,
+          "p_w": 0.7384883761405945,
+          "skip_share": 0.5205479452054795,
+          "events_kept": 1850.0,
+          "events_per_week": 9.256611865618298,
+          "days_per_week": 0.7005003573981415
+        },
+        "verdict": "dead_train"
+      },
+      "c_aboveMA20_slopeUp": {
+        "train": {
+          "seg": "train",
+          "n_days": 390,
+          "n_kept": 217,
+          "baseline": 0.5321690440177917,
+          "gated": 0.5336230993270874,
+          "delta": 0.0014540553092956543,
+          "p_t": 0.48136401176452637,
+          "p_w": 0.47061288356781006,
+          "skip_share": 0.44358974358974357,
+          "events_kept": 1642.0,
+          "events_per_week": 1.7486687965921193,
+          "days_per_week": 0.23109691160809373
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 292,
+          "n_kept": 110,
+          "baseline": 0.5032867789268494,
+          "gated": 0.5155741572380066,
+          "delta": 0.012287378311157227,
+          "p_t": 0.39663901925086975,
+          "p_w": 0.3247954845428467,
+          "skip_share": 0.6232876712328768,
+          "events_kept": 762.0,
+          "events_per_week": 3.812723373838456,
+          "days_per_week": 0.5503931379556826
+        },
+        "verdict": "dead_train"
+      },
+      "c_aboveMA60_slopeUp": {
+        "train": {
+          "seg": "train",
+          "n_days": 390,
+          "n_kept": 201,
+          "baseline": 0.5321690440177917,
+          "gated": 0.497609943151474,
+          "delta": -0.03455910086631775,
+          "p_t": 0.8466055393218994,
+          "p_w": 0.9476731419563293,
+          "skip_share": 0.48461538461538467,
+          "events_kept": 1184.0,
+          "events_per_week": 1.260915867944622,
+          "days_per_week": 0.21405750798722045
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 292,
+          "n_kept": 120,
+          "baseline": 0.5032867789268494,
+          "gated": 0.5132462382316589,
+          "delta": 0.00995945930480957,
+          "p_t": 0.4099529981613159,
+          "p_w": 0.3482312560081482,
+          "skip_share": 0.589041095890411,
+          "events_kept": 833.0,
+          "events_per_week": 4.167977126518942,
+          "days_per_week": 0.6004288777698356
+        },
+        "verdict": "dead_train"
+      },
+      "c_aboveMA250_slopeUp": {
+        "train": {
+          "seg": "train",
+          "n_days": 390,
+          "n_kept": 161,
+          "baseline": 0.5321690440177917,
+          "gated": 0.527099609375,
+          "delta": -0.005069434642791748,
+          "p_t": 0.5486672520637512,
+          "p_w": 0.5765478610992432,
+          "skip_share": 0.5871794871794872,
+          "events_kept": 808.0,
+          "events_per_week": 0.8604898828541001,
+          "days_per_week": 0.17145899893503727
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 292,
+          "n_kept": 85,
+          "baseline": 0.5032867789268494,
+          "gated": 0.5579807758331299,
+          "delta": 0.05469399690628052,
+          "p_t": 0.18095941841602325,
+          "p_w": 0.057988110929727554,
+          "skip_share": 0.7089041095890412,
+          "events_kept": 564.0,
+          "events_per_week": 2.822015725518227,
+          "days_per_week": 0.4253037884203002
+        },
+        "verdict": "dead_train"
+      },
+      "c_belowMA250_slopeDown": {
+        "train": {
+          "seg": "train",
+          "n_days": 390,
+          "n_kept": 69,
+          "baseline": 0.5321690440177917,
+          "gated": 0.6083995699882507,
+          "delta": 0.07623052597045898,
+          "p_t": 0.16793499886989594,
+          "p_w": 0.049148086458444595,
+          "skip_share": 0.823076923076923,
+          "events_kept": 729.0,
+          "events_per_week": 0.7763578274760383,
+          "days_per_week": 0.07348242811501597
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 292,
+          "n_kept": 112,
+          "baseline": 0.5032867789268494,
+          "gated": 0.49499964714050293,
+          "delta": -0.008287131786346436,
+          "p_t": 0.5721014738082886,
+          "p_w": 0.6230460405349731,
+          "skip_share": 0.6164383561643836,
+          "events_kept": 1619.0,
+          "events_per_week": 8.100786275911364,
+          "days_per_week": 0.5604002859185132
+        },
+        "verdict": "dead_train"
+      },
+      "c_volLow_ddShallow": {
+        "train": {
+          "seg": "train",
+          "n_days": 390,
+          "n_kept": 24,
+          "baseline": 0.5321690440177917,
+          "gated": 0.5197212100028992,
+          "delta": -0.012447834014892578,
+          "p_t": 0.5368257761001587,
+          "p_w": 0.5555895566940308,
+          "skip_share": 0.9384615384615385,
+          "events_kept": 173.0,
+          "events_per_week": 0.18423855165069222,
+          "days_per_week": 0.025559105431309903
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 292,
+          "n_kept": 28,
+          "baseline": 0.5032867789268494,
+          "gated": 0.5888161659240723,
+          "delta": 0.0855293869972229,
+          "p_t": 0.24332912266254425,
+          "p_w": 0.10103066265583038,
+          "skip_share": 0.904109589041096,
+          "events_kept": 199.0,
+          "events_per_week": 0.995711222301644,
+          "days_per_week": 0.1401000714796283
+        },
+        "verdict": "dead_train"
+      },
+      "c_volHigh_ddDeep": {
+        "train": {
+          "seg": "train",
+          "n_days": 390,
+          "n_kept": 37,
+          "baseline": 0.5321690440177917,
+          "gated": 0.5134870409965515,
+          "delta": -0.018682003021240234,
+          "p_t": 0.5701708793640137,
+          "p_w": 0.6063090562820435,
+          "skip_share": 0.9051282051282051,
+          "events_kept": 151.0,
+          "events_per_week": 0.16080937167199147,
+          "days_per_week": 0.039403620873269436
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 292,
+          "n_kept": 37,
+          "baseline": 0.5032867789268494,
+          "gated": 0.4624782204627991,
+          "delta": -0.04080855846405029,
+          "p_t": 0.6742903590202332,
+          "p_w": 0.7697285413742065,
+          "skip_share": 0.8732876712328768,
+          "events_kept": 826.0,
+          "events_per_week": 4.132952108649035,
+          "days_per_week": 0.18513223731236597
+        },
+        "verdict": "dead_train"
+      },
+      "c_volLow_ddDeep": {
+        "train": {
+          "seg": "train",
+          "n_days": 390,
+          "n_kept": 87,
+          "baseline": 0.5321690440177917,
+          "gated": 0.48159268498420715,
+          "delta": -0.050576359033584595,
+          "p_t": 0.792668342590332,
+          "p_w": 0.8928309082984924,
+          "skip_share": 0.7769230769230769,
+          "events_kept": 573.0,
+          "events_per_week": 0.610223642172524,
+          "days_per_week": 0.0926517571884984
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 292,
+          "n_kept": 71,
+          "baseline": 0.5032867789268494,
+          "gated": 0.5331764817237854,
+          "delta": 0.029889702796936035,
+          "p_t": 0.32136234641075134,
+          "p_w": 0.19689013063907623,
+          "skip_share": 0.7568493150684932,
+          "events_kept": 842.0,
+          "events_per_week": 4.213009292351679,
+          "days_per_week": 0.35525375268048603
+        },
+        "verdict": "dead_train"
+      },
+      "c_volHigh_ddShallow": {
+        "train": {
+          "seg": "train",
+          "n_days": 390,
+          "n_kept": 26,
+          "baseline": 0.5321690440177917,
+          "gated": 0.5634615421295166,
+          "delta": 0.031292498111724854,
+          "p_t": 0.40878212451934814,
+          "p_w": 0.35833144187927246,
+          "skip_share": 0.9333333333333333,
+          "events_kept": 59.0,
+          "events_per_week": 0.06283280085197018,
+          "days_per_week": 0.027689030883919063
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 292,
+          "n_kept": 13,
+          "baseline": 0.5032867789268494,
+          "gated": 0.5592254996299744,
+          "delta": 0.055938720703125,
+          "p_t": 0.3743728995323181,
+          "p_w": 0.2731572389602661,
+          "skip_share": 0.9554794520547946,
+          "events_kept": 232.0,
+          "events_per_week": 1.1608291636883488,
+          "days_per_week": 0.06504646175839886
+        },
+        "verdict": "dead_train"
+      },
+      "c_rsPos_aboveMA20": {
+        "train": {
+          "seg": "train",
+          "n_days": 390,
+          "n_kept": 159,
+          "baseline": 0.5321690440177917,
+          "gated": 0.5183492302894592,
+          "delta": -0.01381981372833252,
+          "p_t": 0.6301946640014648,
+          "p_w": 0.7007275819778442,
+          "skip_share": 0.5923076923076923,
+          "events_kept": 1237.0,
+          "events_per_week": 1.3173588924387647,
+          "days_per_week": 0.16932907348242812
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 292,
+          "n_kept": 86,
+          "baseline": 0.5032867789268494,
+          "gated": 0.5341929793357849,
+          "delta": 0.030906200408935547,
+          "p_t": 0.2932620346546173,
+          "p_w": 0.1638149917125702,
+          "skip_share": 0.7054794520547945,
+          "events_kept": 953.0,
+          "events_per_week": 4.768406004288778,
+          "days_per_week": 0.4303073624017155
+        },
+        "verdict": "dead_train"
+      },
+      "c_rsPos_belowMA250": {
+        "train": {
+          "seg": "train",
+          "n_days": 390,
+          "n_kept": 126,
+          "baseline": 0.5321690440177917,
+          "gated": 0.5358170866966248,
+          "delta": 0.003648042678833008,
+          "p_t": 0.4710526466369629,
+          "p_w": 0.4538409411907196,
+          "skip_share": 0.676923076923077,
+          "events_kept": 1405.0,
+          "events_per_week": 1.496272630457934,
+          "days_per_week": 0.134185303514377
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 292,
+          "n_kept": 120,
+          "baseline": 0.5032867789268494,
+          "gated": 0.49018338322639465,
+          "delta": -0.013103395700454712,
+          "p_t": 0.6201152205467224,
+          "p_w": 0.7023587822914124,
+          "skip_share": 0.589041095890411,
+          "events_kept": 1544.0,
+          "events_per_week": 7.725518227305217,
+          "days_per_week": 0.6004288777698356
+        },
+        "verdict": "dead_train"
+      },
+      "c_rsNeg_belowMA250": {
+        "train": {
+          "seg": "train",
+          "n_days": 390,
+          "n_kept": 37,
+          "baseline": 0.5321690440177917,
+          "gated": 0.635414719581604,
+          "delta": 0.10324567556381226,
+          "p_t": 0.18917757272720337,
+          "p_w": 0.05972226336598396,
+          "skip_share": 0.9051282051282051,
+          "events_kept": 328.0,
+          "events_per_week": 0.34930777422790205,
+          "days_per_week": 0.039403620873269436
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 292,
+          "n_kept": 56,
+          "baseline": 0.5032867789268494,
+          "gated": 0.4622812271118164,
+          "delta": -0.04100555181503296,
+          "p_t": 0.7186980843544006,
+          "p_w": 0.8317786455154419,
+          "skip_share": 0.8082191780821918,
+          "events_kept": 606.0,
+          "events_per_week": 3.0321658327376695,
+          "days_per_week": 0.2802001429592566
+        },
+        "verdict": "dead_train"
+      },
+      "c_rsPos_volLow": {
+        "train": {
+          "seg": "train",
+          "n_days": 390,
+          "n_kept": 134,
+          "baseline": 0.5321690440177917,
+          "gated": 0.46571671962738037,
+          "delta": -0.06645232439041138,
+          "p_t": 0.9257030487060547,
+          "p_w": 0.9870361685752869,
+          "skip_share": 0.6564102564102564,
+          "events_kept": 814.0,
+          "events_per_week": 0.8668796592119276,
+          "days_per_week": 0.14270500532481364
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 292,
+          "n_kept": 74,
+          "baseline": 0.5032867789268494,
+          "gated": 0.5179508328437805,
+          "delta": 0.014664053916931152,
+          "p_t": 0.40646594762802124,
+          "p_w": 0.33491912484169006,
+          "skip_share": 0.7465753424657534,
+          "events_kept": 826.0,
+          "events_per_week": 4.132952108649035,
+          "days_per_week": 0.37026447462473194
+        },
+        "verdict": "dead_train"
+      },
+      "c_slopeUp_volLow": {
+        "train": {
+          "seg": "train",
+          "n_days": 390,
+          "n_kept": 155,
+          "baseline": 0.5321690440177917,
+          "gated": 0.47348082065582275,
+          "delta": -0.058688223361968994,
+          "p_t": 0.9204777479171753,
+          "p_w": 0.9858701825141907,
+          "skip_share": 0.6025641025641026,
+          "events_kept": 1052.0,
+          "events_per_week": 1.1203407880724174,
+          "days_per_week": 0.1650692225772098
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 292,
+          "n_kept": 83,
+          "baseline": 0.5032867789268494,
+          "gated": 0.5092575550079346,
+          "delta": 0.005970776081085205,
+          "p_t": 0.4585646688938141,
+          "p_w": 0.42772647738456726,
+          "skip_share": 0.7157534246575342,
+          "events_kept": 612.0,
+          "events_per_week": 3.0621872766261613,
+          "days_per_week": 0.4152966404574696
+        },
+        "verdict": "dead_train"
+      },
+      "c_slopeDown_volHigh": {
+        "train": {
+          "seg": "train",
+          "n_days": 390,
+          "n_kept": 46,
+          "baseline": 0.5321690440177917,
+          "gated": 0.48876404762268066,
+          "delta": -0.043404996395111084,
+          "p_t": 0.683280885219574,
+          "p_w": 0.7628976106643677,
+          "skip_share": 0.882051282051282,
+          "events_kept": 219.0,
+          "events_per_week": 0.23322683706070288,
+          "days_per_week": 0.04898828541001065
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 292,
+          "n_kept": 48,
+          "baseline": 0.5032867789268494,
+          "gated": 0.49771714210510254,
+          "delta": -0.005569636821746826,
+          "p_t": 0.527411937713623,
+          "p_w": 0.5467109680175781,
+          "skip_share": 0.8356164383561644,
+          "events_kept": 955.0,
+          "events_per_week": 4.778413152251608,
+          "days_per_week": 0.24017155110793423
+        },
+        "verdict": "dead_train"
+      },
+      "c_rsNeg_volHigh": {
+        "train": {
+          "seg": "train",
+          "n_days": 390,
+          "n_kept": 36,
+          "baseline": 0.5321690440177917,
+          "gated": 0.5535221695899963,
+          "delta": 0.02135312557220459,
+          "p_t": 0.42437687516212463,
+          "p_w": 0.3815009295940399,
+          "skip_share": 0.9076923076923077,
+          "events_kept": 181.0,
+          "events_per_week": 0.19275825346112885,
+          "days_per_week": 0.038338658146964855
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 292,
+          "n_kept": 23,
+          "baseline": 0.5032867789268494,
+          "gated": 0.4085712134838104,
+          "delta": -0.09471556544303894,
+          "p_t": 0.7961815595626831,
+          "p_w": 0.8779289722442627,
+          "skip_share": 0.9212328767123288,
+          "events_kept": 321.0,
+          "events_per_week": 1.6061472480343102,
+          "days_per_week": 0.11508220157255182
+        },
+        "verdict": "dead_train"
+      }
+    },
+    "backup": {
+      "s_above_ma20": {
+        "train": {
+          "seg": "train",
+          "n_days": 2025,
+          "n_kept": 889,
+          "baseline": 0.492364764213562,
+          "gated": 0.5277261734008789,
+          "delta": 0.035361409187316895,
+          "p_t": 0.013998875394463539,
+          "p_w": 0.00021903877495788038,
+          "skip_share": 0.5609876543209876,
+          "events_kept": 8056.0,
+          "events_per_week": 8.57933972310969,
+          "days_per_week": 0.946751863684771
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 702,
+          "n_kept": 365,
+          "baseline": 0.5560504198074341,
+          "gated": 0.55315101146698,
+          "delta": -0.0028994083404541016,
+          "p_t": 0.5490832328796387,
+          "p_w": 0.5951747894287109,
+          "skip_share": 0.48005698005698005,
+          "events_kept": 3745.0,
+          "events_per_week": 18.738384560400284,
+          "days_per_week": 1.8263045032165832
+        },
+        "verdict": "dead_train"
+      },
+      "s_above_ma60": {
+        "train": {
+          "seg": "train",
+          "n_days": 2025,
+          "n_kept": 697,
+          "baseline": 0.492364764213562,
+          "gated": 0.5120618939399719,
+          "delta": 0.019697129726409912,
+          "p_t": 0.15992490947246552,
+          "p_w": 0.05694132298231125,
+          "skip_share": 0.6558024691358024,
+          "events_kept": 3304.0,
+          "events_per_week": 3.5186368477103303,
+          "days_per_week": 0.7422790202342918
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 702,
+          "n_kept": 365,
+          "baseline": 0.5560504198074341,
+          "gated": 0.5374300479888916,
+          "delta": -0.01862037181854248,
+          "p_t": 0.7856600880622864,
+          "p_w": 0.9396829009056091,
+          "skip_share": 0.48005698005698005,
+          "events_kept": 3307.0,
+          "events_per_week": 16.546819156540387,
+          "days_per_week": 1.8263045032165832
+        },
+        "verdict": "dead_train"
+      },
+      "s_above_ma250": {
+        "train": {
+          "seg": "train",
+          "n_days": 2025,
+          "n_kept": 691,
+          "baseline": 0.492364764213562,
+          "gated": 0.5019901394844055,
+          "delta": 0.009625375270843506,
+          "p_t": 0.3127463757991791,
+          "p_w": 0.2185216099023819,
+          "skip_share": 0.6587654320987655,
+          "events_kept": 3592.0,
+          "events_per_week": 3.825346112886049,
+          "days_per_week": 0.7358892438764644
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 702,
+          "n_kept": 393,
+          "baseline": 0.5560504198074341,
+          "gated": 0.5569330453872681,
+          "delta": 0.0008826255798339844,
+          "p_t": 0.4837445914745331,
+          "p_w": 0.46820661425590515,
+          "skip_share": 0.44017094017094016,
+          "events_kept": 3667.0,
+          "events_per_week": 18.348105789849892,
+          "days_per_week": 1.9664045746962115
+        },
+        "verdict": "dead_train"
+      },
+      "s_below_ma250": {
+        "train": {
+          "seg": "train",
+          "n_days": 2025,
+          "n_kept": 1182,
+          "baseline": 0.492364764213562,
+          "gated": 0.4994128942489624,
+          "delta": 0.007048130035400391,
+          "p_t": 0.27689242362976074,
+          "p_w": 0.17583611607551575,
+          "skip_share": 0.4162962962962963,
+          "events_kept": 14326.0,
+          "events_per_week": 15.256656017039404,
+          "days_per_week": 1.2587859424920127
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 702,
+          "n_kept": 309,
+          "baseline": 0.5560504198074341,
+          "gated": 0.5549278259277344,
+          "delta": -0.001122593879699707,
+          "p_t": 0.5162553787231445,
+          "p_w": 0.5317933559417725,
+          "skip_share": 0.5598290598290598,
+          "events_kept": 3044.0,
+          "events_per_week": 15.230879199428163,
+          "days_per_week": 1.5461043602573266
+        },
+        "verdict": "dead_train"
+      },
+      "s_slope_up": {
+        "train": {
+          "seg": "train",
+          "n_days": 2025,
+          "n_kept": 740,
+          "baseline": 0.492364764213562,
+          "gated": 0.5124827027320862,
+          "delta": 0.02011793851852417,
+          "p_t": 0.1436864286661148,
+          "p_w": 0.045912791043519974,
+          "skip_share": 0.634567901234568,
+          "events_kept": 3336.0,
+          "events_per_week": 3.5527156549520766,
+          "days_per_week": 0.7880724174653887
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 702,
+          "n_kept": 348,
+          "baseline": 0.5560504198074341,
+          "gated": 0.5469310283660889,
+          "delta": -0.009119391441345215,
+          "p_t": 0.6442216038703918,
+          "p_w": 0.764721155166626,
+          "skip_share": 0.5042735042735043,
+          "events_kept": 3160.0,
+          "events_per_week": 15.811293781272337,
+          "days_per_week": 1.7412437455325231
+        },
+        "verdict": "dead_train"
+      },
+      "s_slope_down": {
+        "train": {
+          "seg": "train",
+          "n_days": 2025,
+          "n_kept": 1199,
+          "baseline": 0.492364764213562,
+          "gated": 0.487232506275177,
+          "delta": -0.00513225793838501,
+          "p_t": 0.668001651763916,
+          "p_w": 0.752997636795044,
+          "skip_share": 0.4079012345679013,
+          "events_kept": 14945.0,
+          "events_per_week": 15.915867944621938,
+          "days_per_week": 1.2768903088391905
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 702,
+          "n_kept": 354,
+          "baseline": 0.5560504198074341,
+          "gated": 0.5650153160095215,
+          "delta": 0.008964896202087402,
+          "p_t": 0.3557785749435425,
+          "p_w": 0.23527884483337402,
+          "skip_share": 0.49572649572649574,
+          "events_kept": 3551.0,
+          "events_per_week": 17.76769120800572,
+          "days_per_week": 1.771265189421015
+        },
+        "verdict": "dead_train"
+      },
+      "s_vol_low": {
+        "train": {
+          "seg": "train",
+          "n_days": 2025,
+          "n_kept": 678,
+          "baseline": 0.492364764213562,
+          "gated": 0.49155229330062866,
+          "delta": -0.0008124709129333496,
+          "p_t": 0.5162158012390137,
+          "p_w": 0.5254586935043335,
+          "skip_share": 0.6651851851851852,
+          "events_kept": 3406.0,
+          "events_per_week": 3.627263045793397,
+          "days_per_week": 0.7220447284345048
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 702,
+          "n_kept": 366,
+          "baseline": 0.5560504198074341,
+          "gated": 0.5750934481620789,
+          "delta": 0.019043028354644775,
+          "p_t": 0.2077670842409134,
+          "p_w": 0.05658998712897301,
+          "skip_share": 0.4786324786324786,
+          "events_kept": 2853.0,
+          "events_per_week": 14.27519656897784,
+          "days_per_week": 1.8313080771979986
+        },
+        "verdict": "dead_train"
+      },
+      "s_vol_high": {
+        "train": {
+          "seg": "train",
+          "n_days": 2025,
+          "n_kept": 738,
+          "baseline": 0.492364764213562,
+          "gated": 0.5125404000282288,
+          "delta": 0.020175635814666748,
+          "p_t": 0.13994713127613068,
+          "p_w": 0.03979196026921272,
+          "skip_share": 0.6355555555555555,
+          "events_kept": 10725.0,
+          "events_per_week": 11.421725239616613,
+          "days_per_week": 0.7859424920127795
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 702,
+          "n_kept": 178,
+          "baseline": 0.5560504198074341,
+          "gated": 0.5339986681938171,
+          "delta": -0.022051751613616943,
+          "p_t": 0.704265832901001,
+          "p_w": 0.8485199809074402,
+          "skip_share": 0.7464387464387464,
+          "events_kept": 2102.0,
+          "events_per_week": 10.517512508934953,
+          "days_per_week": 0.8906361686919227
+        },
+        "verdict": "dead_train"
+      },
+      "s_dd_shallow": {
+        "train": {
+          "seg": "train",
+          "n_days": 2025,
+          "n_kept": 316,
+          "baseline": 0.492364764213562,
+          "gated": 0.5411878228187561,
+          "delta": 0.04882305860519409,
+          "p_t": 0.07524294406175613,
+          "p_w": 0.007282278034836054,
+          "skip_share": 0.8439506172839506,
+          "events_kept": 1896.0,
+          "events_per_week": 2.0191693290734825,
+          "days_per_week": 0.3365282215122471
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 702,
+          "n_kept": 168,
+          "baseline": 0.5560504198074341,
+          "gated": 0.5202248096466064,
+          "delta": -0.03582561016082764,
+          "p_t": 0.7991091012954712,
+          "p_w": 0.9370162487030029,
+          "skip_share": 0.7606837606837606,
+          "events_kept": 1656.0,
+          "events_per_week": 8.28591851322373,
+          "days_per_week": 0.8406004288777699
+        },
+        "verdict": "dead_train"
+      },
+      "s_dd_deep": {
+        "train": {
+          "seg": "train",
+          "n_days": 2025,
+          "n_kept": 1076,
+          "baseline": 0.492364764213562,
+          "gated": 0.49990731477737427,
+          "delta": 0.007542550563812256,
+          "p_t": 0.28458982706069946,
+          "p_w": 0.18427547812461853,
+          "skip_share": 0.46864197530864193,
+          "events_kept": 13808.0,
+          "events_per_week": 14.705005324813632,
+          "days_per_week": 1.1458998935037275
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 702,
+          "n_kept": 254,
+          "baseline": 0.5560504198074341,
+          "gated": 0.5720357894897461,
+          "delta": 0.01598536968231201,
+          "p_t": 0.31217581033706665,
+          "p_w": 0.16450439393520355,
+          "skip_share": 0.6381766381766382,
+          "events_kept": 2770.0,
+          "events_per_week": 13.859899928520372,
+          "days_per_week": 1.2709077912794853
+        },
+        "verdict": "dead_train"
+      },
+      "s_rs1000_pos": {
+        "train": {
+          "seg": "train",
+          "n_days": 2025,
+          "n_kept": 677,
+          "baseline": 0.492364764213562,
+          "gated": 0.49730655550956726,
+          "delta": 0.004941791296005249,
+          "p_t": 0.4024858772754669,
+          "p_w": 0.34790968894958496,
+          "skip_share": 0.665679012345679,
+          "events_kept": 3915.0,
+          "events_per_week": 4.169329073482428,
+          "days_per_week": 0.7209797657082002
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 702,
+          "n_kept": 357,
+          "baseline": 0.5560504198074341,
+          "gated": 0.5837449431419373,
+          "delta": 0.027694523334503174,
+          "p_t": 0.124301977455616,
+          "p_w": 0.012184948660433292,
+          "skip_share": 0.4914529914529915,
+          "events_kept": 3328.0,
+          "events_per_week": 16.651894210150108,
+          "days_per_week": 1.7862759113652609
+        },
+        "verdict": "dead_train"
+      },
+      "s_rs1000_neg": {
+        "train": {
+          "seg": "train",
+          "n_days": 2025,
+          "n_kept": 950,
+          "baseline": 0.492364764213562,
+          "gated": 0.5138148665428162,
+          "delta": 0.02145010232925415,
+          "p_t": 0.0766584500670433,
+          "p_w": 0.01139978040009737,
+          "skip_share": 0.5308641975308642,
+          "events_kept": 12546.0,
+          "events_per_week": 13.361022364217252,
+          "days_per_week": 1.0117145899893503
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 702,
+          "n_kept": 345,
+          "baseline": 0.5560504198074341,
+          "gated": 0.5273926258087158,
+          "delta": -0.02865779399871826,
+          "p_t": 0.8756978511810303,
+          "p_w": 0.9878150224685669,
+          "skip_share": 0.5085470085470085,
+          "events_kept": 3383.0,
+          "events_per_week": 16.927090779127948,
+          "days_per_week": 1.7262330235882772
+        },
+        "verdict": "dead_train"
+      },
+      "c_aboveMA20_volLow": {
+        "train": {
+          "seg": "train",
+          "n_days": 2025,
+          "n_kept": 328,
+          "baseline": 0.492364764213562,
+          "gated": 0.5385971069335938,
+          "delta": 0.04623234272003174,
+          "p_t": 0.08479251712560654,
+          "p_w": 0.011928673833608627,
+          "skip_share": 0.8380246913580247,
+          "events_kept": 1849.0,
+          "events_per_week": 1.9691160809371673,
+          "days_per_week": 0.34930777422790205
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 702,
+          "n_kept": 216,
+          "baseline": 0.5560504198074341,
+          "gated": 0.573503851890564,
+          "delta": 0.017453432083129883,
+          "p_t": 0.3187808096408844,
+          "p_w": 0.17389777302742004,
+          "skip_share": 0.6923076923076923,
+          "events_kept": 1865.0,
+          "events_per_week": 9.331665475339529,
+          "days_per_week": 1.080771979985704
+        },
+        "verdict": "dead_train"
+      },
+      "c_aboveMA20_volHigh": {
+        "train": {
+          "seg": "train",
+          "n_days": 2025,
+          "n_kept": 333,
+          "baseline": 0.492364764213562,
+          "gated": 0.5356559753417969,
+          "delta": 0.04329121112823486,
+          "p_t": 0.09175782650709152,
+          "p_w": 0.0116475410759449,
+          "skip_share": 0.8355555555555556,
+          "events_kept": 4757.0,
+          "events_per_week": 5.066027689030884,
+          "days_per_week": 0.3546325878594249
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 702,
+          "n_kept": 58,
+          "baseline": 0.5560504198074341,
+          "gated": 0.5131339430809021,
+          "delta": -0.04291647672653198,
+          "p_t": 0.7115935683250427,
+          "p_w": 0.8492038249969482,
+          "skip_share": 0.9173789173789174,
+          "events_kept": 550.0,
+          "events_per_week": 2.7519656897784133,
+          "days_per_week": 0.2902072909220872
+        },
+        "verdict": "dead_train"
+      },
+      "c_aboveMA60_volLow": {
+        "train": {
+          "seg": "train",
+          "n_days": 2025,
+          "n_kept": 290,
+          "baseline": 0.492364764213562,
+          "gated": 0.4768986701965332,
+          "delta": -0.015466094017028809,
+          "p_t": 0.673137366771698,
+          "p_w": 0.7530626058578491,
+          "skip_share": 0.8567901234567901,
+          "events_kept": 855.0,
+          "events_per_week": 0.9105431309904153,
+          "days_per_week": 0.308839190628328
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 702,
+          "n_kept": 229,
+          "baseline": 0.5560504198074341,
+          "gated": 0.5439780950546265,
+          "delta": -0.012072324752807617,
+          "p_t": 0.6354833245277405,
+          "p_w": 0.7487845420837402,
+          "skip_share": 0.6737891737891738,
+          "events_kept": 1850.0,
+          "events_per_week": 9.256611865618298,
+          "days_per_week": 1.1458184417441029
+        },
+        "verdict": "dead_train"
+      },
+      "c_aboveMA60_volHigh": {
+        "train": {
+          "seg": "train",
+          "n_days": 2025,
+          "n_kept": 237,
+          "baseline": 0.492364764213562,
+          "gated": 0.5508590936660767,
+          "delta": 0.05849432945251465,
+          "p_t": 0.07470336556434631,
+          "p_w": 0.006465918850153685,
+          "skip_share": 0.882962962962963,
+          "events_kept": 1776.0,
+          "events_per_week": 1.8913738019169328,
+          "days_per_week": 0.2523961661341853
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 702,
+          "n_kept": 56,
+          "baseline": 0.5560504198074341,
+          "gated": 0.5442349314689636,
+          "delta": -0.011815488338470459,
+          "p_t": 0.5562722682952881,
+          "p_w": 0.6012005805969238,
+          "skip_share": 0.9202279202279202,
+          "events_kept": 461.0,
+          "events_per_week": 2.3066476054324516,
+          "days_per_week": 0.2802001429592566
+        },
+        "verdict": "dead_train"
+      },
+      "c_aboveMA250_volLow": {
+        "train": {
+          "seg": "train",
+          "n_days": 2025,
+          "n_kept": 249,
+          "baseline": 0.492364764213562,
+          "gated": 0.4415886104106903,
+          "delta": -0.050776153802871704,
+          "p_t": 0.9216846823692322,
+          "p_w": 0.9824044704437256,
+          "skip_share": 0.8770370370370371,
+          "events_kept": 863.0,
+          "events_per_week": 0.919062832800852,
+          "days_per_week": 0.26517571884984026
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 702,
+          "n_kept": 231,
+          "baseline": 0.5560504198074341,
+          "gated": 0.5844380855560303,
+          "delta": 0.02838766574859619,
+          "p_t": 0.21141138672828674,
+          "p_w": 0.05286926031112671,
+          "skip_share": 0.670940170940171,
+          "events_kept": 1941.0,
+          "events_per_week": 9.711937097927091,
+          "days_per_week": 1.1558255897069336
+        },
+        "verdict": "dead_train"
+      },
+      "c_aboveMA250_volHigh": {
+        "train": {
+          "seg": "train",
+          "n_days": 2025,
+          "n_kept": 249,
+          "baseline": 0.492364764213562,
+          "gated": 0.5387545228004456,
+          "delta": 0.046389758586883545,
+          "p_t": 0.11638382077217102,
+          "p_w": 0.02073698490858078,
+          "skip_share": 0.8770370370370371,
+          "events_kept": 1992.0,
+          "events_per_week": 2.121405750798722,
+          "days_per_week": 0.26517571884984026
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 702,
+          "n_kept": 78,
+          "baseline": 0.5560504198074341,
+          "gated": 0.5346856713294983,
+          "delta": -0.02136474847793579,
+          "p_t": 0.6233983635902405,
+          "p_w": 0.7201734781265259,
+          "skip_share": 0.8888888888888888,
+          "events_kept": 719.0,
+          "events_per_week": 3.5975696926375984,
+          "days_per_week": 0.3902787705503931
+        },
+        "verdict": "dead_train"
+      },
+      "c_belowMA250_volLow": {
+        "train": {
+          "seg": "train",
+          "n_days": 2025,
+          "n_kept": 404,
+          "baseline": 0.492364764213562,
+          "gated": 0.5284246206283569,
+          "delta": 0.03605985641479492,
+          "p_t": 0.10956738889217377,
+          "p_w": 0.02316390909254551,
+          "skip_share": 0.8004938271604938,
+          "events_kept": 2505.0,
+          "events_per_week": 2.6677316293929714,
+          "days_per_week": 0.43024494142705005
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 702,
+          "n_kept": 135,
+          "baseline": 0.5560504198074341,
+          "gated": 0.5591037273406982,
+          "delta": 0.00305330753326416,
+          "p_t": 0.4757760763168335,
+          "p_w": 0.45271235704421997,
+          "skip_share": 0.8076923076923077,
+          "events_kept": 912.0,
+          "events_per_week": 4.563259471050751,
+          "days_per_week": 0.675482487491065
+        },
+        "verdict": "dead_train"
+      },
+      "c_belowMA250_volHigh": {
+        "train": {
+          "seg": "train",
+          "n_days": 2025,
+          "n_kept": 479,
+          "baseline": 0.492364764213562,
+          "gated": 0.49657562375068665,
+          "delta": 0.004210859537124634,
+          "p_t": 0.4333130717277527,
+          "p_w": 0.3923952877521515,
+          "skip_share": 0.7634567901234568,
+          "events_kept": 8575.0,
+          "events_per_week": 9.132055378061768,
+          "days_per_week": 0.5101171458998935
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 702,
+          "n_kept": 100,
+          "baseline": 0.5560504198074341,
+          "gated": 0.5334628224372864,
+          "delta": -0.022587597370147705,
+          "p_t": 0.6515793800354004,
+          "p_w": 0.7752794027328491,
+          "skip_share": 0.8575498575498576,
+          "events_kept": 1383.0,
+          "events_per_week": 6.919942816297355,
+          "days_per_week": 0.5003573981415297
+        },
+        "verdict": "dead_train"
+      },
+      "c_aboveMA250_ddShallow": {
+        "train": {
+          "seg": "train",
+          "n_days": 2025,
+          "n_kept": 316,
+          "baseline": 0.492364764213562,
+          "gated": 0.5411878228187561,
+          "delta": 0.04882305860519409,
+          "p_t": 0.07524294406175613,
+          "p_w": 0.007282278034836054,
+          "skip_share": 0.8439506172839506,
+          "events_kept": 1896.0,
+          "events_per_week": 2.0191693290734825,
+          "days_per_week": 0.3365282215122471
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 702,
+          "n_kept": 168,
+          "baseline": 0.5560504198074341,
+          "gated": 0.5202248096466064,
+          "delta": -0.03582561016082764,
+          "p_t": 0.7991091012954712,
+          "p_w": 0.9370162487030029,
+          "skip_share": 0.7606837606837606,
+          "events_kept": 1656.0,
+          "events_per_week": 8.28591851322373,
+          "days_per_week": 0.8406004288777699
+        },
+        "verdict": "dead_train"
+      },
+      "c_aboveMA60_ddShallow": {
+        "train": {
+          "seg": "train",
+          "n_days": 2025,
+          "n_kept": 301,
+          "baseline": 0.492364764213562,
+          "gated": 0.5522419214248657,
+          "delta": 0.05987715721130371,
+          "p_t": 0.04554923251271248,
+          "p_w": 0.0019362046150490642,
+          "skip_share": 0.851358024691358,
+          "events_kept": 1745.0,
+          "events_per_week": 1.8583599574014908,
+          "days_per_week": 0.32055378061767836
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 702,
+          "n_kept": 161,
+          "baseline": 0.5560504198074341,
+          "gated": 0.5218208432197571,
+          "delta": -0.034229576587677,
+          "p_t": 0.7818750143051147,
+          "p_w": 0.9223983883857727,
+          "skip_share": 0.7706552706552706,
+          "events_kept": 1627.0,
+          "events_per_week": 8.140814867762687,
+          "days_per_week": 0.8055754110078628
+        },
+        "verdict": "dead_train"
+      },
+      "c_aboveMA20_ddShallow": {
+        "train": {
+          "seg": "train",
+          "n_days": 2025,
+          "n_kept": 269,
+          "baseline": 0.492364764213562,
+          "gated": 0.5665481686592102,
+          "delta": 0.0741834044456482,
+          "p_t": 0.026255840435624123,
+          "p_w": 0.00034288116148673,
+          "skip_share": 0.8671604938271604,
+          "events_kept": 1575.0,
+          "events_per_week": 1.6773162939297124,
+          "days_per_week": 0.28647497337593186
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 702,
+          "n_kept": 141,
+          "baseline": 0.5560504198074341,
+          "gated": 0.5094994306564331,
+          "delta": -0.04655098915100098,
+          "p_t": 0.8382902145385742,
+          "p_w": 0.9620673060417175,
+          "skip_share": 0.7991452991452992,
+          "events_kept": 1533.0,
+          "events_per_week": 7.670478913509649,
+          "days_per_week": 0.7055039313795568
+        },
+        "verdict": "dead_train"
+      },
+      "c_belowMA250_ddShallow": {
+        "train": {
+          "seg": "train",
+          "n_days": 2025,
+          "n_kept": 0,
+          "baseline": 0.492364764213562,
+          "gated": NaN,
+          "delta": NaN,
+          "p_t": NaN,
+          "p_w": NaN,
+          "skip_share": 1.0,
+          "events_kept": 0,
+          "events_per_week": 0.0,
+          "days_per_week": 0.0
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 702,
+          "n_kept": 0,
+          "baseline": 0.5560504198074341,
+          "gated": NaN,
+          "delta": NaN,
+          "p_t": NaN,
+          "p_w": NaN,
+          "skip_share": 1.0,
+          "events_kept": 0,
+          "events_per_week": 0.0,
+          "days_per_week": 0.0
+        },
+        "verdict": "na"
+      },
+      "c_belowMA250_ddDeep": {
+        "train": {
+          "seg": "train",
+          "n_days": 2025,
+          "n_kept": 1023,
+          "baseline": 0.492364764213562,
+          "gated": 0.5013634562492371,
+          "delta": 0.008998692035675049,
+          "p_t": 0.25967729091644287,
+          "p_w": 0.15385617315769196,
+          "skip_share": 0.4948148148148148,
+          "events_kept": 13471.0,
+          "events_per_week": 14.346112886048989,
+          "days_per_week": 1.0894568690095847
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 702,
+          "n_kept": 252,
+          "baseline": 0.5560504198074341,
+          "gated": 0.5726075172424316,
+          "delta": 0.01655709743499756,
+          "p_t": 0.3072252571582794,
+          "p_w": 0.1577136069536209,
+          "skip_share": 0.641025641025641,
+          "events_kept": 2755.0,
+          "events_per_week": 13.784846318799142,
+          "days_per_week": 1.2609006433166547
+        },
+        "verdict": "dead_train"
+      },
+      "c_aboveMA20_slopeUp": {
+        "train": {
+          "seg": "train",
+          "n_days": 2025,
+          "n_kept": 593,
+          "baseline": 0.492364764213562,
+          "gated": 0.5332958698272705,
+          "delta": 0.040931105613708496,
+          "p_t": 0.03545214980840683,
+          "p_w": 0.0017301797633990645,
+          "skip_share": 0.7071604938271605,
+          "events_kept": 2832.0,
+          "events_per_week": 3.015974440894569,
+          "days_per_week": 0.6315228966986155
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 702,
+          "n_kept": 260,
+          "baseline": 0.5560504198074341,
+          "gated": 0.5438821911811829,
+          "delta": -0.01216822862625122,
+          "p_t": 0.6492408514022827,
+          "p_w": 0.7698220610618591,
+          "skip_share": 0.6296296296296297,
+          "events_kept": 2568.0,
+          "events_per_week": 12.849177984274482,
+          "days_per_week": 1.300929235167977
+        },
+        "verdict": "dead_train"
+      },
+      "c_aboveMA60_slopeUp": {
+        "train": {
+          "seg": "train",
+          "n_days": 2025,
+          "n_kept": 549,
+          "baseline": 0.492364764213562,
+          "gated": 0.5080950856208801,
+          "delta": 0.015730321407318115,
+          "p_t": 0.2527177333831787,
+          "p_w": 0.14616045355796814,
+          "skip_share": 0.7288888888888889,
+          "events_kept": 2331.0,
+          "events_per_week": 2.4824281150159746,
+          "days_per_week": 0.5846645367412141
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 702,
+          "n_kept": 285,
+          "baseline": 0.5560504198074341,
+          "gated": 0.5367366671562195,
+          "delta": -0.0193137526512146,
+          "p_t": 0.7442988157272339,
+          "p_w": 0.8966999650001526,
+          "skip_share": 0.594017094017094,
+          "events_kept": 2460.0,
+          "events_per_week": 12.308791994281629,
+          "days_per_week": 1.4260185847033595
+        },
+        "verdict": "dead_train"
+      },
+      "c_aboveMA250_slopeUp": {
+        "train": {
+          "seg": "train",
+          "n_days": 2025,
+          "n_kept": 446,
+          "baseline": 0.492364764213562,
+          "gated": 0.5278975367546082,
+          "delta": 0.03553277254104614,
+          "p_t": 0.0974922627210617,
+          "p_w": 0.0174342580139637,
+          "skip_share": 0.779753086419753,
+          "events_kept": 2083.0,
+          "events_per_week": 2.2183173588924388,
+          "days_per_week": 0.4749733759318424
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 702,
+          "n_kept": 239,
+          "baseline": 0.5560504198074341,
+          "gated": 0.5321843028068542,
+          "delta": -0.023866117000579834,
+          "p_t": 0.761002779006958,
+          "p_w": 0.9115169644355774,
+          "skip_share": 0.6595441595441596,
+          "events_kept": 2115.0,
+          "events_per_week": 10.582558970693352,
+          "days_per_week": 1.195854181558256
+        },
+        "verdict": "dead_train"
+      },
+      "c_belowMA250_slopeDown": {
+        "train": {
+          "seg": "train",
+          "n_days": 2025,
+          "n_kept": 904,
+          "baseline": 0.492364764213562,
+          "gated": 0.5019797682762146,
+          "delta": 0.009615004062652588,
+          "p_t": 0.2700854539871216,
+          "p_w": 0.16415151953697205,
+          "skip_share": 0.5535802469135802,
+          "events_kept": 13129.0,
+          "events_per_week": 13.981895633652822,
+          "days_per_week": 0.9627263045793397
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 702,
+          "n_kept": 200,
+          "baseline": 0.5560504198074341,
+          "gated": 0.5416638255119324,
+          "delta": -0.014386594295501709,
+          "p_t": 0.6465980410575867,
+          "p_w": 0.7666745781898499,
+          "skip_share": 0.7150997150997151,
+          "events_kept": 1999.0,
+          "events_per_week": 10.002144388849178,
+          "days_per_week": 1.0007147962830594
+        },
+        "verdict": "dead_train"
+      },
+      "c_volLow_ddShallow": {
+        "train": {
+          "seg": "train",
+          "n_days": 2025,
+          "n_kept": 104,
+          "baseline": 0.492364764213562,
+          "gated": 0.489167720079422,
+          "delta": -0.0031970441341400146,
+          "p_t": 0.5212053060531616,
+          "p_w": 0.5334904789924622,
+          "skip_share": 0.948641975308642,
+          "events_kept": 430.0,
+          "events_per_week": 0.4579339723109691,
+          "days_per_week": 0.11075612353567625
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 702,
+          "n_kept": 78,
+          "baseline": 0.5560504198074341,
+          "gated": 0.5435994267463684,
+          "delta": -0.012450993061065674,
+          "p_t": 0.5718578100204468,
+          "p_w": 0.6325045824050903,
+          "skip_share": 0.8888888888888888,
+          "events_kept": 550.0,
+          "events_per_week": 2.7519656897784133,
+          "days_per_week": 0.3902787705503931
+        },
+        "verdict": "dead_train"
+      },
+      "c_volHigh_ddDeep": {
+        "train": {
+          "seg": "train",
+          "n_days": 2025,
+          "n_kept": 475,
+          "baseline": 0.492364764213562,
+          "gated": 0.4899681508541107,
+          "delta": -0.002396613359451294,
+          "p_t": 0.5380212664604187,
+          "p_w": 0.5611522197723389,
+          "skip_share": 0.7654320987654322,
+          "events_kept": 8570.0,
+          "events_per_week": 9.126730564430245,
+          "days_per_week": 0.5058572949946751
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 702,
+          "n_kept": 90,
+          "baseline": 0.5560504198074341,
+          "gated": 0.5449005961418152,
+          "delta": -0.011149823665618896,
+          "p_t": 0.5712278485298157,
+          "p_w": 0.6397941708564758,
+          "skip_share": 0.8717948717948718,
+          "events_kept": 1305.0,
+          "events_per_week": 6.529664045746962,
+          "days_per_week": 0.4503216583273767
+        },
+        "verdict": "dead_train"
+      },
+      "c_volLow_ddDeep": {
+        "train": {
+          "seg": "train",
+          "n_days": 2025,
+          "n_kept": 331,
+          "baseline": 0.492364764213562,
+          "gated": 0.5203605890274048,
+          "delta": 0.027995824813842773,
+          "p_t": 0.19665563106536865,
+          "p_w": 0.08259133249521255,
+          "skip_share": 0.8365432098765432,
+          "events_kept": 2265.0,
+          "events_per_week": 2.412140575079872,
+          "days_per_week": 0.35250266240681577
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 702,
+          "n_kept": 106,
+          "baseline": 0.5560504198074341,
+          "gated": 0.5700498223304749,
+          "delta": 0.013999402523040771,
+          "p_t": 0.40591785311698914,
+          "p_w": 0.31864649057388306,
+          "skip_share": 0.849002849002849,
+          "events_kept": 778.0,
+          "events_per_week": 3.8927805575411005,
+          "days_per_week": 0.5303788420300214
+        },
+        "verdict": "dead_train"
+      },
+      "c_volHigh_ddShallow": {
+        "train": {
+          "seg": "train",
+          "n_days": 2025,
+          "n_kept": 150,
+          "baseline": 0.492364764213562,
+          "gated": 0.5611370801925659,
+          "delta": 0.0687723159790039,
+          "p_t": 0.0919506624341011,
+          "p_w": 0.007184801623225212,
+          "skip_share": 0.9259259259259259,
+          "events_kept": 1204.0,
+          "events_per_week": 1.2822151224707135,
+          "days_per_week": 0.1597444089456869
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 702,
+          "n_kept": 40,
+          "baseline": 0.5560504198074341,
+          "gated": 0.5019288063049316,
+          "delta": -0.05412161350250244,
+          "p_t": 0.7229213714599609,
+          "p_w": 0.8628774285316467,
+          "skip_share": 0.9430199430199431,
+          "events_kept": 420.0,
+          "events_per_week": 2.1015010721944245,
+          "days_per_week": 0.20014295925661185
+        },
+        "verdict": "dead_train"
+      },
+      "c_rsPos_aboveMA20": {
+        "train": {
+          "seg": "train",
+          "n_days": 2025,
+          "n_kept": 345,
+          "baseline": 0.492364764213562,
+          "gated": 0.5280709266662598,
+          "delta": 0.035706162452697754,
+          "p_t": 0.13448591530323029,
+          "p_w": 0.035810451954603195,
+          "skip_share": 0.8296296296296296,
+          "events_kept": 2007.0,
+          "events_per_week": 2.137380191693291,
+          "days_per_week": 0.36741214057507987
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 702,
+          "n_kept": 182,
+          "baseline": 0.5560504198074341,
+          "gated": 0.5931994915008545,
+          "delta": 0.03714907169342041,
+          "p_t": 0.19097822904586792,
+          "p_w": 0.03748246282339096,
+          "skip_share": 0.7407407407407407,
+          "events_kept": 1826.0,
+          "events_per_week": 9.136526090064331,
+          "days_per_week": 0.9106504646175839
+        },
+        "verdict": "dead_train"
+      },
+      "c_rsPos_belowMA250": {
+        "train": {
+          "seg": "train",
+          "n_days": 2025,
+          "n_kept": 411,
+          "baseline": 0.492364764213562,
+          "gated": 0.5090176463127136,
+          "delta": 0.01665288209915161,
+          "p_t": 0.27832624316215515,
+          "p_w": 0.17168620228767395,
+          "skip_share": 0.797037037037037,
+          "events_kept": 2784.0,
+          "events_per_week": 2.9648562300319488,
+          "days_per_week": 0.43769968051118213
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 702,
+          "n_kept": 180,
+          "baseline": 0.5560504198074341,
+          "gated": 0.5496940016746521,
+          "delta": -0.006356418132781982,
+          "p_t": 0.5615358352661133,
+          "p_w": 0.6210201382637024,
+          "skip_share": 0.7435897435897436,
+          "events_kept": 1781.0,
+          "events_per_week": 8.911365260900643,
+          "days_per_week": 0.9006433166547534
+        },
+        "verdict": "dead_train"
+      },
+      "c_rsNeg_belowMA250": {
+        "train": {
+          "seg": "train",
+          "n_days": 2025,
+          "n_kept": 563,
+          "baseline": 0.492364764213562,
+          "gated": 0.5133938193321228,
+          "delta": 0.02102905511856079,
+          "p_t": 0.1783326119184494,
+          "p_w": 0.06512866914272308,
+          "skip_share": 0.7219753086419753,
+          "events_kept": 10184.0,
+          "events_per_week": 10.845580404685837,
+          "days_per_week": 0.5995740149094781
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 702,
+          "n_kept": 129,
+          "baseline": 0.5560504198074341,
+          "gated": 0.5622308254241943,
+          "delta": 0.006180405616760254,
+          "p_t": 0.4527977406978607,
+          "p_w": 0.40932849049568176,
+          "skip_share": 0.8162393162393162,
+          "events_kept": 1263.0,
+          "events_per_week": 6.319513938527519,
+          "days_per_week": 0.6454610436025733
+        },
+        "verdict": "dead_train"
+      },
+      "c_rsPos_volLow": {
+        "train": {
+          "seg": "train",
+          "n_days": 2025,
+          "n_kept": 267,
+          "baseline": 0.492364764213562,
+          "gated": 0.5039423108100891,
+          "delta": 0.0115775465965271,
+          "p_t": 0.3769285976886749,
+          "p_w": 0.30998706817626953,
+          "skip_share": 0.8681481481481481,
+          "events_kept": 961.0,
+          "events_per_week": 1.0234291799787008,
+          "days_per_week": 0.28434504792332266
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 702,
+          "n_kept": 173,
+          "baseline": 0.5560504198074341,
+          "gated": 0.5969787836074829,
+          "delta": 0.04092836380004883,
+          "p_t": 0.17660795152187347,
+          "p_w": 0.028232432901859283,
+          "skip_share": 0.7535612535612536,
+          "events_kept": 1456.0,
+          "events_per_week": 7.285203716940671,
+          "days_per_week": 0.8656182987848463
+        },
+        "verdict": "dead_train"
+      },
+      "c_slopeUp_volLow": {
+        "train": {
+          "seg": "train",
+          "n_days": 2025,
+          "n_kept": 293,
+          "baseline": 0.492364764213562,
+          "gated": 0.5131117105484009,
+          "delta": 0.020746946334838867,
+          "p_t": 0.27969589829444885,
+          "p_w": 0.1783713698387146,
+          "skip_share": 0.8553086419753086,
+          "events_kept": 1000.0,
+          "events_per_week": 1.0649627263045793,
+          "days_per_week": 0.31203407880724177
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 702,
+          "n_kept": 220,
+          "baseline": 0.5560504198074341,
+          "gated": 0.560076117515564,
+          "delta": 0.004025697708129883,
+          "p_t": 0.4557756185531616,
+          "p_w": 0.4135495126247406,
+          "skip_share": 0.6866096866096867,
+          "events_kept": 1528.0,
+          "events_per_week": 7.645461043602573,
+          "days_per_week": 1.1007862759113651
+        },
+        "verdict": "dead_train"
+      },
+      "c_slopeDown_volHigh": {
+        "train": {
+          "seg": "train",
+          "n_days": 2025,
+          "n_kept": 485,
+          "baseline": 0.492364764213562,
+          "gated": 0.5029934644699097,
+          "delta": 0.010628700256347656,
+          "p_t": 0.3345336318016052,
+          "p_w": 0.24025622010231018,
+          "skip_share": 0.7604938271604939,
+          "events_kept": 8992.0,
+          "events_per_week": 9.576144834930778,
+          "days_per_week": 0.516506922257721
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 702,
+          "n_kept": 129,
+          "baseline": 0.5560504198074341,
+          "gated": 0.5290021300315857,
+          "delta": -0.02704828977584839,
+          "p_t": 0.706462562084198,
+          "p_w": 0.8517886996269226,
+          "skip_share": 0.8162393162393162,
+          "events_kept": 1663.0,
+          "events_per_week": 8.320943531093638,
+          "days_per_week": 0.6454610436025733
+        },
+        "verdict": "dead_train"
+      },
+      "c_rsNeg_volHigh": {
+        "train": {
+          "seg": "train",
+          "n_days": 2025,
+          "n_kept": 401,
+          "baseline": 0.492364764213562,
+          "gated": 0.5278448462486267,
+          "delta": 0.0354800820350647,
+          "p_t": 0.10705640912055969,
+          "p_w": 0.01659551076591015,
+          "skip_share": 0.8019753086419753,
+          "events_kept": 7634.0,
+          "events_per_week": 8.129925452609159,
+          "days_per_week": 0.42705005324813633
+        },
+        "val": {
+          "seg": "val",
+          "n_days": 702,
+          "n_kept": 83,
+          "baseline": 0.5560504198074341,
+          "gated": 0.5371311902999878,
+          "delta": -0.01891922950744629,
+          "p_t": 0.6144401431083679,
+          "p_w": 0.7119195461273193,
+          "skip_share": 0.8817663817663818,
+          "events_kept": 1108.0,
+          "events_per_week": 5.543959971408149,
+          "days_per_week": 0.4152966404574696
+        },
+        "verdict": "dead_train"
+      }
+    }
+  },
+  "runtime_sec": 0.2851083278656006
+}

@@ -1,0 +1,6 @@
+feature,cluster,kept,max_abs_rho,is_p2,is_geo_control
+LIMITCNT20_X,0,True,0.98691,True,False
+LIMITCNT20,0,False,0.98691,False,False
+ATRN,2,True,0.97641,False,True
+VOL20,2,True,0.94786,False,True
+AMP20,2,True,0.97641,False,True

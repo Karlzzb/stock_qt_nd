@@ -1,0 +1,25 @@
+{
+  "total_signals": 3259,
+  "entered": 255,
+  "dropped_slot_full": 2951,
+  "dropped_limitup": 0,
+  "dropped_no_quote": 0,
+  "dropped_cash": 0,
+  "dropped_no_close_T": 0,
+  "limit_missing_days": 0,
+  "deferred_exits": 0,
+  "atr_missing_fallback_E1": 0,
+  "capital_utilization": 0.5377274801318568,
+  "coverage": 0.07824486038662166,
+  "final_equity": 505641.758508252,
+  "config": {
+    "pool": "main",
+    "selection": "S3",
+    "exit_rule": "E1",
+    "horizon": 20,
+    "n_slots": 10,
+    "start": "2019-01-01",
+    "end": "2022-10-31",
+    "seed": 42
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "name": "c_z_m3",
+  "lows": {
+    "method": "zigzag",
+    "price": "close",
+    "pct": 0.05,
+    "min_sep": 10
+  },
+  "divergence": {
+    "indicator": "dif",
+    "min_change": 0.001,
+    "below_zero": false,
+    "min_decline": 0.0,
+    "lookback": 2,
+    "volume_confirm": false,
+    "multi": 3
+  },
+  "entry": "close_T",
+  "labels": {
+    "fixed": [
+      5,
+      10,
+      20,
+      30,
+      60
+    ],
+    "dynamic": null,
+    "sniper": {
+      "Ns": [
+        20
+      ],
+      "ks": [
+        2.0
+      ]
+    },
+    "mfe": null
+  }
+}

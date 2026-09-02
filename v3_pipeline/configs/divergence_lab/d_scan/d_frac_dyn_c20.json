@@ -1,0 +1,6 @@
+{
+  "name": "d_frac_dyn_c20",
+  "lows": {"method":"fractal","price":"close","order":10,"min_sep":10},
+  "entry": "close_T",
+  "labels": {"fixed": [5, 10, 30], "dynamic": {"c": 2.0, "cap": 60}}
+}

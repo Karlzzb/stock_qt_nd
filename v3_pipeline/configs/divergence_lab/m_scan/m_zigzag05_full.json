@@ -1,0 +1,9 @@
+{
+  "name": "m_zigzag05_full",
+  "lows": {"method": "zigzag", "price": "close", "pct": 0.05, "min_sep": 5},
+  "divergence": {"indicator": "dif", "min_change": 0.001, "below_zero": true,
+                 "min_decline": 0.08, "lookback": 2, "volume_confirm": true, "multi": 1},
+  "entry": "close_T",
+  "labels": {"fixed": [10, 30], "sniper": {"Ns": [20, 40], "ks": [2.0, 3.0]}},
+  "filters": {"regime": "up", "above_ma200": null}
+}

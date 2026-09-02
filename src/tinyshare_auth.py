@@ -34,7 +34,10 @@ def get_pro_api():
     # override=False：已有环境变量时不覆盖；.env 不存在时静默跳过
     load_dotenv(dotenv_path=_ENV_PATH, override=False)
 
-    token = os.environ.get("TINYSHARE_TOKEN", "").strip()
+    token = (
+        os.environ.get("TTSHARE_TOKEN", "").strip()
+        or os.environ.get("TINYSHARE_TOKEN", "").strip()
+    )
     if not token:
         # 尝试使用 ttshare 默认 token
         token = "QC54t85qlJHyt5n4qC2h3Bkzf68Qem6Ri7DEgJbXbv00F0kUtYr2fAvQ6345f070"

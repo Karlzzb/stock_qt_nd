@@ -1,0 +1,6 @@
+{
+  "name": "d_zz_sniper",
+  "lows": {"method":"zigzag","price":"close","pct":0.05,"min_sep":10},
+  "entry": "close_T",
+  "labels": {"fixed": [10, 30], "sniper": {"Ns": [10, 20, 40], "ks": [1.5, 2.0, 3.0]}, "mfe": [10, 20, 40]}
+}

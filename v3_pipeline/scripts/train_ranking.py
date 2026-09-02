@@ -208,6 +208,12 @@ def train_horizon(
     train_cfg = config["training"]
     model_cfg = config["model"]
 
+    # Label family is configurable (V5): default is the V4 close-to-close family.
+    # label_prefix picks the ranking label column family, return_prefix picks the
+    # raw return column saved alongside predictions for downstream evaluation.
+    label_prefix = train_cfg.get("label_prefix", "rank_future_return_")
+    return_prefix = train_cfg.get("return_prefix", "future_return_")
+
     # Prepare train/val split
     train_mask = cache_df[TIMESTAMP_COL] <= train_cfg["train_end"]
     val_mask = (cache_df[TIMESTAMP_COL] >= train_cfg["val_start"]) & (
@@ -220,7 +226,7 @@ def train_horizon(
     logger.info(f"Train: {len(train_df)} rows, {train_df[TIMESTAMP_COL].min()} to {train_df[TIMESTAMP_COL].max()}")
     logger.info(f"Val: {len(val_df)} rows, {val_df[TIMESTAMP_COL].min()} to {val_df[TIMESTAMP_COL].max()}")
 
-    rank_col = f"rank_future_return_{horizon}"
+    rank_col = f"{label_prefix}{horizon}"
 
     # Prepare datasets
     logger.info("Preparing training dataset...")
@@ -291,7 +297,7 @@ def train_horizon(
         SYMBOL_COL: val_clean[SYMBOL_COL].values,
         "prediction": predictions,
         "actual_rank": val_clean[rank_col].values,
-        "actual_return": val_clean[f"future_return_{horizon}"].values,
+        "actual_return": val_clean[f"{return_prefix}{horizon}"].values,
     })
 
     pred_path = output_dir / f"pred_{horizon}.parquet"
@@ -355,6 +361,14 @@ def main() -> None:
     # Prepare features
     exclude_patterns = config["features"]["exclude_patterns"]
     features = prepare_features(cache_df, exclude_patterns)
+
+    # Optional whitelist: restrict to features listed in a file (one per line).
+    # Used by V5 pruned-feature experiments; the file is the single authority.
+    include_file = config["features"].get("include_file")
+    if include_file:
+        keep = set(Path(include_file).read_text().splitlines())
+        features = [f for f in features if f in keep]
+        logger.info(f"include_file whitelist applied: {len(features)} features kept")
 
     # Save feature list
     feature_list_path = args.output / "features.txt"

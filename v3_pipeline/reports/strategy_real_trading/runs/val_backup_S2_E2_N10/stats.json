@@ -1,0 +1,25 @@
+{
+  "total_signals": 7084,
+  "entered": 463,
+  "dropped_slot_full": 6466,
+  "dropped_limitup": 0,
+  "dropped_no_quote": 0,
+  "dropped_cash": 0,
+  "dropped_no_close_T": 0,
+  "limit_missing_days": 0,
+  "deferred_exits": 1,
+  "atr_missing_fallback_E1": 0,
+  "capital_utilization": 0.7834532047403591,
+  "coverage": 0.06535855448898927,
+  "final_equity": 1397666.1611357417,
+  "config": {
+    "pool": "backup",
+    "selection": "S2",
+    "exit_rule": "E2",
+    "horizon": 20,
+    "n_slots": 10,
+    "start": "2019-01-01",
+    "end": "2022-10-31",
+    "seed": 42
+  }
+}
