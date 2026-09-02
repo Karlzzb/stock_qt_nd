@@ -1,0 +1,63 @@
+{
+  "issue": 26,
+  "symbols": 5573,
+  "missing_daily_files": [],
+  "truncation_check": {
+    "sampled": 20,
+    "checked": 19,
+    "head_rows": 200
+  },
+  "pools": {
+    "main": {
+      "n_events": 8158,
+      "key_missing_events": 0,
+      "label_nan_counts": {
+        "hit_N20_k2.0": 2,
+        "cur_pos_3d": 0,
+        "cur_pos_5d": 0,
+        "cur_pos_10d": 1,
+        "cur_pos_15d": 2,
+        "cur_pos_20d": 2,
+        "cur_pos_25d": 2,
+        "cur_pos_30d": 2,
+        "cur_pos_45d": 5,
+        "cur_pos_60d": 11,
+        "open_exec_pos_3d": 0,
+        "open_exec_pos_5d": 0,
+        "open_exec_pos_10d": 1,
+        "open_exec_pos_15d": 2,
+        "open_exec_pos_20d": 2,
+        "open_exec_pos_25d": 2,
+        "open_exec_pos_30d": 2,
+        "open_exec_pos_45d": 5,
+        "open_exec_pos_60d": 11
+      }
+    },
+    "backup": {
+      "n_events": 37012,
+      "key_missing_events": 0,
+      "label_nan_counts": {
+        "hit_N20_k2.0": 287,
+        "cur_pos_3d": 164,
+        "cur_pos_5d": 214,
+        "cur_pos_10d": 251,
+        "cur_pos_15d": 260,
+        "cur_pos_20d": 347,
+        "cur_pos_25d": 842,
+        "cur_pos_30d": 1013,
+        "cur_pos_45d": 1510,
+        "cur_pos_60d": 1733,
+        "open_exec_pos_3d": 164,
+        "open_exec_pos_5d": 214,
+        "open_exec_pos_10d": 251,
+        "open_exec_pos_15d": 260,
+        "open_exec_pos_20d": 347,
+        "open_exec_pos_25d": 842,
+        "open_exec_pos_30d": 1013,
+        "open_exec_pos_45d": 1510,
+        "open_exec_pos_60d": 1733
+      }
+    }
+  },
+  "elapsed_sec": 23.6
+}

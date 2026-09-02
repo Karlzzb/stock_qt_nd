@@ -1,0 +1,9 @@
+{
+  "winner": "hit_N20_k2.0",
+  "winner_val_precision_at_5_dayavg": 0.5164556962025316,
+  "winner_val_average_precision": 0.6282588395379161,
+  "median_val_average_precision": 0.5599044253188422,
+  "ap_constraint_passed": true,
+  "role": "对照（不参与正式裁决）",
+  "status": "provisional_pending_independent_review"
+}

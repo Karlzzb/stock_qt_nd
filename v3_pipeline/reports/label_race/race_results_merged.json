@@ -1,0 +1,250 @@
+{
+  "issue": 26,
+  "pool": "merged",
+  "role": "正赛",
+  "n_candidates": 19,
+  "grid_size": 36,
+  "grid": [
+    {
+      "num_leaves": 15,
+      "min_data_in_leaf": 50,
+      "learning_rate": 0.05,
+      "feature_fraction": 0.6
+    },
+    {
+      "num_leaves": 15,
+      "min_data_in_leaf": 50,
+      "learning_rate": 0.05,
+      "feature_fraction": 0.8
+    },
+    {
+      "num_leaves": 15,
+      "min_data_in_leaf": 50,
+      "learning_rate": 0.1,
+      "feature_fraction": 0.6
+    },
+    {
+      "num_leaves": 15,
+      "min_data_in_leaf": 50,
+      "learning_rate": 0.1,
+      "feature_fraction": 0.8
+    },
+    {
+      "num_leaves": 15,
+      "min_data_in_leaf": 100,
+      "learning_rate": 0.05,
+      "feature_fraction": 0.6
+    },
+    {
+      "num_leaves": 15,
+      "min_data_in_leaf": 100,
+      "learning_rate": 0.05,
+      "feature_fraction": 0.8
+    },
+    {
+      "num_leaves": 15,
+      "min_data_in_leaf": 100,
+      "learning_rate": 0.1,
+      "feature_fraction": 0.6
+    },
+    {
+      "num_leaves": 15,
+      "min_data_in_leaf": 100,
+      "learning_rate": 0.1,
+      "feature_fraction": 0.8
+    },
+    {
+      "num_leaves": 15,
+      "min_data_in_leaf": 200,
+      "learning_rate": 0.05,
+      "feature_fraction": 0.6
+    },
+    {
+      "num_leaves": 15,
+      "min_data_in_leaf": 200,
+      "learning_rate": 0.05,
+      "feature_fraction": 0.8
+    },
+    {
+      "num_leaves": 15,
+      "min_data_in_leaf": 200,
+      "learning_rate": 0.1,
+      "feature_fraction": 0.6
+    },
+    {
+      "num_leaves": 15,
+      "min_data_in_leaf": 200,
+      "learning_rate": 0.1,
+      "feature_fraction": 0.8
+    },
+    {
+      "num_leaves": 31,
+      "min_data_in_leaf": 50,
+      "learning_rate": 0.05,
+      "feature_fraction": 0.6
+    },
+    {
+      "num_leaves": 31,
+      "min_data_in_leaf": 50,
+      "learning_rate": 0.05,
+      "feature_fraction": 0.8
+    },
+    {
+      "num_leaves": 31,
+      "min_data_in_leaf": 50,
+      "learning_rate": 0.1,
+      "feature_fraction": 0.6
+    },
+    {
+      "num_leaves": 31,
+      "min_data_in_leaf": 50,
+      "learning_rate": 0.1,
+      "feature_fraction": 0.8
+    },
+    {
+      "num_leaves": 31,
+      "min_data_in_leaf": 100,
+      "learning_rate": 0.05,
+      "feature_fraction": 0.6
+    },
+    {
+      "num_leaves": 31,
+      "min_data_in_leaf": 100,
+      "learning_rate": 0.05,
+      "feature_fraction": 0.8
+    },
+    {
+      "num_leaves": 31,
+      "min_data_in_leaf": 100,
+      "learning_rate": 0.1,
+      "feature_fraction": 0.6
+    },
+    {
+      "num_leaves": 31,
+      "min_data_in_leaf": 100,
+      "learning_rate": 0.1,
+      "feature_fraction": 0.8
+    },
+    {
+      "num_leaves": 31,
+      "min_data_in_leaf": 200,
+      "learning_rate": 0.05,
+      "feature_fraction": 0.6
+    },
+    {
+      "num_leaves": 31,
+      "min_data_in_leaf": 200,
+      "learning_rate": 0.05,
+      "feature_fraction": 0.8
+    },
+    {
+      "num_leaves": 31,
+      "min_data_in_leaf": 200,
+      "learning_rate": 0.1,
+      "feature_fraction": 0.6
+    },
+    {
+      "num_leaves": 31,
+      "min_data_in_leaf": 200,
+      "learning_rate": 0.1,
+      "feature_fraction": 0.8
+    },
+    {
+      "num_leaves": 63,
+      "min_data_in_leaf": 50,
+      "learning_rate": 0.05,
+      "feature_fraction": 0.6
+    },
+    {
+      "num_leaves": 63,
+      "min_data_in_leaf": 50,
+      "learning_rate": 0.05,
+      "feature_fraction": 0.8
+    },
+    {
+      "num_leaves": 63,
+      "min_data_in_leaf": 50,
+      "learning_rate": 0.1,
+      "feature_fraction": 0.6
+    },
+    {
+      "num_leaves": 63,
+      "min_data_in_leaf": 50,
+      "learning_rate": 0.1,
+      "feature_fraction": 0.8
+    },
+    {
+      "num_leaves": 63,
+      "min_data_in_leaf": 100,
+      "learning_rate": 0.05,
+      "feature_fraction": 0.6
+    },
+    {
+      "num_leaves": 63,
+      "min_data_in_leaf": 100,
+      "learning_rate": 0.05,
+      "feature_fraction": 0.8
+    },
+    {
+      "num_leaves": 63,
+      "min_data_in_leaf": 100,
+      "learning_rate": 0.1,
+      "feature_fraction": 0.6
+    },
+    {
+      "num_leaves": 63,
+      "min_data_in_leaf": 100,
+      "learning_rate": 0.1,
+      "feature_fraction": 0.8
+    },
+    {
+      "num_leaves": 63,
+      "min_data_in_leaf": 200,
+      "learning_rate": 0.05,
+      "feature_fraction": 0.6
+    },
+    {
+      "num_leaves": 63,
+      "min_data_in_leaf": 200,
+      "learning_rate": 0.05,
+      "feature_fraction": 0.8
+    },
+    {
+      "num_leaves": 63,
+      "min_data_in_leaf": 200,
+      "learning_rate": 0.1,
+      "feature_fraction": 0.6
+    },
+    {
+      "num_leaves": 63,
+      "min_data_in_leaf": 200,
+      "learning_rate": 0.1,
+      "feature_fraction": 0.8
+    }
+  ],
+  "n_features": 2060,
+  "seg_counts": {
+    "train": 22963,
+    "test": 10643,
+    "val": 10231,
+    "embargo": 799,
+    "pre2001": 504
+  },
+  "fallback_rule": "主池 train 2838 < 3000 -> 合并池升正赛（#20 预登记兜底, 实测触发）",
+  "adjudication": {
+    "winner": "hit_N20_k2.0",
+    "winner_val_precision_at_5_dayavg": 0.5750214224507284,
+    "winner_val_average_precision": 0.622474953133874,
+    "median_val_average_precision": 0.5794460048968032,
+    "ap_constraint_passed": true,
+    "role": "正赛",
+    "status": "provisional_pending_independent_review"
+  },
+  "assertions": {
+    "segment_embargo": "PASS (assert_segment_integrity)",
+    "leakage_exclusion": "PASS (model_feature_columns 排除模式零命中)",
+    "winner_oof_reproducible": "PASS (19 候选当选配置 OOF 复现断言逐位一致; 模式: {'hit_N20_k2.0': 'self_rerun_x2', 'cur_pos_5d': 'self_rerun_x2', 'cur_pos_10d': 'self_rerun_x2', 'cur_pos_15d': 'self_rerun_x2', 'cur_pos_3d': 'self_rerun_x2', 'cur_pos_20d': 'self_rerun_x2', 'cur_pos_25d': 'self_rerun_x2', 'cur_pos_30d': 'self_rerun_x2', 'cur_pos_45d': 'self_rerun_x2', 'cur_pos_60d': 'self_rerun_x2', 'open_exec_pos_5d': 'self_rerun_x2', 'open_exec_pos_10d': 'self_rerun_x2', 'open_exec_pos_3d': 'self_rerun_x2', 'open_exec_pos_15d': 'self_rerun_x2', 'open_exec_pos_20d': 'self_rerun_x2', 'open_exec_pos_25d': 'self_rerun_x2', 'open_exec_pos_45d': 'self_rerun_x2', 'open_exec_pos_60d': 'self_rerun_x2', 'open_exec_pos_30d': 'self_rerun_x2'})",
+    "test_untouched": "PASS (test 10643 行在场, 零指标零逐行统计)"
+  },
+  "elapsed_sec": 273.4
+}
