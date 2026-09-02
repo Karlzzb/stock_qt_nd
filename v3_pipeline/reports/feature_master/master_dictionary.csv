@@ -1,0 +1,2407 @@
+column,source,cn_name,status
+AMIHUD_INTRADAY,s1,流动性｜abs(C/O-1)/(V*C) (日内口径),kept
+AMP1,s1,波动率｜(H-L)/PC,kept
+AMP20,s1,"波动率｜Mean((H-L)/PC, 20)",kept
+AMT20,s1,"流动性｜log(Mean(A,20))",kept
+AMT_SHRINK_PEAK,s1,"量能｜Mean(A,5)/Max(Mean(A,5),120)",kept
+ATRN,s1,"波动率｜ATR14(H~,L~,C~)/C~ (Wilder 14)",kept
+BBW_PCTILE250,s1,"波动率｜pct_ts(4*Std(C~,20)/Mean(C~,20), 250)",kept
+BIAS20,s1,"技术指标｜C~/Mean(C~,20)-1",kept
+BIAS60,s1,"技术指标｜C~/Mean(C~,60)-1",kept
+BODY_STRENGTH,s1,K线形态｜(C-O)/(H-L+1e-12),kept
+BOLL_SQUEEZE,s1,"技术指标｜1[(4*Std(C~,20))/Mean(C~,20) < 0.05]",kept
+BREADTH_ABOVE_MA20,s1,"市场宽度｜universe 内 C~>Mean(C~,20) 占比 (自算)",kept
+BREADTH_ADV5,s1,市场宽度｜universe 内 RET5>0 占比 (自算),kept
+BREADTH_NEWLOW,s1,"市场宽度｜universe 内 L~=Min(L~,250) 占比 (自算)",kept
+CAL_DOW_0,s1,日历｜信号日星期 one-hot (0=Mon..4=Fri),kept
+CAL_DOW_1,s1,日历｜信号日星期 one-hot (0=Mon..4=Fri),kept
+CAL_DOW_2,s1,日历｜信号日星期 one-hot (0=Mon..4=Fri),kept
+CAL_DOW_3,s1,日历｜信号日星期 one-hot (0=Mon..4=Fri),kept
+CAL_DOW_4,s1,日历｜信号日星期 one-hot (0=Mon..4=Fri),kept
+CAL_HOLIDAY,s1,"日历｜春节/国庆前 10 个工作日、后 5 个工作日 dummy (静态节假日表+工作日近似, 截断不变)",kept
+CAL_MONTH_1,s1,日历｜月份 one-hot,kept
+CAL_MONTH_10,s1,日历｜月份 one-hot,kept
+CAL_MONTH_11,s1,日历｜月份 one-hot,kept
+CAL_MONTH_12,s1,日历｜月份 one-hot,kept
+CAL_MONTH_2,s1,日历｜月份 one-hot,kept
+CAL_MONTH_3,s1,日历｜月份 one-hot,kept
+CAL_MONTH_4,s1,日历｜月份 one-hot,kept
+CAL_MONTH_5,s1,日历｜月份 one-hot,kept
+CAL_MONTH_6,s1,日历｜月份 one-hot,kept
+CAL_MONTH_7,s1,日历｜月份 one-hot,kept
+CAL_MONTH_8,s1,日历｜月份 one-hot,kept
+CAL_MONTH_9,s1,日历｜月份 one-hot,kept
+CAL_MONTH_POS,s1,"日历｜距月末交易日数 (同月内之后的工作日数, 静态工作日近似, 截断不变)",kept
+CLOSE_VS_HIGH,s1,"K线形态｜(H-C)/(H-L), 一字板置 0.5",kept
+CNTD20,s1,"技术指标｜(Count(R>0,20)-Count(R<0,20))/20",kept
+CORR_CLOSE_A_10,s2,"Corr(C̃,A,10)",kept
+CORR_CLOSE_A_20,s2,"Corr(C̃,A,20)",kept
+CORR_CLOSE_A_3,s2,"Corr(C̃,A,3)",kept
+CORR_CLOSE_A_30,s2,"Corr(C̃,A,30)",kept
+CORR_CLOSE_A_5,s2,"Corr(C̃,A,5)",kept
+CORR_CLOSE_A_60,s2,"Corr(C̃,A,60)",kept
+CORR_CLOSE_RIDX_10,s2,"Corr(C̃,R_idx(000001.SH),10)",kept
+CORR_CLOSE_RIDX_20,s2,"Corr(C̃,R_idx(000001.SH),20)",kept
+CORR_CLOSE_RIDX_3,s2,"Corr(C̃,R_idx(000001.SH),3)",kept
+CORR_CLOSE_RIDX_30,s2,"Corr(C̃,R_idx(000001.SH),30)",kept
+CORR_CLOSE_RIDX_5,s2,"Corr(C̃,R_idx(000001.SH),5)",kept
+CORR_CLOSE_RIDX_60,s2,"Corr(C̃,R_idx(000001.SH),60)",kept
+CORR_CLOSE_V_10,s2,"Corr(C̃,V,10)","dropped_dedup(anchor=CPV10, rho=1.000000)"
+CORR_CLOSE_V_20,s2,"Corr(C̃,V,20)","dropped_dedup(anchor=CPV20, rho=1.000000)"
+CORR_CLOSE_V_3,s2,"Corr(C̃,V,3)",kept
+CORR_CLOSE_V_30,s2,"Corr(C̃,V,30)",kept
+CORR_CLOSE_V_5,s2,"Corr(C̃,V,5)",kept
+CORR_CLOSE_V_60,s2,"Corr(C̃,V,60)",kept
+CORR_HLR_V_10,s2,"Corr(H/L,V,10)","dropped_dedup(anchor=HLV_DIV10, rho=-1.000000)"
+CORR_HLR_V_20,s2,"Corr(H/L,V,20)",kept
+CORR_HLR_V_3,s2,"Corr(H/L,V,3)",kept
+CORR_HLR_V_30,s2,"Corr(H/L,V,30)",kept
+CORR_HLR_V_5,s2,"Corr(H/L,V,5)",kept
+CORR_HLR_V_60,s2,"Corr(H/L,V,60)",kept
+CORR_R_A_10,s2,"Corr(pct_chg/100,A,10)",kept
+CORR_R_A_20,s2,"Corr(pct_chg/100,A,20)",kept
+CORR_R_A_3,s2,"Corr(pct_chg/100,A,3)",kept
+CORR_R_A_30,s2,"Corr(pct_chg/100,A,30)",kept
+CORR_R_A_5,s2,"Corr(pct_chg/100,A,5)",kept
+CORR_R_A_60,s2,"Corr(pct_chg/100,A,60)",kept
+CORR_R_RIDX_10,s2,"Corr(pct_chg/100,R_idx(000001.SH),10)",kept
+CORR_R_RIDX_20,s2,"Corr(pct_chg/100,R_idx(000001.SH),20)",kept
+CORR_R_RIDX_3,s2,"Corr(pct_chg/100,R_idx(000001.SH),3)",kept
+CORR_R_RIDX_30,s2,"Corr(pct_chg/100,R_idx(000001.SH),30)",kept
+CORR_R_RIDX_5,s2,"Corr(pct_chg/100,R_idx(000001.SH),5)",kept
+CORR_R_RIDX_60,s2,"Corr(pct_chg/100,R_idx(000001.SH),60)",kept
+CORR_R_V_10,s2,"Corr(pct_chg/100,V,10)",kept
+CORR_R_V_20,s2,"Corr(pct_chg/100,V,20)",kept
+CORR_R_V_3,s2,"Corr(pct_chg/100,V,3)",kept
+CORR_R_V_30,s2,"Corr(pct_chg/100,V,30)",kept
+CORR_R_V_5,s2,"Corr(pct_chg/100,V,5)",kept
+CORR_R_V_60,s2,"Corr(pct_chg/100,V,60)",kept
+CORR_VWAP_V_10,s2,"Corr(A/V,V,10)","dropped_dedup(anchor=CPV_VWAP10, rho=-1.000000)"
+CORR_VWAP_V_20,s2,"Corr(A/V,V,20)",kept
+CORR_VWAP_V_3,s2,"Corr(A/V,V,3)",kept
+CORR_VWAP_V_30,s2,"Corr(A/V,V,30)",kept
+CORR_VWAP_V_5,s2,"Corr(A/V,V,5)",kept
+CORR_VWAP_V_60,s2,"Corr(A/V,V,60)",kept
+COUNT_RETID_10,s2,"Count(C/O-1>0,10)/10",kept
+COUNT_RETID_20,s2,"Count(C/O-1>0,20)/20",kept
+COUNT_RETID_3,s2,"Count(C/O-1>0,3)/3",kept
+COUNT_RETID_30,s2,"Count(C/O-1>0,30)/30",kept
+COUNT_RETID_5,s2,"Count(C/O-1>0,5)/5",kept
+COUNT_RETID_60,s2,"Count(C/O-1>0,60)/60",kept
+COUNT_RETON_10,s2,"Count(O/PC-1>0,10)/10",kept
+COUNT_RETON_20,s2,"Count(O/PC-1>0,20)/20",kept
+COUNT_RETON_3,s2,"Count(O/PC-1>0,3)/3",kept
+COUNT_RETON_30,s2,"Count(O/PC-1>0,30)/30",kept
+COUNT_RETON_5,s2,"Count(O/PC-1>0,5)/5",kept
+COUNT_RETON_60,s2,"Count(O/PC-1>0,60)/60",kept
+COUNT_R_10,s2,"Count(pct_chg/100>0,10)/10",kept
+COUNT_R_20,s2,"Count(pct_chg/100>0,20)/20",kept
+COUNT_R_3,s2,"Count(pct_chg/100>0,3)/3",kept
+COUNT_R_30,s2,"Count(pct_chg/100>0,30)/30",kept
+COUNT_R_5,s2,"Count(pct_chg/100>0,5)/5",kept
+COUNT_R_60,s2,"Count(pct_chg/100>0,60)/60",kept
+COV_CLOSE_LOGV_10,s2,"Cov(C̃,log(V+1),10)",kept
+COV_CLOSE_LOGV_20,s2,"Cov(C̃,log(V+1),20)",kept
+COV_CLOSE_LOGV_3,s2,"Cov(C̃,log(V+1),3)",kept
+COV_CLOSE_LOGV_30,s2,"Cov(C̃,log(V+1),30)",kept
+COV_CLOSE_LOGV_5,s2,"Cov(C̃,log(V+1),5)",kept
+COV_CLOSE_LOGV_60,s2,"Cov(C̃,log(V+1),60)",kept
+COV_HLR_LOGV_10,s2,"Cov(H/L,log(V+1),10)",kept
+COV_HLR_LOGV_20,s2,"Cov(H/L,log(V+1),20)",kept
+COV_HLR_LOGV_3,s2,"Cov(H/L,log(V+1),3)",kept
+COV_HLR_LOGV_30,s2,"Cov(H/L,log(V+1),30)",kept
+COV_HLR_LOGV_5,s2,"Cov(H/L,log(V+1),5)",kept
+COV_HLR_LOGV_60,s2,"Cov(H/L,log(V+1),60)",kept
+COV_R_LOGV_10,s2,"Cov(pct_chg/100,log(V+1),10)",kept
+COV_R_LOGV_20,s2,"Cov(pct_chg/100,log(V+1),20)",kept
+COV_R_LOGV_3,s2,"Cov(pct_chg/100,log(V+1),3)",kept
+COV_R_LOGV_30,s2,"Cov(pct_chg/100,log(V+1),30)",kept
+COV_R_LOGV_5,s2,"Cov(pct_chg/100,log(V+1),5)",kept
+COV_R_LOGV_60,s2,"Cov(pct_chg/100,log(V+1),60)","dropped_dedup(anchor=DVOL, rho=0.999386)"
+COV_R_RIDX_10,s2,"Cov(pct_chg/100,R_idx(000001.SH),10)",kept
+COV_R_RIDX_20,s2,"Cov(pct_chg/100,R_idx(000001.SH),20)",kept
+COV_R_RIDX_3,s2,"Cov(pct_chg/100,R_idx(000001.SH),3)",kept
+COV_R_RIDX_30,s2,"Cov(pct_chg/100,R_idx(000001.SH),30)",kept
+COV_R_RIDX_5,s2,"Cov(pct_chg/100,R_idx(000001.SH),5)",kept
+COV_R_RIDX_60,s2,"Cov(pct_chg/100,R_idx(000001.SH),60)",kept
+CPV10,s1,"量价相关｜Corr(C~, V, 10)",kept
+CPV20,s1,"量价相关｜Corr(C~, V, 20)",kept
+CPV_TREND,s1,"量价相关｜Slope(Corr(C~,V,10), 10)",kept
+CPV_VWAP10,s1,"量价相关｜-Corr(A/V, V, 10)",kept
+CUMID20,s1,"隔夜/日内｜Sum(log1p(RET_ID), 20)",kept
+CUMON20,s1,"隔夜/日内｜Sum(log1p(RET_ON), 20)",kept
+DAYS_SINCE_L2,s1,事件结构｜T-i2 (= confirm_lag),kept
+DELTA_A_10,s2,"Delta(A,10)/(x+1)",kept
+DELTA_A_20,s2,"Delta(A,20)/(x+1)",kept
+DELTA_A_3,s2,"Delta(A,3)/(x+1)",kept
+DELTA_A_30,s2,"Delta(A,30)/(x+1)",kept
+DELTA_A_5,s2,"Delta(A,5)/(x+1)",kept
+DELTA_A_60,s2,"Delta(A,60)/(x+1)",kept
+DELTA_CF_10,s2,"Delta(CF,10)/C̃",kept
+DELTA_CF_20,s2,"Delta(CF,20)/C̃",kept
+DELTA_CF_3,s2,"Delta(CF,3)/C̃",kept
+DELTA_CF_30,s2,"Delta(CF,30)/C̃",kept
+DELTA_CF_5,s2,"Delta(CF,5)/C̃",kept
+DELTA_CF_60,s2,"Delta(CF,60)/C̃",kept
+DELTA_CLOSE_10,s2,"Delta(C̃,10)/C̃","dropped_dedup(anchor=DELTA_CF_10, rho=1.000000)"
+DELTA_CLOSE_20,s2,"Delta(C̃,20)/C̃","dropped_dedup(anchor=DELTA_CF_20, rho=1.000000)"
+DELTA_CLOSE_3,s2,"Delta(C̃,3)/C̃","dropped_dedup(anchor=DELTA_CF_3, rho=1.000000)"
+DELTA_CLOSE_30,s2,"Delta(C̃,30)/C̃","dropped_dedup(anchor=DELTA_CF_30, rho=1.000000)"
+DELTA_CLOSE_5,s2,"Delta(C̃,5)/C̃","dropped_dedup(anchor=DELTA_CF_5, rho=1.000000)"
+DELTA_CLOSE_60,s2,"Delta(C̃,60)/C̃","dropped_dedup(anchor=DELTA_CF_60, rho=1.000000)"
+DELTA_HIGH_10,s2,"Delta(H̃,10)/C̃",kept
+DELTA_HIGH_20,s2,"Delta(H̃,20)/C̃",kept
+DELTA_HIGH_3,s2,"Delta(H̃,3)/C̃",kept
+DELTA_HIGH_30,s2,"Delta(H̃,30)/C̃",kept
+DELTA_HIGH_5,s2,"Delta(H̃,5)/C̃",kept
+DELTA_HIGH_60,s2,"Delta(H̃,60)/C̃",kept
+DELTA_HLR_10,s2,"Delta(H/L,10)",kept
+DELTA_HLR_20,s2,"Delta(H/L,20)",kept
+DELTA_HLR_3,s2,"Delta(H/L,3)",kept
+DELTA_HLR_30,s2,"Delta(H/L,30)",kept
+DELTA_HLR_5,s2,"Delta(H/L,5)",kept
+DELTA_HLR_60,s2,"Delta(H/L,60)",kept
+DELTA_LOGV_10,s2,"Delta(log(V+1),10)",kept
+DELTA_LOGV_20,s2,"Delta(log(V+1),20)",kept
+DELTA_LOGV_3,s2,"Delta(log(V+1),3)",kept
+DELTA_LOGV_30,s2,"Delta(log(V+1),30)",kept
+DELTA_LOGV_5,s2,"Delta(log(V+1),5)",kept
+DELTA_LOGV_60,s2,"Delta(log(V+1),60)",kept
+DELTA_LOW_10,s2,"Delta(L̃,10)/C̃",kept
+DELTA_LOW_20,s2,"Delta(L̃,20)/C̃",kept
+DELTA_LOW_3,s2,"Delta(L̃,3)/C̃",kept
+DELTA_LOW_30,s2,"Delta(L̃,30)/C̃",kept
+DELTA_LOW_5,s2,"Delta(L̃,5)/C̃",kept
+DELTA_LOW_60,s2,"Delta(L̃,60)/C̃",kept
+DELTA_OPEN_10,s2,"Delta(Õ,10)/C̃",kept
+DELTA_OPEN_20,s2,"Delta(Õ,20)/C̃",kept
+DELTA_OPEN_3,s2,"Delta(Õ,3)/C̃",kept
+DELTA_OPEN_30,s2,"Delta(Õ,30)/C̃",kept
+DELTA_OPEN_5,s2,"Delta(Õ,5)/C̃",kept
+DELTA_OPEN_60,s2,"Delta(Õ,60)/C̃",kept
+DELTA_RETID_10,s2,"Delta(C/O-1,10)",kept
+DELTA_RETID_20,s2,"Delta(C/O-1,20)",kept
+DELTA_RETID_3,s2,"Delta(C/O-1,3)",kept
+DELTA_RETID_30,s2,"Delta(C/O-1,30)",kept
+DELTA_RETID_5,s2,"Delta(C/O-1,5)",kept
+DELTA_RETID_60,s2,"Delta(C/O-1,60)",kept
+DELTA_RETON_10,s2,"Delta(O/PC-1,10)",kept
+DELTA_RETON_20,s2,"Delta(O/PC-1,20)",kept
+DELTA_RETON_3,s2,"Delta(O/PC-1,3)",kept
+DELTA_RETON_30,s2,"Delta(O/PC-1,30)",kept
+DELTA_RETON_5,s2,"Delta(O/PC-1,5)",kept
+DELTA_RETON_60,s2,"Delta(O/PC-1,60)",kept
+DELTA_R_10,s2,"Delta(pct_chg/100,10)",kept
+DELTA_R_20,s2,"Delta(pct_chg/100,20)",kept
+DELTA_R_3,s2,"Delta(pct_chg/100,3)",kept
+DELTA_R_30,s2,"Delta(pct_chg/100,30)",kept
+DELTA_R_5,s2,"Delta(pct_chg/100,5)",kept
+DELTA_R_60,s2,"Delta(pct_chg/100,60)",kept
+DELTA_VWAP_10,s2,"Delta(A/V,10)/C",kept
+DELTA_VWAP_20,s2,"Delta(A/V,20)/C",kept
+DELTA_VWAP_3,s2,"Delta(A/V,3)/C",kept
+DELTA_VWAP_30,s2,"Delta(A/V,30)/C",kept
+DELTA_VWAP_5,s2,"Delta(A/V,5)/C",kept
+DELTA_VWAP_60,s2,"Delta(A/V,60)/C",kept
+DELTA_V_10,s2,"Delta(V,10)/(x+1)",kept
+DELTA_V_20,s2,"Delta(V,20)/(x+1)",kept
+DELTA_V_3,s2,"Delta(V,3)/(x+1)",kept
+DELTA_V_30,s2,"Delta(V,30)/(x+1)",kept
+DELTA_V_5,s2,"Delta(V,5)/(x+1)",kept
+DELTA_V_60,s2,"Delta(V,60)/(x+1)",kept
+DISPOSAL60,s1,"制度｜C/(Sum(A,60)/Sum(V,60)) - 1 (现价对 60 日 VWAP 成本偏离)",kept
+DIST_52W_HIGH,s1,"位置｜C~/Max(H~,250)-1",kept
+DIST_52W_LOW,s1,"位置｜C~/Min(L~,250)-1",kept
+DIST_HIGH60,s1,"位置结构｜C~/Max(H~,60) (取 high 口径, 并入 drawdown_60)",kept
+DIST_LIMIT,s1,"制度｜clip(pct_chg/limit_pct, -1, 1), 1=收涨停 (近似口径)",kept
+DIST_RESIST20,s1,"位置结构｜(Max(H~,20)-C~)/C~",kept
+DIST_SUPPORT20,s1,"位置结构｜(C~-Min(L~,20))/C~",kept
+DIV_COUNT_120,s1,"事件结构｜过去 120 交易日内同池同向底背离次数 (含本次), 窗口 (T-120, T]",kept
+DIV_DIF_LEVEL_L1,s1,事件结构｜DIF[i1]/(C~[i1]*ATRp[i1]),kept
+DIV_DIF_LIFT,s1,事件结构｜(DIF[i2]-DIF[i1])/ATR14[T],kept
+DIV_DIF_SLOPE,s1,事件结构｜(DIF[i2]-DIF[i1])/(i2-i1)/ATR14[T],kept
+DIV_GOLDEN_CROSS_STATE,s1,事件结构｜三值: 2=T 日金叉; 1=T 前 5 日内已金叉; 0=未金叉,kept
+DIV_HIST_AREA_SHRINK,s1,"事件结构｜S2/S1, Sk = 第 k 低点前最近绿柱区间 Sum(HIST|HIST<0)",kept
+DIV_HIST_TROUGH_SHRINK,s1,"事件结构｜min(HIST@i2 绿柱区)/min(HIST@i1 绿柱区) (负值之比, <1 为收缩)",kept
+DIV_PRICE_NEWLOW_DEPTH,s1,事件结构｜L~[i2]/L~[i1]-1,kept
+DIV_SPAN_BARS,s1,事件结构｜i2-i1 (= formation),kept
+DIV_SPAN_VS_CYCLE,s1,事件结构｜(i2-i1)/自 T 起最近一次 DIF 完整正负循环时长 (最后两个已完成异号 run 长度和),kept
+DIV_ZERO_AXIS_DEPTH,s1,"事件结构｜max(DIF[T],DEA[T])/(C~[T]*ATRp[T])",kept
+DOJI,s1,K线形态｜1[abs(C-O) < 0.1*(H-L)],kept
+DOWN_DAY_PCT10,s1,K线形态｜10 日阴线 (C<O) 占比,kept
+DOWN_STREAK,s1,K线形态｜T 日末连续 C<O 天数,kept
+DSR20,s1,"波动结构｜Sum(min(R,0)^2,20)/Sum(R^2,20)",kept
+DVOL,s1,"波动率｜Std(R,5)-Std(R,60)",kept
+EFF_RATIO10,s1,"位置结构｜abs(C~-shift(C~,10))/Sum(abs(dC~),10) (Kaufman)",kept
+EMA_A_10,s2,"EMA(A,10)/(x+1)",kept
+EMA_A_20,s2,"EMA(A,20)/(x+1)",kept
+EMA_A_3,s2,"EMA(A,3)/(x+1)",kept
+EMA_A_30,s2,"EMA(A,30)/(x+1)",kept
+EMA_A_5,s2,"EMA(A,5)/(x+1)",kept
+EMA_A_60,s2,"EMA(A,60)/(x+1)",kept
+EMA_CF_10,s2,"EMA(CF,10)/C̃",kept
+EMA_CF_20,s2,"EMA(CF,20)/C̃",kept
+EMA_CF_3,s2,"EMA(CF,3)/C̃",kept
+EMA_CF_30,s2,"EMA(CF,30)/C̃",kept
+EMA_CF_5,s2,"EMA(CF,5)/C̃",kept
+EMA_CF_60,s2,"EMA(CF,60)/C̃",kept
+EMA_CLOSE_10,s2,"EMA(C̃,10)/C̃","dropped_dedup(anchor=EMA_CF_10, rho=1.000000)"
+EMA_CLOSE_20,s2,"EMA(C̃,20)/C̃","dropped_dedup(anchor=EMA_CF_20, rho=1.000000)"
+EMA_CLOSE_3,s2,"EMA(C̃,3)/C̃","dropped_dedup(anchor=EMA_CF_3, rho=1.000000)"
+EMA_CLOSE_30,s2,"EMA(C̃,30)/C̃","dropped_dedup(anchor=EMA_CF_30, rho=1.000000)"
+EMA_CLOSE_5,s2,"EMA(C̃,5)/C̃","dropped_dedup(anchor=EMA_CF_5, rho=1.000000)"
+EMA_CLOSE_60,s2,"EMA(C̃,60)/C̃","dropped_dedup(anchor=EMA_CF_60, rho=1.000000)"
+EMA_HIGH_10,s2,"EMA(H̃,10)/C̃",kept
+EMA_HIGH_20,s2,"EMA(H̃,20)/C̃",kept
+EMA_HIGH_3,s2,"EMA(H̃,3)/C̃",kept
+EMA_HIGH_30,s2,"EMA(H̃,30)/C̃",kept
+EMA_HIGH_5,s2,"EMA(H̃,5)/C̃",kept
+EMA_HIGH_60,s2,"EMA(H̃,60)/C̃",kept
+EMA_HLR_10,s2,"EMA(H/L,10)",kept
+EMA_HLR_20,s2,"EMA(H/L,20)",kept
+EMA_HLR_3,s2,"EMA(H/L,3)",kept
+EMA_HLR_30,s2,"EMA(H/L,30)",kept
+EMA_HLR_5,s2,"EMA(H/L,5)",kept
+EMA_HLR_60,s2,"EMA(H/L,60)",kept
+EMA_LOGV_10,s2,"EMA(log(V+1),10)",kept
+EMA_LOGV_20,s2,"EMA(log(V+1),20)",kept
+EMA_LOGV_3,s2,"EMA(log(V+1),3)",kept
+EMA_LOGV_30,s2,"EMA(log(V+1),30)",kept
+EMA_LOGV_5,s2,"EMA(log(V+1),5)",kept
+EMA_LOGV_60,s2,"EMA(log(V+1),60)",kept
+EMA_LOW_10,s2,"EMA(L̃,10)/C̃",kept
+EMA_LOW_20,s2,"EMA(L̃,20)/C̃",kept
+EMA_LOW_3,s2,"EMA(L̃,3)/C̃",kept
+EMA_LOW_30,s2,"EMA(L̃,30)/C̃",kept
+EMA_LOW_5,s2,"EMA(L̃,5)/C̃",kept
+EMA_LOW_60,s2,"EMA(L̃,60)/C̃",kept
+EMA_OPEN_10,s2,"EMA(Õ,10)/C̃",kept
+EMA_OPEN_20,s2,"EMA(Õ,20)/C̃",kept
+EMA_OPEN_3,s2,"EMA(Õ,3)/C̃",kept
+EMA_OPEN_30,s2,"EMA(Õ,30)/C̃","dropped_dedup(anchor=EMA_CF_30, rho=0.999017)"
+EMA_OPEN_5,s2,"EMA(Õ,5)/C̃",kept
+EMA_OPEN_60,s2,"EMA(Õ,60)/C̃","dropped_dedup(anchor=EMA_CF_60, rho=0.999688)"
+EMA_RETID_10,s2,"EMA(C/O-1,10)",kept
+EMA_RETID_20,s2,"EMA(C/O-1,20)",kept
+EMA_RETID_3,s2,"EMA(C/O-1,3)",kept
+EMA_RETID_30,s2,"EMA(C/O-1,30)",kept
+EMA_RETID_5,s2,"EMA(C/O-1,5)",kept
+EMA_RETID_60,s2,"EMA(C/O-1,60)",kept
+EMA_RETON_10,s2,"EMA(O/PC-1,10)",kept
+EMA_RETON_20,s2,"EMA(O/PC-1,20)",kept
+EMA_RETON_3,s2,"EMA(O/PC-1,3)",kept
+EMA_RETON_30,s2,"EMA(O/PC-1,30)",kept
+EMA_RETON_5,s2,"EMA(O/PC-1,5)",kept
+EMA_RETON_60,s2,"EMA(O/PC-1,60)",kept
+EMA_R_10,s2,"EMA(pct_chg/100,10)",kept
+EMA_R_20,s2,"EMA(pct_chg/100,20)",kept
+EMA_R_3,s2,"EMA(pct_chg/100,3)",kept
+EMA_R_30,s2,"EMA(pct_chg/100,30)",kept
+EMA_R_5,s2,"EMA(pct_chg/100,5)",kept
+EMA_R_60,s2,"EMA(pct_chg/100,60)",kept
+EMA_VWAP_10,s2,"EMA(A/V,10)/C",kept
+EMA_VWAP_20,s2,"EMA(A/V,20)/C",kept
+EMA_VWAP_3,s2,"EMA(A/V,3)/C",kept
+EMA_VWAP_30,s2,"EMA(A/V,30)/C",kept
+EMA_VWAP_5,s2,"EMA(A/V,5)/C",kept
+EMA_VWAP_60,s2,"EMA(A/V,60)/C",kept
+EMA_V_10,s2,"EMA(V,10)/(x+1)",kept
+EMA_V_20,s2,"EMA(V,20)/(x+1)",kept
+EMA_V_3,s2,"EMA(V,3)/(x+1)",kept
+EMA_V_30,s2,"EMA(V,30)/(x+1)",kept
+EMA_V_5,s2,"EMA(V,5)/(x+1)",kept
+EMA_V_60,s2,"EMA(V,60)/(x+1)",kept
+ENGULFING,s1,K线形态｜前阴今阳/前阳今阴且实体吞没 (+1/-1/0),kept
+GAP_MEAN20,s1,"隔夜｜Mean(RET_ON,20)",kept
+GAP_VOL20,s1,"隔夜｜Std(RET_ON,20)",kept
+GK_VOL,s1,"波动率｜Mean20( sqrt(max(0.5*ln(H/L)^2-(2ln2-1)*ln(C/O)^2, 0)) ) (Garman-Klass)",kept
+GK_VOL_RATIO,s1,"波动率｜GK_VOL/Mean(GK_VOL,20)",kept
+HAMMER,s1,K线形态｜1[下影>=2*实体 且 上影<=0.5*实体 且 下影>=0.6*全长] (T 日),kept
+HAMMER_L2,s1,事件结构｜HAMMER 形态在 i2 日的取值,kept
+HLV_DIV10,s1,"量价相关｜-Corr(H/L, V, 10)",kept
+HL_SPREAD,s1,流动性｜(H-L)/((H+L)/2),kept
+IDXMAX_A_10,s2,"IdxMax(A,10)/10",kept
+IDXMAX_A_20,s2,"IdxMax(A,20)/20",kept
+IDXMAX_A_3,s2,"IdxMax(A,3)/3",kept
+IDXMAX_A_30,s2,"IdxMax(A,30)/30",kept
+IDXMAX_A_5,s2,"IdxMax(A,5)/5",kept
+IDXMAX_A_60,s2,"IdxMax(A,60)/60",kept
+IDXMAX_CF_10,s2,"IdxMax(CF,10)/10",kept
+IDXMAX_CF_20,s2,"IdxMax(CF,20)/20",kept
+IDXMAX_CF_3,s2,"IdxMax(CF,3)/3",kept
+IDXMAX_CF_30,s2,"IdxMax(CF,30)/30",kept
+IDXMAX_CF_5,s2,"IdxMax(CF,5)/5",kept
+IDXMAX_CF_60,s2,"IdxMax(CF,60)/60",kept
+IDXMAX_CLOSE_10,s2,"IdxMax(C̃,10)/10","dropped_dedup(anchor=IDXMAX_CF_10, rho=1.000000)"
+IDXMAX_CLOSE_20,s2,"IdxMax(C̃,20)/20","dropped_dedup(anchor=IDXMAX_CF_20, rho=1.000000)"
+IDXMAX_CLOSE_3,s2,"IdxMax(C̃,3)/3","dropped_dedup(anchor=IDXMAX_CF_3, rho=1.000000)"
+IDXMAX_CLOSE_30,s2,"IdxMax(C̃,30)/30","dropped_dedup(anchor=IDXMAX_CF_30, rho=1.000000)"
+IDXMAX_CLOSE_5,s2,"IdxMax(C̃,5)/5","dropped_dedup(anchor=IDXMAX_CF_5, rho=1.000000)"
+IDXMAX_CLOSE_60,s2,"IdxMax(C̃,60)/60","dropped_dedup(anchor=IDXMAX_CF_60, rho=1.000000)"
+IDXMAX_HIGH_10,s2,"IdxMax(H̃,10)/10",kept
+IDXMAX_HIGH_20,s2,"IdxMax(H̃,20)/20",kept
+IDXMAX_HIGH_3,s2,"IdxMax(H̃,3)/3",kept
+IDXMAX_HIGH_30,s2,"IdxMax(H̃,30)/30",kept
+IDXMAX_HIGH_5,s2,"IdxMax(H̃,5)/5",kept
+IDXMAX_HIGH_60,s2,"IdxMax(H̃,60)/60",kept
+IDXMAX_HLR_10,s2,"IdxMax(H/L,10)/10",kept
+IDXMAX_HLR_20,s2,"IdxMax(H/L,20)/20",kept
+IDXMAX_HLR_3,s2,"IdxMax(H/L,3)/3",kept
+IDXMAX_HLR_30,s2,"IdxMax(H/L,30)/30",kept
+IDXMAX_HLR_5,s2,"IdxMax(H/L,5)/5",kept
+IDXMAX_HLR_60,s2,"IdxMax(H/L,60)/60",kept
+IDXMAX_LOGV_10,s2,"IdxMax(log(V+1),10)/10",kept
+IDXMAX_LOGV_20,s2,"IdxMax(log(V+1),20)/20",kept
+IDXMAX_LOGV_3,s2,"IdxMax(log(V+1),3)/3",kept
+IDXMAX_LOGV_30,s2,"IdxMax(log(V+1),30)/30",kept
+IDXMAX_LOGV_5,s2,"IdxMax(log(V+1),5)/5",kept
+IDXMAX_LOGV_60,s2,"IdxMax(log(V+1),60)/60",kept
+IDXMAX_LOW_10,s2,"IdxMax(L̃,10)/10",kept
+IDXMAX_LOW_20,s2,"IdxMax(L̃,20)/20",kept
+IDXMAX_LOW_3,s2,"IdxMax(L̃,3)/3",kept
+IDXMAX_LOW_30,s2,"IdxMax(L̃,30)/30",kept
+IDXMAX_LOW_5,s2,"IdxMax(L̃,5)/5",kept
+IDXMAX_LOW_60,s2,"IdxMax(L̃,60)/60",kept
+IDXMAX_OPEN_10,s2,"IdxMax(Õ,10)/10",kept
+IDXMAX_OPEN_20,s2,"IdxMax(Õ,20)/20",kept
+IDXMAX_OPEN_3,s2,"IdxMax(Õ,3)/3",kept
+IDXMAX_OPEN_30,s2,"IdxMax(Õ,30)/30",kept
+IDXMAX_OPEN_5,s2,"IdxMax(Õ,5)/5",kept
+IDXMAX_OPEN_60,s2,"IdxMax(Õ,60)/60",kept
+IDXMAX_RETID_10,s2,"IdxMax(C/O-1,10)/10",kept
+IDXMAX_RETID_20,s2,"IdxMax(C/O-1,20)/20",kept
+IDXMAX_RETID_3,s2,"IdxMax(C/O-1,3)/3",kept
+IDXMAX_RETID_30,s2,"IdxMax(C/O-1,30)/30",kept
+IDXMAX_RETID_5,s2,"IdxMax(C/O-1,5)/5",kept
+IDXMAX_RETID_60,s2,"IdxMax(C/O-1,60)/60",kept
+IDXMAX_RETON_10,s2,"IdxMax(O/PC-1,10)/10",kept
+IDXMAX_RETON_20,s2,"IdxMax(O/PC-1,20)/20",kept
+IDXMAX_RETON_3,s2,"IdxMax(O/PC-1,3)/3",kept
+IDXMAX_RETON_30,s2,"IdxMax(O/PC-1,30)/30",kept
+IDXMAX_RETON_5,s2,"IdxMax(O/PC-1,5)/5",kept
+IDXMAX_RETON_60,s2,"IdxMax(O/PC-1,60)/60",kept
+IDXMAX_R_10,s2,"IdxMax(pct_chg/100,10)/10",kept
+IDXMAX_R_20,s2,"IdxMax(pct_chg/100,20)/20",kept
+IDXMAX_R_3,s2,"IdxMax(pct_chg/100,3)/3",kept
+IDXMAX_R_30,s2,"IdxMax(pct_chg/100,30)/30",kept
+IDXMAX_R_5,s2,"IdxMax(pct_chg/100,5)/5",kept
+IDXMAX_R_60,s2,"IdxMax(pct_chg/100,60)/60",kept
+IDXMAX_VWAP_10,s2,"IdxMax(A/V,10)/10",kept
+IDXMAX_VWAP_20,s2,"IdxMax(A/V,20)/20",kept
+IDXMAX_VWAP_3,s2,"IdxMax(A/V,3)/3",kept
+IDXMAX_VWAP_30,s2,"IdxMax(A/V,30)/30",kept
+IDXMAX_VWAP_5,s2,"IdxMax(A/V,5)/5",kept
+IDXMAX_VWAP_60,s2,"IdxMax(A/V,60)/60",kept
+IDXMAX_V_10,s2,"IdxMax(V,10)/10","dropped_dedup(anchor=IDXMAX_LOGV_10, rho=1.000000)"
+IDXMAX_V_20,s2,"IdxMax(V,20)/20","dropped_dedup(anchor=IDXMAX_LOGV_20, rho=1.000000)"
+IDXMAX_V_3,s2,"IdxMax(V,3)/3","dropped_dedup(anchor=IDXMAX_LOGV_3, rho=1.000000)"
+IDXMAX_V_30,s2,"IdxMax(V,30)/30","dropped_dedup(anchor=IDXMAX_LOGV_30, rho=1.000000)"
+IDXMAX_V_5,s2,"IdxMax(V,5)/5","dropped_dedup(anchor=IDXMAX_LOGV_5, rho=1.000000)"
+IDXMAX_V_60,s2,"IdxMax(V,60)/60","dropped_dedup(anchor=IDXMAX_LOGV_60, rho=1.000000)"
+IDXMIN_A_10,s2,"IdxMin(A,10)/10",kept
+IDXMIN_A_20,s2,"IdxMin(A,20)/20",kept
+IDXMIN_A_3,s2,"IdxMin(A,3)/3",kept
+IDXMIN_A_30,s2,"IdxMin(A,30)/30",kept
+IDXMIN_A_5,s2,"IdxMin(A,5)/5",kept
+IDXMIN_A_60,s2,"IdxMin(A,60)/60",kept
+IDXMIN_CF_10,s2,"IdxMin(CF,10)/10",kept
+IDXMIN_CF_20,s2,"IdxMin(CF,20)/20",kept
+IDXMIN_CF_3,s2,"IdxMin(CF,3)/3",kept
+IDXMIN_CF_30,s2,"IdxMin(CF,30)/30",kept
+IDXMIN_CF_5,s2,"IdxMin(CF,5)/5",kept
+IDXMIN_CF_60,s2,"IdxMin(CF,60)/60",kept
+IDXMIN_CLOSE_10,s2,"IdxMin(C̃,10)/10","dropped_dedup(anchor=IDXMIN_CF_10, rho=1.000000)"
+IDXMIN_CLOSE_20,s2,"IdxMin(C̃,20)/20","dropped_dedup(anchor=IDXMIN_CF_20, rho=1.000000)"
+IDXMIN_CLOSE_3,s2,"IdxMin(C̃,3)/3","dropped_dedup(anchor=IDXMIN_CF_3, rho=1.000000)"
+IDXMIN_CLOSE_30,s2,"IdxMin(C̃,30)/30","dropped_dedup(anchor=IDXMIN_CF_30, rho=1.000000)"
+IDXMIN_CLOSE_5,s2,"IdxMin(C̃,5)/5","dropped_dedup(anchor=IDXMIN_CF_5, rho=1.000000)"
+IDXMIN_CLOSE_60,s2,"IdxMin(C̃,60)/60","dropped_dedup(anchor=IDXMIN_CF_60, rho=1.000000)"
+IDXMIN_HIGH_10,s2,"IdxMin(H̃,10)/10",kept
+IDXMIN_HIGH_20,s2,"IdxMin(H̃,20)/20",kept
+IDXMIN_HIGH_3,s2,"IdxMin(H̃,3)/3",kept
+IDXMIN_HIGH_30,s2,"IdxMin(H̃,30)/30",kept
+IDXMIN_HIGH_5,s2,"IdxMin(H̃,5)/5",kept
+IDXMIN_HIGH_60,s2,"IdxMin(H̃,60)/60",kept
+IDXMIN_HLR_10,s2,"IdxMin(H/L,10)/10",kept
+IDXMIN_HLR_20,s2,"IdxMin(H/L,20)/20",kept
+IDXMIN_HLR_3,s2,"IdxMin(H/L,3)/3",kept
+IDXMIN_HLR_30,s2,"IdxMin(H/L,30)/30",kept
+IDXMIN_HLR_5,s2,"IdxMin(H/L,5)/5",kept
+IDXMIN_HLR_60,s2,"IdxMin(H/L,60)/60",kept
+IDXMIN_LOGV_10,s2,"IdxMin(log(V+1),10)/10",kept
+IDXMIN_LOGV_20,s2,"IdxMin(log(V+1),20)/20",kept
+IDXMIN_LOGV_3,s2,"IdxMin(log(V+1),3)/3",kept
+IDXMIN_LOGV_30,s2,"IdxMin(log(V+1),30)/30",kept
+IDXMIN_LOGV_5,s2,"IdxMin(log(V+1),5)/5",kept
+IDXMIN_LOGV_60,s2,"IdxMin(log(V+1),60)/60",kept
+IDXMIN_LOW_10,s2,"IdxMin(L̃,10)/10",kept
+IDXMIN_LOW_20,s2,"IdxMin(L̃,20)/20","dropped_dedup(anchor=IMIN20, rho=1.000000)"
+IDXMIN_LOW_3,s2,"IdxMin(L̃,3)/3",kept
+IDXMIN_LOW_30,s2,"IdxMin(L̃,30)/30",kept
+IDXMIN_LOW_5,s2,"IdxMin(L̃,5)/5",kept
+IDXMIN_LOW_60,s2,"IdxMin(L̃,60)/60",kept
+IDXMIN_OPEN_10,s2,"IdxMin(Õ,10)/10",kept
+IDXMIN_OPEN_20,s2,"IdxMin(Õ,20)/20",kept
+IDXMIN_OPEN_3,s2,"IdxMin(Õ,3)/3",kept
+IDXMIN_OPEN_30,s2,"IdxMin(Õ,30)/30",kept
+IDXMIN_OPEN_5,s2,"IdxMin(Õ,5)/5",kept
+IDXMIN_OPEN_60,s2,"IdxMin(Õ,60)/60",kept
+IDXMIN_RETID_10,s2,"IdxMin(C/O-1,10)/10",kept
+IDXMIN_RETID_20,s2,"IdxMin(C/O-1,20)/20",kept
+IDXMIN_RETID_3,s2,"IdxMin(C/O-1,3)/3",kept
+IDXMIN_RETID_30,s2,"IdxMin(C/O-1,30)/30",kept
+IDXMIN_RETID_5,s2,"IdxMin(C/O-1,5)/5",kept
+IDXMIN_RETID_60,s2,"IdxMin(C/O-1,60)/60",kept
+IDXMIN_RETON_10,s2,"IdxMin(O/PC-1,10)/10",kept
+IDXMIN_RETON_20,s2,"IdxMin(O/PC-1,20)/20",kept
+IDXMIN_RETON_3,s2,"IdxMin(O/PC-1,3)/3",kept
+IDXMIN_RETON_30,s2,"IdxMin(O/PC-1,30)/30",kept
+IDXMIN_RETON_5,s2,"IdxMin(O/PC-1,5)/5",kept
+IDXMIN_RETON_60,s2,"IdxMin(O/PC-1,60)/60",kept
+IDXMIN_R_10,s2,"IdxMin(pct_chg/100,10)/10",kept
+IDXMIN_R_20,s2,"IdxMin(pct_chg/100,20)/20",kept
+IDXMIN_R_3,s2,"IdxMin(pct_chg/100,3)/3",kept
+IDXMIN_R_30,s2,"IdxMin(pct_chg/100,30)/30",kept
+IDXMIN_R_5,s2,"IdxMin(pct_chg/100,5)/5",kept
+IDXMIN_R_60,s2,"IdxMin(pct_chg/100,60)/60",kept
+IDXMIN_VWAP_10,s2,"IdxMin(A/V,10)/10",kept
+IDXMIN_VWAP_20,s2,"IdxMin(A/V,20)/20",kept
+IDXMIN_VWAP_3,s2,"IdxMin(A/V,3)/3",kept
+IDXMIN_VWAP_30,s2,"IdxMin(A/V,30)/30",kept
+IDXMIN_VWAP_5,s2,"IdxMin(A/V,5)/5",kept
+IDXMIN_VWAP_60,s2,"IdxMin(A/V,60)/60",kept
+IDXMIN_V_10,s2,"IdxMin(V,10)/10","dropped_dedup(anchor=IDXMIN_LOGV_10, rho=1.000000)"
+IDXMIN_V_20,s2,"IdxMin(V,20)/20","dropped_dedup(anchor=IDXMIN_LOGV_20, rho=1.000000)"
+IDXMIN_V_3,s2,"IdxMin(V,3)/3","dropped_dedup(anchor=IDXMIN_LOGV_3, rho=1.000000)"
+IDXMIN_V_30,s2,"IdxMin(V,30)/30","dropped_dedup(anchor=IDXMIN_LOGV_30, rho=1.000000)"
+IDXMIN_V_5,s2,"IdxMin(V,5)/5","dropped_dedup(anchor=IDXMIN_LOGV_5, rho=1.000000)"
+IDXMIN_V_60,s2,"IdxMin(V,60)/60","dropped_dedup(anchor=IDXMIN_LOGV_60, rho=1.000000)"
+ILLIQ20,s1,"流动性｜log(Mean(abs(R)/(A*1000), 20) + 1e-30)",kept
+IMIN20,s1,"位置｜IdxMin(L~,20)/20 (最值距今天数/20)",kept
+IMXD20,s1,"位置｜(IdxMax(H~,20)-IdxMin(L~,20))/20",kept
+INFO_DISC20,s1,"反转｜sign(RET20)*(Count(R<0,20)-Count(R>0,20))/20 (Frog-in-the-Pan)",kept
+IVOL60,s1,波动率｜60 日 R = a+b*R_idx OLS 残差的 std (指数 000001.SH),"dropped_dedup(anchor=DVOL, rho=-0.999401)"
+IVOV60,s1,"高阶矩｜Std(Std(R,5),60)","dropped_dedup(anchor=DVOL, rho=-0.999580)"
+JUMPFREQ60,s1,"波动结构｜Count(abs(R)>2*Std(R,60),60)/60",kept
+KBAR_KLEN,s2,KBAR_KLEN,kept
+KBAR_KLOW,s2,KBAR_KLOW,kept
+KBAR_KLOW2,s2,KBAR_KLOW2,kept
+KBAR_KMID,s2,KBAR_KMID,"dropped_dedup(anchor=RET_ID, rho=1.000000)"
+KBAR_KMID2,s2,KBAR_KMID2,"dropped_dedup(anchor=BODY_STRENGTH, rho=1.000000)"
+KBAR_KSFT,s2,KBAR_KSFT,kept
+KBAR_KSFT2,s2,KBAR_KSFT2,"dropped_dedup(anchor=CLOSE_VS_HIGH, rho=-1.000000)"
+KBAR_KUP,s2,KBAR_KUP,kept
+KBAR_KUP2,s2,KBAR_KUP2,"dropped_dedup(anchor=UPPER_SHADOW_RATIO, rho=1.000000)"
+KDJ_D,s1,"技术指标｜D=EMA(K,1/3)",kept
+KDJ_J,s1,技术指标｜J=3K-2D (输出 K/D/J 三列),kept
+KDJ_K,s1,"技术指标｜RSV9 递推 K=EMA(RSV,1/3)",kept
+KURT60,s1,"高阶矩｜Kurt(R,60)",kept
+KURT_A_10,s2,"Kurt(A,10)",kept
+KURT_A_20,s2,"Kurt(A,20)",kept
+KURT_A_3,s2,"Kurt(A,3)",kept
+KURT_A_30,s2,"Kurt(A,30)",kept
+KURT_A_5,s2,"Kurt(A,5)",kept
+KURT_A_60,s2,"Kurt(A,60)",kept
+KURT_CF_10,s2,"Kurt(CF,10)",kept
+KURT_CF_20,s2,"Kurt(CF,20)",kept
+KURT_CF_3,s2,"Kurt(CF,3)",kept
+KURT_CF_30,s2,"Kurt(CF,30)",kept
+KURT_CF_5,s2,"Kurt(CF,5)",kept
+KURT_CF_60,s2,"Kurt(CF,60)",kept
+KURT_CLOSE_10,s2,"Kurt(C̃,10)","dropped_dedup(anchor=KURT_CF_10, rho=1.000000)"
+KURT_CLOSE_20,s2,"Kurt(C̃,20)","dropped_dedup(anchor=KURT_CF_20, rho=1.000000)"
+KURT_CLOSE_3,s2,"Kurt(C̃,3)",kept
+KURT_CLOSE_30,s2,"Kurt(C̃,30)","dropped_dedup(anchor=KURT_CF_30, rho=1.000000)"
+KURT_CLOSE_5,s2,"Kurt(C̃,5)","dropped_dedup(anchor=KURT_CF_5, rho=1.000000)"
+KURT_CLOSE_60,s2,"Kurt(C̃,60)","dropped_dedup(anchor=KURT_CF_60, rho=1.000000)"
+KURT_HIGH_10,s2,"Kurt(H̃,10)",kept
+KURT_HIGH_20,s2,"Kurt(H̃,20)",kept
+KURT_HIGH_3,s2,"Kurt(H̃,3)",kept
+KURT_HIGH_30,s2,"Kurt(H̃,30)",kept
+KURT_HIGH_5,s2,"Kurt(H̃,5)",kept
+KURT_HIGH_60,s2,"Kurt(H̃,60)",kept
+KURT_HLR_10,s2,"Kurt(H/L,10)",kept
+KURT_HLR_20,s2,"Kurt(H/L,20)",kept
+KURT_HLR_3,s2,"Kurt(H/L,3)",kept
+KURT_HLR_30,s2,"Kurt(H/L,30)",kept
+KURT_HLR_5,s2,"Kurt(H/L,5)",kept
+KURT_HLR_60,s2,"Kurt(H/L,60)",kept
+KURT_LOGV_10,s2,"Kurt(log(V+1),10)",kept
+KURT_LOGV_20,s2,"Kurt(log(V+1),20)",kept
+KURT_LOGV_3,s2,"Kurt(log(V+1),3)",kept
+KURT_LOGV_30,s2,"Kurt(log(V+1),30)",kept
+KURT_LOGV_5,s2,"Kurt(log(V+1),5)",kept
+KURT_LOGV_60,s2,"Kurt(log(V+1),60)",kept
+KURT_LOW_10,s2,"Kurt(L̃,10)",kept
+KURT_LOW_20,s2,"Kurt(L̃,20)",kept
+KURT_LOW_3,s2,"Kurt(L̃,3)",kept
+KURT_LOW_30,s2,"Kurt(L̃,30)",kept
+KURT_LOW_5,s2,"Kurt(L̃,5)",kept
+KURT_LOW_60,s2,"Kurt(L̃,60)",kept
+KURT_OPEN_10,s2,"Kurt(Õ,10)",kept
+KURT_OPEN_20,s2,"Kurt(Õ,20)",kept
+KURT_OPEN_3,s2,"Kurt(Õ,3)",kept
+KURT_OPEN_30,s2,"Kurt(Õ,30)",kept
+KURT_OPEN_5,s2,"Kurt(Õ,5)",kept
+KURT_OPEN_60,s2,"Kurt(Õ,60)",kept
+KURT_RETID_10,s2,"Kurt(C/O-1,10)",kept
+KURT_RETID_20,s2,"Kurt(C/O-1,20)",kept
+KURT_RETID_3,s2,"Kurt(C/O-1,3)",kept
+KURT_RETID_30,s2,"Kurt(C/O-1,30)",kept
+KURT_RETID_5,s2,"Kurt(C/O-1,5)",kept
+KURT_RETID_60,s2,"Kurt(C/O-1,60)",kept
+KURT_RETON_10,s2,"Kurt(O/PC-1,10)",kept
+KURT_RETON_20,s2,"Kurt(O/PC-1,20)",kept
+KURT_RETON_3,s2,"Kurt(O/PC-1,3)",kept
+KURT_RETON_30,s2,"Kurt(O/PC-1,30)",kept
+KURT_RETON_5,s2,"Kurt(O/PC-1,5)",kept
+KURT_RETON_60,s2,"Kurt(O/PC-1,60)",kept
+KURT_R_10,s2,"Kurt(pct_chg/100,10)",kept
+KURT_R_20,s2,"Kurt(pct_chg/100,20)",kept
+KURT_R_3,s2,"Kurt(pct_chg/100,3)",kept
+KURT_R_30,s2,"Kurt(pct_chg/100,30)",kept
+KURT_R_5,s2,"Kurt(pct_chg/100,5)",kept
+KURT_R_60,s2,"Kurt(pct_chg/100,60)","dropped_dedup(anchor=KURT60, rho=1.000000)"
+KURT_VWAP_10,s2,"Kurt(A/V,10)",kept
+KURT_VWAP_20,s2,"Kurt(A/V,20)",kept
+KURT_VWAP_3,s2,"Kurt(A/V,3)",kept
+KURT_VWAP_30,s2,"Kurt(A/V,30)",kept
+KURT_VWAP_5,s2,"Kurt(A/V,5)",kept
+KURT_VWAP_60,s2,"Kurt(A/V,60)",kept
+KURT_V_10,s2,"Kurt(V,10)",kept
+KURT_V_20,s2,"Kurt(V,20)",kept
+KURT_V_3,s2,"Kurt(V,3)",kept
+KURT_V_30,s2,"Kurt(V,30)",kept
+KURT_V_5,s2,"Kurt(V,5)",kept
+KURT_V_60,s2,"Kurt(V,60)",kept
+LIMITCNT20,s1,"制度｜Count(pct_chg >= limit-0.1, 20), limit 按板块 10/20/30",kept
+LIMITDOWN_CNT20,s1,"制度｜Count(pct_chg <= -(limit-0.1), 20)",kept
+LIMITUP_N_MKT,s1,"市场情绪｜全市场涨停家数 (pct_chg>=limit-0.1, 自算)",kept
+LIMITUP_N_MKT_MA20,s1,市场情绪｜LIMITUP_N_MKT 的 20 日均值,kept
+LOG_PRICE,s1,"价格水平｜ln(C) (原始价, 除权失真标注: 仅作彩票/退市代理)",kept
+LOWER_SHADOW_L2,s1,"事件结构｜(min(O~,C~)-L~)[i2]/ATR14[i2]",kept
+MA200_ABOVE,s1,趋势｜1[C~ > MA200],kept
+MA200_RATIO,s1,"趋势｜C~/Mean(C~,200)-1",kept
+MACD_DIF_NORM,s1,技术指标｜DIF/(C~*ATRp),kept
+MACD_GOLDEN_CROSS,s1,"技术指标｜DIF 上穿 DEA 标记 (日频, 非事件窗)",kept
+MACD_HIST,s1,技术指标｜2*(DIF-DEA),kept
+MACD_HIST_AMP20,s1,"技术指标｜Max(HIST,20)-Min(HIST,20)",kept
+MACD_HIST_SLOPE5,s1,"技术指标｜Slope(MACD_HIST, 5)",kept
+MACD_ZERO_CROSS,s1,"技术指标｜DIF 穿零轴标记 (上穿+1/下穿-1, 仅穿越日非零)",kept
+MAX20,s1,"彩票｜Max(R,20)",kept
+MAX5_20,s1,彩票｜20 日内最大 5 个 R 的均值,kept
+MAX_A_10,s2,"Max(A,10)/(x+1)",kept
+MAX_A_20,s2,"Max(A,20)/(x+1)",kept
+MAX_A_3,s2,"Max(A,3)/(x+1)",kept
+MAX_A_30,s2,"Max(A,30)/(x+1)",kept
+MAX_A_5,s2,"Max(A,5)/(x+1)",kept
+MAX_A_60,s2,"Max(A,60)/(x+1)",kept
+MAX_CF_10,s2,"Max(CF,10)/C̃",kept
+MAX_CF_20,s2,"Max(CF,20)/C̃",kept
+MAX_CF_3,s2,"Max(CF,3)/C̃",kept
+MAX_CF_30,s2,"Max(CF,30)/C̃",kept
+MAX_CF_5,s2,"Max(CF,5)/C̃",kept
+MAX_CF_60,s2,"Max(CF,60)/C̃",kept
+MAX_CLOSE_10,s2,"Max(C̃,10)/C̃","dropped_dedup(anchor=MAX_CF_10, rho=1.000000)"
+MAX_CLOSE_20,s2,"Max(C̃,20)/C̃","dropped_dedup(anchor=MAX_CF_20, rho=1.000000)"
+MAX_CLOSE_3,s2,"Max(C̃,3)/C̃","dropped_dedup(anchor=MAX_CF_3, rho=1.000000)"
+MAX_CLOSE_30,s2,"Max(C̃,30)/C̃","dropped_dedup(anchor=MAX_CF_30, rho=1.000000)"
+MAX_CLOSE_5,s2,"Max(C̃,5)/C̃","dropped_dedup(anchor=MAX_CF_5, rho=1.000000)"
+MAX_CLOSE_60,s2,"Max(C̃,60)/C̃","dropped_dedup(anchor=MAX_CF_60, rho=1.000000)"
+MAX_HIGH_10,s2,"Max(H̃,10)/C̃",kept
+MAX_HIGH_20,s2,"Max(H̃,20)/C̃","dropped_dedup(anchor=DIST_RESIST20, rho=1.000000)"
+MAX_HIGH_3,s2,"Max(H̃,3)/C̃",kept
+MAX_HIGH_30,s2,"Max(H̃,30)/C̃",kept
+MAX_HIGH_5,s2,"Max(H̃,5)/C̃",kept
+MAX_HIGH_60,s2,"Max(H̃,60)/C̃",kept
+MAX_HLR_10,s2,"Max(H/L,10)",kept
+MAX_HLR_20,s2,"Max(H/L,20)",kept
+MAX_HLR_3,s2,"Max(H/L,3)",kept
+MAX_HLR_30,s2,"Max(H/L,30)",kept
+MAX_HLR_5,s2,"Max(H/L,5)",kept
+MAX_HLR_60,s2,"Max(H/L,60)",kept
+MAX_LOGV_10,s2,"Max(log(V+1),10)",kept
+MAX_LOGV_20,s2,"Max(log(V+1),20)",kept
+MAX_LOGV_3,s2,"Max(log(V+1),3)",kept
+MAX_LOGV_30,s2,"Max(log(V+1),30)",kept
+MAX_LOGV_5,s2,"Max(log(V+1),5)",kept
+MAX_LOGV_60,s2,"Max(log(V+1),60)",kept
+MAX_LOW_10,s2,"Max(L̃,10)/C̃",kept
+MAX_LOW_20,s2,"Max(L̃,20)/C̃",kept
+MAX_LOW_3,s2,"Max(L̃,3)/C̃",kept
+MAX_LOW_30,s2,"Max(L̃,30)/C̃",kept
+MAX_LOW_5,s2,"Max(L̃,5)/C̃",kept
+MAX_LOW_60,s2,"Max(L̃,60)/C̃",kept
+MAX_OPEN_10,s2,"Max(Õ,10)/C̃",kept
+MAX_OPEN_20,s2,"Max(Õ,20)/C̃",kept
+MAX_OPEN_3,s2,"Max(Õ,3)/C̃",kept
+MAX_OPEN_30,s2,"Max(Õ,30)/C̃",kept
+MAX_OPEN_5,s2,"Max(Õ,5)/C̃",kept
+MAX_OPEN_60,s2,"Max(Õ,60)/C̃",kept
+MAX_RETID_10,s2,"Max(C/O-1,10)",kept
+MAX_RETID_20,s2,"Max(C/O-1,20)",kept
+MAX_RETID_3,s2,"Max(C/O-1,3)",kept
+MAX_RETID_30,s2,"Max(C/O-1,30)",kept
+MAX_RETID_5,s2,"Max(C/O-1,5)",kept
+MAX_RETID_60,s2,"Max(C/O-1,60)",kept
+MAX_RETON_10,s2,"Max(O/PC-1,10)",kept
+MAX_RETON_20,s2,"Max(O/PC-1,20)",kept
+MAX_RETON_3,s2,"Max(O/PC-1,3)",kept
+MAX_RETON_30,s2,"Max(O/PC-1,30)",kept
+MAX_RETON_5,s2,"Max(O/PC-1,5)",kept
+MAX_RETON_60,s2,"Max(O/PC-1,60)","dropped_dedup(anchor=DVOL, rho=-0.999582)"
+MAX_R_10,s2,"Max(pct_chg/100,10)",kept
+MAX_R_20,s2,"Max(pct_chg/100,20)","dropped_dedup(anchor=MAX20, rho=1.000000)"
+MAX_R_3,s2,"Max(pct_chg/100,3)",kept
+MAX_R_30,s2,"Max(pct_chg/100,30)",kept
+MAX_R_5,s2,"Max(pct_chg/100,5)",kept
+MAX_R_60,s2,"Max(pct_chg/100,60)","dropped_dedup(anchor=DVOL, rho=-0.999574)"
+MAX_VWAP_10,s2,"Max(A/V,10)/C",kept
+MAX_VWAP_20,s2,"Max(A/V,20)/C",kept
+MAX_VWAP_3,s2,"Max(A/V,3)/C",kept
+MAX_VWAP_30,s2,"Max(A/V,30)/C",kept
+MAX_VWAP_5,s2,"Max(A/V,5)/C",kept
+MAX_VWAP_60,s2,"Max(A/V,60)/C",kept
+MAX_V_10,s2,"Max(V,10)/(x+1)",kept
+MAX_V_20,s2,"Max(V,20)/(x+1)",kept
+MAX_V_3,s2,"Max(V,3)/(x+1)",kept
+MAX_V_30,s2,"Max(V,30)/(x+1)",kept
+MAX_V_5,s2,"Max(V,5)/(x+1)",kept
+MAX_V_60,s2,"Max(V,60)/(x+1)",kept
+MA_STACK,s1,趋势｜sign(C~-MA60)+sign(MA60-MA120)+sign(MA120-MA250) (加总),kept
+MEAN_A_10,s2,"Mean(A,10)/(x+1)",kept
+MEAN_A_20,s2,"Mean(A,20)/(x+1)",kept
+MEAN_A_3,s2,"Mean(A,3)/(x+1)",kept
+MEAN_A_30,s2,"Mean(A,30)/(x+1)",kept
+MEAN_A_5,s2,"Mean(A,5)/(x+1)",kept
+MEAN_A_60,s2,"Mean(A,60)/(x+1)",kept
+MEAN_CF_10,s2,"Mean(CF,10)/C̃",kept
+MEAN_CF_20,s2,"Mean(CF,20)/C̃",kept
+MEAN_CF_3,s2,"Mean(CF,3)/C̃",kept
+MEAN_CF_30,s2,"Mean(CF,30)/C̃",kept
+MEAN_CF_5,s2,"Mean(CF,5)/C̃",kept
+MEAN_CF_60,s2,"Mean(CF,60)/C̃",kept
+MEAN_CLOSE_10,s2,"Mean(C̃,10)/C̃","dropped_dedup(anchor=MEAN_CF_10, rho=1.000000)"
+MEAN_CLOSE_20,s2,"Mean(C̃,20)/C̃","dropped_dedup(anchor=MEAN_CF_20, rho=1.000000)"
+MEAN_CLOSE_3,s2,"Mean(C̃,3)/C̃","dropped_dedup(anchor=MEAN_CF_3, rho=1.000000)"
+MEAN_CLOSE_30,s2,"Mean(C̃,30)/C̃","dropped_dedup(anchor=MEAN_CF_30, rho=1.000000)"
+MEAN_CLOSE_5,s2,"Mean(C̃,5)/C̃","dropped_dedup(anchor=MEAN_CF_5, rho=1.000000)"
+MEAN_CLOSE_60,s2,"Mean(C̃,60)/C̃","dropped_dedup(anchor=MEAN_CF_60, rho=1.000000)"
+MEAN_HIGH_10,s2,"Mean(H̃,10)/C̃",kept
+MEAN_HIGH_20,s2,"Mean(H̃,20)/C̃",kept
+MEAN_HIGH_3,s2,"Mean(H̃,3)/C̃",kept
+MEAN_HIGH_30,s2,"Mean(H̃,30)/C̃",kept
+MEAN_HIGH_5,s2,"Mean(H̃,5)/C̃",kept
+MEAN_HIGH_60,s2,"Mean(H̃,60)/C̃",kept
+MEAN_HLR_10,s2,"Mean(H/L,10)",kept
+MEAN_HLR_20,s2,"Mean(H/L,20)",kept
+MEAN_HLR_3,s2,"Mean(H/L,3)",kept
+MEAN_HLR_30,s2,"Mean(H/L,30)",kept
+MEAN_HLR_5,s2,"Mean(H/L,5)",kept
+MEAN_HLR_60,s2,"Mean(H/L,60)",kept
+MEAN_LOGV_10,s2,"Mean(log(V+1),10)",kept
+MEAN_LOGV_20,s2,"Mean(log(V+1),20)",kept
+MEAN_LOGV_3,s2,"Mean(log(V+1),3)",kept
+MEAN_LOGV_30,s2,"Mean(log(V+1),30)",kept
+MEAN_LOGV_5,s2,"Mean(log(V+1),5)",kept
+MEAN_LOGV_60,s2,"Mean(log(V+1),60)",kept
+MEAN_LOW_10,s2,"Mean(L̃,10)/C̃",kept
+MEAN_LOW_20,s2,"Mean(L̃,20)/C̃",kept
+MEAN_LOW_3,s2,"Mean(L̃,3)/C̃",kept
+MEAN_LOW_30,s2,"Mean(L̃,30)/C̃",kept
+MEAN_LOW_5,s2,"Mean(L̃,5)/C̃",kept
+MEAN_LOW_60,s2,"Mean(L̃,60)/C̃",kept
+MEAN_OPEN_10,s2,"Mean(Õ,10)/C̃",kept
+MEAN_OPEN_20,s2,"Mean(Õ,20)/C̃",kept
+MEAN_OPEN_3,s2,"Mean(Õ,3)/C̃",kept
+MEAN_OPEN_30,s2,"Mean(Õ,30)/C̃",kept
+MEAN_OPEN_5,s2,"Mean(Õ,5)/C̃",kept
+MEAN_OPEN_60,s2,"Mean(Õ,60)/C̃","dropped_dedup(anchor=MEAN_CF_60, rho=0.999702)"
+MEAN_RETID_10,s2,"Mean(C/O-1,10)",kept
+MEAN_RETID_20,s2,"Mean(C/O-1,20)",kept
+MEAN_RETID_3,s2,"Mean(C/O-1,3)",kept
+MEAN_RETID_30,s2,"Mean(C/O-1,30)",kept
+MEAN_RETID_5,s2,"Mean(C/O-1,5)",kept
+MEAN_RETID_60,s2,"Mean(C/O-1,60)",kept
+MEAN_RETON_10,s2,"Mean(O/PC-1,10)",kept
+MEAN_RETON_20,s2,"Mean(O/PC-1,20)","dropped_dedup(anchor=GAP_MEAN20, rho=1.000000)"
+MEAN_RETON_3,s2,"Mean(O/PC-1,3)",kept
+MEAN_RETON_30,s2,"Mean(O/PC-1,30)",kept
+MEAN_RETON_5,s2,"Mean(O/PC-1,5)",kept
+MEAN_RETON_60,s2,"Mean(O/PC-1,60)",kept
+MEAN_R_10,s2,"Mean(pct_chg/100,10)",kept
+MEAN_R_20,s2,"Mean(pct_chg/100,20)",kept
+MEAN_R_3,s2,"Mean(pct_chg/100,3)",kept
+MEAN_R_30,s2,"Mean(pct_chg/100,30)",kept
+MEAN_R_5,s2,"Mean(pct_chg/100,5)",kept
+MEAN_R_60,s2,"Mean(pct_chg/100,60)",kept
+MEAN_VWAP_10,s2,"Mean(A/V,10)/C",kept
+MEAN_VWAP_20,s2,"Mean(A/V,20)/C",kept
+MEAN_VWAP_3,s2,"Mean(A/V,3)/C",kept
+MEAN_VWAP_30,s2,"Mean(A/V,30)/C",kept
+MEAN_VWAP_5,s2,"Mean(A/V,5)/C",kept
+MEAN_VWAP_60,s2,"Mean(A/V,60)/C",kept
+MEAN_V_10,s2,"Mean(V,10)/(x+1)",kept
+MEAN_V_20,s2,"Mean(V,20)/(x+1)",kept
+MEAN_V_3,s2,"Mean(V,3)/(x+1)",kept
+MEAN_V_30,s2,"Mean(V,30)/(x+1)",kept
+MEAN_V_5,s2,"Mean(V,5)/(x+1)",kept
+MEAN_V_60,s2,"Mean(V,60)/(x+1)",kept
+MED_A_10,s2,"Med(A,10)/(x+1)",kept
+MED_A_20,s2,"Med(A,20)/(x+1)",kept
+MED_A_3,s2,"Med(A,3)/(x+1)",kept
+MED_A_30,s2,"Med(A,30)/(x+1)",kept
+MED_A_5,s2,"Med(A,5)/(x+1)",kept
+MED_A_60,s2,"Med(A,60)/(x+1)",kept
+MED_CF_10,s2,"Med(CF,10)/C̃",kept
+MED_CF_20,s2,"Med(CF,20)/C̃",kept
+MED_CF_3,s2,"Med(CF,3)/C̃",kept
+MED_CF_30,s2,"Med(CF,30)/C̃",kept
+MED_CF_5,s2,"Med(CF,5)/C̃",kept
+MED_CF_60,s2,"Med(CF,60)/C̃",kept
+MED_CLOSE_10,s2,"Med(C̃,10)/C̃","dropped_dedup(anchor=MED_CF_10, rho=1.000000)"
+MED_CLOSE_20,s2,"Med(C̃,20)/C̃","dropped_dedup(anchor=MED_CF_20, rho=1.000000)"
+MED_CLOSE_3,s2,"Med(C̃,3)/C̃","dropped_dedup(anchor=MED_CF_3, rho=1.000000)"
+MED_CLOSE_30,s2,"Med(C̃,30)/C̃","dropped_dedup(anchor=MED_CF_30, rho=1.000000)"
+MED_CLOSE_5,s2,"Med(C̃,5)/C̃","dropped_dedup(anchor=MED_CF_5, rho=1.000000)"
+MED_CLOSE_60,s2,"Med(C̃,60)/C̃","dropped_dedup(anchor=MED_CF_60, rho=1.000000)"
+MED_HIGH_10,s2,"Med(H̃,10)/C̃",kept
+MED_HIGH_20,s2,"Med(H̃,20)/C̃",kept
+MED_HIGH_3,s2,"Med(H̃,3)/C̃",kept
+MED_HIGH_30,s2,"Med(H̃,30)/C̃",kept
+MED_HIGH_5,s2,"Med(H̃,5)/C̃",kept
+MED_HIGH_60,s2,"Med(H̃,60)/C̃",kept
+MED_HLR_10,s2,"Med(H/L,10)",kept
+MED_HLR_20,s2,"Med(H/L,20)",kept
+MED_HLR_3,s2,"Med(H/L,3)",kept
+MED_HLR_30,s2,"Med(H/L,30)",kept
+MED_HLR_5,s2,"Med(H/L,5)",kept
+MED_HLR_60,s2,"Med(H/L,60)",kept
+MED_LOGV_10,s2,"Med(log(V+1),10)",kept
+MED_LOGV_20,s2,"Med(log(V+1),20)",kept
+MED_LOGV_3,s2,"Med(log(V+1),3)",kept
+MED_LOGV_30,s2,"Med(log(V+1),30)",kept
+MED_LOGV_5,s2,"Med(log(V+1),5)",kept
+MED_LOGV_60,s2,"Med(log(V+1),60)",kept
+MED_LOW_10,s2,"Med(L̃,10)/C̃",kept
+MED_LOW_20,s2,"Med(L̃,20)/C̃",kept
+MED_LOW_3,s2,"Med(L̃,3)/C̃",kept
+MED_LOW_30,s2,"Med(L̃,30)/C̃",kept
+MED_LOW_5,s2,"Med(L̃,5)/C̃",kept
+MED_LOW_60,s2,"Med(L̃,60)/C̃",kept
+MED_OPEN_10,s2,"Med(Õ,10)/C̃",kept
+MED_OPEN_20,s2,"Med(Õ,20)/C̃",kept
+MED_OPEN_3,s2,"Med(Õ,3)/C̃",kept
+MED_OPEN_30,s2,"Med(Õ,30)/C̃",kept
+MED_OPEN_5,s2,"Med(Õ,5)/C̃",kept
+MED_OPEN_60,s2,"Med(Õ,60)/C̃",kept
+MED_RETID_10,s2,"Med(C/O-1,10)",kept
+MED_RETID_20,s2,"Med(C/O-1,20)",kept
+MED_RETID_3,s2,"Med(C/O-1,3)",kept
+MED_RETID_30,s2,"Med(C/O-1,30)",kept
+MED_RETID_5,s2,"Med(C/O-1,5)",kept
+MED_RETID_60,s2,"Med(C/O-1,60)",kept
+MED_RETON_10,s2,"Med(O/PC-1,10)",kept
+MED_RETON_20,s2,"Med(O/PC-1,20)",kept
+MED_RETON_3,s2,"Med(O/PC-1,3)",kept
+MED_RETON_30,s2,"Med(O/PC-1,30)",kept
+MED_RETON_5,s2,"Med(O/PC-1,5)",kept
+MED_RETON_60,s2,"Med(O/PC-1,60)",kept
+MED_R_10,s2,"Med(pct_chg/100,10)",kept
+MED_R_20,s2,"Med(pct_chg/100,20)",kept
+MED_R_3,s2,"Med(pct_chg/100,3)",kept
+MED_R_30,s2,"Med(pct_chg/100,30)",kept
+MED_R_5,s2,"Med(pct_chg/100,5)",kept
+MED_R_60,s2,"Med(pct_chg/100,60)",kept
+MED_VWAP_10,s2,"Med(A/V,10)/C",kept
+MED_VWAP_20,s2,"Med(A/V,20)/C",kept
+MED_VWAP_3,s2,"Med(A/V,3)/C",kept
+MED_VWAP_30,s2,"Med(A/V,30)/C",kept
+MED_VWAP_5,s2,"Med(A/V,5)/C",kept
+MED_VWAP_60,s2,"Med(A/V,60)/C",kept
+MED_V_10,s2,"Med(V,10)/(x+1)",kept
+MED_V_20,s2,"Med(V,20)/(x+1)",kept
+MED_V_3,s2,"Med(V,3)/(x+1)",kept
+MED_V_30,s2,"Med(V,30)/(x+1)",kept
+MED_V_5,s2,"Med(V,5)/(x+1)",kept
+MED_V_60,s2,"Med(V,60)/(x+1)",kept
+MIN20,s1,"彩票｜Min(R,20)",kept
+MIN_A_10,s2,"Min(A,10)/(x+1)",kept
+MIN_A_20,s2,"Min(A,20)/(x+1)",kept
+MIN_A_3,s2,"Min(A,3)/(x+1)",kept
+MIN_A_30,s2,"Min(A,30)/(x+1)",kept
+MIN_A_5,s2,"Min(A,5)/(x+1)",kept
+MIN_A_60,s2,"Min(A,60)/(x+1)",kept
+MIN_CF_10,s2,"Min(CF,10)/C̃",kept
+MIN_CF_20,s2,"Min(CF,20)/C̃",kept
+MIN_CF_3,s2,"Min(CF,3)/C̃",kept
+MIN_CF_30,s2,"Min(CF,30)/C̃",kept
+MIN_CF_5,s2,"Min(CF,5)/C̃",kept
+MIN_CF_60,s2,"Min(CF,60)/C̃",kept
+MIN_CLOSE_10,s2,"Min(C̃,10)/C̃","dropped_dedup(anchor=MIN_CF_10, rho=1.000000)"
+MIN_CLOSE_20,s2,"Min(C̃,20)/C̃","dropped_dedup(anchor=MIN_CF_20, rho=1.000000)"
+MIN_CLOSE_3,s2,"Min(C̃,3)/C̃","dropped_dedup(anchor=MIN_CF_3, rho=1.000000)"
+MIN_CLOSE_30,s2,"Min(C̃,30)/C̃","dropped_dedup(anchor=MIN_CF_30, rho=1.000000)"
+MIN_CLOSE_5,s2,"Min(C̃,5)/C̃","dropped_dedup(anchor=MIN_CF_5, rho=1.000000)"
+MIN_CLOSE_60,s2,"Min(C̃,60)/C̃","dropped_dedup(anchor=MIN_CF_60, rho=1.000000)"
+MIN_HIGH_10,s2,"Min(H̃,10)/C̃",kept
+MIN_HIGH_20,s2,"Min(H̃,20)/C̃",kept
+MIN_HIGH_3,s2,"Min(H̃,3)/C̃",kept
+MIN_HIGH_30,s2,"Min(H̃,30)/C̃",kept
+MIN_HIGH_5,s2,"Min(H̃,5)/C̃",kept
+MIN_HIGH_60,s2,"Min(H̃,60)/C̃",kept
+MIN_HLR_10,s2,"Min(H/L,10)",kept
+MIN_HLR_20,s2,"Min(H/L,20)",kept
+MIN_HLR_3,s2,"Min(H/L,3)",kept
+MIN_HLR_30,s2,"Min(H/L,30)",kept
+MIN_HLR_5,s2,"Min(H/L,5)",kept
+MIN_HLR_60,s2,"Min(H/L,60)",kept
+MIN_LOGV_10,s2,"Min(log(V+1),10)",kept
+MIN_LOGV_20,s2,"Min(log(V+1),20)",kept
+MIN_LOGV_3,s2,"Min(log(V+1),3)",kept
+MIN_LOGV_30,s2,"Min(log(V+1),30)",kept
+MIN_LOGV_5,s2,"Min(log(V+1),5)",kept
+MIN_LOGV_60,s2,"Min(log(V+1),60)",kept
+MIN_LOW_10,s2,"Min(L̃,10)/C̃",kept
+MIN_LOW_20,s2,"Min(L̃,20)/C̃","dropped_dedup(anchor=DIST_SUPPORT20, rho=-1.000000)"
+MIN_LOW_3,s2,"Min(L̃,3)/C̃",kept
+MIN_LOW_30,s2,"Min(L̃,30)/C̃",kept
+MIN_LOW_5,s2,"Min(L̃,5)/C̃",kept
+MIN_LOW_60,s2,"Min(L̃,60)/C̃",kept
+MIN_OPEN_10,s2,"Min(Õ,10)/C̃",kept
+MIN_OPEN_20,s2,"Min(Õ,20)/C̃",kept
+MIN_OPEN_3,s2,"Min(Õ,3)/C̃",kept
+MIN_OPEN_30,s2,"Min(Õ,30)/C̃",kept
+MIN_OPEN_5,s2,"Min(Õ,5)/C̃",kept
+MIN_OPEN_60,s2,"Min(Õ,60)/C̃",kept
+MIN_RETID_10,s2,"Min(C/O-1,10)",kept
+MIN_RETID_20,s2,"Min(C/O-1,20)",kept
+MIN_RETID_3,s2,"Min(C/O-1,3)",kept
+MIN_RETID_30,s2,"Min(C/O-1,30)",kept
+MIN_RETID_5,s2,"Min(C/O-1,5)",kept
+MIN_RETID_60,s2,"Min(C/O-1,60)",kept
+MIN_RETON_10,s2,"Min(O/PC-1,10)",kept
+MIN_RETON_20,s2,"Min(O/PC-1,20)",kept
+MIN_RETON_3,s2,"Min(O/PC-1,3)",kept
+MIN_RETON_30,s2,"Min(O/PC-1,30)",kept
+MIN_RETON_5,s2,"Min(O/PC-1,5)",kept
+MIN_RETON_60,s2,"Min(O/PC-1,60)",kept
+MIN_R_10,s2,"Min(pct_chg/100,10)",kept
+MIN_R_20,s2,"Min(pct_chg/100,20)","dropped_dedup(anchor=MIN20, rho=1.000000)"
+MIN_R_3,s2,"Min(pct_chg/100,3)",kept
+MIN_R_30,s2,"Min(pct_chg/100,30)",kept
+MIN_R_5,s2,"Min(pct_chg/100,5)",kept
+MIN_R_60,s2,"Min(pct_chg/100,60)",kept
+MIN_VWAP_10,s2,"Min(A/V,10)/C",kept
+MIN_VWAP_20,s2,"Min(A/V,20)/C",kept
+MIN_VWAP_3,s2,"Min(A/V,3)/C",kept
+MIN_VWAP_30,s2,"Min(A/V,30)/C",kept
+MIN_VWAP_5,s2,"Min(A/V,5)/C",kept
+MIN_VWAP_60,s2,"Min(A/V,60)/C",kept
+MIN_V_10,s2,"Min(V,10)/(x+1)",kept
+MIN_V_20,s2,"Min(V,20)/(x+1)",kept
+MIN_V_3,s2,"Min(V,3)/(x+1)",kept
+MIN_V_30,s2,"Min(V,30)/(x+1)",kept
+MIN_V_5,s2,"Min(V,5)/(x+1)",kept
+MIN_V_60,s2,"Min(V,60)/(x+1)",kept
+MKT_AMT_PCT,s1,市场情绪｜全市场 amount 加总 20 日均值的 250 日时序分位,kept
+MKT_AVG_AMP,s1,市场状态｜两指数 (H-L)/L 当日均值,kept
+MKT_AVG_CHANGE,s1,市场状态｜两指数 (C-O)/O 均值,kept
+MKT_DD120,s1,"市场状态｜C_idx/Max(H_idx,120)-1",kept
+MKT_MA60,s1,"市场状态｜C_idx/Mean(C_idx,60)-1",kept
+MKT_MEDIAN_RET20,s1,市场宽度｜universe 内 RET20 中位数 (自算),kept
+MKT_RET20,s1,"市场状态｜C_idx/shift(C_idx,20)-1",kept
+MKT_RSI14,s1,"市场状态｜RSI(C_idx,14)",kept
+MKT_SENTIMENT,s1,市场状态｜两指数均值版情绪 (规则同单指数),kept
+MKT_SH_AMPLITUDE,s1,市场状态｜上证指数 (H-L)/L,kept
+MKT_SH_PRICE_CHANGE,s1,市场状态｜上证指数 (C-O)/O,kept
+MKT_SH_PRICE_CHANGE_ABS,s1,市场状态｜|MKT_SH_PRICE_CHANGE|,kept
+MKT_SH_PRICE_WAVE_ABS,s1,市场状态｜上证指数振幅绝对值,"dropped_dedup(anchor=MKT_SH_AMPLITUDE, rho=1.000000)"
+MKT_SH_SENTIMENT,s1,市场状态｜涨>1%且振幅<2%->2; 跌>1%且振幅>3%->0; 否则 1 (上证),kept
+MKT_SH_SZ_SYNC_DIRECTION,s1,市场状态｜1[两指数 (C-O)/O 同号],kept
+MKT_SH_SZ_SYNC_STRENGTH,s1,市场状态｜|pc_sh - pc_sz|,kept
+MKT_SH_VOLUME_RATIO,s1,市场状态｜上证指数量/20 日均量,kept
+MKT_SH_VOLUME_SIGNAL,s1,市场状态｜1[量比>1.2] (上证),kept
+MKT_SYNC_SCORE,s1,"市场状态｜1 - min(1, |pc_sh-pc_sz|/0.02), pc=(C-O)/O (v2 market_sync_score 口径)",kept
+MKT_SZ_AMPLITUDE,s1,市场状态｜深证成指 (H-L)/L,kept
+MKT_SZ_PRICE_CHANGE,s1,市场状态｜深证成指 (C-O)/O,kept
+MKT_SZ_PRICE_CHANGE_ABS,s1,市场状态｜|MKT_SZ_PRICE_CHANGE|,kept
+MKT_SZ_PRICE_WAVE_ABS,s1,市场状态｜深证成指振幅绝对值,"dropped_dedup(anchor=MKT_SZ_AMPLITUDE, rho=1.000000)"
+MKT_SZ_SENTIMENT,s1,市场状态｜同上 (深证),kept
+MKT_SZ_VOLUME_RATIO,s1,市场状态｜深证成指量/20 日均量,kept
+MKT_SZ_VOLUME_SIGNAL,s1,市场状态｜1[量比>1.2] (深证),kept
+MKT_VOL20_PCT,s1,"市场状态｜pct_ts(Std(R_idx,20),250)",kept
+NEW_LISTING,s1,制度｜1[T - list_date < 250 交易日] (= 股内行号 < 250),kept
+OBV_DIV,s1,"量价背离｜zscore_ts(C~,20)-zscore_ts(OBV,20)",kept
+OBV_TREND,s1,"量能｜Slope(OBV,5)/Mean(V,20), OBV=sign(R)*V 累积",kept
+PARK20,s1,"波动率｜sqrt(Sum(log(H/L)^2,20)/(4*ln2*20)) (Parkinson)",kept
+PCTB,s1,"技术指标｜(C~-Mean(C~,20))/(2*Std(C~,20)) (%B)",kept
+POS_52W,s1,"位置｜(C~-Min(L~,250))/(Max(H~,250)-Min(L~,250))",kept
+PRICE_IMPACT,s1,流动性｜abs(C-O)/sqrt(V),kept
+PRICE_TREND5,s1,"位置结构｜Slope(C~,5)/C~",kept
+PVR20,s1,"量价背离｜Mean(V|R>0,20)/Mean(V|R<0,20) (最少 5 个上涨日否则 NaN)",kept
+Q20_A_10,s2,"Quant(A,10,0.2)/(x+1)",kept
+Q20_A_20,s2,"Quant(A,20,0.2)/(x+1)",kept
+Q20_A_3,s2,"Quant(A,3,0.2)/(x+1)",kept
+Q20_A_30,s2,"Quant(A,30,0.2)/(x+1)",kept
+Q20_A_5,s2,"Quant(A,5,0.2)/(x+1)",kept
+Q20_A_60,s2,"Quant(A,60,0.2)/(x+1)",kept
+Q20_CF_10,s2,"Quant(CF,10,0.2)/C̃",kept
+Q20_CF_20,s2,"Quant(CF,20,0.2)/C̃",kept
+Q20_CF_3,s2,"Quant(CF,3,0.2)/C̃",kept
+Q20_CF_30,s2,"Quant(CF,30,0.2)/C̃",kept
+Q20_CF_5,s2,"Quant(CF,5,0.2)/C̃",kept
+Q20_CF_60,s2,"Quant(CF,60,0.2)/C̃",kept
+Q20_CLOSE_10,s2,"Quant(C̃,10,0.2)/C̃","dropped_dedup(anchor=Q20_CF_10, rho=1.000000)"
+Q20_CLOSE_20,s2,"Quant(C̃,20,0.2)/C̃","dropped_dedup(anchor=Q20_CF_20, rho=1.000000)"
+Q20_CLOSE_3,s2,"Quant(C̃,3,0.2)/C̃","dropped_dedup(anchor=Q20_CF_3, rho=1.000000)"
+Q20_CLOSE_30,s2,"Quant(C̃,30,0.2)/C̃","dropped_dedup(anchor=Q20_CF_30, rho=1.000000)"
+Q20_CLOSE_5,s2,"Quant(C̃,5,0.2)/C̃","dropped_dedup(anchor=Q20_CF_5, rho=1.000000)"
+Q20_CLOSE_60,s2,"Quant(C̃,60,0.2)/C̃","dropped_dedup(anchor=Q20_CF_60, rho=1.000000)"
+Q20_HIGH_10,s2,"Quant(H̃,10,0.2)/C̃",kept
+Q20_HIGH_20,s2,"Quant(H̃,20,0.2)/C̃",kept
+Q20_HIGH_3,s2,"Quant(H̃,3,0.2)/C̃",kept
+Q20_HIGH_30,s2,"Quant(H̃,30,0.2)/C̃",kept
+Q20_HIGH_5,s2,"Quant(H̃,5,0.2)/C̃",kept
+Q20_HIGH_60,s2,"Quant(H̃,60,0.2)/C̃",kept
+Q20_HLR_10,s2,"Quant(H/L,10,0.2)",kept
+Q20_HLR_20,s2,"Quant(H/L,20,0.2)",kept
+Q20_HLR_3,s2,"Quant(H/L,3,0.2)",kept
+Q20_HLR_30,s2,"Quant(H/L,30,0.2)",kept
+Q20_HLR_5,s2,"Quant(H/L,5,0.2)",kept
+Q20_HLR_60,s2,"Quant(H/L,60,0.2)",kept
+Q20_LOGV_10,s2,"Quant(log(V+1),10,0.2)",kept
+Q20_LOGV_20,s2,"Quant(log(V+1),20,0.2)",kept
+Q20_LOGV_3,s2,"Quant(log(V+1),3,0.2)",kept
+Q20_LOGV_30,s2,"Quant(log(V+1),30,0.2)",kept
+Q20_LOGV_5,s2,"Quant(log(V+1),5,0.2)",kept
+Q20_LOGV_60,s2,"Quant(log(V+1),60,0.2)",kept
+Q20_LOW_10,s2,"Quant(L̃,10,0.2)/C̃",kept
+Q20_LOW_20,s2,"Quant(L̃,20,0.2)/C̃",kept
+Q20_LOW_3,s2,"Quant(L̃,3,0.2)/C̃",kept
+Q20_LOW_30,s2,"Quant(L̃,30,0.2)/C̃",kept
+Q20_LOW_5,s2,"Quant(L̃,5,0.2)/C̃",kept
+Q20_LOW_60,s2,"Quant(L̃,60,0.2)/C̃",kept
+Q20_OPEN_10,s2,"Quant(Õ,10,0.2)/C̃",kept
+Q20_OPEN_20,s2,"Quant(Õ,20,0.2)/C̃",kept
+Q20_OPEN_3,s2,"Quant(Õ,3,0.2)/C̃",kept
+Q20_OPEN_30,s2,"Quant(Õ,30,0.2)/C̃",kept
+Q20_OPEN_5,s2,"Quant(Õ,5,0.2)/C̃",kept
+Q20_OPEN_60,s2,"Quant(Õ,60,0.2)/C̃",kept
+Q20_RETID_10,s2,"Quant(C/O-1,10,0.2)",kept
+Q20_RETID_20,s2,"Quant(C/O-1,20,0.2)",kept
+Q20_RETID_3,s2,"Quant(C/O-1,3,0.2)",kept
+Q20_RETID_30,s2,"Quant(C/O-1,30,0.2)",kept
+Q20_RETID_5,s2,"Quant(C/O-1,5,0.2)",kept
+Q20_RETID_60,s2,"Quant(C/O-1,60,0.2)",kept
+Q20_RETON_10,s2,"Quant(O/PC-1,10,0.2)",kept
+Q20_RETON_20,s2,"Quant(O/PC-1,20,0.2)",kept
+Q20_RETON_3,s2,"Quant(O/PC-1,3,0.2)",kept
+Q20_RETON_30,s2,"Quant(O/PC-1,30,0.2)",kept
+Q20_RETON_5,s2,"Quant(O/PC-1,5,0.2)",kept
+Q20_RETON_60,s2,"Quant(O/PC-1,60,0.2)",kept
+Q20_R_10,s2,"Quant(pct_chg/100,10,0.2)",kept
+Q20_R_20,s2,"Quant(pct_chg/100,20,0.2)",kept
+Q20_R_3,s2,"Quant(pct_chg/100,3,0.2)",kept
+Q20_R_30,s2,"Quant(pct_chg/100,30,0.2)",kept
+Q20_R_5,s2,"Quant(pct_chg/100,5,0.2)",kept
+Q20_R_60,s2,"Quant(pct_chg/100,60,0.2)",kept
+Q20_VWAP_10,s2,"Quant(A/V,10,0.2)/C",kept
+Q20_VWAP_20,s2,"Quant(A/V,20,0.2)/C",kept
+Q20_VWAP_3,s2,"Quant(A/V,3,0.2)/C",kept
+Q20_VWAP_30,s2,"Quant(A/V,30,0.2)/C",kept
+Q20_VWAP_5,s2,"Quant(A/V,5,0.2)/C",kept
+Q20_VWAP_60,s2,"Quant(A/V,60,0.2)/C",kept
+Q20_V_10,s2,"Quant(V,10,0.2)/(x+1)",kept
+Q20_V_20,s2,"Quant(V,20,0.2)/(x+1)",kept
+Q20_V_3,s2,"Quant(V,3,0.2)/(x+1)",kept
+Q20_V_30,s2,"Quant(V,30,0.2)/(x+1)",kept
+Q20_V_5,s2,"Quant(V,5,0.2)/(x+1)",kept
+Q20_V_60,s2,"Quant(V,60,0.2)/(x+1)",kept
+Q80_A_10,s2,"Quant(A,10,0.8)/(x+1)",kept
+Q80_A_20,s2,"Quant(A,20,0.8)/(x+1)",kept
+Q80_A_3,s2,"Quant(A,3,0.8)/(x+1)",kept
+Q80_A_30,s2,"Quant(A,30,0.8)/(x+1)",kept
+Q80_A_5,s2,"Quant(A,5,0.8)/(x+1)",kept
+Q80_A_60,s2,"Quant(A,60,0.8)/(x+1)",kept
+Q80_CF_10,s2,"Quant(CF,10,0.8)/C̃",kept
+Q80_CF_20,s2,"Quant(CF,20,0.8)/C̃",kept
+Q80_CF_3,s2,"Quant(CF,3,0.8)/C̃",kept
+Q80_CF_30,s2,"Quant(CF,30,0.8)/C̃",kept
+Q80_CF_5,s2,"Quant(CF,5,0.8)/C̃",kept
+Q80_CF_60,s2,"Quant(CF,60,0.8)/C̃",kept
+Q80_CLOSE_10,s2,"Quant(C̃,10,0.8)/C̃","dropped_dedup(anchor=Q80_CF_10, rho=1.000000)"
+Q80_CLOSE_20,s2,"Quant(C̃,20,0.8)/C̃","dropped_dedup(anchor=Q80_CF_20, rho=1.000000)"
+Q80_CLOSE_3,s2,"Quant(C̃,3,0.8)/C̃","dropped_dedup(anchor=Q80_CF_3, rho=1.000000)"
+Q80_CLOSE_30,s2,"Quant(C̃,30,0.8)/C̃","dropped_dedup(anchor=Q80_CF_30, rho=1.000000)"
+Q80_CLOSE_5,s2,"Quant(C̃,5,0.8)/C̃","dropped_dedup(anchor=Q80_CF_5, rho=1.000000)"
+Q80_CLOSE_60,s2,"Quant(C̃,60,0.8)/C̃","dropped_dedup(anchor=Q80_CF_60, rho=1.000000)"
+Q80_HIGH_10,s2,"Quant(H̃,10,0.8)/C̃",kept
+Q80_HIGH_20,s2,"Quant(H̃,20,0.8)/C̃",kept
+Q80_HIGH_3,s2,"Quant(H̃,3,0.8)/C̃",kept
+Q80_HIGH_30,s2,"Quant(H̃,30,0.8)/C̃",kept
+Q80_HIGH_5,s2,"Quant(H̃,5,0.8)/C̃",kept
+Q80_HIGH_60,s2,"Quant(H̃,60,0.8)/C̃",kept
+Q80_HLR_10,s2,"Quant(H/L,10,0.8)",kept
+Q80_HLR_20,s2,"Quant(H/L,20,0.8)",kept
+Q80_HLR_3,s2,"Quant(H/L,3,0.8)",kept
+Q80_HLR_30,s2,"Quant(H/L,30,0.8)",kept
+Q80_HLR_5,s2,"Quant(H/L,5,0.8)",kept
+Q80_HLR_60,s2,"Quant(H/L,60,0.8)",kept
+Q80_LOGV_10,s2,"Quant(log(V+1),10,0.8)",kept
+Q80_LOGV_20,s2,"Quant(log(V+1),20,0.8)",kept
+Q80_LOGV_3,s2,"Quant(log(V+1),3,0.8)",kept
+Q80_LOGV_30,s2,"Quant(log(V+1),30,0.8)",kept
+Q80_LOGV_5,s2,"Quant(log(V+1),5,0.8)",kept
+Q80_LOGV_60,s2,"Quant(log(V+1),60,0.8)",kept
+Q80_LOW_10,s2,"Quant(L̃,10,0.8)/C̃",kept
+Q80_LOW_20,s2,"Quant(L̃,20,0.8)/C̃",kept
+Q80_LOW_3,s2,"Quant(L̃,3,0.8)/C̃",kept
+Q80_LOW_30,s2,"Quant(L̃,30,0.8)/C̃",kept
+Q80_LOW_5,s2,"Quant(L̃,5,0.8)/C̃",kept
+Q80_LOW_60,s2,"Quant(L̃,60,0.8)/C̃",kept
+Q80_OPEN_10,s2,"Quant(Õ,10,0.8)/C̃",kept
+Q80_OPEN_20,s2,"Quant(Õ,20,0.8)/C̃",kept
+Q80_OPEN_3,s2,"Quant(Õ,3,0.8)/C̃",kept
+Q80_OPEN_30,s2,"Quant(Õ,30,0.8)/C̃",kept
+Q80_OPEN_5,s2,"Quant(Õ,5,0.8)/C̃",kept
+Q80_OPEN_60,s2,"Quant(Õ,60,0.8)/C̃",kept
+Q80_RETID_10,s2,"Quant(C/O-1,10,0.8)",kept
+Q80_RETID_20,s2,"Quant(C/O-1,20,0.8)",kept
+Q80_RETID_3,s2,"Quant(C/O-1,3,0.8)",kept
+Q80_RETID_30,s2,"Quant(C/O-1,30,0.8)",kept
+Q80_RETID_5,s2,"Quant(C/O-1,5,0.8)",kept
+Q80_RETID_60,s2,"Quant(C/O-1,60,0.8)",kept
+Q80_RETON_10,s2,"Quant(O/PC-1,10,0.8)",kept
+Q80_RETON_20,s2,"Quant(O/PC-1,20,0.8)",kept
+Q80_RETON_3,s2,"Quant(O/PC-1,3,0.8)",kept
+Q80_RETON_30,s2,"Quant(O/PC-1,30,0.8)",kept
+Q80_RETON_5,s2,"Quant(O/PC-1,5,0.8)",kept
+Q80_RETON_60,s2,"Quant(O/PC-1,60,0.8)",kept
+Q80_R_10,s2,"Quant(pct_chg/100,10,0.8)",kept
+Q80_R_20,s2,"Quant(pct_chg/100,20,0.8)",kept
+Q80_R_3,s2,"Quant(pct_chg/100,3,0.8)",kept
+Q80_R_30,s2,"Quant(pct_chg/100,30,0.8)",kept
+Q80_R_5,s2,"Quant(pct_chg/100,5,0.8)",kept
+Q80_R_60,s2,"Quant(pct_chg/100,60,0.8)",kept
+Q80_VWAP_10,s2,"Quant(A/V,10,0.8)/C",kept
+Q80_VWAP_20,s2,"Quant(A/V,20,0.8)/C",kept
+Q80_VWAP_3,s2,"Quant(A/V,3,0.8)/C",kept
+Q80_VWAP_30,s2,"Quant(A/V,30,0.8)/C",kept
+Q80_VWAP_5,s2,"Quant(A/V,5,0.8)/C",kept
+Q80_VWAP_60,s2,"Quant(A/V,60,0.8)/C",kept
+Q80_V_10,s2,"Quant(V,10,0.8)/(x+1)",kept
+Q80_V_20,s2,"Quant(V,20,0.8)/(x+1)",kept
+Q80_V_3,s2,"Quant(V,3,0.8)/(x+1)",kept
+Q80_V_30,s2,"Quant(V,30,0.8)/(x+1)",kept
+Q80_V_5,s2,"Quant(V,5,0.8)/(x+1)",kept
+Q80_V_60,s2,"Quant(V,60,0.8)/(x+1)",kept
+REBOUND_DAY_T,s1,事件结构｜(C~[T]-O~[T])/ATR14[T] (等价原始价口径 (C-O)/ATR),kept
+REBOUND_FROM_L2,s1,事件结构｜(C~[T]-L~[i2])/ATR14[T],kept
+REF_A_10,s2,"Ref(A,10)/(x+1)","dropped_dedup(anchor=DELTA_A_10, rho=-1.000000)"
+REF_A_20,s2,"Ref(A,20)/(x+1)","dropped_dedup(anchor=DELTA_A_20, rho=-0.999996)"
+REF_A_3,s2,"Ref(A,3)/(x+1)","dropped_dedup(anchor=DELTA_A_3, rho=-0.999993)"
+REF_A_30,s2,"Ref(A,30)/(x+1)","dropped_dedup(anchor=DELTA_A_30, rho=-1.000000)"
+REF_A_5,s2,"Ref(A,5)/(x+1)","dropped_dedup(anchor=DELTA_A_5, rho=-0.999993)"
+REF_A_60,s2,"Ref(A,60)/(x+1)","dropped_dedup(anchor=DELTA_A_60, rho=-1.000000)"
+REF_CF_10,s2,"Ref(CF,10)/C̃","dropped_dedup(anchor=DELTA_CF_10, rho=-1.000000)"
+REF_CF_20,s2,"Ref(CF,20)/C̃","dropped_dedup(anchor=DELTA_CF_20, rho=-1.000000)"
+REF_CF_3,s2,"Ref(CF,3)/C̃","dropped_dedup(anchor=DELTA_CF_3, rho=-1.000000)"
+REF_CF_30,s2,"Ref(CF,30)/C̃","dropped_dedup(anchor=DELTA_CF_30, rho=-1.000000)"
+REF_CF_5,s2,"Ref(CF,5)/C̃","dropped_dedup(anchor=DELTA_CF_5, rho=-1.000000)"
+REF_CF_60,s2,"Ref(CF,60)/C̃","dropped_dedup(anchor=DELTA_CF_60, rho=-1.000000)"
+REF_CLOSE_10,s2,"Ref(C̃,10)/C̃","dropped_dedup(anchor=DELTA_CF_10, rho=-1.000000)"
+REF_CLOSE_20,s2,"Ref(C̃,20)/C̃","dropped_dedup(anchor=DELTA_CF_20, rho=-1.000000)"
+REF_CLOSE_3,s2,"Ref(C̃,3)/C̃","dropped_dedup(anchor=DELTA_CF_3, rho=-1.000000)"
+REF_CLOSE_30,s2,"Ref(C̃,30)/C̃","dropped_dedup(anchor=DELTA_CF_30, rho=-1.000000)"
+REF_CLOSE_5,s2,"Ref(C̃,5)/C̃","dropped_dedup(anchor=DELTA_CF_5, rho=-1.000000)"
+REF_CLOSE_60,s2,"Ref(C̃,60)/C̃","dropped_dedup(anchor=DELTA_CF_60, rho=-1.000000)"
+REF_HIGH_10,s2,"Ref(H̃,10)/C̃",kept
+REF_HIGH_20,s2,"Ref(H̃,20)/C̃",kept
+REF_HIGH_3,s2,"Ref(H̃,3)/C̃",kept
+REF_HIGH_30,s2,"Ref(H̃,30)/C̃",kept
+REF_HIGH_5,s2,"Ref(H̃,5)/C̃",kept
+REF_HIGH_60,s2,"Ref(H̃,60)/C̃","dropped_dedup(anchor=DELTA_HIGH_60, rho=-0.999321)"
+REF_HLR_10,s2,"Ref(H/L,10)",kept
+REF_HLR_20,s2,"Ref(H/L,20)",kept
+REF_HLR_3,s2,"Ref(H/L,3)",kept
+REF_HLR_30,s2,"Ref(H/L,30)",kept
+REF_HLR_5,s2,"Ref(H/L,5)",kept
+REF_HLR_60,s2,"Ref(H/L,60)",kept
+REF_LOGV_10,s2,"Ref(log(V+1),10)",kept
+REF_LOGV_20,s2,"Ref(log(V+1),20)",kept
+REF_LOGV_3,s2,"Ref(log(V+1),3)",kept
+REF_LOGV_30,s2,"Ref(log(V+1),30)",kept
+REF_LOGV_5,s2,"Ref(log(V+1),5)",kept
+REF_LOGV_60,s2,"Ref(log(V+1),60)",kept
+REF_LOW_10,s2,"Ref(L̃,10)/C̃",kept
+REF_LOW_20,s2,"Ref(L̃,20)/C̃",kept
+REF_LOW_3,s2,"Ref(L̃,3)/C̃",kept
+REF_LOW_30,s2,"Ref(L̃,30)/C̃",kept
+REF_LOW_5,s2,"Ref(L̃,5)/C̃",kept
+REF_LOW_60,s2,"Ref(L̃,60)/C̃",kept
+REF_OPEN_10,s2,"Ref(Õ,10)/C̃",kept
+REF_OPEN_20,s2,"Ref(Õ,20)/C̃",kept
+REF_OPEN_3,s2,"Ref(Õ,3)/C̃",kept
+REF_OPEN_30,s2,"Ref(Õ,30)/C̃",kept
+REF_OPEN_5,s2,"Ref(Õ,5)/C̃",kept
+REF_OPEN_60,s2,"Ref(Õ,60)/C̃",kept
+REF_RETID_10,s2,"Ref(C/O-1,10)",kept
+REF_RETID_20,s2,"Ref(C/O-1,20)",kept
+REF_RETID_3,s2,"Ref(C/O-1,3)",kept
+REF_RETID_30,s2,"Ref(C/O-1,30)",kept
+REF_RETID_5,s2,"Ref(C/O-1,5)",kept
+REF_RETID_60,s2,"Ref(C/O-1,60)",kept
+REF_RETON_10,s2,"Ref(O/PC-1,10)",kept
+REF_RETON_20,s2,"Ref(O/PC-1,20)",kept
+REF_RETON_3,s2,"Ref(O/PC-1,3)",kept
+REF_RETON_30,s2,"Ref(O/PC-1,30)",kept
+REF_RETON_5,s2,"Ref(O/PC-1,5)",kept
+REF_RETON_60,s2,"Ref(O/PC-1,60)",kept
+REF_R_10,s2,"Ref(pct_chg/100,10)",kept
+REF_R_20,s2,"Ref(pct_chg/100,20)",kept
+REF_R_3,s2,"Ref(pct_chg/100,3)",kept
+REF_R_30,s2,"Ref(pct_chg/100,30)",kept
+REF_R_5,s2,"Ref(pct_chg/100,5)",kept
+REF_R_60,s2,"Ref(pct_chg/100,60)",kept
+REF_VWAP_10,s2,"Ref(A/V,10)/C",kept
+REF_VWAP_20,s2,"Ref(A/V,20)/C",kept
+REF_VWAP_3,s2,"Ref(A/V,3)/C",kept
+REF_VWAP_30,s2,"Ref(A/V,30)/C",kept
+REF_VWAP_5,s2,"Ref(A/V,5)/C",kept
+REF_VWAP_60,s2,"Ref(A/V,60)/C","dropped_dedup(anchor=DELTA_VWAP_60, rho=-0.999635)"
+REF_V_10,s2,"Ref(V,10)/(x+1)","dropped_dedup(anchor=DELTA_V_10, rho=-1.000000)"
+REF_V_20,s2,"Ref(V,20)/(x+1)","dropped_dedup(anchor=DELTA_V_20, rho=-0.999996)"
+REF_V_3,s2,"Ref(V,3)/(x+1)","dropped_dedup(anchor=DELTA_V_3, rho=-0.999995)"
+REF_V_30,s2,"Ref(V,30)/(x+1)","dropped_dedup(anchor=DELTA_V_30, rho=-0.999999)"
+REF_V_5,s2,"Ref(V,5)/(x+1)","dropped_dedup(anchor=DELTA_V_5, rho=-0.999997)"
+REF_V_60,s2,"Ref(V,60)/(x+1)","dropped_dedup(anchor=DELTA_V_60, rho=-1.000000)"
+REGIME_CODE,s1,"市场状态｜全样本等权日收益累积指数 120 日滚动收益 -> unknown/sideways/up/down = -1/0/1/2 (divergence_lab build_market_regime 口径, universe 剔除 2 只指数文件)",kept
+RESI_A_10,s2,"Resi(A,10)/(Mean+1)",kept
+RESI_A_20,s2,"Resi(A,20)/(Mean+1)",kept
+RESI_A_3,s2,"Resi(A,3)/(Mean+1)",kept
+RESI_A_30,s2,"Resi(A,30)/(Mean+1)",kept
+RESI_A_5,s2,"Resi(A,5)/(Mean+1)",kept
+RESI_A_60,s2,"Resi(A,60)/(Mean+1)",kept
+RESI_CF_10,s2,"Resi(CF,10)/C̃",kept
+RESI_CF_20,s2,"Resi(CF,20)/C̃",kept
+RESI_CF_3,s2,"Resi(CF,3)/C̃",kept
+RESI_CF_30,s2,"Resi(CF,30)/C̃",kept
+RESI_CF_5,s2,"Resi(CF,5)/C̃",kept
+RESI_CF_60,s2,"Resi(CF,60)/C̃",kept
+RESI_CLOSE_10,s2,"Resi(C̃,10)/C̃","dropped_dedup(anchor=RESI_CF_10, rho=1.000000)"
+RESI_CLOSE_20,s2,"Resi(C̃,20)/C̃","dropped_dedup(anchor=RESI_CF_20, rho=1.000000)"
+RESI_CLOSE_3,s2,"Resi(C̃,3)/C̃","dropped_dedup(anchor=RESI_CF_3, rho=1.000000)"
+RESI_CLOSE_30,s2,"Resi(C̃,30)/C̃","dropped_dedup(anchor=RESI_CF_30, rho=1.000000)"
+RESI_CLOSE_5,s2,"Resi(C̃,5)/C̃","dropped_dedup(anchor=RESI_CF_5, rho=1.000000)"
+RESI_CLOSE_60,s2,"Resi(C̃,60)/C̃","dropped_dedup(anchor=RESI_CF_60, rho=1.000000)"
+RESI_HIGH_10,s2,"Resi(H̃,10)/C̃",kept
+RESI_HIGH_20,s2,"Resi(H̃,20)/C̃",kept
+RESI_HIGH_3,s2,"Resi(H̃,3)/C̃",kept
+RESI_HIGH_30,s2,"Resi(H̃,30)/C̃",kept
+RESI_HIGH_5,s2,"Resi(H̃,5)/C̃",kept
+RESI_HIGH_60,s2,"Resi(H̃,60)/C̃",kept
+RESI_HLR_10,s2,"Resi(H/L,10)",kept
+RESI_HLR_20,s2,"Resi(H/L,20)",kept
+RESI_HLR_3,s2,"Resi(H/L,3)",kept
+RESI_HLR_30,s2,"Resi(H/L,30)",kept
+RESI_HLR_5,s2,"Resi(H/L,5)",kept
+RESI_HLR_60,s2,"Resi(H/L,60)",kept
+RESI_LOGV_10,s2,"Resi(log(V+1),10)",kept
+RESI_LOGV_20,s2,"Resi(log(V+1),20)",kept
+RESI_LOGV_3,s2,"Resi(log(V+1),3)",kept
+RESI_LOGV_30,s2,"Resi(log(V+1),30)",kept
+RESI_LOGV_5,s2,"Resi(log(V+1),5)",kept
+RESI_LOGV_60,s2,"Resi(log(V+1),60)",kept
+RESI_LOW_10,s2,"Resi(L̃,10)/C̃",kept
+RESI_LOW_20,s2,"Resi(L̃,20)/C̃",kept
+RESI_LOW_3,s2,"Resi(L̃,3)/C̃",kept
+RESI_LOW_30,s2,"Resi(L̃,30)/C̃",kept
+RESI_LOW_5,s2,"Resi(L̃,5)/C̃",kept
+RESI_LOW_60,s2,"Resi(L̃,60)/C̃",kept
+RESI_OPEN_10,s2,"Resi(Õ,10)/C̃",kept
+RESI_OPEN_20,s2,"Resi(Õ,20)/C̃",kept
+RESI_OPEN_3,s2,"Resi(Õ,3)/C̃",kept
+RESI_OPEN_30,s2,"Resi(Õ,30)/C̃",kept
+RESI_OPEN_5,s2,"Resi(Õ,5)/C̃",kept
+RESI_OPEN_60,s2,"Resi(Õ,60)/C̃",kept
+RESI_RETID_10,s2,"Resi(C/O-1,10)",kept
+RESI_RETID_20,s2,"Resi(C/O-1,20)",kept
+RESI_RETID_3,s2,"Resi(C/O-1,3)",kept
+RESI_RETID_30,s2,"Resi(C/O-1,30)",kept
+RESI_RETID_5,s2,"Resi(C/O-1,5)",kept
+RESI_RETID_60,s2,"Resi(C/O-1,60)",kept
+RESI_RETON_10,s2,"Resi(O/PC-1,10)",kept
+RESI_RETON_20,s2,"Resi(O/PC-1,20)",kept
+RESI_RETON_3,s2,"Resi(O/PC-1,3)",kept
+RESI_RETON_30,s2,"Resi(O/PC-1,30)",kept
+RESI_RETON_5,s2,"Resi(O/PC-1,5)",kept
+RESI_RETON_60,s2,"Resi(O/PC-1,60)",kept
+RESI_R_10,s2,"Resi(pct_chg/100,10)",kept
+RESI_R_20,s2,"Resi(pct_chg/100,20)",kept
+RESI_R_3,s2,"Resi(pct_chg/100,3)",kept
+RESI_R_30,s2,"Resi(pct_chg/100,30)",kept
+RESI_R_5,s2,"Resi(pct_chg/100,5)",kept
+RESI_R_60,s2,"Resi(pct_chg/100,60)",kept
+RESI_VWAP_10,s2,"Resi(A/V,10)/C",kept
+RESI_VWAP_20,s2,"Resi(A/V,20)/C",kept
+RESI_VWAP_3,s2,"Resi(A/V,3)/C",kept
+RESI_VWAP_30,s2,"Resi(A/V,30)/C",kept
+RESI_VWAP_5,s2,"Resi(A/V,5)/C",kept
+RESI_VWAP_60,s2,"Resi(A/V,60)/C",kept
+RESI_V_10,s2,"Resi(V,10)/(Mean+1)",kept
+RESI_V_20,s2,"Resi(V,20)/(Mean+1)",kept
+RESI_V_3,s2,"Resi(V,3)/(Mean+1)",kept
+RESI_V_30,s2,"Resi(V,30)/(Mean+1)",kept
+RESI_V_5,s2,"Resi(V,5)/(Mean+1)",kept
+RESI_V_60,s2,"Resi(V,60)/(Mean+1)",kept
+RET1,s1,反转｜R (= pct_chg/100),kept
+RET10,s1,"反转｜CF/shift(CF,10)-1",kept
+RET120_20,s1,"动量｜shift(CF,20)/shift(CF,240)-1 (剔除近 1 月的中期动量)",kept
+RET20,s1,"反转｜CF/shift(CF,20)-1",kept
+RET20_CSR,s1,反转×截面｜cs_rank(RET20) 横截面百分位 (全 universe 当日),kept
+RET5,s1,"反转｜CF/shift(CF,5)-1",kept
+RET60,s1,"反转｜CF/shift(CF,60)-1",kept
+RET_ID,s1,隔夜/日内｜C/O - 1,kept
+RET_ON,s1,隔夜/日内｜O/PC - 1,kept
+RSI14,s1,"技术指标｜Wilder RSI(C~,14)",kept
+RSI6,s1,"技术指标｜Wilder RSI(C~,6)",kept
+RSI_DIV,s1,事件结构｜1[L~[i2]<L~[i1] 且 RSI14[i2]>RSI14[i1]],kept
+RSI_OVERSOLD_DAYS,s1,技术指标｜RSI14<30 连续天数,kept
+RSQ_A_10,s2,"Rsquare(A,10)",kept
+RSQ_A_20,s2,"Rsquare(A,20)",kept
+RSQ_A_3,s2,"Rsquare(A,3)",kept
+RSQ_A_30,s2,"Rsquare(A,30)",kept
+RSQ_A_5,s2,"Rsquare(A,5)",kept
+RSQ_A_60,s2,"Rsquare(A,60)",kept
+RSQ_CF_10,s2,"Rsquare(CF,10)",kept
+RSQ_CF_20,s2,"Rsquare(CF,20)",kept
+RSQ_CF_3,s2,"Rsquare(CF,3)",kept
+RSQ_CF_30,s2,"Rsquare(CF,30)",kept
+RSQ_CF_5,s2,"Rsquare(CF,5)",kept
+RSQ_CF_60,s2,"Rsquare(CF,60)",kept
+RSQ_CLOSE_10,s2,"Rsquare(C̃,10)","dropped_dedup(anchor=RSQ_CF_10, rho=1.000000)"
+RSQ_CLOSE_20,s2,"Rsquare(C̃,20)","dropped_dedup(anchor=RSQ_CF_20, rho=1.000000)"
+RSQ_CLOSE_3,s2,"Rsquare(C̃,3)","dropped_dedup(anchor=RSQ_CF_3, rho=1.000000)"
+RSQ_CLOSE_30,s2,"Rsquare(C̃,30)","dropped_dedup(anchor=RSQ_CF_30, rho=1.000000)"
+RSQ_CLOSE_5,s2,"Rsquare(C̃,5)","dropped_dedup(anchor=RSQ_CF_5, rho=1.000000)"
+RSQ_CLOSE_60,s2,"Rsquare(C̃,60)","dropped_dedup(anchor=RSQ_CF_60, rho=1.000000)"
+RSQ_HIGH_10,s2,"Rsquare(H̃,10)",kept
+RSQ_HIGH_20,s2,"Rsquare(H̃,20)",kept
+RSQ_HIGH_3,s2,"Rsquare(H̃,3)",kept
+RSQ_HIGH_30,s2,"Rsquare(H̃,30)",kept
+RSQ_HIGH_5,s2,"Rsquare(H̃,5)",kept
+RSQ_HIGH_60,s2,"Rsquare(H̃,60)",kept
+RSQ_HLR_10,s2,"Rsquare(H/L,10)",kept
+RSQ_HLR_20,s2,"Rsquare(H/L,20)",kept
+RSQ_HLR_3,s2,"Rsquare(H/L,3)",kept
+RSQ_HLR_30,s2,"Rsquare(H/L,30)",kept
+RSQ_HLR_5,s2,"Rsquare(H/L,5)",kept
+RSQ_HLR_60,s2,"Rsquare(H/L,60)",kept
+RSQ_LOGV_10,s2,"Rsquare(log(V+1),10)",kept
+RSQ_LOGV_20,s2,"Rsquare(log(V+1),20)",kept
+RSQ_LOGV_3,s2,"Rsquare(log(V+1),3)",kept
+RSQ_LOGV_30,s2,"Rsquare(log(V+1),30)",kept
+RSQ_LOGV_5,s2,"Rsquare(log(V+1),5)",kept
+RSQ_LOGV_60,s2,"Rsquare(log(V+1),60)",kept
+RSQ_LOW_10,s2,"Rsquare(L̃,10)",kept
+RSQ_LOW_20,s2,"Rsquare(L̃,20)",kept
+RSQ_LOW_3,s2,"Rsquare(L̃,3)",kept
+RSQ_LOW_30,s2,"Rsquare(L̃,30)",kept
+RSQ_LOW_5,s2,"Rsquare(L̃,5)",kept
+RSQ_LOW_60,s2,"Rsquare(L̃,60)",kept
+RSQ_OPEN_10,s2,"Rsquare(Õ,10)",kept
+RSQ_OPEN_20,s2,"Rsquare(Õ,20)",kept
+RSQ_OPEN_3,s2,"Rsquare(Õ,3)",kept
+RSQ_OPEN_30,s2,"Rsquare(Õ,30)",kept
+RSQ_OPEN_5,s2,"Rsquare(Õ,5)",kept
+RSQ_OPEN_60,s2,"Rsquare(Õ,60)",kept
+RSQ_RETID_10,s2,"Rsquare(C/O-1,10)",kept
+RSQ_RETID_20,s2,"Rsquare(C/O-1,20)",kept
+RSQ_RETID_3,s2,"Rsquare(C/O-1,3)",kept
+RSQ_RETID_30,s2,"Rsquare(C/O-1,30)",kept
+RSQ_RETID_5,s2,"Rsquare(C/O-1,5)",kept
+RSQ_RETID_60,s2,"Rsquare(C/O-1,60)",kept
+RSQ_RETON_10,s2,"Rsquare(O/PC-1,10)",kept
+RSQ_RETON_20,s2,"Rsquare(O/PC-1,20)",kept
+RSQ_RETON_3,s2,"Rsquare(O/PC-1,3)",kept
+RSQ_RETON_30,s2,"Rsquare(O/PC-1,30)",kept
+RSQ_RETON_5,s2,"Rsquare(O/PC-1,5)",kept
+RSQ_RETON_60,s2,"Rsquare(O/PC-1,60)",kept
+RSQ_R_10,s2,"Rsquare(pct_chg/100,10)",kept
+RSQ_R_20,s2,"Rsquare(pct_chg/100,20)",kept
+RSQ_R_3,s2,"Rsquare(pct_chg/100,3)",kept
+RSQ_R_30,s2,"Rsquare(pct_chg/100,30)",kept
+RSQ_R_5,s2,"Rsquare(pct_chg/100,5)",kept
+RSQ_R_60,s2,"Rsquare(pct_chg/100,60)",kept
+RSQ_VWAP_10,s2,"Rsquare(A/V,10)",kept
+RSQ_VWAP_20,s2,"Rsquare(A/V,20)",kept
+RSQ_VWAP_3,s2,"Rsquare(A/V,3)",kept
+RSQ_VWAP_30,s2,"Rsquare(A/V,30)",kept
+RSQ_VWAP_5,s2,"Rsquare(A/V,5)",kept
+RSQ_VWAP_60,s2,"Rsquare(A/V,60)",kept
+RSQ_V_10,s2,"Rsquare(V,10)",kept
+RSQ_V_20,s2,"Rsquare(V,20)",kept
+RSQ_V_3,s2,"Rsquare(V,3)",kept
+RSQ_V_30,s2,"Rsquare(V,30)",kept
+RSQ_V_5,s2,"Rsquare(V,5)",kept
+RSQ_V_60,s2,"Rsquare(V,60)",kept
+RSV9,s1,"技术指标｜(C~-Min(L~,9))/(Max(H~,9)-Min(L~,9))",kept
+RVC20,s1,"量价相关｜Corr(R, V/shift(V,1)-1, 20)",kept
+SJV60,s1,"波动结构｜Sum(R^2*1[R>th],60)-Sum(R^2*1[R<-th],60), th=2*Std(R,60)",kept
+SKEW60,s1,"高阶矩｜Skew(R,60)",kept
+SKEW_A_10,s2,"Skew(A,10)",kept
+SKEW_A_20,s2,"Skew(A,20)",kept
+SKEW_A_3,s2,"Skew(A,3)",kept
+SKEW_A_30,s2,"Skew(A,30)",kept
+SKEW_A_5,s2,"Skew(A,5)",kept
+SKEW_A_60,s2,"Skew(A,60)",kept
+SKEW_CF_10,s2,"Skew(CF,10)",kept
+SKEW_CF_20,s2,"Skew(CF,20)",kept
+SKEW_CF_3,s2,"Skew(CF,3)",kept
+SKEW_CF_30,s2,"Skew(CF,30)",kept
+SKEW_CF_5,s2,"Skew(CF,5)",kept
+SKEW_CF_60,s2,"Skew(CF,60)",kept
+SKEW_CLOSE_10,s2,"Skew(C̃,10)","dropped_dedup(anchor=SKEW_CF_10, rho=1.000000)"
+SKEW_CLOSE_20,s2,"Skew(C̃,20)","dropped_dedup(anchor=SKEW_CF_20, rho=1.000000)"
+SKEW_CLOSE_3,s2,"Skew(C̃,3)","dropped_dedup(anchor=SKEW_CF_3, rho=1.000000)"
+SKEW_CLOSE_30,s2,"Skew(C̃,30)","dropped_dedup(anchor=SKEW_CF_30, rho=1.000000)"
+SKEW_CLOSE_5,s2,"Skew(C̃,5)","dropped_dedup(anchor=SKEW_CF_5, rho=1.000000)"
+SKEW_CLOSE_60,s2,"Skew(C̃,60)","dropped_dedup(anchor=SKEW_CF_60, rho=1.000000)"
+SKEW_HIGH_10,s2,"Skew(H̃,10)",kept
+SKEW_HIGH_20,s2,"Skew(H̃,20)",kept
+SKEW_HIGH_3,s2,"Skew(H̃,3)",kept
+SKEW_HIGH_30,s2,"Skew(H̃,30)",kept
+SKEW_HIGH_5,s2,"Skew(H̃,5)",kept
+SKEW_HIGH_60,s2,"Skew(H̃,60)",kept
+SKEW_HLR_10,s2,"Skew(H/L,10)",kept
+SKEW_HLR_20,s2,"Skew(H/L,20)",kept
+SKEW_HLR_3,s2,"Skew(H/L,3)",kept
+SKEW_HLR_30,s2,"Skew(H/L,30)",kept
+SKEW_HLR_5,s2,"Skew(H/L,5)",kept
+SKEW_HLR_60,s2,"Skew(H/L,60)",kept
+SKEW_LOGV_10,s2,"Skew(log(V+1),10)",kept
+SKEW_LOGV_20,s2,"Skew(log(V+1),20)",kept
+SKEW_LOGV_3,s2,"Skew(log(V+1),3)",kept
+SKEW_LOGV_30,s2,"Skew(log(V+1),30)",kept
+SKEW_LOGV_5,s2,"Skew(log(V+1),5)",kept
+SKEW_LOGV_60,s2,"Skew(log(V+1),60)",kept
+SKEW_LOW_10,s2,"Skew(L̃,10)",kept
+SKEW_LOW_20,s2,"Skew(L̃,20)",kept
+SKEW_LOW_3,s2,"Skew(L̃,3)",kept
+SKEW_LOW_30,s2,"Skew(L̃,30)",kept
+SKEW_LOW_5,s2,"Skew(L̃,5)",kept
+SKEW_LOW_60,s2,"Skew(L̃,60)",kept
+SKEW_OPEN_10,s2,"Skew(Õ,10)",kept
+SKEW_OPEN_20,s2,"Skew(Õ,20)",kept
+SKEW_OPEN_3,s2,"Skew(Õ,3)",kept
+SKEW_OPEN_30,s2,"Skew(Õ,30)",kept
+SKEW_OPEN_5,s2,"Skew(Õ,5)",kept
+SKEW_OPEN_60,s2,"Skew(Õ,60)",kept
+SKEW_RETID_10,s2,"Skew(C/O-1,10)",kept
+SKEW_RETID_20,s2,"Skew(C/O-1,20)",kept
+SKEW_RETID_3,s2,"Skew(C/O-1,3)",kept
+SKEW_RETID_30,s2,"Skew(C/O-1,30)",kept
+SKEW_RETID_5,s2,"Skew(C/O-1,5)",kept
+SKEW_RETID_60,s2,"Skew(C/O-1,60)",kept
+SKEW_RETON_10,s2,"Skew(O/PC-1,10)",kept
+SKEW_RETON_20,s2,"Skew(O/PC-1,20)",kept
+SKEW_RETON_3,s2,"Skew(O/PC-1,3)",kept
+SKEW_RETON_30,s2,"Skew(O/PC-1,30)",kept
+SKEW_RETON_5,s2,"Skew(O/PC-1,5)",kept
+SKEW_RETON_60,s2,"Skew(O/PC-1,60)",kept
+SKEW_R_10,s2,"Skew(pct_chg/100,10)",kept
+SKEW_R_20,s2,"Skew(pct_chg/100,20)",kept
+SKEW_R_3,s2,"Skew(pct_chg/100,3)",kept
+SKEW_R_30,s2,"Skew(pct_chg/100,30)",kept
+SKEW_R_5,s2,"Skew(pct_chg/100,5)",kept
+SKEW_R_60,s2,"Skew(pct_chg/100,60)","dropped_dedup(anchor=SKEW60, rho=1.000000)"
+SKEW_VWAP_10,s2,"Skew(A/V,10)",kept
+SKEW_VWAP_20,s2,"Skew(A/V,20)",kept
+SKEW_VWAP_3,s2,"Skew(A/V,3)",kept
+SKEW_VWAP_30,s2,"Skew(A/V,30)",kept
+SKEW_VWAP_5,s2,"Skew(A/V,5)",kept
+SKEW_VWAP_60,s2,"Skew(A/V,60)",kept
+SKEW_V_10,s2,"Skew(V,10)",kept
+SKEW_V_20,s2,"Skew(V,20)",kept
+SKEW_V_3,s2,"Skew(V,3)",kept
+SKEW_V_30,s2,"Skew(V,30)",kept
+SKEW_V_5,s2,"Skew(V,5)",kept
+SKEW_V_60,s2,"Skew(V,60)",kept
+SLOPE_A_10,s2,"Slope(A,10)/(Mean+1)",kept
+SLOPE_A_20,s2,"Slope(A,20)/(Mean+1)",kept
+SLOPE_A_3,s2,"Slope(A,3)/(Mean+1)",kept
+SLOPE_A_30,s2,"Slope(A,30)/(Mean+1)",kept
+SLOPE_A_5,s2,"Slope(A,5)/(Mean+1)",kept
+SLOPE_A_60,s2,"Slope(A,60)/(Mean+1)",kept
+SLOPE_CF_10,s2,"Slope(CF,10)/C̃",kept
+SLOPE_CF_20,s2,"Slope(CF,20)/C̃",kept
+SLOPE_CF_3,s2,"Slope(CF,3)/C̃",kept
+SLOPE_CF_30,s2,"Slope(CF,30)/C̃",kept
+SLOPE_CF_5,s2,"Slope(CF,5)/C̃","dropped_dedup(anchor=PRICE_TREND5, rho=1.000000)"
+SLOPE_CF_60,s2,"Slope(CF,60)/C̃",kept
+SLOPE_CLOSE_10,s2,"Slope(C̃,10)/C̃","dropped_dedup(anchor=SLOPE_CF_10, rho=1.000000)"
+SLOPE_CLOSE_20,s2,"Slope(C̃,20)/C̃","dropped_dedup(anchor=SLOPE_CF_20, rho=1.000000)"
+SLOPE_CLOSE_3,s2,"Slope(C̃,3)/C̃","dropped_dedup(anchor=SLOPE_CF_3, rho=1.000000)"
+SLOPE_CLOSE_30,s2,"Slope(C̃,30)/C̃","dropped_dedup(anchor=SLOPE_CF_30, rho=1.000000)"
+SLOPE_CLOSE_5,s2,"Slope(C̃,5)/C̃","dropped_dedup(anchor=PRICE_TREND5, rho=1.000000)"
+SLOPE_CLOSE_60,s2,"Slope(C̃,60)/C̃","dropped_dedup(anchor=SLOPE_CF_60, rho=1.000000)"
+SLOPE_HIGH_10,s2,"Slope(H̃,10)/C̃",kept
+SLOPE_HIGH_20,s2,"Slope(H̃,20)/C̃",kept
+SLOPE_HIGH_3,s2,"Slope(H̃,3)/C̃",kept
+SLOPE_HIGH_30,s2,"Slope(H̃,30)/C̃",kept
+SLOPE_HIGH_5,s2,"Slope(H̃,5)/C̃",kept
+SLOPE_HIGH_60,s2,"Slope(H̃,60)/C̃","dropped_dedup(anchor=SLOPE_CF_60, rho=0.999326)"
+SLOPE_HLR_10,s2,"Slope(H/L,10)",kept
+SLOPE_HLR_20,s2,"Slope(H/L,20)",kept
+SLOPE_HLR_3,s2,"Slope(H/L,3)",kept
+SLOPE_HLR_30,s2,"Slope(H/L,30)",kept
+SLOPE_HLR_5,s2,"Slope(H/L,5)",kept
+SLOPE_HLR_60,s2,"Slope(H/L,60)",kept
+SLOPE_LOGV_10,s2,"Slope(log(V+1),10)",kept
+SLOPE_LOGV_20,s2,"Slope(log(V+1),20)",kept
+SLOPE_LOGV_3,s2,"Slope(log(V+1),3)",kept
+SLOPE_LOGV_30,s2,"Slope(log(V+1),30)",kept
+SLOPE_LOGV_5,s2,"Slope(log(V+1),5)",kept
+SLOPE_LOGV_60,s2,"Slope(log(V+1),60)",kept
+SLOPE_LOW_10,s2,"Slope(L̃,10)/C̃",kept
+SLOPE_LOW_20,s2,"Slope(L̃,20)/C̃",kept
+SLOPE_LOW_3,s2,"Slope(L̃,3)/C̃",kept
+SLOPE_LOW_30,s2,"Slope(L̃,30)/C̃",kept
+SLOPE_LOW_5,s2,"Slope(L̃,5)/C̃",kept
+SLOPE_LOW_60,s2,"Slope(L̃,60)/C̃","dropped_dedup(anchor=SLOPE_CF_60, rho=0.999276)"
+SLOPE_OPEN_10,s2,"Slope(Õ,10)/C̃",kept
+SLOPE_OPEN_20,s2,"Slope(Õ,20)/C̃",kept
+SLOPE_OPEN_3,s2,"Slope(Õ,3)/C̃",kept
+SLOPE_OPEN_30,s2,"Slope(Õ,30)/C̃",kept
+SLOPE_OPEN_5,s2,"Slope(Õ,5)/C̃",kept
+SLOPE_OPEN_60,s2,"Slope(Õ,60)/C̃","dropped_dedup(anchor=SLOPE_CF_60, rho=0.999301)"
+SLOPE_RETID_10,s2,"Slope(C/O-1,10)",kept
+SLOPE_RETID_20,s2,"Slope(C/O-1,20)",kept
+SLOPE_RETID_3,s2,"Slope(C/O-1,3)",kept
+SLOPE_RETID_30,s2,"Slope(C/O-1,30)",kept
+SLOPE_RETID_5,s2,"Slope(C/O-1,5)",kept
+SLOPE_RETID_60,s2,"Slope(C/O-1,60)",kept
+SLOPE_RETON_10,s2,"Slope(O/PC-1,10)",kept
+SLOPE_RETON_20,s2,"Slope(O/PC-1,20)",kept
+SLOPE_RETON_3,s2,"Slope(O/PC-1,3)",kept
+SLOPE_RETON_30,s2,"Slope(O/PC-1,30)",kept
+SLOPE_RETON_5,s2,"Slope(O/PC-1,5)",kept
+SLOPE_RETON_60,s2,"Slope(O/PC-1,60)",kept
+SLOPE_R_10,s2,"Slope(pct_chg/100,10)",kept
+SLOPE_R_20,s2,"Slope(pct_chg/100,20)",kept
+SLOPE_R_3,s2,"Slope(pct_chg/100,3)",kept
+SLOPE_R_30,s2,"Slope(pct_chg/100,30)",kept
+SLOPE_R_5,s2,"Slope(pct_chg/100,5)",kept
+SLOPE_R_60,s2,"Slope(pct_chg/100,60)","dropped_dedup(anchor=SLOPE_RETON_60, rho=0.999224)"
+SLOPE_VWAP_10,s2,"Slope(A/V,10)/C",kept
+SLOPE_VWAP_20,s2,"Slope(A/V,20)/C",kept
+SLOPE_VWAP_3,s2,"Slope(A/V,3)/C",kept
+SLOPE_VWAP_30,s2,"Slope(A/V,30)/C",kept
+SLOPE_VWAP_5,s2,"Slope(A/V,5)/C",kept
+SLOPE_VWAP_60,s2,"Slope(A/V,60)/C",kept
+SLOPE_V_10,s2,"Slope(V,10)/(Mean+1)",kept
+SLOPE_V_20,s2,"Slope(V,20)/(Mean+1)",kept
+SLOPE_V_3,s2,"Slope(V,3)/(Mean+1)",kept
+SLOPE_V_30,s2,"Slope(V,30)/(Mean+1)",kept
+SLOPE_V_5,s2,"Slope(V,5)/(Mean+1)",kept
+SLOPE_V_60,s2,"Slope(V,60)/(Mean+1)",kept
+SNAP_H,s2,SNAP_H,kept
+SNAP_L,s2,SNAP_L,kept
+SNAP_O,s2,SNAP_O,kept
+SNAP_VWAP,s2,SNAP_VWAP,kept
+SR_RATIO20,s1,"位置结构｜Mean(H~,20)/Mean(L~,20) (RSRS 思路)",kept
+STD_A_10,s2,"Std(A,10)/(Mean+1)",kept
+STD_A_20,s2,"Std(A,20)/(Mean+1)",kept
+STD_A_3,s2,"Std(A,3)/(Mean+1)",kept
+STD_A_30,s2,"Std(A,30)/(Mean+1)",kept
+STD_A_5,s2,"Std(A,5)/(Mean+1)",kept
+STD_A_60,s2,"Std(A,60)/(Mean+1)",kept
+STD_CF_10,s2,"Std(CF,10)/C̃",kept
+STD_CF_20,s2,"Std(CF,20)/C̃",kept
+STD_CF_3,s2,"Std(CF,3)/C̃",kept
+STD_CF_30,s2,"Std(CF,30)/C̃",kept
+STD_CF_5,s2,"Std(CF,5)/C̃",kept
+STD_CF_60,s2,"Std(CF,60)/C̃",kept
+STD_CLOSE_10,s2,"Std(C̃,10)/C̃","dropped_dedup(anchor=STD_CF_10, rho=1.000000)"
+STD_CLOSE_20,s2,"Std(C̃,20)/C̃","dropped_dedup(anchor=STD_CF_20, rho=1.000000)"
+STD_CLOSE_3,s2,"Std(C̃,3)/C̃","dropped_dedup(anchor=STD_CF_3, rho=1.000000)"
+STD_CLOSE_30,s2,"Std(C̃,30)/C̃","dropped_dedup(anchor=STD_CF_30, rho=1.000000)"
+STD_CLOSE_5,s2,"Std(C̃,5)/C̃","dropped_dedup(anchor=STD_CF_5, rho=1.000000)"
+STD_CLOSE_60,s2,"Std(C̃,60)/C̃","dropped_dedup(anchor=STD_CF_60, rho=1.000000)"
+STD_HIGH_10,s2,"Std(H̃,10)/C̃",kept
+STD_HIGH_20,s2,"Std(H̃,20)/C̃",kept
+STD_HIGH_3,s2,"Std(H̃,3)/C̃",kept
+STD_HIGH_30,s2,"Std(H̃,30)/C̃",kept
+STD_HIGH_5,s2,"Std(H̃,5)/C̃",kept
+STD_HIGH_60,s2,"Std(H̃,60)/C̃",kept
+STD_HLR_10,s2,"Std(H/L,10)",kept
+STD_HLR_20,s2,"Std(H/L,20)",kept
+STD_HLR_3,s2,"Std(H/L,3)",kept
+STD_HLR_30,s2,"Std(H/L,30)",kept
+STD_HLR_5,s2,"Std(H/L,5)",kept
+STD_HLR_60,s2,"Std(H/L,60)","dropped_dedup(anchor=MAX_HLR_60, rho=0.999753)"
+STD_LOGV_10,s2,"Std(log(V+1),10)",kept
+STD_LOGV_20,s2,"Std(log(V+1),20)",kept
+STD_LOGV_3,s2,"Std(log(V+1),3)",kept
+STD_LOGV_30,s2,"Std(log(V+1),30)",kept
+STD_LOGV_5,s2,"Std(log(V+1),5)",kept
+STD_LOGV_60,s2,"Std(log(V+1),60)",kept
+STD_LOW_10,s2,"Std(L̃,10)/C̃",kept
+STD_LOW_20,s2,"Std(L̃,20)/C̃",kept
+STD_LOW_3,s2,"Std(L̃,3)/C̃",kept
+STD_LOW_30,s2,"Std(L̃,30)/C̃",kept
+STD_LOW_5,s2,"Std(L̃,5)/C̃",kept
+STD_LOW_60,s2,"Std(L̃,60)/C̃","dropped_dedup(anchor=STD_CF_60, rho=0.999259)"
+STD_OPEN_10,s2,"Std(Õ,10)/C̃",kept
+STD_OPEN_20,s2,"Std(Õ,20)/C̃",kept
+STD_OPEN_3,s2,"Std(Õ,3)/C̃",kept
+STD_OPEN_30,s2,"Std(Õ,30)/C̃",kept
+STD_OPEN_5,s2,"Std(Õ,5)/C̃",kept
+STD_OPEN_60,s2,"Std(Õ,60)/C̃","dropped_dedup(anchor=STD_CF_60, rho=0.999440)"
+STD_RETID_10,s2,"Std(C/O-1,10)",kept
+STD_RETID_20,s2,"Std(C/O-1,20)",kept
+STD_RETID_3,s2,"Std(C/O-1,3)",kept
+STD_RETID_30,s2,"Std(C/O-1,30)",kept
+STD_RETID_5,s2,"Std(C/O-1,5)",kept
+STD_RETID_60,s2,"Std(C/O-1,60)",kept
+STD_RETON_10,s2,"Std(O/PC-1,10)",kept
+STD_RETON_20,s2,"Std(O/PC-1,20)","dropped_dedup(anchor=GAP_VOL20, rho=1.000000)"
+STD_RETON_3,s2,"Std(O/PC-1,3)",kept
+STD_RETON_30,s2,"Std(O/PC-1,30)",kept
+STD_RETON_5,s2,"Std(O/PC-1,5)",kept
+STD_RETON_60,s2,"Std(O/PC-1,60)","dropped_dedup(anchor=DVOL, rho=-0.999415)"
+STD_R_10,s2,"Std(pct_chg/100,10)",kept
+STD_R_20,s2,"Std(pct_chg/100,20)","dropped_dedup(anchor=VOL20, rho=1.000000)"
+STD_R_3,s2,"Std(pct_chg/100,3)",kept
+STD_R_30,s2,"Std(pct_chg/100,30)",kept
+STD_R_5,s2,"Std(pct_chg/100,5)","dropped_dedup(anchor=VOL5, rho=1.000000)"
+STD_R_60,s2,"Std(pct_chg/100,60)","dropped_dedup(anchor=DVOL, rho=-0.999280)"
+STD_VWAP_10,s2,"Std(A/V,10)/C",kept
+STD_VWAP_20,s2,"Std(A/V,20)/C",kept
+STD_VWAP_3,s2,"Std(A/V,3)/C",kept
+STD_VWAP_30,s2,"Std(A/V,30)/C",kept
+STD_VWAP_5,s2,"Std(A/V,5)/C",kept
+STD_VWAP_60,s2,"Std(A/V,60)/C",kept
+STD_V_10,s2,"Std(V,10)/(Mean+1)",kept
+STD_V_20,s2,"Std(V,20)/(Mean+1)","dropped_dedup(anchor=VSTD20, rho=1.000000)"
+STD_V_3,s2,"Std(V,3)/(Mean+1)",kept
+STD_V_30,s2,"Std(V,30)/(Mean+1)",kept
+STD_V_5,s2,"Std(V,5)/(Mean+1)",kept
+STD_V_60,s2,"Std(V,60)/(Mean+1)",kept
+SUMD20,s1,"技术指标｜(Sum(max(R,0),20)-Sum(max(-R,0),20))/Sum(abs(R),20)",kept
+SUM_RETID_10,s2,"Sum(C/O-1,10)","dropped_dedup(anchor=MEAN_RETID_10, rho=1.000000)"
+SUM_RETID_20,s2,"Sum(C/O-1,20)","dropped_dedup(anchor=MEAN_RETID_20, rho=1.000000)"
+SUM_RETID_3,s2,"Sum(C/O-1,3)","dropped_dedup(anchor=MEAN_RETID_3, rho=1.000000)"
+SUM_RETID_30,s2,"Sum(C/O-1,30)","dropped_dedup(anchor=MEAN_RETID_30, rho=1.000000)"
+SUM_RETID_5,s2,"Sum(C/O-1,5)","dropped_dedup(anchor=MEAN_RETID_5, rho=1.000000)"
+SUM_RETID_60,s2,"Sum(C/O-1,60)","dropped_dedup(anchor=MEAN_RETID_60, rho=1.000000)"
+SUM_RETON_10,s2,"Sum(O/PC-1,10)","dropped_dedup(anchor=MEAN_RETON_10, rho=1.000000)"
+SUM_RETON_20,s2,"Sum(O/PC-1,20)","dropped_dedup(anchor=GAP_MEAN20, rho=1.000000)"
+SUM_RETON_3,s2,"Sum(O/PC-1,3)","dropped_dedup(anchor=MEAN_RETON_3, rho=1.000000)"
+SUM_RETON_30,s2,"Sum(O/PC-1,30)","dropped_dedup(anchor=MEAN_RETON_30, rho=1.000000)"
+SUM_RETON_5,s2,"Sum(O/PC-1,5)","dropped_dedup(anchor=MEAN_RETON_5, rho=1.000000)"
+SUM_RETON_60,s2,"Sum(O/PC-1,60)","dropped_dedup(anchor=MEAN_RETON_60, rho=1.000000)"
+SUM_R_10,s2,"Sum(pct_chg/100,10)","dropped_dedup(anchor=MEAN_R_10, rho=1.000000)"
+SUM_R_20,s2,"Sum(pct_chg/100,20)","dropped_dedup(anchor=MEAN_R_20, rho=1.000000)"
+SUM_R_3,s2,"Sum(pct_chg/100,3)","dropped_dedup(anchor=MEAN_R_3, rho=1.000000)"
+SUM_R_30,s2,"Sum(pct_chg/100,30)","dropped_dedup(anchor=MEAN_R_30, rho=1.000000)"
+SUM_R_5,s2,"Sum(pct_chg/100,5)","dropped_dedup(anchor=MEAN_R_5, rho=1.000000)"
+SUM_R_60,s2,"Sum(pct_chg/100,60)","dropped_dedup(anchor=MEAN_R_60, rho=1.000000)"
+T1_GAP,s1,"制度｜Mean(RET_ON[t] | RET_ID[t-1] < -2%, 20)",kept
+TREND_SLOPE_120,s1,"趋势｜Slope(log(C~),120)*120 / (Std(R,120)*sqrt(120)) (t 统计量口径)",kept
+TSRANK20,s1,"位置｜TsRank(C~,20) (最新值在 20 日内分位)",kept
+TSRANK_A_10,s2,"TsRank(A,10)",kept
+TSRANK_A_20,s2,"TsRank(A,20)",kept
+TSRANK_A_3,s2,"TsRank(A,3)",kept
+TSRANK_A_30,s2,"TsRank(A,30)",kept
+TSRANK_A_5,s2,"TsRank(A,5)",kept
+TSRANK_A_60,s2,"TsRank(A,60)",kept
+TSRANK_CF_10,s2,"TsRank(CF,10)",kept
+TSRANK_CF_20,s2,"TsRank(CF,20)","dropped_dedup(anchor=TSRANK20, rho=1.000000)"
+TSRANK_CF_3,s2,"TsRank(CF,3)",kept
+TSRANK_CF_30,s2,"TsRank(CF,30)",kept
+TSRANK_CF_5,s2,"TsRank(CF,5)",kept
+TSRANK_CF_60,s2,"TsRank(CF,60)",kept
+TSRANK_CLOSE_10,s2,"TsRank(C̃,10)","dropped_dedup(anchor=TSRANK_CF_10, rho=1.000000)"
+TSRANK_CLOSE_20,s2,"TsRank(C̃,20)","dropped_dedup(anchor=TSRANK20, rho=1.000000)"
+TSRANK_CLOSE_3,s2,"TsRank(C̃,3)","dropped_dedup(anchor=TSRANK_CF_3, rho=1.000000)"
+TSRANK_CLOSE_30,s2,"TsRank(C̃,30)","dropped_dedup(anchor=TSRANK_CF_30, rho=1.000000)"
+TSRANK_CLOSE_5,s2,"TsRank(C̃,5)","dropped_dedup(anchor=TSRANK_CF_5, rho=1.000000)"
+TSRANK_CLOSE_60,s2,"TsRank(C̃,60)","dropped_dedup(anchor=TSRANK_CF_60, rho=1.000000)"
+TSRANK_HIGH_10,s2,"TsRank(H̃,10)",kept
+TSRANK_HIGH_20,s2,"TsRank(H̃,20)",kept
+TSRANK_HIGH_3,s2,"TsRank(H̃,3)",kept
+TSRANK_HIGH_30,s2,"TsRank(H̃,30)",kept
+TSRANK_HIGH_5,s2,"TsRank(H̃,5)",kept
+TSRANK_HIGH_60,s2,"TsRank(H̃,60)",kept
+TSRANK_HLR_10,s2,"TsRank(H/L,10)",kept
+TSRANK_HLR_20,s2,"TsRank(H/L,20)",kept
+TSRANK_HLR_3,s2,"TsRank(H/L,3)",kept
+TSRANK_HLR_30,s2,"TsRank(H/L,30)",kept
+TSRANK_HLR_5,s2,"TsRank(H/L,5)",kept
+TSRANK_HLR_60,s2,"TsRank(H/L,60)",kept
+TSRANK_LOGV_10,s2,"TsRank(log(V+1),10)",kept
+TSRANK_LOGV_20,s2,"TsRank(log(V+1),20)",kept
+TSRANK_LOGV_3,s2,"TsRank(log(V+1),3)",kept
+TSRANK_LOGV_30,s2,"TsRank(log(V+1),30)",kept
+TSRANK_LOGV_5,s2,"TsRank(log(V+1),5)",kept
+TSRANK_LOGV_60,s2,"TsRank(log(V+1),60)",kept
+TSRANK_LOW_10,s2,"TsRank(L̃,10)",kept
+TSRANK_LOW_20,s2,"TsRank(L̃,20)",kept
+TSRANK_LOW_3,s2,"TsRank(L̃,3)",kept
+TSRANK_LOW_30,s2,"TsRank(L̃,30)",kept
+TSRANK_LOW_5,s2,"TsRank(L̃,5)",kept
+TSRANK_LOW_60,s2,"TsRank(L̃,60)",kept
+TSRANK_OPEN_10,s2,"TsRank(Õ,10)",kept
+TSRANK_OPEN_20,s2,"TsRank(Õ,20)",kept
+TSRANK_OPEN_3,s2,"TsRank(Õ,3)",kept
+TSRANK_OPEN_30,s2,"TsRank(Õ,30)",kept
+TSRANK_OPEN_5,s2,"TsRank(Õ,5)",kept
+TSRANK_OPEN_60,s2,"TsRank(Õ,60)",kept
+TSRANK_RETID_10,s2,"TsRank(C/O-1,10)",kept
+TSRANK_RETID_20,s2,"TsRank(C/O-1,20)",kept
+TSRANK_RETID_3,s2,"TsRank(C/O-1,3)",kept
+TSRANK_RETID_30,s2,"TsRank(C/O-1,30)",kept
+TSRANK_RETID_5,s2,"TsRank(C/O-1,5)",kept
+TSRANK_RETID_60,s2,"TsRank(C/O-1,60)",kept
+TSRANK_RETON_10,s2,"TsRank(O/PC-1,10)",kept
+TSRANK_RETON_20,s2,"TsRank(O/PC-1,20)",kept
+TSRANK_RETON_3,s2,"TsRank(O/PC-1,3)",kept
+TSRANK_RETON_30,s2,"TsRank(O/PC-1,30)",kept
+TSRANK_RETON_5,s2,"TsRank(O/PC-1,5)",kept
+TSRANK_RETON_60,s2,"TsRank(O/PC-1,60)",kept
+TSRANK_R_10,s2,"TsRank(pct_chg/100,10)",kept
+TSRANK_R_20,s2,"TsRank(pct_chg/100,20)",kept
+TSRANK_R_3,s2,"TsRank(pct_chg/100,3)",kept
+TSRANK_R_30,s2,"TsRank(pct_chg/100,30)",kept
+TSRANK_R_5,s2,"TsRank(pct_chg/100,5)",kept
+TSRANK_R_60,s2,"TsRank(pct_chg/100,60)",kept
+TSRANK_VWAP_10,s2,"TsRank(A/V,10)",kept
+TSRANK_VWAP_20,s2,"TsRank(A/V,20)",kept
+TSRANK_VWAP_3,s2,"TsRank(A/V,3)",kept
+TSRANK_VWAP_30,s2,"TsRank(A/V,30)",kept
+TSRANK_VWAP_5,s2,"TsRank(A/V,5)",kept
+TSRANK_VWAP_60,s2,"TsRank(A/V,60)",kept
+TSRANK_V_10,s2,"TsRank(V,10)","dropped_dedup(anchor=TSRANK_LOGV_10, rho=1.000000)"
+TSRANK_V_20,s2,"TsRank(V,20)","dropped_dedup(anchor=TSRANK_LOGV_20, rho=1.000000)"
+TSRANK_V_3,s2,"TsRank(V,3)","dropped_dedup(anchor=TSRANK_LOGV_3, rho=1.000000)"
+TSRANK_V_30,s2,"TsRank(V,30)","dropped_dedup(anchor=TSRANK_LOGV_30, rho=1.000000)"
+TSRANK_V_5,s2,"TsRank(V,5)","dropped_dedup(anchor=TSRANK_LOGV_5, rho=1.000000)"
+TSRANK_V_60,s2,"TsRank(V,60)","dropped_dedup(anchor=TSRANK_LOGV_60, rho=1.000000)"
+UPPER_SHADOW_RATIO,s1,"K线形态｜(H-max(O,C))/(H-L), 一字板置 0",kept
+VMA5,s1,"量能｜V/Mean(V,5) (量比近似)",kept
+VOL15,s1,"波动率｜Std(R,15)",kept
+VOL20,s1,"波动率｜Std(R,20)",kept
+VOL5,s1,"波动率｜Std(R,5)",kept
+VOL60,s1,"波动率｜Std(R,60)","dropped_dedup(anchor=DVOL, rho=-0.999280)"
+VOLUME_TREND10,s1,"量能｜Slope(V,10)/Mean(V,20)",kept
+VOL_CONTRACTION60,s1,"波动率｜ATRp/shift(ATRp,60)",kept
+VOL_DRYUP_EXTREME,s1,"量能｜1[Mean(V,5) < Quant(Mean(V,5),250,0.1)]",kept
+VOL_MOM,s1,"量能｜(Mean(V,5)-Mean(V,20))/Mean(V,20)",kept
+VR1_20,s1,"量能｜V/Mean(V,20)",kept
+VR5_60,s1,"量能｜Mean(V,5)/Mean(V,60)",kept
+VSHRINK,s1,"量价背离｜Mean(V|R<0,近10)/Mean(V|R<0,前10)",kept
+VSTD20,s1,"量能｜Std(V,20)/(Mean(V,20)+1)",kept
+WMA_A_10,s2,"DecayLinear(A,10)/(x+1)",kept
+WMA_A_20,s2,"DecayLinear(A,20)/(x+1)",kept
+WMA_A_3,s2,"DecayLinear(A,3)/(x+1)",kept
+WMA_A_30,s2,"DecayLinear(A,30)/(x+1)",kept
+WMA_A_5,s2,"DecayLinear(A,5)/(x+1)",kept
+WMA_A_60,s2,"DecayLinear(A,60)/(x+1)",kept
+WMA_CF_10,s2,"DecayLinear(CF,10)/C̃",kept
+WMA_CF_20,s2,"DecayLinear(CF,20)/C̃",kept
+WMA_CF_3,s2,"DecayLinear(CF,3)/C̃",kept
+WMA_CF_30,s2,"DecayLinear(CF,30)/C̃",kept
+WMA_CF_5,s2,"DecayLinear(CF,5)/C̃",kept
+WMA_CF_60,s2,"DecayLinear(CF,60)/C̃",kept
+WMA_CLOSE_10,s2,"DecayLinear(C̃,10)/C̃","dropped_dedup(anchor=WMA_CF_10, rho=1.000000)"
+WMA_CLOSE_20,s2,"DecayLinear(C̃,20)/C̃","dropped_dedup(anchor=WMA_CF_20, rho=1.000000)"
+WMA_CLOSE_3,s2,"DecayLinear(C̃,3)/C̃","dropped_dedup(anchor=WMA_CF_3, rho=1.000000)"
+WMA_CLOSE_30,s2,"DecayLinear(C̃,30)/C̃","dropped_dedup(anchor=WMA_CF_30, rho=1.000000)"
+WMA_CLOSE_5,s2,"DecayLinear(C̃,5)/C̃","dropped_dedup(anchor=WMA_CF_5, rho=1.000000)"
+WMA_CLOSE_60,s2,"DecayLinear(C̃,60)/C̃","dropped_dedup(anchor=WMA_CF_60, rho=1.000000)"
+WMA_HIGH_10,s2,"DecayLinear(H̃,10)/C̃",kept
+WMA_HIGH_20,s2,"DecayLinear(H̃,20)/C̃",kept
+WMA_HIGH_3,s2,"DecayLinear(H̃,3)/C̃",kept
+WMA_HIGH_30,s2,"DecayLinear(H̃,30)/C̃",kept
+WMA_HIGH_5,s2,"DecayLinear(H̃,5)/C̃",kept
+WMA_HIGH_60,s2,"DecayLinear(H̃,60)/C̃",kept
+WMA_HLR_10,s2,"DecayLinear(H/L,10)",kept
+WMA_HLR_20,s2,"DecayLinear(H/L,20)",kept
+WMA_HLR_3,s2,"DecayLinear(H/L,3)",kept
+WMA_HLR_30,s2,"DecayLinear(H/L,30)",kept
+WMA_HLR_5,s2,"DecayLinear(H/L,5)",kept
+WMA_HLR_60,s2,"DecayLinear(H/L,60)",kept
+WMA_LOGV_10,s2,"DecayLinear(log(V+1),10)","dropped_dedup(anchor=EMA_LOGV_10, rho=0.999205)"
+WMA_LOGV_20,s2,"DecayLinear(log(V+1),20)","dropped_dedup(anchor=EMA_LOGV_20, rho=0.999061)"
+WMA_LOGV_3,s2,"DecayLinear(log(V+1),3)","dropped_dedup(anchor=EMA_LOGV_3, rho=0.999368)"
+WMA_LOGV_30,s2,"DecayLinear(log(V+1),30)","dropped_dedup(anchor=EMA_LOGV_20, rho=0.999279)"
+WMA_LOGV_5,s2,"DecayLinear(log(V+1),5)","dropped_dedup(anchor=EMA_LOGV_5, rho=0.999336)"
+WMA_LOGV_60,s2,"DecayLinear(log(V+1),60)",kept
+WMA_LOW_10,s2,"DecayLinear(L̃,10)/C̃",kept
+WMA_LOW_20,s2,"DecayLinear(L̃,20)/C̃",kept
+WMA_LOW_3,s2,"DecayLinear(L̃,3)/C̃",kept
+WMA_LOW_30,s2,"DecayLinear(L̃,30)/C̃",kept
+WMA_LOW_5,s2,"DecayLinear(L̃,5)/C̃",kept
+WMA_LOW_60,s2,"DecayLinear(L̃,60)/C̃",kept
+WMA_OPEN_10,s2,"DecayLinear(Õ,10)/C̃",kept
+WMA_OPEN_20,s2,"DecayLinear(Õ,20)/C̃",kept
+WMA_OPEN_3,s2,"DecayLinear(Õ,3)/C̃",kept
+WMA_OPEN_30,s2,"DecayLinear(Õ,30)/C̃",kept
+WMA_OPEN_5,s2,"DecayLinear(Õ,5)/C̃",kept
+WMA_OPEN_60,s2,"DecayLinear(Õ,60)/C̃","dropped_dedup(anchor=WMA_CF_60, rho=0.999478)"
+WMA_RETID_10,s2,"DecayLinear(C/O-1,10)",kept
+WMA_RETID_20,s2,"DecayLinear(C/O-1,20)",kept
+WMA_RETID_3,s2,"DecayLinear(C/O-1,3)",kept
+WMA_RETID_30,s2,"DecayLinear(C/O-1,30)",kept
+WMA_RETID_5,s2,"DecayLinear(C/O-1,5)",kept
+WMA_RETID_60,s2,"DecayLinear(C/O-1,60)",kept
+WMA_RETON_10,s2,"DecayLinear(O/PC-1,10)",kept
+WMA_RETON_20,s2,"DecayLinear(O/PC-1,20)",kept
+WMA_RETON_3,s2,"DecayLinear(O/PC-1,3)",kept
+WMA_RETON_30,s2,"DecayLinear(O/PC-1,30)",kept
+WMA_RETON_5,s2,"DecayLinear(O/PC-1,5)",kept
+WMA_RETON_60,s2,"DecayLinear(O/PC-1,60)",kept
+WMA_R_10,s2,"DecayLinear(pct_chg/100,10)",kept
+WMA_R_20,s2,"DecayLinear(pct_chg/100,20)",kept
+WMA_R_3,s2,"DecayLinear(pct_chg/100,3)",kept
+WMA_R_30,s2,"DecayLinear(pct_chg/100,30)",kept
+WMA_R_5,s2,"DecayLinear(pct_chg/100,5)",kept
+WMA_R_60,s2,"DecayLinear(pct_chg/100,60)",kept
+WMA_VWAP_10,s2,"DecayLinear(A/V,10)/C",kept
+WMA_VWAP_20,s2,"DecayLinear(A/V,20)/C",kept
+WMA_VWAP_3,s2,"DecayLinear(A/V,3)/C",kept
+WMA_VWAP_30,s2,"DecayLinear(A/V,30)/C",kept
+WMA_VWAP_5,s2,"DecayLinear(A/V,5)/C",kept
+WMA_VWAP_60,s2,"DecayLinear(A/V,60)/C",kept
+WMA_V_10,s2,"DecayLinear(V,10)/(x+1)",kept
+WMA_V_20,s2,"DecayLinear(V,20)/(x+1)",kept
+WMA_V_3,s2,"DecayLinear(V,3)/(x+1)",kept
+WMA_V_30,s2,"DecayLinear(V,30)/(x+1)",kept
+WMA_V_5,s2,"DecayLinear(V,5)/(x+1)",kept
+WMA_V_60,s2,"DecayLinear(V,60)/(x+1)",kept
+alpha12,s3,量价反向(Alpha12),kept
+alpha12_rankpct,s3,量价反向(Alpha12)｜当日横截面百分位,kept
+alpha12_z,s3,量价反向(Alpha12)｜当日横截面稳健标准化,kept
+amihud_illiq_intraday,s3,Amihud非流动性(日内)_illiq_intraday,"dropped_dedup(anchor=AMIHUD_INTRADAY, rho=1.000000)"
+amihud_illiq_intraday_rankpct,s3,Amihud非流动性(日内)_illiq_intraday｜当日横截面百分位,kept
+amihud_illiq_intraday_z,s3,Amihud非流动性(日内)_illiq_intraday｜当日横截面稳健标准化,kept
+amplitude,s3,振幅,kept
+amplitude_lag_1,s3,振幅｜滞后1日,kept
+amplitude_lag_1_rankpct,s3,振幅｜滞后1日｜当日横截面百分位,kept
+amplitude_lag_1_z,s3,振幅｜滞后1日｜当日横截面稳健标准化,kept
+amplitude_lag_3,s3,振幅｜滞后3日,"dropped_dedup(anchor=REF_HLR_3, rho=1.000000)"
+amplitude_lag_3_rankpct,s3,振幅｜滞后3日｜当日横截面百分位,kept
+amplitude_lag_3_z,s3,振幅｜滞后3日｜当日横截面稳健标准化,kept
+amplitude_lag_5,s3,振幅｜滞后5日,"dropped_dedup(anchor=REF_HLR_5, rho=1.000000)"
+amplitude_lag_5_rankpct,s3,振幅｜滞后5日｜当日横截面百分位,kept
+amplitude_lag_5_z,s3,振幅｜滞后5日｜当日横截面稳健标准化,kept
+amplitude_rankpct,s3,振幅｜当日横截面百分位,kept
+amplitude_z,s3,振幅｜当日横截面稳健标准化,kept
+atr,s3,平均真实波幅,kept
+atr_rankpct,s3,平均真实波幅｜当日横截面百分位,kept
+atr_ratio,s3,平均真实波幅_ratio,kept
+atr_ratio_rankpct,s3,平均真实波幅_ratio｜当日横截面百分位,kept
+atr_ratio_z,s3,平均真实波幅_ratio｜当日横截面稳健标准化,kept
+atr_z,s3,平均真实波幅｜当日横截面稳健标准化,kept
+bb_lower,s3,布林带lower,kept
+bb_lower_rankpct,s3,布林带lower｜当日横截面百分位,kept
+bb_lower_z,s3,布林带lower｜当日横截面稳健标准化,kept
+bb_middle,s3,布林带middle,kept
+bb_middle_rankpct,s3,布林带middle｜当日横截面百分位,kept
+bb_middle_z,s3,布林带middle｜当日横截面稳健标准化,kept
+bb_position,s3,布林带position,kept
+bb_position_rankpct,s3,布林带position｜当日横截面百分位,kept
+bb_position_z,s3,布林带position｜当日横截面稳健标准化,kept
+bb_squeeze,s3,布林带squeeze,kept
+bb_squeeze_rankpct,s3,布林带squeeze｜当日横截面百分位,kept
+bb_squeeze_z,s3,布林带squeeze｜当日横截面稳健标准化,kept
+bb_upper,s3,布林带upper,kept
+bb_upper_rankpct,s3,布林带upper｜当日横截面百分位,"dropped_dedup(anchor=bb_middle_rankpct, rho=0.999193)"
+bb_upper_z,s3,布林带upper｜当日横截面稳健标准化,kept
+body_strength,s3,K线实体强度,"dropped_dedup(anchor=BODY_STRENGTH, rho=1.000000)"
+body_strength_rankpct,s3,K线实体强度｜当日横截面百分位,kept
+body_strength_z,s3,K线实体强度｜当日横截面稳健标准化,kept
+boxcox_atr,s3,ATR对数变换(log1p),kept
+boxcox_atr_rankpct,s3,ATR对数变换(log1p)｜当日横截面百分位,"dropped_dedup(anchor=atr_rankpct, rho=1.000000)"
+boxcox_atr_z,s3,ATR对数变换(log1p)｜当日横截面稳健标准化,kept
+close,s3,收盘价,"dropped_dedup(anchor=bb_middle, rho=0.999081)"
+close_lag_10,s3,收盘价｜滞后10日,kept
+close_lag_10_rankpct,s3,收盘价｜滞后10日｜当日横截面百分位,kept
+close_lag_10_z,s3,收盘价｜滞后10日｜当日横截面稳健标准化,kept
+close_lag_15,s3,收盘价｜滞后15日,kept
+close_lag_15_rankpct,s3,收盘价｜滞后15日｜当日横截面百分位,kept
+close_lag_15_z,s3,收盘价｜滞后15日｜当日横截面稳健标准化,kept
+close_lag_20,s3,收盘价｜滞后20日,kept
+close_lag_20_rankpct,s3,收盘价｜滞后20日｜当日横截面百分位,kept
+close_lag_20_z,s3,收盘价｜滞后20日｜当日横截面稳健标准化,kept
+close_lag_25,s3,收盘价｜滞后25日,kept
+close_lag_25_rankpct,s3,收盘价｜滞后25日｜当日横截面百分位,kept
+close_lag_25_z,s3,收盘价｜滞后25日｜当日横截面稳健标准化,kept
+close_lag_3,s3,收盘价｜滞后3日,"dropped_dedup(anchor=bb_middle, rho=0.999456)"
+close_lag_30,s3,收盘价｜滞后30日,kept
+close_lag_30_rankpct,s3,收盘价｜滞后30日｜当日横截面百分位,kept
+close_lag_30_z,s3,收盘价｜滞后30日｜当日横截面稳健标准化,kept
+close_lag_3_rankpct,s3,收盘价｜滞后3日｜当日横截面百分位,"dropped_dedup(anchor=bb_middle_rankpct, rho=0.999592)"
+close_lag_3_z,s3,收盘价｜滞后3日｜当日横截面稳健标准化,"dropped_dedup(anchor=bb_middle_z, rho=0.999241)"
+close_lag_5,s3,收盘价｜滞后5日,kept
+close_lag_5_rankpct,s3,收盘价｜滞后5日｜当日横截面百分位,kept
+close_lag_5_z,s3,收盘价｜滞后5日｜当日横截面稳健标准化,kept
+close_smooth_10,s3,收盘价EMA10平滑,"dropped_dedup(anchor=bb_middle, rho=0.999420)"
+close_smooth_10_rankpct,s3,收盘价EMA10平滑｜当日横截面百分位,"dropped_dedup(anchor=bb_middle_rankpct, rho=0.999644)"
+close_smooth_10_z,s3,收盘价EMA10平滑｜当日横截面稳健标准化,"dropped_dedup(anchor=bb_middle_z, rho=0.999545)"
+close_vs_high,s3,收盘距日高位置,kept
+close_vs_high_rankpct,s3,收盘距日高位置｜当日横截面百分位,kept
+close_vs_high_z,s3,收盘距日高位置｜当日横截面稳健标准化,kept
+clv,s3,收盘位置值,kept
+clv_rankpct,s3,收盘位置值｜当日横截面百分位,kept
+clv_z,s3,收盘位置值｜当日横截面稳健标准化,kept
+cs_n,s3,当日横截面样本数,kept
+daily_return,s3,日收益率,"dropped_dedup(anchor=RET1, rho=0.999591)"
+daily_return_rankpct,s3,日收益率｜当日横截面百分位,kept
+daily_return_z,s3,日收益率｜当日横截面稳健标准化,kept
+day_of_month,s3,月内日序,kept
+day_of_year,s3,年内日序,kept
+dist_to_high_60,s3,距60日高点距离,kept
+dist_to_high_60_rankpct,s3,距60日高点距离｜当日横截面百分位,kept
+dist_to_high_60_z,s3,距60日高点距离｜当日横截面稳健标准化,kept
+distance_to_resistance,s3,距压力位距离,kept
+distance_to_resistance_rankpct,s3,距压力位距离｜当日横截面百分位,kept
+distance_to_resistance_z,s3,距压力位距离｜当日横截面稳健标准化,kept
+distance_to_support,s3,距支撑位距离,kept
+distance_to_support_rankpct,s3,距支撑位距离｜当日横截面百分位,kept
+distance_to_support_z,s3,距支撑位距离｜当日横截面稳健标准化,kept
+doji_pattern,s3,十字线形态_pattern,"dropped_dedup(anchor=DOJI, rho=1.000000)"
+doji_pattern_rankpct,s3,十字线形态_pattern｜当日横截面百分位,kept
+doji_pattern_z,s3,十字线形态_pattern｜当日横截面稳健标准化,kept
+downtrend,s3,下跌趋势标记,kept
+effective_spread,s3,有效价差估计,kept
+effective_spread_rankpct,s3,有效价差估计｜当日横截面百分位,"dropped_dedup(anchor=amplitude_rankpct, rho=0.999559)"
+effective_spread_z,s3,有效价差估计｜当日横截面稳健标准化,kept
+efficiency_ratio,s3,效率系数,kept
+efficiency_ratio_lag_1,s3,效率系数｜滞后1日,kept
+efficiency_ratio_lag_1_rankpct,s3,效率系数｜滞后1日｜当日横截面百分位,kept
+efficiency_ratio_lag_1_z,s3,效率系数｜滞后1日｜当日横截面稳健标准化,kept
+efficiency_ratio_lag_3,s3,效率系数｜滞后3日,kept
+efficiency_ratio_lag_3_rankpct,s3,效率系数｜滞后3日｜当日横截面百分位,kept
+efficiency_ratio_lag_3_z,s3,效率系数｜滞后3日｜当日横截面稳健标准化,kept
+efficiency_ratio_lag_5,s3,效率系数｜滞后5日,kept
+efficiency_ratio_lag_5_rankpct,s3,效率系数｜滞后5日｜当日横截面百分位,kept
+efficiency_ratio_lag_5_z,s3,效率系数｜滞后5日｜当日横截面稳健标准化,kept
+efficiency_ratio_rankpct,s3,效率系数｜当日横截面百分位,kept
+efficiency_ratio_z,s3,效率系数｜当日横截面稳健标准化,kept
+engulfing_pattern,s3,吞没形态_pattern,kept
+engulfing_pattern_rankpct,s3,吞没形态_pattern｜当日横截面百分位,kept
+engulfing_pattern_z,s3,吞没形态_pattern｜当日横截面稳健标准化,kept
+hammer_pattern,s3,锤子线形态_pattern,"dropped_dedup(anchor=HAMMER, rho=1.000000)"
+hammer_pattern_rankpct,s3,锤子线形态_pattern｜当日横截面百分位,kept
+hammer_pattern_z,s3,锤子线形态_pattern｜当日横截面稳健标准化,kept
+hammer_signal,s3,锤子线形态_signal,kept
+high,s3,最高价,"dropped_dedup(anchor=bb_middle, rho=0.999049)"
+high_lag_10,s3,最高价｜滞后10日,"dropped_dedup(anchor=close_lag_10, rho=0.999761)"
+high_lag_10_rankpct,s3,最高价｜滞后10日｜当日横截面百分位,"dropped_dedup(anchor=close_lag_10_rankpct, rho=0.999707)"
+high_lag_10_z,s3,最高价｜滞后10日｜当日横截面稳健标准化,"dropped_dedup(anchor=close_lag_10_z, rho=0.999694)"
+high_lag_15,s3,最高价｜滞后15日,"dropped_dedup(anchor=close_lag_15, rho=0.999649)"
+high_lag_15_rankpct,s3,最高价｜滞后15日｜当日横截面百分位,"dropped_dedup(anchor=close_lag_15_rankpct, rho=0.999642)"
+high_lag_15_z,s3,最高价｜滞后15日｜当日横截面稳健标准化,"dropped_dedup(anchor=close_lag_15_z, rho=0.999635)"
+high_lag_20,s3,最高价｜滞后20日,"dropped_dedup(anchor=close_lag_20, rho=0.999572)"
+high_lag_20_rankpct,s3,最高价｜滞后20日｜当日横截面百分位,"dropped_dedup(anchor=close_lag_20_rankpct, rho=0.999643)"
+high_lag_20_z,s3,最高价｜滞后20日｜当日横截面稳健标准化,"dropped_dedup(anchor=close_lag_20_z, rho=0.999586)"
+high_lag_25,s3,最高价｜滞后25日,"dropped_dedup(anchor=close_lag_25, rho=0.999546)"
+high_lag_25_rankpct,s3,最高价｜滞后25日｜当日横截面百分位,"dropped_dedup(anchor=close_lag_25_rankpct, rho=0.999592)"
+high_lag_25_z,s3,最高价｜滞后25日｜当日横截面稳健标准化,"dropped_dedup(anchor=close_lag_25_z, rho=0.999557)"
+high_lag_3,s3,最高价｜滞后3日,"dropped_dedup(anchor=bb_middle, rho=0.999131)"
+high_lag_30,s3,最高价｜滞后30日,"dropped_dedup(anchor=close_lag_30, rho=0.999520)"
+high_lag_30_rankpct,s3,最高价｜滞后30日｜当日横截面百分位,"dropped_dedup(anchor=close_lag_30_rankpct, rho=0.999551)"
+high_lag_30_z,s3,最高价｜滞后30日｜当日横截面稳健标准化,"dropped_dedup(anchor=close_lag_30_z, rho=0.999498)"
+high_lag_3_rankpct,s3,最高价｜滞后3日｜当日横截面百分位,"dropped_dedup(anchor=bb_middle_rankpct, rho=0.999412)"
+high_lag_3_z,s3,最高价｜滞后3日｜当日横截面稳健标准化,kept
+high_lag_5,s3,最高价｜滞后5日,"dropped_dedup(anchor=close_lag_5, rho=0.999613)"
+high_lag_5_rankpct,s3,最高价｜滞后5日｜当日横截面百分位,"dropped_dedup(anchor=close_lag_5_rankpct, rho=0.999720)"
+high_lag_5_z,s3,最高价｜滞后5日｜当日横截面稳健标准化,"dropped_dedup(anchor=close_lag_5_z, rho=0.999680)"
+high_mean_20,s3,20日高点均值,kept
+high_mean_20_rankpct,s3,20日高点均值｜当日横截面百分位,kept
+high_mean_20_z,s3,20日高点均值｜当日横截面稳健标准化,kept
+hl_spread,s3,高低价差,"dropped_dedup(anchor=HL_SPREAD, rho=1.000000)"
+hl_spread_rankpct,s3,高低价差｜当日横截面百分位,"dropped_dedup(anchor=amplitude_rankpct, rho=1.000000)"
+hl_spread_z,s3,高低价差｜当日横截面稳健标准化,kept
+illiq,s3,非流动性,kept
+illiq_lag_1,s3,非流动性｜滞后1日,kept
+illiq_lag_1_rankpct,s3,非流动性｜滞后1日｜当日横截面百分位,kept
+illiq_lag_1_z,s3,非流动性｜滞后1日｜当日横截面稳健标准化,kept
+illiq_lag_3,s3,非流动性｜滞后3日,kept
+illiq_lag_3_rankpct,s3,非流动性｜滞后3日｜当日横截面百分位,kept
+illiq_lag_3_z,s3,非流动性｜滞后3日｜当日横截面稳健标准化,kept
+illiq_lag_5,s3,非流动性｜滞后5日,kept
+illiq_lag_5_rankpct,s3,非流动性｜滞后5日｜当日横截面百分位,kept
+illiq_lag_5_z,s3,非流动性｜滞后5日｜当日横截面稳健标准化,kept
+illiq_rankpct,s3,非流动性｜当日横截面百分位,kept
+illiq_z,s3,非流动性｜当日横截面稳健标准化,kept
+intraday_pos,s3,日内位置,"dropped_dedup(anchor=close_vs_high, rho=-1.000000)"
+intraday_pos_lag_1,s3,日内位置｜滞后1日,kept
+intraday_pos_lag_1_rankpct,s3,日内位置｜滞后1日｜当日横截面百分位,kept
+intraday_pos_lag_1_z,s3,日内位置｜滞后1日｜当日横截面稳健标准化,kept
+intraday_pos_lag_2,s3,日内位置｜滞后2日,kept
+intraday_pos_lag_2_rankpct,s3,日内位置｜滞后2日｜当日横截面百分位,kept
+intraday_pos_lag_2_z,s3,日内位置｜滞后2日｜当日横截面稳健标准化,kept
+intraday_pos_lag_3,s3,日内位置｜滞后3日,kept
+intraday_pos_lag_3_rankpct,s3,日内位置｜滞后3日｜当日横截面百分位,kept
+intraday_pos_lag_3_z,s3,日内位置｜滞后3日｜当日横截面稳健标准化,kept
+intraday_pos_rankpct,s3,日内位置｜当日横截面百分位,kept
+intraday_pos_z,s3,日内位置｜当日横截面稳健标准化,"dropped_dedup(anchor=close_vs_high_z, rho=-1.000000)"
+is_month_end,s3,月末标记,kept
+is_month_start,s3,月初标记,kept
+is_quarter_end,s3,季末标记,kept
+is_quarter_start,s3,季初标记,kept
+log_volume,s3,对数成交量,kept
+log_volume_rankpct,s3,对数成交量｜当日横截面百分位,kept
+log_volume_z,s3,对数成交量｜当日横截面稳健标准化,kept
+low,s3,最低价,"dropped_dedup(anchor=bb_middle, rho=0.999019)"
+low_lag_10,s3,最低价｜滞后10日,"dropped_dedup(anchor=close_lag_10, rho=0.999664)"
+low_lag_10_rankpct,s3,最低价｜滞后10日｜当日横截面百分位,"dropped_dedup(anchor=close_lag_10_rankpct, rho=0.999618)"
+low_lag_10_z,s3,最低价｜滞后10日｜当日横截面稳健标准化,"dropped_dedup(anchor=close_lag_10_z, rho=0.999612)"
+low_lag_15,s3,最低价｜滞后15日,"dropped_dedup(anchor=close_lag_15, rho=0.999622)"
+low_lag_15_rankpct,s3,最低价｜滞后15日｜当日横截面百分位,"dropped_dedup(anchor=close_lag_15_rankpct, rho=0.999647)"
+low_lag_15_z,s3,最低价｜滞后15日｜当日横截面稳健标准化,"dropped_dedup(anchor=close_lag_15_z, rho=0.999624)"
+low_lag_20,s3,最低价｜滞后20日,"dropped_dedup(anchor=close_lag_20, rho=0.999607)"
+low_lag_20_rankpct,s3,最低价｜滞后20日｜当日横截面百分位,"dropped_dedup(anchor=close_lag_20_rankpct, rho=0.999570)"
+low_lag_20_z,s3,最低价｜滞后20日｜当日横截面稳健标准化,"dropped_dedup(anchor=close_lag_20_z, rho=0.999553)"
+low_lag_25,s3,最低价｜滞后25日,"dropped_dedup(anchor=close_lag_25, rho=0.999520)"
+low_lag_25_rankpct,s3,最低价｜滞后25日｜当日横截面百分位,"dropped_dedup(anchor=close_lag_25_rankpct, rho=0.999567)"
+low_lag_25_z,s3,最低价｜滞后25日｜当日横截面稳健标准化,"dropped_dedup(anchor=close_lag_25_z, rho=0.999510)"
+low_lag_3,s3,最低价｜滞后3日,"dropped_dedup(anchor=bb_middle, rho=0.999309)"
+low_lag_30,s3,最低价｜滞后30日,"dropped_dedup(anchor=close_lag_30, rho=0.999518)"
+low_lag_30_rankpct,s3,最低价｜滞后30日｜当日横截面百分位,"dropped_dedup(anchor=close_lag_30_rankpct, rho=0.999524)"
+low_lag_30_z,s3,最低价｜滞后30日｜当日横截面稳健标准化,"dropped_dedup(anchor=close_lag_30_z, rho=0.999469)"
+low_lag_3_rankpct,s3,最低价｜滞后3日｜当日横截面百分位,"dropped_dedup(anchor=bb_middle_rankpct, rho=0.999458)"
+low_lag_3_z,s3,最低价｜滞后3日｜当日横截面稳健标准化,"dropped_dedup(anchor=bb_middle_z, rho=0.999095)"
+low_lag_5,s3,最低价｜滞后5日,"dropped_dedup(anchor=close_lag_5, rho=0.999710)"
+low_lag_5_rankpct,s3,最低价｜滞后5日｜当日横截面百分位,"dropped_dedup(anchor=close_lag_5_rankpct, rho=0.999682)"
+low_lag_5_z,s3,最低价｜滞后5日｜当日横截面稳健标准化,"dropped_dedup(anchor=close_lag_5_z, rho=0.999670)"
+low_mean_20,s3,20日低点均值,"dropped_dedup(anchor=high_mean_20, rho=0.999831)"
+low_mean_20_rankpct,s3,20日低点均值｜当日横截面百分位,"dropped_dedup(anchor=high_mean_20_rankpct, rho=0.999848)"
+low_mean_20_z,s3,20日低点均值｜当日横截面稳健标准化,"dropped_dedup(anchor=high_mean_20_z, rho=0.999864)"
+ma_20,s3,移动均线20,"dropped_dedup(anchor=high_mean_20, rho=0.999950)"
+ma_20_rankpct,s3,移动均线20｜当日横截面百分位,"dropped_dedup(anchor=high_mean_20_rankpct, rho=0.999870)"
+ma_20_z,s3,移动均线20｜当日横截面稳健标准化,"dropped_dedup(anchor=high_mean_20_z, rho=0.999871)"
+ma_5,s3,移动均线5,"dropped_dedup(anchor=bb_middle, rho=1.000000)"
+ma_5_rankpct,s3,移动均线5｜当日横截面百分位,"dropped_dedup(anchor=bb_middle_rankpct, rho=1.000000)"
+ma_5_z,s3,移动均线5｜当日横截面稳健标准化,"dropped_dedup(anchor=bb_middle_z, rho=1.000000)"
+ma_60,s3,移动均线60,kept
+ma_60_rankpct,s3,移动均线60｜当日横截面百分位,kept
+ma_60_z,s3,移动均线60｜当日横截面稳健标准化,kept
+ma_arrangement,s3,均线排列,kept
+ma_arrangement_rankpct,s3,均线排列｜当日横截面百分位,kept
+ma_arrangement_z,s3,均线排列｜当日横截面稳健标准化,kept
+macd,s3,指数平滑异同移动平均线,kept
+macd_above_signal,s3,指数平滑异同移动平均线_above_signal,kept
+macd_above_signal_rankpct,s3,指数平滑异同移动平均线_above_signal｜当日横截面百分位,kept
+macd_above_signal_z,s3,指数平滑异同移动平均线_above_signal｜当日横截面稳健标准化,kept
+macd_death_cross,s3,指数平滑异同移动平均线_death_cross,kept
+macd_death_cross_rankpct,s3,指数平滑异同移动平均线_death_cross｜当日横截面百分位,kept
+macd_death_cross_z,s3,指数平滑异同移动平均线_death_cross｜当日横截面稳健标准化,kept
+macd_golden_cross,s3,指数平滑异同移动平均线_golden_cross,kept
+macd_golden_cross_rankpct,s3,指数平滑异同移动平均线_golden_cross｜当日横截面百分位,kept
+macd_golden_cross_z,s3,指数平滑异同移动平均线_golden_cross｜当日横截面稳健标准化,kept
+macd_hist,s3,指数平滑异同移动平均线柱,kept
+macd_hist_acceleration,s3,指数平滑异同移动平均线柱_acceleration,kept
+macd_hist_acceleration_rankpct,s3,指数平滑异同移动平均线柱_acceleration｜当日横截面百分位,kept
+macd_hist_acceleration_z,s3,指数平滑异同移动平均线柱_acceleration｜当日横截面稳健标准化,kept
+macd_hist_amplitude,s3,指数平滑异同移动平均线柱_amplitude,kept
+macd_hist_amplitude_rankpct,s3,指数平滑异同移动平均线柱_amplitude｜当日横截面百分位,kept
+macd_hist_amplitude_z,s3,指数平滑异同移动平均线柱_amplitude｜当日横截面稳健标准化,kept
+macd_hist_direction,s3,指数平滑异同移动平均线柱_direction,"dropped_dedup(anchor=macd_above_signal, rho=1.000000)"
+macd_hist_direction_rankpct,s3,指数平滑异同移动平均线柱_direction｜当日横截面百分位,"dropped_dedup(anchor=macd_above_signal_rankpct, rho=0.999820)"
+macd_hist_direction_z,s3,指数平滑异同移动平均线柱_direction｜当日横截面稳健标准化,kept
+macd_hist_rankpct,s3,指数平滑异同移动平均线柱｜当日横截面百分位,kept
+macd_hist_trend_5,s3,指数平滑异同移动平均线柱_trend_5,kept
+macd_hist_trend_5_rankpct,s3,指数平滑异同移动平均线柱_trend_5｜当日横截面百分位,kept
+macd_hist_trend_5_z,s3,指数平滑异同移动平均线柱_trend_5｜当日横截面稳健标准化,kept
+macd_hist_z,s3,指数平滑异同移动平均线柱｜当日横截面稳健标准化,kept
+macd_percentile,s3,MACD滚动百分位,kept
+macd_percentile_rankpct,s3,MACD滚动百分位｜当日横截面百分位,kept
+macd_percentile_z,s3,MACD滚动百分位｜当日横截面稳健标准化,kept
+macd_rankpct,s3,指数平滑异同移动平均线｜当日横截面百分位,kept
+macd_robust,s3,指数平滑异同移动平均线_robust,kept
+macd_robust_rankpct,s3,指数平滑异同移动平均线_robust｜当日横截面百分位,kept
+macd_robust_z,s3,指数平滑异同移动平均线_robust｜当日横截面稳健标准化,kept
+macd_signal,s3,指数平滑异同移动平均线信号线,kept
+macd_signal_convergence,s3,指数平滑异同移动平均线信号线_convergence,"dropped_dedup(anchor=macd_hist, rho=1.000000)"
+macd_signal_convergence_rankpct,s3,指数平滑异同移动平均线信号线_convergence｜当日横截面百分位,"dropped_dedup(anchor=macd_hist_rankpct, rho=1.000000)"
+macd_signal_convergence_trend,s3,指数平滑异同移动平均线信号线_convergence_trend,kept
+macd_signal_convergence_trend_rankpct,s3,指数平滑异同移动平均线信号线_convergence_trend｜当日横截面百分位,kept
+macd_signal_convergence_trend_z,s3,指数平滑异同移动平均线信号线_convergence_trend｜当日横截面稳健标准化,kept
+macd_signal_convergence_z,s3,指数平滑异同移动平均线信号线_convergence｜当日横截面稳健标准化,"dropped_dedup(anchor=macd_hist_z, rho=1.000000)"
+macd_signal_cross,s3,指数平滑异同移动平均线信号线_cross,"dropped_dedup(anchor=macd_golden_cross, rho=1.000000)"
+macd_signal_cross_rankpct,s3,指数平滑异同移动平均线信号线_cross｜当日横截面百分位,"dropped_dedup(anchor=macd_golden_cross_rankpct, rho=1.000000)"
+macd_signal_cross_z,s3,指数平滑异同移动平均线信号线_cross｜当日横截面稳健标准化,"dropped_dedup(anchor=macd_golden_cross_z, rho=1.000000)"
+macd_signal_distance,s3,指数平滑异同移动平均线信号线_distance,"dropped_dedup(anchor=macd_hist, rho=1.000000)"
+macd_signal_distance_rankpct,s3,指数平滑异同移动平均线信号线_distance｜当日横截面百分位,"dropped_dedup(anchor=macd_hist_rankpct, rho=1.000000)"
+macd_signal_distance_z,s3,指数平滑异同移动平均线信号线_distance｜当日横截面稳健标准化,"dropped_dedup(anchor=macd_hist_z, rho=1.000000)"
+macd_signal_rankpct,s3,指数平滑异同移动平均线信号线｜当日横截面百分位,kept
+macd_signal_z,s3,指数平滑异同移动平均线信号线｜当日横截面稳健标准化,kept
+macd_z,s3,指数平滑异同移动平均线｜当日横截面稳健标准化,kept
+macd_zero_cross,s3,指数平滑异同移动平均线_zero_cross,kept
+macd_zero_cross_down,s3,指数平滑异同移动平均线_zero_cross_down,kept
+macd_zero_cross_down_rankpct,s3,指数平滑异同移动平均线_zero_cross_down｜当日横截面百分位,kept
+macd_zero_cross_down_z,s3,指数平滑异同移动平均线_zero_cross_down｜当日横截面稳健标准化,kept
+macd_zero_cross_rankpct,s3,指数平滑异同移动平均线_zero_cross｜当日横截面百分位,kept
+macd_zero_cross_up,s3,指数平滑异同移动平均线_zero_cross_up,kept
+macd_zero_cross_up_rankpct,s3,指数平滑异同移动平均线_zero_cross_up｜当日横截面百分位,kept
+macd_zero_cross_up_z,s3,指数平滑异同移动平均线_zero_cross_up｜当日横截面稳健标准化,kept
+macd_zero_cross_z,s3,指数平滑异同移动平均线_zero_cross｜当日横截面稳健标准化,kept
+market_avg_amplitude,s3,市场综合状态avg_amplitude,"dropped_dedup(anchor=MKT_AVG_AMP, rho=1.000000)"
+market_avg_amplitude_rankpct,s3,市场综合状态avg_amplitude｜当日横截面百分位,kept
+market_avg_amplitude_z,s3,市场综合状态avg_amplitude｜当日横截面稳健标准化,kept
+market_avg_change,s3,市场综合状态avg_change,"dropped_dedup(anchor=MKT_AVG_CHANGE, rho=1.000000)"
+market_avg_change_rankpct,s3,市场综合状态avg_change｜当日横截面百分位,"dropped_dedup(anchor=market_avg_amplitude_rankpct, rho=1.000000)"
+market_avg_change_z,s3,市场综合状态avg_change｜当日横截面稳健标准化,kept
+market_sentiment,s3,市场综合状态sentiment,"dropped_dedup(anchor=MKT_SENTIMENT, rho=1.000000)"
+market_sentiment_rankpct,s3,市场综合状态sentiment｜当日横截面百分位,"dropped_dedup(anchor=market_avg_amplitude_rankpct, rho=1.000000)"
+market_sentiment_z,s3,市场综合状态sentiment｜当日横截面稳健标准化,kept
+market_sync_score,s3,市场综合状态sync_score,"dropped_dedup(anchor=MKT_SYNC_SCORE, rho=1.000000)"
+market_sync_score_rankpct,s3,市场综合状态sync_score｜当日横截面百分位,"dropped_dedup(anchor=market_avg_amplitude_rankpct, rho=1.000000)"
+market_sync_score_z,s3,市场综合状态sync_score｜当日横截面稳健标准化,kept
+obv,s3,能量潮,kept
+obv_rankpct,s3,能量潮｜当日横截面百分位,kept
+obv_trend,s3,能量潮_trend,kept
+obv_trend_rankpct,s3,能量潮_trend｜当日横截面百分位,kept
+obv_trend_z,s3,能量潮_trend｜当日横截面稳健标准化,kept
+obv_z,s3,能量潮｜当日横截面稳健标准化,kept
+open,s3,开盘价,"dropped_dedup(anchor=bb_middle, rho=0.999091)"
+open_lag_10,s3,开盘价｜滞后10日,"dropped_dedup(anchor=close_lag_10, rho=0.999349)"
+open_lag_10_rankpct,s3,开盘价｜滞后10日｜当日横截面百分位,"dropped_dedup(anchor=close_lag_10_rankpct, rho=0.999305)"
+open_lag_10_z,s3,开盘价｜滞后10日｜当日横截面稳健标准化,"dropped_dedup(anchor=close_lag_10_z, rho=0.999258)"
+open_lag_15,s3,开盘价｜滞后15日,"dropped_dedup(anchor=close_lag_15, rho=0.999231)"
+open_lag_15_rankpct,s3,开盘价｜滞后15日｜当日横截面百分位,"dropped_dedup(anchor=close_lag_15_rankpct, rho=0.999319)"
+open_lag_15_z,s3,开盘价｜滞后15日｜当日横截面稳健标准化,"dropped_dedup(anchor=close_lag_15_z, rho=0.999222)"
+open_lag_20,s3,开盘价｜滞后20日,"dropped_dedup(anchor=close_lag_20, rho=0.999137)"
+open_lag_20_rankpct,s3,开盘价｜滞后20日｜当日横截面百分位,"dropped_dedup(anchor=close_lag_20_rankpct, rho=0.999194)"
+open_lag_20_z,s3,开盘价｜滞后20日｜当日横截面稳健标准化,"dropped_dedup(anchor=close_lag_20_z, rho=0.999078)"
+open_lag_25,s3,开盘价｜滞后25日,"dropped_dedup(anchor=close_lag_25, rho=0.999036)"
+open_lag_25_rankpct,s3,开盘价｜滞后25日｜当日横截面百分位,"dropped_dedup(anchor=close_lag_25_rankpct, rho=0.999169)"
+open_lag_25_z,s3,开盘价｜滞后25日｜当日横截面稳健标准化,"dropped_dedup(anchor=close_lag_25_z, rho=0.999016)"
+open_lag_3,s3,开盘价｜滞后3日,kept
+open_lag_30,s3,开盘价｜滞后30日,"dropped_dedup(anchor=close_lag_30, rho=0.999022)"
+open_lag_30_rankpct,s3,开盘价｜滞后30日｜当日横截面百分位,"dropped_dedup(anchor=close_lag_30_rankpct, rho=0.999047)"
+open_lag_30_z,s3,开盘价｜滞后30日｜当日横截面稳健标准化,kept
+open_lag_3_rankpct,s3,开盘价｜滞后3日｜当日横截面百分位,"dropped_dedup(anchor=bb_middle_rankpct, rho=0.999276)"
+open_lag_3_z,s3,开盘价｜滞后3日｜当日横截面稳健标准化,"dropped_dedup(anchor=high_lag_3_z, rho=0.999678)"
+open_lag_5,s3,开盘价｜滞后5日,"dropped_dedup(anchor=close_lag_5, rho=0.999246)"
+open_lag_5_rankpct,s3,开盘价｜滞后5日｜当日横截面百分位,"dropped_dedup(anchor=close_lag_5_rankpct, rho=0.999417)"
+open_lag_5_z,s3,开盘价｜滞后5日｜当日横截面稳健标准化,"dropped_dedup(anchor=close_lag_5_z, rho=0.999331)"
+pct_change,s3,日收益率,"dropped_dedup(anchor=RET1, rho=0.999591)"
+pct_change_rankpct,s3,日收益率｜当日横截面百分位,"dropped_dedup(anchor=daily_return_rankpct, rho=1.000000)"
+pct_change_z,s3,日收益率｜当日横截面稳健标准化,"dropped_dedup(anchor=daily_return_z, rho=1.000000)"
+price_impact,s3,价格冲击,"dropped_dedup(anchor=PRICE_IMPACT, rho=1.000000)"
+price_impact_rankpct,s3,价格冲击｜当日横截面百分位,kept
+price_impact_z,s3,价格冲击｜当日横截面稳健标准化,kept
+price_trend_5,s3,价格趋势_5,kept
+price_trend_5_rankpct,s3,价格趋势_5｜当日横截面百分位,kept
+price_trend_5_z,s3,价格趋势_5｜当日横截面稳健标准化,kept
+price_volume_divergence,s3,价量背离标记,kept
+price_volume_divergence_rankpct,s3,价量背离标记｜当日横截面百分位,kept
+price_volume_divergence_z,s3,价量背离标记｜当日横截面稳健标准化,kept
+price_vs_ma20,s3,价格相对均线偏离20,kept
+price_vs_ma20_rankpct,s3,价格相对均线偏离20｜当日横截面百分位,kept
+price_vs_ma20_z,s3,价格相对均线偏离20｜当日横截面稳健标准化,kept
+price_vs_ma5,s3,价格相对均线偏离5,kept
+price_vs_ma5_rankpct,s3,价格相对均线偏离5｜当日横截面百分位,kept
+price_vs_ma5_z,s3,价格相对均线偏离5｜当日横截面稳健标准化,kept
+price_vs_ma60,s3,价格相对均线偏离60,kept
+price_vs_ma60_rankpct,s3,价格相对均线偏离60｜当日横截面百分位,kept
+price_vs_ma60_z,s3,价格相对均线偏离60｜当日横截面稳健标准化,kept
+pv_corr_10,s3,量价相关(10日),kept
+pv_corr_10_rankpct,s3,量价相关(10日)｜当日横截面百分位,kept
+pv_corr_10_z,s3,量价相关(10日)｜当日横截面稳健标准化,kept
+quarter,s3,季度,kept
+rank_return,s3,当日收益全市场百分位,"dropped_dedup(anchor=daily_return_rankpct, rho=1.000000)"
+rank_volume,s3,当日成交量全市场百分位,"dropped_dedup(anchor=log_volume_rankpct, rho=1.000000)"
+ret_intraday,s3,日内收益,"dropped_dedup(anchor=RET_ID, rho=1.000000)"
+ret_intraday_lag_1,s3,日内收益｜滞后1日,kept
+ret_intraday_lag_1_rankpct,s3,日内收益｜滞后1日｜当日横截面百分位,kept
+ret_intraday_lag_1_z,s3,日内收益｜滞后1日｜当日横截面稳健标准化,kept
+ret_intraday_lag_3,s3,日内收益｜滞后3日,"dropped_dedup(anchor=REF_RETID_3, rho=1.000000)"
+ret_intraday_lag_3_rankpct,s3,日内收益｜滞后3日｜当日横截面百分位,kept
+ret_intraday_lag_3_z,s3,日内收益｜滞后3日｜当日横截面稳健标准化,kept
+ret_intraday_lag_5,s3,日内收益｜滞后5日,"dropped_dedup(anchor=REF_RETID_5, rho=1.000000)"
+ret_intraday_lag_5_rankpct,s3,日内收益｜滞后5日｜当日横截面百分位,kept
+ret_intraday_lag_5_z,s3,日内收益｜滞后5日｜当日横截面稳健标准化,kept
+ret_intraday_rankpct,s3,日内收益｜当日横截面百分位,kept
+ret_intraday_z,s3,日内收益｜当日横截面稳健标准化,kept
+ret_overnight,s3,隔夜收益,"dropped_dedup(anchor=RET_ON, rho=0.999262)"
+ret_overnight_lag_1,s3,隔夜收益｜滞后1日,kept
+ret_overnight_lag_1_rankpct,s3,隔夜收益｜滞后1日｜当日横截面百分位,kept
+ret_overnight_lag_1_z,s3,隔夜收益｜滞后1日｜当日横截面稳健标准化,kept
+ret_overnight_lag_3,s3,隔夜收益｜滞后3日,kept
+ret_overnight_lag_3_rankpct,s3,隔夜收益｜滞后3日｜当日横截面百分位,kept
+ret_overnight_lag_3_z,s3,隔夜收益｜滞后3日｜当日横截面稳健标准化,kept
+ret_overnight_lag_5,s3,隔夜收益｜滞后5日,kept
+ret_overnight_lag_5_rankpct,s3,隔夜收益｜滞后5日｜当日横截面百分位,kept
+ret_overnight_lag_5_z,s3,隔夜收益｜滞后5日｜当日横截面稳健标准化,kept
+ret_overnight_rankpct,s3,隔夜收益｜当日横截面百分位,kept
+ret_overnight_z,s3,隔夜收益｜当日横截面稳健标准化,kept
+return_lag_1,s3,滞后1日,kept
+return_lag_10,s3,滞后10日,kept
+return_lag_10_rankpct,s3,滞后10日｜当日横截面百分位,kept
+return_lag_10_z,s3,滞后10日｜当日横截面稳健标准化,kept
+return_lag_1_rankpct,s3,滞后1日｜当日横截面百分位,kept
+return_lag_1_z,s3,滞后1日｜当日横截面稳健标准化,kept
+return_lag_2,s3,滞后2日,kept
+return_lag_20,s3,滞后20日,kept
+return_lag_20_rankpct,s3,滞后20日｜当日横截面百分位,kept
+return_lag_20_z,s3,滞后20日｜当日横截面稳健标准化,kept
+return_lag_2_rankpct,s3,滞后2日｜当日横截面百分位,kept
+return_lag_2_z,s3,滞后2日｜当日横截面稳健标准化,kept
+return_lag_3,s3,滞后3日,kept
+return_lag_3_rankpct,s3,滞后3日｜当日横截面百分位,kept
+return_lag_3_z,s3,滞后3日｜当日横截面稳健标准化,kept
+return_lag_5,s3,滞后5日,kept
+return_lag_5_rankpct,s3,滞后5日｜当日横截面百分位,kept
+return_lag_5_z,s3,滞后5日｜当日横截面稳健标准化,kept
+rsi_14,s3,相对强弱指标14,kept
+rsi_14_rankpct,s3,相对强弱指标14｜当日横截面百分位,kept
+rsi_14_z,s3,相对强弱指标14｜当日横截面稳健标准化,kept
+rsi_24,s3,相对强弱指标24,kept
+rsi_24_rankpct,s3,相对强弱指标24｜当日横截面百分位,kept
+rsi_24_z,s3,相对强弱指标24｜当日横截面稳健标准化,kept
+rsi_6,s3,相对强弱指标6,kept
+rsi_6_rankpct,s3,相对强弱指标6｜当日横截面百分位,kept
+rsi_6_z,s3,相对强弱指标6｜当日横截面稳健标准化,kept
+rsi_momentum,s3,相对强弱指标momentum,kept
+rsi_momentum_rankpct,s3,相对强弱指标momentum｜当日横截面百分位,kept
+rsi_momentum_z,s3,相对强弱指标momentum｜当日横截面稳健标准化,kept
+rsi_overbought_14,s3,相对强弱指标overbought_14,kept
+rsi_overbought_14_rankpct,s3,相对强弱指标overbought_14｜当日横截面百分位,kept
+rsi_overbought_14_z,s3,相对强弱指标overbought_14｜当日横截面稳健标准化,kept
+rsi_overbought_24,s3,相对强弱指标overbought_24,kept
+rsi_overbought_24_rankpct,s3,相对强弱指标overbought_24｜当日横截面百分位,kept
+rsi_overbought_24_z,s3,相对强弱指标overbought_24｜当日横截面稳健标准化,kept
+rsi_overbought_6,s3,相对强弱指标overbought_6,kept
+rsi_overbought_6_rankpct,s3,相对强弱指标overbought_6｜当日横截面百分位,kept
+rsi_overbought_6_z,s3,相对强弱指标overbought_6｜当日横截面稳健标准化,kept
+rsi_oversold_14,s3,相对强弱指标oversold_14,kept
+rsi_oversold_14_rankpct,s3,相对强弱指标oversold_14｜当日横截面百分位,kept
+rsi_oversold_14_z,s3,相对强弱指标oversold_14｜当日横截面稳健标准化,kept
+rsi_oversold_24,s3,相对强弱指标oversold_24,kept
+rsi_oversold_24_rankpct,s3,相对强弱指标oversold_24｜当日横截面百分位,kept
+rsi_oversold_24_z,s3,相对强弱指标oversold_24｜当日横截面稳健标准化,kept
+rsi_oversold_6,s3,相对强弱指标oversold_6,kept
+rsi_oversold_6_rankpct,s3,相对强弱指标oversold_6｜当日横截面百分位,kept
+rsi_oversold_6_z,s3,相对强弱指标oversold_6｜当日横截面稳健标准化,kept
+rsi_robust,s3,相对强弱指标robust,kept
+rsi_robust_rankpct,s3,相对强弱指标robust｜当日横截面百分位,kept
+rsi_robust_z,s3,相对强弱指标robust｜当日横截面稳健标准化,kept
+rsi_turning,s3,相对强弱指标turning,kept
+rsi_turning_rankpct,s3,相对强弱指标turning｜当日横截面百分位,kept
+rsi_turning_simple,s3,相对强弱指标turning_simple,"dropped_dedup(anchor=rsi_turning, rho=1.000000)"
+rsi_turning_simple_rankpct,s3,相对强弱指标turning_simple｜当日横截面百分位,"dropped_dedup(anchor=rsi_turning_rankpct, rho=1.000000)"
+rsi_turning_simple_z,s3,相对强弱指标turning_simple｜当日横截面稳健标准化,kept
+rsi_turning_z,s3,相对强弱指标turning｜当日横截面稳健标准化,"dropped_dedup(anchor=rsi_turning_simple_z, rho=1.000000)"
+sh_amplitude,s3,上证指数日特征amplitude,"dropped_dedup(anchor=MKT_SH_AMPLITUDE, rho=1.000000)"
+sh_amplitude_rankpct,s3,上证指数日特征amplitude｜当日横截面百分位,"dropped_dedup(anchor=market_avg_amplitude_rankpct, rho=1.000000)"
+sh_amplitude_z,s3,上证指数日特征amplitude｜当日横截面稳健标准化,kept
+sh_price_change,s3,上证指数日特征price_change,"dropped_dedup(anchor=MKT_SH_PRICE_CHANGE, rho=1.000000)"
+sh_price_change_abs,s3,上证指数日特征price_change_abs,"dropped_dedup(anchor=MKT_SH_PRICE_CHANGE_ABS, rho=1.000000)"
+sh_price_change_abs_rankpct,s3,上证指数日特征price_change_abs｜当日横截面百分位,"dropped_dedup(anchor=market_avg_amplitude_rankpct, rho=1.000000)"
+sh_price_change_abs_z,s3,上证指数日特征price_change_abs｜当日横截面稳健标准化,kept
+sh_price_change_rankpct,s3,上证指数日特征price_change｜当日横截面百分位,"dropped_dedup(anchor=market_avg_amplitude_rankpct, rho=1.000000)"
+sh_price_change_z,s3,上证指数日特征price_change｜当日横截面稳健标准化,kept
+sh_price_wave_abs,s3,上证指数日特征price_wave_abs,"dropped_dedup(anchor=MKT_SH_AMPLITUDE, rho=1.000000)"
+sh_price_wave_abs_rankpct,s3,上证指数日特征price_wave_abs｜当日横截面百分位,"dropped_dedup(anchor=market_avg_amplitude_rankpct, rho=1.000000)"
+sh_price_wave_abs_z,s3,上证指数日特征price_wave_abs｜当日横截面稳健标准化,kept
+sh_sentiment,s3,上证指数日特征sentiment,"dropped_dedup(anchor=MKT_SH_SENTIMENT, rho=1.000000)"
+sh_sentiment_rankpct,s3,上证指数日特征sentiment｜当日横截面百分位,"dropped_dedup(anchor=market_avg_amplitude_rankpct, rho=1.000000)"
+sh_sentiment_z,s3,上证指数日特征sentiment｜当日横截面稳健标准化,kept
+sh_sz_sync_direction,s3,沪深同步性_direction,"dropped_dedup(anchor=MKT_SH_SZ_SYNC_DIRECTION, rho=1.000000)"
+sh_sz_sync_direction_rankpct,s3,沪深同步性_direction｜当日横截面百分位,"dropped_dedup(anchor=market_avg_amplitude_rankpct, rho=1.000000)"
+sh_sz_sync_direction_z,s3,沪深同步性_direction｜当日横截面稳健标准化,kept
+sh_sz_sync_strength,s3,沪深同步性_strength,"dropped_dedup(anchor=MKT_SH_SZ_SYNC_STRENGTH, rho=1.000000)"
+sh_sz_sync_strength_rankpct,s3,沪深同步性_strength｜当日横截面百分位,"dropped_dedup(anchor=market_avg_amplitude_rankpct, rho=1.000000)"
+sh_sz_sync_strength_z,s3,沪深同步性_strength｜当日横截面稳健标准化,kept
+sh_volume_ratio,s3,上证指数日特征volume_ratio,"dropped_dedup(anchor=MKT_SH_VOLUME_RATIO, rho=1.000000)"
+sh_volume_ratio_rankpct,s3,上证指数日特征volume_ratio｜当日横截面百分位,"dropped_dedup(anchor=market_avg_amplitude_rankpct, rho=1.000000)"
+sh_volume_ratio_z,s3,上证指数日特征volume_ratio｜当日横截面稳健标准化,kept
+sh_volume_signal,s3,上证指数日特征volume_signal,"dropped_dedup(anchor=MKT_SH_VOLUME_SIGNAL, rho=1.000000)"
+sh_volume_signal_rankpct,s3,上证指数日特征volume_signal｜当日横截面百分位,"dropped_dedup(anchor=market_avg_amplitude_rankpct, rho=1.000000)"
+sh_volume_signal_z,s3,上证指数日特征volume_signal｜当日横截面稳健标准化,kept
+signed_vol_strength,s3,带符号量能强度_strength,kept
+signed_vol_strength_rankpct,s3,带符号量能强度_strength｜当日横截面百分位,kept
+signed_vol_strength_z,s3,带符号量能强度_strength｜当日横截面稳健标准化,kept
+signed_volume_strength,s3,带符号成交量强度,kept
+signed_volume_strength_rankpct,s3,带符号成交量强度｜当日横截面百分位,kept
+signed_volume_strength_z,s3,带符号成交量强度｜当日横截面稳健标准化,kept
+slowd,s3,随机指标D,kept
+slowd_rankpct,s3,随机指标D｜当日横截面百分位,kept
+slowd_z,s3,随机指标D｜当日横截面稳健标准化,kept
+slowk,s3,随机指标K,kept
+slowk_rankpct,s3,随机指标K｜当日横截面百分位,kept
+slowk_z,s3,随机指标K｜当日横截面稳健标准化,kept
+smart_money_diff,s3,聪明钱差值,kept
+smart_money_diff_lag_1,s3,聪明钱差值｜滞后1日,kept
+smart_money_diff_lag_1_rankpct,s3,聪明钱差值｜滞后1日｜当日横截面百分位,kept
+smart_money_diff_lag_1_z,s3,聪明钱差值｜滞后1日｜当日横截面稳健标准化,kept
+smart_money_diff_lag_3,s3,聪明钱差值｜滞后3日,kept
+smart_money_diff_lag_3_rankpct,s3,聪明钱差值｜滞后3日｜当日横截面百分位,kept
+smart_money_diff_lag_3_z,s3,聪明钱差值｜滞后3日｜当日横截面稳健标准化,kept
+smart_money_diff_lag_5,s3,聪明钱差值｜滞后5日,kept
+smart_money_diff_lag_5_rankpct,s3,聪明钱差值｜滞后5日｜当日横截面百分位,kept
+smart_money_diff_lag_5_z,s3,聪明钱差值｜滞后5日｜当日横截面稳健标准化,kept
+smart_money_diff_rankpct,s3,聪明钱差值｜当日横截面百分位,kept
+smart_money_diff_z,s3,聪明钱差值｜当日横截面稳健标准化,kept
+stoch_overbought,s3,随机指标状态overbought,kept
+stoch_overbought_rankpct,s3,随机指标状态overbought｜当日横截面百分位,kept
+stoch_overbought_z,s3,随机指标状态overbought｜当日横截面稳健标准化,kept
+stoch_oversold,s3,随机指标状态oversold,kept
+stoch_oversold_rankpct,s3,随机指标状态oversold｜当日横截面百分位,kept
+stoch_oversold_z,s3,随机指标状态oversold｜当日横截面稳健标准化,kept
+support_resistance_ratio,s3,支撑压力比,"dropped_dedup(anchor=SR_RATIO20, rho=0.999969)"
+support_resistance_ratio_lag_1,s3,支撑压力比｜滞后1日,kept
+support_resistance_ratio_lag_1_rankpct,s3,支撑压力比｜滞后1日｜当日横截面百分位,kept
+support_resistance_ratio_lag_1_z,s3,支撑压力比｜滞后1日｜当日横截面稳健标准化,kept
+support_resistance_ratio_lag_3,s3,支撑压力比｜滞后3日,kept
+support_resistance_ratio_lag_3_rankpct,s3,支撑压力比｜滞后3日｜当日横截面百分位,kept
+support_resistance_ratio_lag_3_z,s3,支撑压力比｜滞后3日｜当日横截面稳健标准化,kept
+support_resistance_ratio_lag_5,s3,支撑压力比｜滞后5日,kept
+support_resistance_ratio_lag_5_rankpct,s3,支撑压力比｜滞后5日｜当日横截面百分位,kept
+support_resistance_ratio_lag_5_z,s3,支撑压力比｜滞后5日｜当日横截面稳健标准化,kept
+support_resistance_ratio_rankpct,s3,支撑压力比｜当日横截面百分位,kept
+support_resistance_ratio_z,s3,支撑压力比｜当日横截面稳健标准化,kept
+sz_amplitude,s3,深证成指日特征amplitude,"dropped_dedup(anchor=MKT_SZ_AMPLITUDE, rho=1.000000)"
+sz_amplitude_rankpct,s3,深证成指日特征amplitude｜当日横截面百分位,"dropped_dedup(anchor=market_avg_amplitude_rankpct, rho=1.000000)"
+sz_amplitude_z,s3,深证成指日特征amplitude｜当日横截面稳健标准化,kept
+sz_price_change,s3,深证成指日特征price_change,"dropped_dedup(anchor=MKT_SZ_PRICE_CHANGE, rho=1.000000)"
+sz_price_change_abs,s3,深证成指日特征price_change_abs,"dropped_dedup(anchor=MKT_SZ_PRICE_CHANGE_ABS, rho=1.000000)"
+sz_price_change_abs_rankpct,s3,深证成指日特征price_change_abs｜当日横截面百分位,"dropped_dedup(anchor=market_avg_amplitude_rankpct, rho=1.000000)"
+sz_price_change_abs_z,s3,深证成指日特征price_change_abs｜当日横截面稳健标准化,kept
+sz_price_change_rankpct,s3,深证成指日特征price_change｜当日横截面百分位,"dropped_dedup(anchor=market_avg_amplitude_rankpct, rho=1.000000)"
+sz_price_change_z,s3,深证成指日特征price_change｜当日横截面稳健标准化,kept
+sz_price_wave_abs,s3,深证成指日特征price_wave_abs,"dropped_dedup(anchor=MKT_SZ_AMPLITUDE, rho=1.000000)"
+sz_price_wave_abs_rankpct,s3,深证成指日特征price_wave_abs｜当日横截面百分位,"dropped_dedup(anchor=market_avg_amplitude_rankpct, rho=1.000000)"
+sz_price_wave_abs_z,s3,深证成指日特征price_wave_abs｜当日横截面稳健标准化,kept
+sz_sentiment,s3,深证成指日特征sentiment,"dropped_dedup(anchor=MKT_SZ_SENTIMENT, rho=1.000000)"
+sz_sentiment_rankpct,s3,深证成指日特征sentiment｜当日横截面百分位,"dropped_dedup(anchor=market_avg_amplitude_rankpct, rho=1.000000)"
+sz_sentiment_z,s3,深证成指日特征sentiment｜当日横截面稳健标准化,kept
+sz_volume_ratio,s3,深证成指日特征volume_ratio,"dropped_dedup(anchor=MKT_SZ_VOLUME_RATIO, rho=1.000000)"
+sz_volume_ratio_rankpct,s3,深证成指日特征volume_ratio｜当日横截面百分位,"dropped_dedup(anchor=market_avg_amplitude_rankpct, rho=1.000000)"
+sz_volume_ratio_z,s3,深证成指日特征volume_ratio｜当日横截面稳健标准化,kept
+sz_volume_signal,s3,深证成指日特征volume_signal,"dropped_dedup(anchor=MKT_SZ_VOLUME_SIGNAL, rho=1.000000)"
+sz_volume_signal_rankpct,s3,深证成指日特征volume_signal｜当日横截面百分位,"dropped_dedup(anchor=market_avg_amplitude_rankpct, rho=1.000000)"
+sz_volume_signal_z,s3,深证成指日特征volume_signal｜当日横截面稳健标准化,kept
+upper_shadow_ratio,s3,上影线占比,"dropped_dedup(anchor=UPPER_SHADOW_RATIO, rho=1.000000)"
+upper_shadow_ratio_rankpct,s3,上影线占比｜当日横截面百分位,kept
+upper_shadow_ratio_z,s3,上影线占比｜当日横截面稳健标准化,kept
+vol_divergence,s3,波动率背离,kept
+vol_divergence_rankpct,s3,波动率背离｜当日横截面百分位,kept
+vol_divergence_z,s3,波动率背离｜当日横截面稳健标准化,kept
+vol_gk,s3,GK波动率,kept
+vol_gk_lag_1,s3,GK波动率｜滞后1日,kept
+vol_gk_lag_10,s3,GK波动率｜滞后10日,kept
+vol_gk_lag_10_rankpct,s3,GK波动率｜滞后10日｜当日横截面百分位,kept
+vol_gk_lag_10_z,s3,GK波动率｜滞后10日｜当日横截面稳健标准化,kept
+vol_gk_lag_1_rankpct,s3,GK波动率｜滞后1日｜当日横截面百分位,kept
+vol_gk_lag_1_z,s3,GK波动率｜滞后1日｜当日横截面稳健标准化,kept
+vol_gk_lag_3,s3,GK波动率｜滞后3日,kept
+vol_gk_lag_3_rankpct,s3,GK波动率｜滞后3日｜当日横截面百分位,kept
+vol_gk_lag_3_z,s3,GK波动率｜滞后3日｜当日横截面稳健标准化,kept
+vol_gk_lag_5,s3,GK波动率｜滞后5日,kept
+vol_gk_lag_5_rankpct,s3,GK波动率｜滞后5日｜当日横截面百分位,kept
+vol_gk_lag_5_z,s3,GK波动率｜滞后5日｜当日横截面稳健标准化,kept
+vol_gk_rankpct,s3,GK波动率｜当日横截面百分位,kept
+vol_gk_ratio,s3,GK波动率_ratio,kept
+vol_gk_ratio_lag_1,s3,GK波动率_ratio｜滞后1日,kept
+vol_gk_ratio_lag_10,s3,GK波动率_ratio｜滞后10日,kept
+vol_gk_ratio_lag_10_rankpct,s3,GK波动率_ratio｜滞后10日｜当日横截面百分位,kept
+vol_gk_ratio_lag_10_z,s3,GK波动率_ratio｜滞后10日｜当日横截面稳健标准化,kept
+vol_gk_ratio_lag_1_rankpct,s3,GK波动率_ratio｜滞后1日｜当日横截面百分位,kept
+vol_gk_ratio_lag_1_z,s3,GK波动率_ratio｜滞后1日｜当日横截面稳健标准化,kept
+vol_gk_ratio_lag_3,s3,GK波动率_ratio｜滞后3日,kept
+vol_gk_ratio_lag_3_rankpct,s3,GK波动率_ratio｜滞后3日｜当日横截面百分位,kept
+vol_gk_ratio_lag_3_z,s3,GK波动率_ratio｜滞后3日｜当日横截面稳健标准化,kept
+vol_gk_ratio_lag_5,s3,GK波动率_ratio｜滞后5日,kept
+vol_gk_ratio_lag_5_rankpct,s3,GK波动率_ratio｜滞后5日｜当日横截面百分位,kept
+vol_gk_ratio_lag_5_z,s3,GK波动率_ratio｜滞后5日｜当日横截面稳健标准化,kept
+vol_gk_ratio_rankpct,s3,GK波动率_ratio｜当日横截面百分位,kept
+vol_gk_ratio_z,s3,GK波动率_ratio｜当日横截面稳健标准化,kept
+vol_gk_z,s3,GK波动率｜当日横截面稳健标准化,kept
+volatility_10d,s3,滚动波动率10d,kept
+volatility_10d_rankpct,s3,滚动波动率10d｜当日横截面百分位,kept
+volatility_10d_z,s3,滚动波动率10d｜当日横截面稳健标准化,kept
+volatility_15d,s3,滚动波动率15d,kept
+volatility_15d_rankpct,s3,滚动波动率15d｜当日横截面百分位,kept
+volatility_15d_z,s3,滚动波动率15d｜当日横截面稳健标准化,kept
+volatility_20d,s3,滚动波动率20d,kept
+volatility_20d_rankpct,s3,滚动波动率20d｜当日横截面百分位,kept
+volatility_20d_z,s3,滚动波动率20d｜当日横截面稳健标准化,kept
+volatility_25d,s3,滚动波动率25d,kept
+volatility_25d_rankpct,s3,滚动波动率25d｜当日横截面百分位,kept
+volatility_25d_z,s3,滚动波动率25d｜当日横截面稳健标准化,kept
+volatility_30d,s3,滚动波动率30d,kept
+volatility_30d_rankpct,s3,滚动波动率30d｜当日横截面百分位,kept
+volatility_30d_z,s3,滚动波动率30d｜当日横截面稳健标准化,kept
+volatility_3d,s3,滚动波动率3d,kept
+volatility_3d_rankpct,s3,滚动波动率3d｜当日横截面百分位,kept
+volatility_3d_z,s3,滚动波动率3d｜当日横截面稳健标准化,kept
+volatility_5d,s3,滚动波动率5d,kept
+volatility_5d_rankpct,s3,滚动波动率5d｜当日横截面百分位,kept
+volatility_5d_z,s3,滚动波动率5d｜当日横截面稳健标准化,kept
+volume,s3,成交量,kept
+volume_consistency,s3,成交量一致性,kept
+volume_consistency_rankpct,s3,成交量一致性｜当日横截面百分位,kept
+volume_consistency_z,s3,成交量一致性｜当日横截面稳健标准化,kept
+volume_dryup,s3,缩量标记,kept
+volume_dryup_rankpct,s3,缩量标记｜当日横截面百分位,kept
+volume_dryup_z,s3,缩量标记｜当日横截面稳健标准化,kept
+volume_lag_10,s3,成交量｜滞后10日,kept
+volume_lag_10_rankpct,s3,成交量｜滞后10日｜当日横截面百分位,kept
+volume_lag_10_z,s3,成交量｜滞后10日｜当日横截面稳健标准化,kept
+volume_lag_15,s3,成交量｜滞后15日,kept
+volume_lag_15_rankpct,s3,成交量｜滞后15日｜当日横截面百分位,kept
+volume_lag_15_z,s3,成交量｜滞后15日｜当日横截面稳健标准化,kept
+volume_lag_20,s3,成交量｜滞后20日,kept
+volume_lag_20_rankpct,s3,成交量｜滞后20日｜当日横截面百分位,kept
+volume_lag_20_z,s3,成交量｜滞后20日｜当日横截面稳健标准化,kept
+volume_lag_25,s3,成交量｜滞后25日,kept
+volume_lag_25_rankpct,s3,成交量｜滞后25日｜当日横截面百分位,kept
+volume_lag_25_z,s3,成交量｜滞后25日｜当日横截面稳健标准化,kept
+volume_lag_3,s3,成交量｜滞后3日,kept
+volume_lag_30,s3,成交量｜滞后30日,kept
+volume_lag_30_rankpct,s3,成交量｜滞后30日｜当日横截面百分位,kept
+volume_lag_30_z,s3,成交量｜滞后30日｜当日横截面稳健标准化,kept
+volume_lag_3_rankpct,s3,成交量｜滞后3日｜当日横截面百分位,kept
+volume_lag_3_z,s3,成交量｜滞后3日｜当日横截面稳健标准化,kept
+volume_lag_5,s3,成交量｜滞后5日,kept
+volume_lag_5_rankpct,s3,成交量｜滞后5日｜当日横截面百分位,kept
+volume_lag_5_z,s3,成交量｜滞后5日｜当日横截面稳健标准化,kept
+volume_ma20,s3,成交量均线20,kept
+volume_ma20_rankpct,s3,成交量均线20｜当日横截面百分位,kept
+volume_ma20_z,s3,成交量均线20｜当日横截面稳健标准化,kept
+volume_ma_20,s3,成交量均线_20,"dropped_dedup(anchor=volume_ma20, rho=1.000000)"
+volume_ma_20_rankpct,s3,成交量均线_20｜当日横截面百分位,"dropped_dedup(anchor=volume_ma20_rankpct, rho=0.999891)"
+volume_ma_20_z,s3,成交量均线_20｜当日横截面稳健标准化,kept
+volume_ma_ratio,s3,成交量均线比,kept
+volume_ma_ratio_rankpct,s3,成交量均线比｜当日横截面百分位,kept
+volume_ma_ratio_z,s3,成交量均线比｜当日横截面稳健标准化,kept
+volume_momentum,s3,成交量动量,"dropped_dedup(anchor=VOL_MOM, rho=1.000000)"
+volume_momentum_rankpct,s3,成交量动量｜当日横截面百分位,kept
+volume_momentum_z,s3,成交量动量｜当日横截面稳健标准化,kept
+volume_rankpct,s3,成交量｜当日横截面百分位,"dropped_dedup(anchor=log_volume_rankpct, rho=1.000000)"
+volume_ratio,s3,量比,"dropped_dedup(anchor=VR1_20, rho=1.000000)"
+volume_ratio_rankpct,s3,量比｜当日横截面百分位,kept
+volume_ratio_z,s3,量比｜当日横截面稳健标准化,kept
+volume_spike,s3,放量标记,kept
+volume_spike_rankpct,s3,放量标记｜当日横截面百分位,kept
+volume_spike_z,s3,放量标记｜当日横截面稳健标准化,kept
+volume_trend_10,s3,成交量趋势_10,kept
+volume_trend_10_rankpct,s3,成交量趋势_10｜当日横截面百分位,kept
+volume_trend_10_z,s3,成交量趋势_10｜当日横截面稳健标准化,kept
+volume_trend_5,s3,成交量趋势_5,kept
+volume_trend_5_rankpct,s3,成交量趋势_5｜当日横截面百分位,kept
+volume_trend_5_z,s3,成交量趋势_5｜当日横截面稳健标准化,kept
+volume_z,s3,成交量｜当日横截面稳健标准化,kept
+week_of_year,s3,年内周序,kept
+rank_return_rankpct,,,dropped_leakage
+rank_volume_rankpct,,,dropped_leakage
+rank_return_z,,,dropped_leakage
+rank_volume_z,,,dropped_leakage
