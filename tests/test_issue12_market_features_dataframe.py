@@ -41,8 +41,6 @@ def test_get_default_combined_features_returns_dataframe():
     assert len(merged) == 1, f"Expected 1 row after merge, got {len(merged)}"
     assert 'market_sentiment' in merged.columns, "Expected market features in merged result"
 
-    print("✓ All assertions passed")
-    return True
 
 if __name__ == '__main__':
     try:
