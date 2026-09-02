@@ -1,5 +1,7 @@
 column,source,cn_name,status
+ABN_TURN_21_252,s4,异常换手率（短期对长期中枢比值）,kept
 AMIHUD_INTRADAY,s1,流动性｜abs(C/O-1)/(V*C) (日内口径),kept
+AMIHUD_TURN20,s4,换手口径 Amihud 非流动性二十日均值,kept
 AMP1,s1,波动率｜(H-L)/PC,kept
 AMP20,s1,"波动率｜Mean((H-L)/PC, 20)",kept
 AMT20,s1,"流动性｜log(Mean(A,20))",kept
@@ -10,6 +12,7 @@ BIAS20,s1,"技术指标｜C~/Mean(C~,20)-1",kept
 BIAS60,s1,"技术指标｜C~/Mean(C~,60)-1",kept
 BODY_STRENGTH,s1,K线形态｜(C-O)/(H-L+1e-12),kept
 BOLL_SQUEEZE,s1,"技术指标｜1[(4*Std(C~,20))/Mean(C~,20) < 0.05]",kept
+BP_IND_Z,s4,账面市值比行业内标准化值,kept
 BREADTH_ABOVE_MA20,s1,"市场宽度｜universe 内 C~>Mean(C~,20) 占比 (自算)",kept
 BREADTH_ADV5,s1,市场宽度｜universe 内 RET5>0 占比 (自算),kept
 BREADTH_NEWLOW,s1,"市场宽度｜universe 内 L~=Min(L~,250) 占比 (自算)",kept
@@ -34,6 +37,8 @@ CAL_MONTH_9,s1,日历｜月份 one-hot,kept
 CAL_MONTH_POS,s1,"日历｜距月末交易日数 (同月内之后的工作日数, 静态工作日近似, 截断不变)",kept
 CLOSE_VS_HIGH,s1,"K线形态｜(H-C)/(H-L), 一字板置 0.5",kept
 CNTD20,s1,"技术指标｜(Count(R>0,20)-Count(R<0,20))/20",kept
+CONSEC_LIMITUP,s4,个股连续涨停天数,kept
+CONSEC_SUSP_GAP,s4,连板跨越停牌缺口标记,kept
 CORR_CLOSE_A_10,s2,"Corr(C̃,A,10)",kept
 CORR_CLOSE_A_20,s2,"Corr(C̃,A,20)",kept
 CORR_CLOSE_A_3,s2,"Corr(C̃,A,3)",kept
@@ -130,6 +135,7 @@ CPV_TREND,s1,"量价相关｜Slope(Corr(C~,V,10), 10)",kept
 CPV_VWAP10,s1,"量价相关｜-Corr(A/V, V, 10)",kept
 CUMID20,s1,"隔夜/日内｜Sum(log1p(RET_ID), 20)",kept
 CUMON20,s1,"隔夜/日内｜Sum(log1p(RET_ON), 20)",kept
+DAYS_BELOW_PAR,s4,连续低于面值天数,kept
 DAYS_SINCE_L2,s1,事件结构｜T-i2 (= confirm_lag),kept
 DELTA_A_10,s2,"Delta(A,10)/(x+1)",kept
 DELTA_A_20,s2,"Delta(A,20)/(x+1)",kept
@@ -228,10 +234,13 @@ DIV_SPAN_BARS,s1,事件结构｜i2-i1 (= formation),kept
 DIV_SPAN_VS_CYCLE,s1,事件结构｜(i2-i1)/自 T 起最近一次 DIF 完整正负循环时长 (最后两个已完成异号 run 长度和),kept
 DIV_ZERO_AXIS_DEPTH,s1,"事件结构｜max(DIF[T],DEA[T])/(C~[T]*ATRp[T])",kept
 DOJI,s1,K线形态｜1[abs(C-O) < 0.1*(H-L)],kept
+DOWNLIMIT_UNSEALED,s4,触跌停未封标记（撬板）,kept
+DOWNTOUCH_RECOVER,s4,撬板回收幅度（收盘价与跌停价相对差）,"dropped_dedup(anchor=SNAP_L, rho=-0.999183)"
 DOWN_DAY_PCT10,s1,K线形态｜10 日阴线 (C<O) 占比,kept
 DOWN_STREAK,s1,K线形态｜T 日末连续 C<O 天数,kept
 DSR20,s1,"波动结构｜Sum(min(R,0)^2,20)/Sum(R^2,20)",kept
 DVOL,s1,"波动率｜Std(R,5)-Std(R,60)",kept
+DV_TTM,s4,股息率滚动十二个月值,kept
 EFF_RATIO10,s1,"位置结构｜abs(C~-shift(C~,10))/Sum(abs(dC~),10) (Kaufman)",kept
 EMA_A_10,s2,"EMA(A,10)/(x+1)",kept
 EMA_A_20,s2,"EMA(A,20)/(x+1)",kept
@@ -312,6 +321,7 @@ EMA_V_30,s2,"EMA(V,30)/(x+1)",kept
 EMA_V_5,s2,"EMA(V,5)/(x+1)",kept
 EMA_V_60,s2,"EMA(V,60)/(x+1)",kept
 ENGULFING,s1,K线形态｜前阴今阳/前阳今阴且实体吞没 (+1/-1/0),kept
+EP_TSRANK_500,s4,盈利收益率五百日历史分位,kept
 GAP_MEAN20,s1,"隔夜｜Mean(RET_ON,20)",kept
 GAP_VOL20,s1,"隔夜｜Std(RET_ON,20)",kept
 GK_VOL,s1,"波动率｜Mean20( sqrt(max(0.5*ln(H/L)^2-(2ln2-1)*ln(C/O)^2, 0)) ) (Garman-Klass)",kept
@@ -479,6 +489,10 @@ IDXMIN_V_60,s2,"IdxMin(V,60)/60","dropped_dedup(anchor=IDXMIN_LOGV_60, rho=1.000
 ILLIQ20,s1,"流动性｜log(Mean(abs(R)/(A*1000), 20) + 1e-30)",kept
 IMIN20,s1,"位置｜IdxMin(L~,20)/20 (最值距今天数/20)",kept
 IMXD20,s1,"位置｜(IdxMax(H~,20)-IdxMin(L~,20))/20",kept
+IND_BREADTH_MA60,s4,行业内六十日均线上方个股占比,kept
+IND_CAPIT_PCT120,s4,行业内一百二十日新低附近个股占比,kept
+IND_EXCESS_RET20,s4,个股二十日收益对行业超额,kept
+IND_MOM20_EQW,s4,申万一级行业二十日等权动量,kept
 INFO_DISC20,s1,"反转｜sign(RET20)*(Count(R<0,20)-Count(R>0,20))/20 (Frog-in-the-Pan)",kept
 IVOL60,s1,波动率｜60 日 R = a+b*R_idx OLS 残差的 std (指数 000001.SH),"dropped_dedup(anchor=DVOL, rho=-0.999401)"
 IVOV60,s1,"高阶矩｜Std(Std(R,5),60)","dropped_dedup(anchor=DVOL, rho=-0.999580)"
@@ -578,6 +592,10 @@ LIMITCNT20,s1,"制度｜Count(pct_chg >= limit-0.1, 20), limit 按板块 10/20/3
 LIMITDOWN_CNT20,s1,"制度｜Count(pct_chg <= -(limit-0.1), 20)",kept
 LIMITUP_N_MKT,s1,"市场情绪｜全市场涨停家数 (pct_chg>=limit-0.1, 自算)",kept
 LIMITUP_N_MKT_MA20,s1,市场情绪｜LIMITUP_N_MKT 的 20 日均值,kept
+LIMITUP_SEALED_EXACT,s4,精确收盘封涨停标记,kept
+LIMITUP_SEALED_SRC,s4,封涨停判定口径来源（2=精确价 1=阈值近似 0=缺失）,kept
+LIST_AGE,s4,上市时长对数,kept
+LN_FREE_MV,s4,自由流通市值对数,kept
 LOG_PRICE,s1,"价格水平｜ln(C) (原始价, 除权失真标注: 仅作彩票/退市代理)",kept
 LOWER_SHADOW_L2,s1,"事件结构｜(min(O~,C~)-L~)[i2]/ATR14[i2]",kept
 MA200_ABOVE,s1,趋势｜1[C~ > MA200],kept
@@ -908,10 +926,17 @@ MKT_AMT_PCT,s1,市场情绪｜全市场 amount 加总 20 日均值的 250 日时
 MKT_AVG_AMP,s1,市场状态｜两指数 (H-L)/L 当日均值,kept
 MKT_AVG_CHANGE,s1,市场状态｜两指数 (C-O)/O 均值,kept
 MKT_DD120,s1,"市场状态｜C_idx/Max(H_idx,120)-1",kept
+MKT_DOWNLIMIT_Z,s4,市场跌停家数滚动标准化恐慌度,kept
+MKT_LIMITUP_PREM,s4,昨日涨停股当日平均溢价,kept
+MKT_LIMITUP_PREM_MA5,s4,昨日涨停股当日平均溢价五日均值,kept
 MKT_MA60,s1,"市场状态｜C_idx/Mean(C_idx,60)-1",kept
 MKT_MEDIAN_RET20,s1,市场宽度｜universe 内 RET20 中位数 (自算),kept
+MKT_NH_NL_DIFF,s4,市场二百五十日新高新低家数差占比,kept
+MKT_NH_NL_RATIO,s4,市场二百五十日新高占新高新低家数比,kept
+MKT_PROMOTE_RATE,s4,市场连板晋级率,kept
 MKT_RET20,s1,"市场状态｜C_idx/shift(C_idx,20)-1",kept
 MKT_RSI14,s1,"市场状态｜RSI(C_idx,14)",kept
+MKT_SEAL_RATIO,s4,市场封板率,kept
 MKT_SENTIMENT,s1,市场状态｜两指数均值版情绪 (规则同单指数),kept
 MKT_SH_AMPLITUDE,s1,市场状态｜上证指数 (H-L)/L,kept
 MKT_SH_PRICE_CHANGE,s1,市场状态｜上证指数 (C-O)/O,kept
@@ -930,11 +955,15 @@ MKT_SZ_PRICE_WAVE_ABS,s1,市场状态｜深证成指振幅绝对值,"dropped_ded
 MKT_SZ_SENTIMENT,s1,市场状态｜同上 (深证),kept
 MKT_SZ_VOLUME_RATIO,s1,市场状态｜深证成指量/20 日均量,kept
 MKT_SZ_VOLUME_SIGNAL,s1,市场状态｜1[量比>1.2] (深证),kept
+MKT_TURNOVER_PCTL,s4,全市场换手率七百五十日滚动分位（成交额加权）,kept
+MKT_TURNOVER_PCTL_EQW,s4,全市场换手率七百五十日滚动分位（等权对照）,kept
 MKT_VOL20_PCT,s1,"市场状态｜pct_ts(Std(R_idx,20),250)",kept
 NEW_LISTING,s1,制度｜1[T - list_date < 250 交易日] (= 股内行号 < 250),kept
 OBV_DIV,s1,"量价背离｜zscore_ts(C~,20)-zscore_ts(OBV,20)",kept
 OBV_TREND,s1,"量能｜Slope(OBV,5)/Mean(V,20), OBV=sign(R)*V 累积",kept
+ONEWORD_LIMITUP,s4,一字涨停标记,kept
 PARK20,s1,"波动率｜sqrt(Sum(log(H/L)^2,20)/(4*ln2*20)) (Parkinson)",kept
+PAR_VALUE_GAP,s4,面值退市距离（原始收盘价对数）,"dropped_dedup(anchor=LOG_PRICE, rho=1.000000)"
 PCTB,s1,"技术指标｜(C~-Mean(C~,20))/(2*Std(C~,20)) (%B)",kept
 POS_52W,s1,"位置｜(C~-Min(L~,250))/(Max(H~,250)-Min(L~,250))",kept
 PRICE_IMPACT,s1,流动性｜abs(C-O)/sqrt(V),kept
@@ -1177,6 +1206,9 @@ REF_V_30,s2,"Ref(V,30)/(x+1)","dropped_dedup(anchor=DELTA_V_30, rho=-0.999999)"
 REF_V_5,s2,"Ref(V,5)/(x+1)","dropped_dedup(anchor=DELTA_V_5, rho=-0.999997)"
 REF_V_60,s2,"Ref(V,60)/(x+1)","dropped_dedup(anchor=DELTA_V_60, rho=-1.000000)"
 REGIME_CODE,s1,"市场状态｜全样本等权日收益累积指数 120 日滚动收益 -> unknown/sideways/up/down = -1/0/1/2 (divergence_lab build_market_regime 口径, universe 剔除 2 只指数文件)",kept
+RESID_MOM60,s4,剔除市场与行业后的六十日残差动量（跳过近五日）,kept
+RESID_MOM60_INDNA,s4,残差动量窗口内行业收益缺失退化标记,kept
+RESID_MOM60_MKSRC,s4,残差动量市场收益口径拼接标记（2=纯沪深300 1=混合 0=纯上证综指）,kept
 RESI_A_10,s2,"Resi(A,10)/(Mean+1)",kept
 RESI_A_20,s2,"Resi(A,20)/(Mean+1)",kept
 RESI_A_3,s2,"Resi(A,3)/(Mean+1)",kept
@@ -1589,6 +1621,10 @@ STD_V_3,s2,"Std(V,3)/(Mean+1)",kept
 STD_V_30,s2,"Std(V,30)/(Mean+1)",kept
 STD_V_5,s2,"Std(V,5)/(Mean+1)",kept
 STD_V_60,s2,"Std(V,60)/(Mean+1)",kept
+STR20,s4,量稳换手率（换手二十日波动）,kept
+STYLE_GV_RS60,s4,成长价值风格六十日相对强弱,kept
+STYLE_SIZE_RS60,s4,大小盘风格六十日相对强弱,kept
+ST_STATUS,s4,风险警示状态（3=退市整理期 2=*ST 1=ST 0=正常）,kept
 SUMD20,s1,"技术指标｜(Sum(max(R,0),20)-Sum(max(-R,0),20))/Sum(abs(R),20)",kept
 SUM_RETID_10,s2,"Sum(C/O-1,10)","dropped_dedup(anchor=MEAN_RETID_10, rho=1.000000)"
 SUM_RETID_20,s2,"Sum(C/O-1,20)","dropped_dedup(anchor=MEAN_RETID_20, rho=1.000000)"
@@ -1609,6 +1645,8 @@ SUM_R_30,s2,"Sum(pct_chg/100,30)","dropped_dedup(anchor=MEAN_R_30, rho=1.000000)
 SUM_R_5,s2,"Sum(pct_chg/100,5)","dropped_dedup(anchor=MEAN_R_5, rho=1.000000)"
 SUM_R_60,s2,"Sum(pct_chg/100,60)","dropped_dedup(anchor=MEAN_R_60, rho=1.000000)"
 T1_GAP,s1,"制度｜Mean(RET_ON[t] | RET_ID[t-1] < -2%, 20)",kept
+TOUCH_FAIL_DEPTH,s4,炸板回落深度（涨停价与收盘价相对差）,"dropped_dedup(anchor=SNAP_H, rho=0.999185)"
+TOUCH_LIMITUP_FAIL,s4,触涨停未封标记（炸板）,kept
 TREND_SLOPE_120,s1,"趋势｜Slope(log(C~),120)*120 / (Std(R,120)*sqrt(120)) (t 统计量口径)",kept
 TSRANK20,s1,"位置｜TsRank(C~,20) (最新值在 20 日内分位)",kept
 TSRANK_A_10,s2,"TsRank(A,10)",kept
@@ -1689,12 +1727,15 @@ TSRANK_V_3,s2,"TsRank(V,3)","dropped_dedup(anchor=TSRANK_LOGV_3, rho=1.000000)"
 TSRANK_V_30,s2,"TsRank(V,30)","dropped_dedup(anchor=TSRANK_LOGV_30, rho=1.000000)"
 TSRANK_V_5,s2,"TsRank(V,5)","dropped_dedup(anchor=TSRANK_LOGV_5, rho=1.000000)"
 TSRANK_V_60,s2,"TsRank(V,60)","dropped_dedup(anchor=TSRANK_LOGV_60, rho=1.000000)"
+TURN_F20,s4,自由流通换手率二十日均值,kept
 UPPER_SHADOW_RATIO,s1,"K线形态｜(H-max(O,C))/(H-L), 一字板置 0",kept
 VMA5,s1,"量能｜V/Mean(V,5) (量比近似)",kept
 VOL15,s1,"波动率｜Std(R,15)",kept
 VOL20,s1,"波动率｜Std(R,20)",kept
 VOL5,s1,"波动率｜Std(R,5)",kept
 VOL60,s1,"波动率｜Std(R,60)","dropped_dedup(anchor=DVOL, rho=-0.999280)"
+VOLUME_RATIO_MA5,s4,交易所口径量比五日均值,kept
+VOLUME_RATIO_T,s4,交易所口径量比当日值,kept
 VOLUME_TREND10,s1,"量能｜Slope(V,10)/Mean(V,20)",kept
 VOL_CONTRACTION60,s1,"波动率｜ATRp/shift(ATRp,60)",kept
 VOL_DRYUP_EXTREME,s1,"量能｜1[Mean(V,5) < Quant(Mean(V,5),250,0.1)]",kept

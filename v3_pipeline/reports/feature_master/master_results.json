@@ -2,12 +2,12 @@
   "pools": {
     "main": {
       "rows": 8154,
-      "cols": 2033,
+      "cols": 2071,
       "path": "v3_pipeline/reports/feature_master/master_main.parquet"
     },
     "backup": {
       "rows": 36986,
-      "cols": 2033,
+      "cols": 2071,
       "path": "v3_pipeline/reports/feature_master/master_backup.parquet"
     }
   },
@@ -27,8 +27,8 @@
   },
   "dedup": {
     "threshold": 0.999,
-    "in": 2402,
-    "kept": 2022,
+    "in": 2443,
+    "kept": 2060,
     "dropped": [
       {
         "column": "amihud_illiq_intraday",
@@ -159,6 +159,11 @@
         "column": "KURT_R_60",
         "anchor": "KURT60",
         "rho": 0.9999999913773437
+      },
+      {
+        "column": "PAR_VALUE_GAP",
+        "anchor": "LOG_PRICE",
+        "rho": 0.999999999999998
       },
       {
         "column": "MAX_R_20",
@@ -1176,6 +1181,16 @@
         "rho": 0.9992235705817671
       },
       {
+        "column": "TOUCH_FAIL_DEPTH",
+        "anchor": "SNAP_H",
+        "rho": 0.9991852242827834
+      },
+      {
+        "column": "DOWNTOUCH_RECOVER",
+        "anchor": "SNAP_L",
+        "rho": -0.9991825762011655
+      },
+      {
         "column": "STD_CLOSE_10",
         "anchor": "STD_CF_10",
         "rho": 1.0
@@ -1947,5 +1962,18 @@
       "n_checked": 5,
       "mismatches": []
     }
-  ]
+  ],
+  "spot_check_s4": [
+    {
+      "pool": "main",
+      "n_checked": 4,
+      "mismatches": []
+    },
+    {
+      "pool": "backup",
+      "n_checked": 4,
+      "mismatches": []
+    }
+  ],
+  "has_s4": true
 }

@@ -39,9 +39,6 @@ def get_pro_api():
         or os.environ.get("TINYSHARE_TOKEN", "").strip()
     )
     if not token:
-        # 尝试使用 ttshare 默认 token
-        token = "QC54t85qlJHyt5n4qC2h3Bkzf68Qem6Ri7DEgJbXbv00F0kUtYr2fAvQ6345f070"
-    if not token:
         raise EnvironmentError(
             "TINYSHARE_TOKEN 未找到。\n"
             f"请在项目根目录的 .env 文件（{_ENV_PATH}）中添加：\n"

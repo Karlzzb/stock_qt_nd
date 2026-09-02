@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
-"""事件×特征主表合并库（issue #22）。
+"""事件×特征主表合并库（issue #22；issue #24 扩展来源 4）。
 
-三来源合并为一张事件日快照特征主表：
+四来源合并为一张事件日快照特征主表：
   s1 事件级特征词典（feature_matrix，179 列，键 event_id）
   s2 特征工厂（factory_full，1603 列，键 ts_code+date）
   s3 日频特征缓存重建（v4daily_snapshot，键 ts_code+date）
+  s4 T3 新特征事件日快照（t3_snapshot，issue #24，键 ts_code+date，可缺省）
 
 纪律：
   - 泄漏列物理剔除：既定排除模式 = V4/V5 训练配置 exclude_patterns
     ∪ feature_engine 14 条黑名单；^rank_ 前缀规则对白名单
     {rank_return, rank_volume} 豁免（V2 因果横截面特征，非标签排名）。
   - 同式列去重：|ρ|≥0.999（两池 train+val 段合并计算，不涉标签），
-    保留优先级 s1 > s2 > s3，同优先级按列名字典序。
+    保留优先级 s1 > s2 > s3 > s4，同优先级按列名字典序。
   - 列名跨源碰撞：值同去重、值异报错浮出（禁止静默改名）。
 """
 import re
@@ -58,7 +59,7 @@ EMBARGO = [(pd.Timestamp("2018-11-19"), pd.Timestamp("2018-12-28")),
            (pd.Timestamp("2022-09-13"), pd.Timestamp("2022-10-31"))]
 
 DEDUP_THRESHOLD = 0.999
-SOURCE_PRIORITY = {"s1": 0, "s2": 1, "s3": 2}
+SOURCE_PRIORITY = {"s1": 0, "s2": 1, "s3": 2, "s4": 3}
 
 
 def segment_of(dates):
@@ -84,10 +85,11 @@ def assert_no_leakage(columns):
     assert not bad, f"主表列命中泄漏排除模式: {bad[:20]}"
 
 
-def merge_sources(events, s1, s2, s3):
-    """事件表为底, 左连接三来源。返回 (合并df, 列来源映射, 碰撞记录)。
+def merge_sources(events, s1, s2, s3, s4=None):
+    """事件表为底, 左连接各来源。返回 (合并df, 列来源映射, 碰撞记录)。
 
-    events: 锁定事件表（已剔指数伪股）; s1 键 event_id; s2/s3 键 (ts_code,date)。
+    events: 锁定事件表（已剔指数伪股）; s1 键 event_id; s2/s3/s4 键 (ts_code,date)。
+    s4 = T3 新特征快照（issue #24），可缺省（None 则退化为三来源行为）。
     碰撞列值同则保留高优先级源, 值异则 ValueError。
     """
     ev = events.copy()
@@ -101,7 +103,7 @@ def merge_sources(events, s1, s2, s3):
     src_of = {c: "s1" for c in s1.columns if c != "event_id"}
 
     collisions = []
-    for tag, s in (("s2", s2), ("s3", s3)):
+    for tag, s in (("s2", s2), ("s3", s3), ("s4", s4)):
         if s is None:
             continue
         s = s.copy()

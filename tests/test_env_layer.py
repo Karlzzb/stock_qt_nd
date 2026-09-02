@@ -39,7 +39,10 @@ class TestTinyshareAuth:
 
     def test_raises_when_token_blank(self, monkeypatch, tmp_path):
         """TINYSHARE_TOKEN 设为空字符串时同样应抛出 EnvironmentError。"""
+        # 两个别名环境变量均置空：TTSHARE_TOKEN 为 ttshare 迁移期别名，
+        # 若只置空 TINYSHARE_TOKEN，load_dotenv 仍会从真实 .env 加载别名 token。
         monkeypatch.setenv("TINYSHARE_TOKEN", "   ")
+        monkeypatch.setenv("TTSHARE_TOKEN", "   ")
         if str(SRC) not in sys.path:
             sys.path.insert(0, str(SRC))
         import tinyshare_auth

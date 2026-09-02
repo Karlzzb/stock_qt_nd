@@ -1,21 +1,23 @@
 #!/usr/bin/env python3
-"""事件×特征主表构建驱动（issue #22）。
+"""事件×特征主表构建驱动（issue #22；issue #24 并入来源 4）。
 
 输入:
   事件表   v3_pipeline/reports/divergence_lab/m_scan/{m_fractal15_full,m_zigzag05_nofilter}/events.parquet
   来源 1   v3_pipeline/reports/feature_matrix/{main,backup}_pool_features.parquet
   来源 2   reports/feature_master/cache/factory_full_{main,backup}.parquet      (regen_factory_full.py)
   来源 3   reports/feature_master/cache/v4daily_snapshot_{main,backup}.parquet  (rebuild_v4_daily_snapshot.py)
+  来源 4   reports/feature_master/cache/t3_snapshot_{main,backup}.parquet       (build_t3_features.py, 可缺省)
 输出:
   v3_pipeline/reports/feature_master/master_{main,backup}.parquet
   v3_pipeline/reports/feature_master/master_dictionary.csv
   v3_pipeline/reports/feature_master/master_results.json
 
-验收断言（issue #22 AC）:
-  1. 三来源全部合并（行数=事件数, 各来源列在表）
+验收断言（issue #22 AC + issue #24 AC）:
+  1. 各来源全部合并（行数=事件数, 各来源列在表）
   2. 泄漏排除模式断言（命中列物理缺席）
   3. 去重规则断言（去重后两两 |ρ|<0.999）
-  4. 事件日快照与逐日重算一致性（来源3重建脚本前缀抽检零不一致 + 本脚本末端新鲜抽检）
+  4. 事件日快照与逐日重算一致性（来源3重建脚本前缀抽检零不一致 + 本脚本末端新鲜抽检
+     + 来源4在场时 T3 截断重算末端抽检）
 
 用法: python v3_pipeline/scripts/build_feature_master.py
 """
@@ -34,6 +36,7 @@ sys.path.insert(0, str(REPO / "v3_pipeline" / "src"))
 
 import feature_engine as fe  # noqa: E402
 import feature_master as fmx  # noqa: E402
+import t3_features as t3  # noqa: E402
 import v4_daily_snapshot as v4s  # noqa: E402
 
 SCAN_DIR = REPO / "v3_pipeline" / "reports" / "divergence_lab" / "m_scan"
@@ -45,6 +48,8 @@ POOLS = {"main": "m_fractal15_full", "backup": "m_zigzag05_nofilter"}
 # 末端新鲜抽检规模（确定性种子）
 SPOT_STOCKS = 5
 SPOT_SEED = 20260902
+# 来源 4（T3）末端截断重算抽检规模（每格约数十秒，窗口面板重建开销大）
+SPOT_S4_CELLS = 4
 
 
 PROGRESS = OUT_DIR / "master_progress.log"
@@ -157,19 +162,53 @@ def spot_check_snapshot(df_master, pool):
     return {"pool": pool, "n_checked": n_checked, "mismatches": bad}
 
 
+def spot_check_s4(df_master, pool, ctx):
+    """来源4 末端抽检: 主表中的 T3 列值 == 截断前缀重算（时点一致性）。"""
+    rng = np.random.default_rng(SPOT_SEED + 1)
+    cand = df_master[["ts_code", "date"]].drop_duplicates()
+    picks = cand.iloc[rng.choice(len(cand), size=min(SPOT_S4_CELLS, len(cand)),
+                                 replace=False)]
+    n_checked, bad = 0, []
+    for row in picks.itertuples():
+        ref = t3.prefix_recompute_at(t3.STOCK_DATA, ctx, row.ts_code, row.date)
+        if ref is None:
+            continue
+        mrow = df_master[(df_master["ts_code"] == row.ts_code)
+                         & (df_master["date"] == row.date)]
+        cmp_cols = [c for c in t3.T3_COLUMNS if c in mrow.columns]
+        a = mrow[cmp_cols].iloc[0].to_numpy(np.float64)
+        b = ref[cmp_cols].iloc[0].to_numpy(np.float64)
+        n_checked += 1
+        if not np.allclose(a, b, rtol=1e-9, atol=0, equal_nan=True):
+            diff = [cmp_cols[k] for k in np.where(
+                ~np.isclose(a, b, rtol=1e-9, atol=0, equal_nan=True))[0]]
+            bad.append({"ts_code": row.ts_code, "date": str(row.date.date()),
+                        "cols": diff[:10]})
+        log(f"  s4 抽检 {row.ts_code} {row.date.date()} 完成")
+    return {"pool": pool, "n_checked": n_checked, "mismatches": bad}
+
+
 def main():
     t0 = time.time()
     OUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    # ---- 加载三来源
+    # ---- 加载来源 2/3（缓存重建产物）与来源 4（T3 快照，存在则并入）
     s2 = {p: pd.read_parquet(CACHE_DIR / f"factory_full_{p}.parquet") for p in POOLS}
     s3 = {p: pd.read_parquet(CACHE_DIR / f"v4daily_snapshot_{p}.parquet")
           for p in POOLS}
+    s4 = {}
+    for p in POOLS:
+        path = CACHE_DIR / f"t3_snapshot_{p}.parquet"
+        if path.exists():
+            s4[p] = pd.read_parquet(path)
+    has_s4 = len(s4) == len(POOLS)
+    log(f"来源4 (T3): {'并入' if has_s4 else '缺席（t3_snapshot 未就绪）'}")
     merged, src_of, collisions = {}, {}, {}
     for pool in POOLS:
         ev = load_events(pool)
         s1 = pd.read_parquet(FM_DIR / f"{pool}_pool_features.parquet")
-        df, so, coll = fmx.merge_sources(ev, s1, s2[pool], s3[pool])
+        df, so, coll = fmx.merge_sources(ev, s1, s2[pool], s3[pool],
+                                         s4.get(pool))
         bool_cols = [c for c in df.columns if df[c].dtype.kind == "b"
                      and c not in fmx.EVENT_META_COLS]
         if bool_cols:  # bool 特征统一为 0/1 数值, 参与去重与训练
@@ -177,12 +216,12 @@ def main():
         merged[pool], src_of[pool], collisions[pool] = df, so, coll
         log(f"[{pool}] 合并后 {df.shape} ({time.time()-t0:.0f}s)")
 
-    # ---- AC1: 三来源全部合并
+    # ---- AC1: 各来源全部合并
     for pool in POOLS:
         df = merged[pool]
         assert len(df) == len(pd.read_parquet(
             FM_DIR / f"{pool}_pool_features.parquet")), f"{pool} 行数与特征矩阵不一致"
-        for tag in ("s1", "s2", "s3"):
+        for tag in (("s1", "s2", "s3", "s4") if has_s4 else ("s1", "s2", "s3")):
             assert any(t == tag for t in src_of[pool].values()), f"{pool} 缺来源 {tag}"
 
     # ---- 泄漏排除（物理剔除 + 断言）
@@ -232,13 +271,25 @@ def main():
         assert not s["mismatches"], f"末端抽检失败: {s}"
     log(f"末端抽检通过 ({time.time()-t0:.0f}s)")
 
+    # ---- AC4b: 来源4 末端抽检（主表 T3 列 vs 截断前缀重算）
+    spot_s4 = []
+    if has_s4:
+        ctx4 = t3.build_ctx()
+        spot_s4 = [spot_check_s4(merged[p], p, ctx4) for p in POOLS]
+        for s in spot_s4:
+            assert s["n_checked"] >= SPOT_S4_CELLS - 2, \
+                f"s4 末端抽检覆盖不足: {s['pool']} 仅 {s['n_checked']} 例"
+            assert not s["mismatches"], f"s4 末端抽检失败: {s}"
+        log(f"s4 末端抽检通过 ({time.time()-t0:.0f}s)")
+
     # ---- 落盘
     results = {"pools": {}, "leak_excluded": leak_records,
                "dedup": {"threshold": fmx.DEDUP_THRESHOLD, "in": len(feat_cols),
                          "kept": len(keep),
                          "dropped": [{"column": c, "anchor": a, "rho": r}
                                      for c, a, r in drop_records]},
-               "collisions": collisions, "spot_check": spot}
+               "collisions": collisions, "spot_check": spot,
+               "spot_check_s4": spot_s4, "has_s4": has_s4}
     for pool in POOLS:
         df = merged[pool]
         path = OUT_DIR / f"master_{pool}.parquet"
@@ -260,6 +311,8 @@ def main():
     for c in sorted(set(feat_cols)):
         src = src_pooled.get(c)
         cn = cn1.get(c) or cn2.get(c) or (cn_name_s3(c) if src == "s3" else "")
+        if src == "s4":
+            cn = t3.T3_CN.get(c, "")
         rows.append({"column": c, "source": src, "cn_name": cn,
                      "status": status.get(c, "dropped_not_in_union")})
     for c in leak_records["main"] + leak_records["backup"]:
