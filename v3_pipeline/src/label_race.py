@@ -147,7 +147,9 @@ def run_single_config(train: pd.DataFrame, val: pd.DataFrame, feat_cols: list[st
     """单候选单配置：五折 OOF -> 校准层 [p, p²] -> 终模 -> train_oof/val 指标行。
 
     返回 (row, artifacts)；row 可直接作指标表一行，artifacts 含
-    oof/oof_mask/val_prob/best_iters 供落盘与复跑断言。test 段不得传入。
+    oof/oof_mask/val_prob/best_iters 供落盘与复跑断言；
+    oof/oof_mask 与"train 按 (date,ts_code,event_id) mergesort 后的行序"对齐。
+    test 段不得传入。
     """
     assert train["seg"].eq("train").all() and val["seg"].eq("val").all(), \
         "run_single_config 只接受 train/val 段"

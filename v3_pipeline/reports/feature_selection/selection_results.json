@@ -1,0 +1,67 @@
+{
+  "issue": 27,
+  "pool": "merged",
+  "label": "hit_N20_k2.0",
+  "config_id": 13,
+  "preregistration_ts": "2026-09-03T04:07:40Z",
+  "n_features_total": 2060,
+  "layers": {
+    "layer1": {
+      "in": 2060,
+      "out": 516,
+      "removed_zero_importance": 1544
+    },
+    "layer2": {
+      "in": 516,
+      "out": 473,
+      "removed_drift": 43
+    },
+    "layer3": {
+      "in": 473,
+      "out": 385,
+      "cluster_absorbed": 88,
+      "threshold": 0.9
+    },
+    "layer4": {
+      "ladder": [
+        5,
+        10,
+        15,
+        20,
+        25,
+        30,
+        40,
+        50,
+        75,
+        100,
+        150,
+        200,
+        300,
+        385
+      ],
+      "k_star": 25,
+      "rule": "x=log2(K), y=val_precision_at_5_dayavg, 首末连线垂距最远, 平局取小 K"
+    }
+  },
+  "final": {
+    "n_features": 25,
+    "final_num_boost_round": 60,
+    "val_average_precision": 0.6529705065324982,
+    "val_precision_at_5_dayavg": 0.5737360754070265,
+    "base_all_features_val_precision_at_5_dayavg": 0.5750214224507284
+  },
+  "seg_counts": {
+    "train": 22963,
+    "test": 10643,
+    "val": 10231
+  },
+  "assertions": {
+    "segment_embargo": "PASS (assert_segment_integrity)",
+    "leakage_exclusion": "PASS (model_feature_columns 排除模式零命中)",
+    "base_oof_anchor_t6": "PASS (基模 OOF 与 T6 落盘折外逐位一致)",
+    "base_val_metric_anchor_t6": "PASS (基模 val 指标与 T6 汇总逐位一致)",
+    "scores_repro_fresh_process": "PASS (--repro-check 全新进程全链重导, 层表/拐点/模型/分数逐位一致)",
+    "test_zero_metric": "PASS (test 10643 行仅出分数, y 全 NaN, 零指标零逐行统计)"
+  },
+  "elapsed_sec": 86.1
+}

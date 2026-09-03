@@ -1,0 +1,140 @@
+{
+  "issue": 27,
+  "pool": "merged",
+  "label": "hit_N20_k2.0",
+  "config_id": 13,
+  "params": {
+    "num_leaves": 31,
+    "min_data_in_leaf": 50,
+    "learning_rate": 0.05,
+    "feature_fraction": 0.8
+  },
+  "n_features": 25,
+  "features": [
+    {
+      "feature": "macd_death_cross_rankpct",
+      "rank": 1,
+      "cn_name": "指数平滑异同移动平均线_death_cross｜当日横截面百分位"
+    },
+    {
+      "feature": "REGIME_CODE",
+      "rank": 3,
+      "cn_name": "市场状态｜全样本等权日收益累积指数 120 日滚动收益 -> unknown/sideways/up/down = -1/0/1/2 (divergence_lab build_market_regime 口径, universe 剔除 2 只指数文件)"
+    },
+    {
+      "feature": "MKT_NH_NL_DIFF",
+      "rank": 8,
+      "cn_name": "市场二百五十日新高新低家数差占比"
+    },
+    {
+      "feature": "ma_arrangement_rankpct",
+      "rank": 9,
+      "cn_name": "均线排列｜当日横截面百分位"
+    },
+    {
+      "feature": "TREND_SLOPE_120",
+      "rank": 10,
+      "cn_name": "趋势｜Slope(log(C~),120)*120 / (Std(R,120)*sqrt(120)) (t 统计量口径)"
+    },
+    {
+      "feature": "AMT20",
+      "rank": 12,
+      "cn_name": "流动性｜log(Mean(A,20))"
+    },
+    {
+      "feature": "macd_zero_cross_down_rankpct",
+      "rank": 13,
+      "cn_name": "指数平滑异同移动平均线_zero_cross_down｜当日横截面百分位"
+    },
+    {
+      "feature": "STYLE_SIZE_RS60",
+      "rank": 15,
+      "cn_name": "大小盘风格六十日相对强弱"
+    },
+    {
+      "feature": "RET120_20",
+      "rank": 20,
+      "cn_name": "动量｜shift(CF,20)/shift(CF,240)-1 (剔除近 1 月的中期动量)"
+    },
+    {
+      "feature": "LN_FREE_MV",
+      "rank": 21,
+      "cn_name": "自由流通市值对数"
+    },
+    {
+      "feature": "MKT_SEAL_RATIO",
+      "rank": 23,
+      "cn_name": "市场封板率"
+    },
+    {
+      "feature": "volume_z",
+      "rank": 24,
+      "cn_name": "成交量｜当日横截面稳健标准化"
+    },
+    {
+      "feature": "doji_pattern_rankpct",
+      "rank": 25,
+      "cn_name": "十字线形态_pattern｜当日横截面百分位"
+    },
+    {
+      "feature": "MACD_DIF_NORM",
+      "rank": 26,
+      "cn_name": "技术指标｜DIF/(C~*ATRp)"
+    },
+    {
+      "feature": "MEAN_R_60",
+      "rank": 27,
+      "cn_name": "Mean(pct_chg/100,60)"
+    },
+    {
+      "feature": "DIST_52W_HIGH",
+      "rank": 28,
+      "cn_name": "位置｜C~/Max(H~,250)-1"
+    },
+    {
+      "feature": "SJV60",
+      "rank": 29,
+      "cn_name": "波动结构｜Sum(R^2*1[R>th],60)-Sum(R^2*1[R<-th],60), th=2*Std(R,60)"
+    },
+    {
+      "feature": "IDXMIN_R_60",
+      "rank": 30,
+      "cn_name": "IdxMin(pct_chg/100,60)/60"
+    },
+    {
+      "feature": "STD_A_20",
+      "rank": 31,
+      "cn_name": "Std(A,20)/(Mean+1)"
+    },
+    {
+      "feature": "MKT_RET20",
+      "rank": 32,
+      "cn_name": "市场状态｜C_idx/shift(C_idx,20)-1"
+    },
+    {
+      "feature": "BREADTH_ADV5",
+      "rank": 33,
+      "cn_name": "市场宽度｜universe 内 RET5>0 占比 (自算)"
+    },
+    {
+      "feature": "VOL_CONTRACTION60",
+      "rank": 34,
+      "cn_name": "波动率｜ATRp/shift(ATRp,60)"
+    },
+    {
+      "feature": "log_volume_z",
+      "rank": 35,
+      "cn_name": "对数成交量｜当日横截面稳健标准化"
+    },
+    {
+      "feature": "ABN_TURN_21_252",
+      "rank": 36,
+      "cn_name": "异常换手率（短期对长期中枢比值）"
+    },
+    {
+      "feature": "MKT_TURNOVER_PCTL_EQW",
+      "rank": 37,
+      "cn_name": "全市场换手率七百五十日滚动分位（等权对照）"
+    }
+  ]
+}
