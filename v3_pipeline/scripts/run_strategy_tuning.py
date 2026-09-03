@@ -166,7 +166,8 @@ def build_mkt_atr(calendar: list[pd.Timestamp], lookback: int,
 def replay_score_decay_assertions(trades: pd.DataFrame, cfg: dict,
                                   events: pd.DataFrame, panel: pd.DataFrame,
                                   calendar: list[pd.Timestamp],
-                                  repo_root: str) -> dict:
+                                  repo_root: str,
+                                  open_positions: pd.DataFrame | None = None) -> dict:
     """逐笔独立重放类 C 出场：不读引擎内部状态，由 原始日线+scores_final+面板 重算。
 
     对每笔交易断言：
@@ -174,10 +175,17 @@ def replay_score_decay_assertions(trades: pd.DataFrame, cfg: dict,
       2. horizon：exit_date 为 entry_date 起第 H 个交易日，exit_raw_price=当日收盘。
       3. rank_out/score_drop：决策日 D = exit_date 前该股最后一个有行情的交易日
          （停牌日无面板分，引擎按 missing-score hold 跳过评估，出场意图顺延至下一交易日开盘）；
-         候选集 = D 日新鲜信号 prob ∪ D 日全部在持股票（由交易明细重建持有区间）面板分；
+         候选集 = D 日新鲜信号 prob ∪ D 日全部在持股票（面板分）；
          rank_out -> 该股不在前 top_k；score_drop -> score_D < buy_prob×(1-margin)；
          exit_raw_price = exit_date 开盘价（独立读原始日线）。
     buy_prob 自 scores_final 原始事件行读取（不用引擎记录值）。
+
+    在持集合重建口径（与引擎 step-2 评估时刻的 positions 逐一对齐）：
+      - 已平仓交易 q：entry_date <= D 且（exit_date > D，或 exit_date == D 且 exit_reason=='horizon'
+        —— 收盘到期卖出在 D 日评估时仍在仓；rank_out/score_drop 为 D 日开盘执行，评估前已离场）。
+      - 窗口末仍在仓持仓（open_positions，含停牌僵尸仓，永不出现于 trades）：
+        entry_date <= D 即在持。T9 测试段实锤案例：600781.SH 入场日即最后行情日，
+        僵尸仓进入候选集改变 top_k 排名（见 t9_report.md）。
     """
     sp = panel.set_index(["ts_code", "date"])["prob"]
     ev_prob = events.set_index(["ts_code", "event_date"])["prob"]
@@ -185,6 +193,9 @@ def replay_score_decay_assertions(trades: pd.DataFrame, cfg: dict,
     code_days = {c: g["date"].to_numpy() for c, g in panel.groupby("ts_code")}
     cal_index = {d: i for i, d in enumerate(calendar)}
     top_k, margin, horizon = cfg["top_k"], cfg["score_margin"], cfg["horizon"]
+    if open_positions is None:
+        open_positions = pd.DataFrame(
+            columns=["ts_code", "event_date", "entry_date", "buy_prob"])
 
     n_checked, mismatches = 0, []
     daily_cache: dict[str, pd.DataFrame] = {}
@@ -234,17 +245,24 @@ def replay_score_decay_assertions(trades: pd.DataFrame, cfg: dict,
             continue
         # 候选集重建：D 日新鲜信号 + D 日在持股票（含本股，按 ts_code 去重取高）
         cand: dict[str, float] = {}
+
+        def _merge(code: str, score: float) -> None:
+            if np.isfinite(score):
+                cand[code] = max(cand.get(code, -np.inf), float(score))
+
         if dec_day in by_date:
             for r in by_date[dec_day].itertuples():
-                v = float(r.prob)
-                if v > cand.get(r.ts_code, -np.inf):
-                    cand[r.ts_code] = v
+                _merge(r.ts_code, float(r.prob))
         for q in trades.itertuples():
-            # D 日在持：入场日 <= D 且出场日 > D（开盘执行/收盘执行在 D 日均仍在仓）
-            if q.entry_date <= dec_day < q.exit_date:
-                q_s = sp.get((q.ts_code, dec_day), np.nan)
-                if np.isfinite(q_s):
-                    cand[q.ts_code] = max(cand.get(q.ts_code, -np.inf), float(q_s))
+            # D 日评估时在持：已入场；出场日晚于 D，或 D 日收盘到期卖出（评估时仍在仓）
+            if q.entry_date <= dec_day and (q.exit_date > dec_day or
+                                            (q.exit_date == dec_day
+                                             and q.exit_reason == "horizon")):
+                _merge(q.ts_code, sp.get((q.ts_code, dec_day), np.nan))
+        for q in open_positions.itertuples():
+            # 窗口末仍在仓持仓（含僵尸仓）：永不平仓故不在 trades，D 日已入场即在持
+            if q.entry_date <= dec_day:
+                _merge(q.ts_code, sp.get((q.ts_code, dec_day), np.nan))
         ranked = sorted(cand.items(), key=lambda kv: (-kv[1], kv[0]))
         top_codes = [c for c, _ in ranked[:top_k]]
         threshold = buy_prob * (1.0 - margin)

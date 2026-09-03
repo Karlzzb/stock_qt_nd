@@ -59,6 +59,7 @@ MODEL_PATH = REPO / "v3_pipeline/reports/feature_selection/model.txt"
 CAL_PATH = REPO / "v3_pipeline/reports/feature_selection/calibrator.json"
 MASTER_DIR = REPO / "v3_pipeline/reports/feature_master"
 OUT_DIR = REPO / "v3_pipeline/reports/strategy_tuning"
+# 缓存按窗口打标：不同窗口的构建互不串缓存（T8 验证段 / T9 测试段并存可复现）
 CACHE_DIR = OUT_DIR / "panel_cache"
 
 S1_STOCK_COLS = ["AMT20", "DIST_52W_HIGH", "MACD_DIF_NORM", "RET120_20",
@@ -471,9 +472,11 @@ def main() -> None:
     args = ap.parse_args()
     t0 = time.time()
     lo, hi = pd.Timestamp(args.start), pd.Timestamp(args.end)
+    tag = f"{lo:%Y%m%d}_{hi:%Y%m%d}"
+    global CACHE_DIR
+    CACHE_DIR = OUT_DIR / f"panel_cache_{tag}"
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-    tag = f"{lo:%Y%m%d}_{hi:%Y%m%d}"
     out_panel = OUT_DIR / f"daily_score_panel_{tag}.parquet"
     out_results = OUT_DIR / f"daily_score_panel_{tag}_results.json"
 

@@ -1,0 +1,141 @@
+{
+  "issue": 29,
+  "preregistration_comment_id": 5521655421,
+  "run_ts": "2026-09-03T15:17:42+0800",
+  "window": [
+    "2022-11-01",
+    "2026-08-31"
+  ],
+  "benchmark": "000905.SH",
+  "benchmark_ann": 0.0790850420256537,
+  "benchmark_mdd": -0.3114731480389472,
+  "thresholds": {
+    "excess_ann_gt": 0.15,
+    "sharpe_gt": 0.5
+  },
+  "results": {
+    "A13": {
+      "strategy_class": "A",
+      "spec": {
+        "strategy_class": "fixed_tp_sl",
+        "horizon": 12,
+        "tp": 0.25,
+        "sl": -0.14,
+        "vol_lookback": null,
+        "vol_high_thresh": null,
+        "vol_low_thresh": null,
+        "vol_profit_mult": null,
+        "vol_stop_mult": null,
+        "low_vol_profit_mult": null,
+        "top_k": null,
+        "score_margin": null
+      },
+      "n_slots": 3,
+      "ann_return": -0.006984289940463739,
+      "excess_ann": -0.08606933196611743,
+      "max_dd": -0.33632133728588653,
+      "sharpe": 0.10108362896478947,
+      "calmar": -0.020766716726411012,
+      "n_trades": 142,
+      "turnover": 12.256525851046595,
+      "utilization": 0.8515317184191835,
+      "yearly_returns": {
+        "2022": -0.08116108957153245,
+        "2023": 0.14907258342790874,
+        "2024": -0.15370626435824974,
+        "2025": 0.1075263903986563,
+        "2026": -0.016262752025062333
+      },
+      "pass_threshold": false
+    },
+    "B15": {
+      "strategy_class": "B",
+      "spec": {
+        "strategy_class": "vol_adaptive",
+        "horizon": 12,
+        "tp": 0.25,
+        "sl": -0.14,
+        "vol_lookback": 21,
+        "vol_high_thresh": 1.8,
+        "vol_low_thresh": 0.6,
+        "vol_profit_mult": 1.5,
+        "vol_stop_mult": 1.1,
+        "low_vol_profit_mult": 1.0,
+        "top_k": null,
+        "score_margin": null
+      },
+      "n_slots": 3,
+      "ann_return": 0.055181814347161184,
+      "excess_ann": -0.02390322767849251,
+      "max_dd": -0.30813367128317704,
+      "sharpe": 0.34600125508382346,
+      "calmar": 0.17908401284859488,
+      "n_trades": 140,
+      "turnover": 11.887684560911437,
+      "utilization": 0.8376770264013861,
+      "yearly_returns": {
+        "2022": -0.08116108957153245,
+        "2023": 0.3705767004132443,
+        "2024": -0.11528647839826545,
+        "2025": 0.10872021421764444,
+        "2026": -0.005551940724545457
+      },
+      "pass_threshold": false
+    },
+    "C15": {
+      "strategy_class": "C",
+      "spec": {
+        "strategy_class": "score_decay",
+        "horizon": 15,
+        "tp": null,
+        "sl": null,
+        "vol_lookback": null,
+        "vol_high_thresh": null,
+        "vol_low_thresh": null,
+        "vol_profit_mult": null,
+        "vol_stop_mult": null,
+        "low_vol_profit_mult": null,
+        "top_k": 3,
+        "score_margin": 0.0
+      },
+      "n_slots": 3,
+      "ann_return": -0.0707979157780011,
+      "excess_ann": -0.1498829578036548,
+      "max_dd": -0.33887336481568464,
+      "sharpe": -0.31008740423233155,
+      "calmar": -0.208921453052259,
+      "n_trades": 224,
+      "turnover": 20.532074065536484,
+      "utilization": 0.8038655564800722,
+      "yearly_returns": {
+        "2022": -0.10861055979699896,
+        "2023": 0.06084540595511356,
+        "2024": -0.18502292095563377,
+        "2025": -0.020535013418202186,
+        "2026": 0.0
+      },
+      "pass_threshold": false
+    }
+  },
+  "class_c_replay": {
+    "n_trades": 224,
+    "n_checked": 224,
+    "n_mismatch": 0,
+    "mismatches": [],
+    "pass": true
+  },
+  "panel_assertions": {
+    "coverage": true,
+    "feature_anchor": true,
+    "prefix_spot": true,
+    "prob_anchor": true
+  },
+  "one_shot_guard": {
+    "attempt": 3,
+    "prior_run_starts": 2,
+    "completed_rerun": true,
+    "rerun_reason": "机器可读台账补记失败首跑（一次性护栏口径修复：attempt史自日志自举）；市场结果为确定性重算，与前两跑逐位一致",
+    "rerun_of": "2026-09-03T15:08:24+0800"
+  },
+  "elapsed_s": 33.4
+}

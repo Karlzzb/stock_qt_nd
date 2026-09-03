@@ -518,7 +518,15 @@ def run_backtest_v3(events: pd.DataFrame, md: se.MarketData, n_slots: int,
     se._log(log_path, f"run_backtest_v3 done: class={cls} signals={stats['total_signals']} "
                       f"entered={stats['entered']} trades={len(trades_df)} "
                       f"final_equity={stats.get('final_equity', float('nan')):.2f}")
-    return {"equity": equity_df, "trades": trades_df, "stats": stats}
+    # 诊断列（纯附加，不影响任何交易行为）：窗口末仍在仓的持仓（含停牌僵尸仓）。
+    # 用途：类 C 逐笔重放断言重建候选集时，在仓集合 = trades ∪ open_positions。
+    open_df = pd.DataFrame([dict(ts_code=p.ts_code, event_date=p.event_date,
+                                 entry_date=p.entry_date, buy_prob=p.buy_prob)
+                            for p in positions],
+                           columns=["ts_code", "event_date", "entry_date", "buy_prob"])
+    stats["open_at_end"] = int(len(open_df))
+    return {"equity": equity_df, "trades": trades_df, "stats": stats,
+            "open_positions": open_df}
 
 
 # ---------------------------------------------------------------- 顶层配置入口
@@ -546,6 +554,7 @@ def run_config_v3(events: pd.DataFrame, md: se.MarketData, n_slots: int,
         os.makedirs(out_dir, exist_ok=True)
         result["equity"].to_parquet(os.path.join(out_dir, "equity_curve.parquet"))
         result["trades"].to_parquet(os.path.join(out_dir, "trades.parquet"))
+        result["open_positions"].to_parquet(os.path.join(out_dir, "open_positions.parquet"))
         with open(os.path.join(out_dir, "stats.json"), "w", encoding="utf-8") as f:
             json.dump({**result["stats"], **result["config"]}, f, ensure_ascii=False,
                       indent=2, default=str)
