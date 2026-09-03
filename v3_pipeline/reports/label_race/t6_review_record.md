@@ -80,4 +80,5 @@
 
 全部五项复核 PASS，无一 FAIL。
 裁决链（38×36 网格 → 选配置 → 总裁决 → 中位数约束）重算逐位一致；正赛当选配置独立重跑逐位一致；标签手工抽验与 NaN 纪律过关；test 段零触碰、预登记时序、段计数、特征泄漏断言全部合规。
-**复核意见：放行。** 当选标签 hit_N20_k2.0（合并池正赛，config_id=13，val_precision_at_5_dayavg=0.5750，val_average_precision=0.6225 ≥ 中位数 0.5794）可落 #20 锁定。
+**复核意见：放行。**
+当选标签 hit_N20_k2.0（合并池正赛，config_id=13，val_precision_at_5_dayavg=0.5750，val_average_precision=0.6225 ≥ 中位数 0.5794）可落 #20 锁定。

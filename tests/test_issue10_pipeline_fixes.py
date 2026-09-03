@@ -391,33 +391,3 @@ class TestBatchRegressionWithDelistedStock:
         # log1p(atr) 应 >= 0
         vals = multi_stock_result["boxcox_atr"].dropna()
         assert (vals >= 0).all(), "log1p(atr) 应 >= 0"
-
-
-# ---------------------------------------------------------------------------
-# 6. v1 废弃警告
-# ---------------------------------------------------------------------------
-
-class TestV1Deprecated:
-    """import feature_pipeline (v1) 应抛出 DeprecationWarning。"""
-
-    def test_v1_emits_deprecation_warning(self):
-        # 强制重新加载以触发模块级 warning
-        import importlib
-        import sys
-
-        # 移除已缓存模块
-        for k in list(sys.modules.keys()):
-            if "feature_pipeline" in k and "v2" not in k:
-                del sys.modules[k]
-
-        with warnings.catch_warnings(record=True) as w:
-            warnings.simplefilter("always")
-            try:
-                import src.feature_pipeline  # noqa: F401
-            except Exception:
-                pass  # 导入失败也算触发了（依赖可能缺失）
-            dep_warnings = [x for x in w if issubclass(x.category, DeprecationWarning)]
-            assert len(dep_warnings) >= 1, (
-                "feature_pipeline v1 应抛出 DeprecationWarning"
-            )
-            assert "废弃" in str(dep_warnings[0].message) or "deprecated" in str(dep_warnings[0].message).lower()

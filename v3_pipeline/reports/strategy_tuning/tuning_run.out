@@ -1,0 +1,160 @@
+2026-09-03 14:14:39 T8 RUN START（issue #28 预登记网格：A20 + B20 + C16，验证段）
+2026-09-03 14:14:39 load_score_events window=[2019-01-01,2022-10-31] events=10216 (dedup dropped 15) unique_stocks=3875
+2026-09-03 14:14:39 calendar loaded: 928 trading days [2019-01-02 .. 2022-10-31]
+2026-09-03 14:14:41 heartbeat: loaded 500/3875 daily files (1.5s)
+2026-09-03 14:14:42 heartbeat: loaded 1000/3875 daily files (2.7s)
+2026-09-03 14:14:43 heartbeat: loaded 1500/3875 daily files (3.7s)
+2026-09-03 14:14:44 heartbeat: loaded 2000/3875 daily files (4.7s)
+2026-09-03 14:14:46 heartbeat: loaded 2500/3875 daily files (6.0s)
+2026-09-03 14:14:47 heartbeat: loaded 3000/3875 daily files (7.4s)
+2026-09-03 14:14:48 heartbeat: loaded 3500/3875 daily files (8.3s)
+2026-09-03 14:14:48 daily loaded: 3875 stocks (8.9s)
+2026-09-03 14:14:49 基准 000905.SH: ann=+0.0930 mdd=-0.3157
+2026-09-03 14:14:49 构建全市场 ATR 均值序列（类 B，LB=14/21）...
+2026-09-03 14:14:54   mkt_atr lb=14 1000/5891 (4s)
+2026-09-03 14:14:57   mkt_atr lb=14 2000/5891 (7s)
+2026-09-03 14:15:04   mkt_atr lb=14 4000/5891 (14s)
+2026-09-03 14:15:06   mkt_atr lb=14 5000/5891 (17s)
+2026-09-03 14:15:08 mkt_atr lb=14 days_valid=928 (19s)
+2026-09-03 14:15:12   mkt_atr lb=21 1000/5891 (4s)
+2026-09-03 14:15:16   mkt_atr lb=21 2000/5891 (7s)
+2026-09-03 14:15:22   mkt_atr lb=21 4000/5891 (14s)
+2026-09-03 14:15:25   mkt_atr lb=21 5000/5891 (17s)
+2026-09-03 14:15:27 mkt_atr lb=21 days_valid=928 (19s)
+2026-09-03 14:15:27 加载日频打分面板（类 C）...
+2026-09-03 14:15:28 run_backtest_v3 done: class=fixed_tp_sl signals=10216 entered=180 trades=180 final_equity=585919.61
+2026-09-03 14:15:28 A A1 done 0.4s | ann=-0.1304 excess=-0.2233 sharpe=-0.399 trades=180
+2026-09-03 14:15:28 run_backtest_v3 done: class=fixed_tp_sl signals=10216 entered=153 trades=152 final_equity=1076405.93
+2026-09-03 14:15:28 A A2 done 0.34s | ann=+0.0194 excess=-0.0736 sharpe=0.207 trades=152
+2026-09-03 14:15:29 run_backtest_v3 done: class=fixed_tp_sl signals=10216 entered=135 trades=134 final_equity=1039771.86
+2026-09-03 14:15:29 A A3 done 0.31s | ann=+0.0102 excess=-0.0827 sharpe=0.162 trades=134
+2026-09-03 14:15:29 run_backtest_v3 done: class=fixed_tp_sl signals=10216 entered=155 trades=154 final_equity=905876.28
+2026-09-03 14:15:29 A A4 done 0.28s | ann=-0.0255 excess=-0.1185 sharpe=0.018 trades=154
+2026-09-03 14:15:29 run_backtest_v3 done: class=fixed_tp_sl signals=10216 entered=147 trades=146 final_equity=775615.17
+2026-09-03 14:15:29 A A5 done 0.28s | ann=-0.0642 excess=-0.1572 sharpe=-0.143 trades=146
+2026-09-03 14:15:29 run_backtest_v3 done: class=fixed_tp_sl signals=10216 entered=130 trades=129 final_equity=735638.92
+2026-09-03 14:15:29 A A6 done 0.31s | ann=-0.0771 excess=-0.1701 sharpe=-0.226 trades=129
+2026-09-03 14:15:30 run_backtest_v3 done: class=fixed_tp_sl signals=10216 entered=178 trades=178 final_equity=731283.89
+2026-09-03 14:15:30 A A7 done 0.3s | ann=-0.0785 excess=-0.1715 sharpe=-0.174 trades=178
+2026-09-03 14:15:30 run_backtest_v3 done: class=fixed_tp_sl signals=10216 entered=147 trades=146 final_equity=1207901.84
+2026-09-03 14:15:30 A A8 done 0.27s | ann=+0.0506 excess=-0.0424 sharpe=0.326 trades=146
+2026-09-03 14:15:30 run_backtest_v3 done: class=fixed_tp_sl signals=10216 entered=145 trades=144 final_equity=542800.87
+2026-09-03 14:15:30 A A9 done 0.27s | ann=-0.1475 excess=-0.2405 sharpe=-0.502 trades=144
+2026-09-03 14:15:31 run_backtest_v3 done: class=fixed_tp_sl signals=10216 entered=181 trades=181 final_equity=617148.25
+2026-09-03 14:15:31 A A10 done 0.35s | ann=-0.1185 excess=-0.2115 sharpe=-0.326 trades=181
+2026-09-03 14:15:31 run_backtest_v3 done: class=fixed_tp_sl signals=10216 entered=140 trades=139 final_equity=650510.78
+2026-09-03 14:15:31 A A11 done 0.28s | ann=-0.1063 excess=-0.1993 sharpe=-0.308 trades=139
+2026-09-03 14:15:31 run_backtest_v3 done: class=fixed_tp_sl signals=10216 entered=125 trades=124 final_equity=809664.80
+2026-09-03 14:15:31 A A12 done 0.25s | ann=-0.0537 excess=-0.1467 sharpe=-0.117 trades=124
+2026-09-03 14:15:31 run_backtest_v3 done: class=fixed_tp_sl signals=10216 entered=213 trades=213 final_equity=2372860.06
+2026-09-03 14:15:31 A A13 done 0.34s | ann=+0.2533 excess=+0.1603 sharpe=0.988 trades=213
+2026-09-03 14:15:32 run_backtest_v3 done: class=fixed_tp_sl signals=10216 entered=154 trades=154 final_equity=959168.14
+2026-09-03 14:15:32 A A14 done 0.35s | ann=-0.0108 excess=-0.1038 sharpe=0.128 trades=154
+2026-09-03 14:15:32 run_backtest_v3 done: class=fixed_tp_sl signals=10216 entered=93 trades=92 final_equity=833875.68
+2026-09-03 14:15:32 A A15 done 0.19s | ann=-0.0464 excess=-0.1393 sharpe=-0.020 trades=92
+2026-09-03 14:15:32 run_backtest_v3 done: class=fixed_tp_sl signals=10216 entered=226 trades=224 final_equity=1117942.43
+2026-09-03 14:15:32 A A16 done 0.38s | ann=+0.0296 excess=-0.0634 sharpe=0.248 trades=224
+2026-09-03 14:15:33 run_backtest_v3 done: class=fixed_tp_sl signals=10216 entered=227 trades=227 final_equity=788862.72
+2026-09-03 14:15:33 A A17 done 0.33s | ann=-0.0601 excess=-0.1531 sharpe=-0.090 trades=227
+2026-09-03 14:15:33 run_backtest_v3 done: class=fixed_tp_sl signals=10216 entered=132 trades=131 final_equity=689676.37
+2026-09-03 14:15:33 A A18 done 0.33s | ann=-0.0925 excess=-0.1855 sharpe=-0.186 trades=131
+2026-09-03 14:15:33 run_backtest_v3 done: class=fixed_tp_sl signals=10216 entered=148 trades=148 final_equity=1397154.15
+2026-09-03 14:15:33 A A19 done 0.29s | ann=+0.0913 excess=-0.0017 sharpe=0.437 trades=148
+2026-09-03 14:15:34 run_backtest_v3 done: class=fixed_tp_sl signals=10216 entered=189 trades=188 final_equity=1129378.22
+2026-09-03 14:15:34 A A20 done 0.29s | ann=+0.0323 excess=-0.0607 sharpe=0.257 trades=188
+2026-09-03 14:15:34 类 A 20/20 完成
+2026-09-03 14:15:34 run_backtest_v3 done: class=vol_adaptive signals=10216 entered=147 trades=146 final_equity=812800.54
+2026-09-03 14:15:34 B B1 done 0.3s | ann=-0.0527 excess=-0.1457 sharpe=-0.086 trades=146
+2026-09-03 14:15:34 run_backtest_v3 done: class=vol_adaptive signals=10216 entered=147 trades=146 final_equity=812800.54
+2026-09-03 14:15:34 B B2 done 0.3s | ann=-0.0527 excess=-0.1457 sharpe=-0.086 trades=146
+2026-09-03 14:15:35 run_backtest_v3 done: class=vol_adaptive signals=10216 entered=147 trades=146 final_equity=809263.12
+2026-09-03 14:15:35 B B3 done 0.37s | ann=-0.0538 excess=-0.1468 sharpe=-0.089 trades=146
+2026-09-03 14:15:35 run_backtest_v3 done: class=vol_adaptive signals=10216 entered=147 trades=146 final_equity=812800.54
+2026-09-03 14:15:35 B B4 done 0.3s | ann=-0.0527 excess=-0.1457 sharpe=-0.086 trades=146
+2026-09-03 14:15:35 run_backtest_v3 done: class=vol_adaptive signals=10216 entered=147 trades=146 final_equity=812800.54
+2026-09-03 14:15:35 B B5 done 0.3s | ann=-0.0527 excess=-0.1457 sharpe=-0.086 trades=146
+2026-09-03 14:15:36 run_backtest_v3 done: class=vol_adaptive signals=10216 entered=149 trades=148 final_equity=1025835.74
+2026-09-03 14:15:36 B B6 done 0.3s | ann=+0.0067 excess=-0.0863 sharpe=0.156 trades=148
+2026-09-03 14:15:36 run_backtest_v3 done: class=vol_adaptive signals=10216 entered=146 trades=145 final_equity=1096234.50
+2026-09-03 14:15:36 B B7 done 0.38s | ann=+0.0243 excess=-0.0687 sharpe=0.225 trades=145
+2026-09-03 14:15:36 run_backtest_v3 done: class=vol_adaptive signals=10216 entered=144 trades=143 final_equity=824008.65
+2026-09-03 14:15:36 B B8 done 0.3s | ann=-0.0493 excess=-0.1423 sharpe=-0.089 trades=143
+2026-09-03 14:15:37 run_backtest_v3 done: class=vol_adaptive signals=10216 entered=149 trades=148 final_equity=633991.10
+2026-09-03 14:15:37 B B9 done 0.31s | ann=-0.1122 excess=-0.2052 sharpe=-0.348 trades=148
+2026-09-03 14:15:37 run_backtest_v3 done: class=vol_adaptive signals=10216 entered=148 trades=147 final_equity=671307.38
+2026-09-03 14:15:37 B B10 done 0.3s | ann=-0.0989 excess=-0.1919 sharpe=-0.310 trades=147
+2026-09-03 14:15:37 run_backtest_v3 done: class=vol_adaptive signals=10216 entered=145 trades=144 final_equity=1211975.71
+2026-09-03 14:15:37 B B11 done 0.3s | ann=+0.0515 excess=-0.0415 sharpe=0.331 trades=144
+2026-09-03 14:15:37 run_backtest_v3 done: class=vol_adaptive signals=10216 entered=141 trades=140 final_equity=678771.65
+2026-09-03 14:15:37 B B12 done 0.3s | ann=-0.0963 excess=-0.1893 sharpe=-0.264 trades=140
+2026-09-03 14:15:38 run_backtest_v3 done: class=vol_adaptive signals=10216 entered=174 trades=174 final_equity=658569.42
+2026-09-03 14:15:38 B B13 done 0.44s | ann=-0.1034 excess=-0.1964 sharpe=-0.309 trades=174
+2026-09-03 14:15:38 run_backtest_v3 done: class=vol_adaptive signals=10216 entered=144 trades=143 final_equity=545954.65
+2026-09-03 14:15:38 B B14 done 0.29s | ann=-0.1463 excess=-0.2392 sharpe=-0.474 trades=143
+2026-09-03 14:15:38 run_backtest_v3 done: class=vol_adaptive signals=10216 entered=212 trades=212 final_equity=2378371.21
+2026-09-03 14:15:38 B B15 done 0.35s | ann=+0.2540 excess=+0.1610 sharpe=0.984 trades=212
+2026-09-03 14:15:39 run_backtest_v3 done: class=vol_adaptive signals=10216 entered=152 trades=152 final_equity=937836.21
+2026-09-03 14:15:39 B B16 done 0.32s | ann=-0.0166 excess=-0.1096 sharpe=0.114 trades=152
+2026-09-03 14:15:39 run_backtest_v3 done: class=vol_adaptive signals=10216 entered=224 trades=222 final_equity=1307059.15
+2026-09-03 14:15:39 B B17 done 0.41s | ann=+0.0725 excess=-0.0205 sharpe=0.439 trades=222
+2026-09-03 14:15:40 run_backtest_v3 done: class=vol_adaptive signals=10216 entered=147 trades=146 final_equity=809263.12
+2026-09-03 14:15:40 B B18 done 0.4s | ann=-0.0538 excess=-0.1468 sharpe=-0.089 trades=146
+2026-09-03 14:15:40 run_backtest_v3 done: class=vol_adaptive signals=10216 entered=141 trades=140 final_equity=644802.28
+2026-09-03 14:15:40 B B19 done 0.3s | ann=-0.1083 excess=-0.2013 sharpe=-0.320 trades=140
+2026-09-03 14:15:40 run_backtest_v3 done: class=vol_adaptive signals=10216 entered=149 trades=148 final_equity=1025835.74
+2026-09-03 14:15:40 B B20 done 0.3s | ann=+0.0067 excess=-0.0863 sharpe=0.156 trades=148
+2026-09-03 14:15:40 类 B 20/20 完成
+2026-09-03 14:15:41 run_backtest_v3 done: class=score_decay signals=10216 entered=572 trades=572 final_equity=1500459.02
+2026-09-03 14:15:41 C C1 done 0.79s | ann=+0.1118 excess=+0.0188 sharpe=0.563 trades=572
+2026-09-03 14:15:42 run_backtest_v3 done: class=score_decay signals=10216 entered=952 trades=952 final_equity=1006225.90
+2026-09-03 14:15:42 C C2 done 1.16s | ann=+0.0016 excess=-0.0914 sharpe=0.112 trades=952
+2026-09-03 14:15:43 run_backtest_v3 done: class=score_decay signals=10216 entered=517 trades=517 final_equity=1360645.61
+2026-09-03 14:15:43 C C3 done 0.77s | ann=+0.0838 excess=-0.0092 sharpe=0.458 trades=517
+2026-09-03 14:15:44 run_backtest_v3 done: class=score_decay signals=10216 entered=895 trades=895 final_equity=1206040.60
+2026-09-03 14:15:44 C C4 done 1.09s | ann=+0.0502 excess=-0.0428 sharpe=0.324 trades=895
+2026-09-03 14:15:45 run_backtest_v3 done: class=score_decay signals=10216 entered=509 trades=509 final_equity=1403803.26
+2026-09-03 14:15:45 C C5 done 0.77s | ann=+0.0927 excess=-0.0003 sharpe=0.492 trades=509
+2026-09-03 14:15:46 run_backtest_v3 done: class=score_decay signals=10216 entered=892 trades=892 final_equity=1431629.57
+2026-09-03 14:15:46 C C6 done 1.21s | ann=+0.0983 excess=+0.0053 sharpe=0.508 trades=892
+2026-09-03 14:15:47 run_backtest_v3 done: class=score_decay signals=10216 entered=507 trades=507 final_equity=1428241.52
+2026-09-03 14:15:47 C C7 done 0.77s | ann=+0.0976 excess=+0.0046 sharpe=0.513 trades=507
+2026-09-03 14:15:48 run_backtest_v3 done: class=score_decay signals=10216 entered=883 trades=883 final_equity=1477979.77
+2026-09-03 14:15:48 C C8 done 1.1s | ann=+0.1075 excess=+0.0145 sharpe=0.541 trades=883
+2026-09-03 14:15:49 run_backtest_v3 done: class=score_decay signals=10216 entered=506 trades=506 final_equity=1451651.74
+2026-09-03 14:15:49 C C9 done 0.78s | ann=+0.1023 excess=+0.0093 sharpe=0.531 trades=506
+2026-09-03 14:15:50 run_backtest_v3 done: class=score_decay signals=10216 entered=882 trades=882 final_equity=1579953.81
+2026-09-03 14:15:50 C C10 done 1.22s | ann=+0.1269 excess=+0.0339 sharpe=0.612 trades=882
+2026-09-03 14:15:51 run_backtest_v3 done: class=score_decay signals=10216 entered=503 trades=503 final_equity=1360629.45
+2026-09-03 14:15:51 C C11 done 0.78s | ann=+0.0838 excess=-0.0092 sharpe=0.460 trades=503
+2026-09-03 14:15:52 run_backtest_v3 done: class=score_decay signals=10216 entered=882 trades=882 final_equity=1567272.65
+2026-09-03 14:15:52 C C12 done 1.1s | ann=+0.1246 excess=+0.0316 sharpe=0.603 trades=882
+2026-09-03 14:15:53 run_backtest_v3 done: class=score_decay signals=10216 entered=428 trades=428 final_equity=943023.13
+2026-09-03 14:15:53 C C13 done 0.8s | ann=-0.0152 excess=-0.1082 sharpe=0.092 trades=428
+2026-09-03 14:15:53 run_backtest_v3 done: class=score_decay signals=10216 entered=384 trades=384 final_equity=924004.55
+2026-09-03 14:15:53 C C14 done 0.93s | ann=-0.0204 excess=-0.1134 sharpe=0.055 trades=384
+2026-09-03 14:15:54 run_backtest_v3 done: class=score_decay signals=10216 entered=534 trades=534 final_equity=1712813.27
+2026-09-03 14:15:54 C C15 done 0.76s | ann=+0.1510 excess=+0.0580 sharpe=0.631 trades=534
+2026-09-03 14:15:55 run_backtest_v3 done: class=score_decay signals=10216 entered=496 trades=496 final_equity=785167.11
+2026-09-03 14:15:55 C C16 done 0.78s | ann=-0.0612 excess=-0.1542 sharpe=-0.128 trades=496
+2026-09-03 14:15:55 类 C 16/16 完成
+2026-09-03 14:15:55 类 A 表落盘 /home/karl/repos/personal/stock_qt_nd/v3_pipeline/reports/strategy_tuning/tuning_class_A.csv (20 配置)
+2026-09-03 14:15:55 类 B 表落盘 /home/karl/repos/personal/stock_qt_nd/v3_pipeline/reports/strategy_tuning/tuning_class_B.csv (20 配置)
+2026-09-03 14:15:55 类 C 表落盘 /home/karl/repos/personal/stock_qt_nd/v3_pipeline/reports/strategy_tuning/tuning_class_C.csv (16 配置)
+2026-09-03 14:15:55 类 A 最优: A13 excess=+0.1603 sharpe=0.988
+2026-09-03 14:15:55 类 B 最优: B15 excess=+0.1610 sharpe=0.984
+2026-09-03 14:15:55 类 C 最优: C15 excess=+0.0580 sharpe=0.631
+2026-09-03 14:15:55 run_config_v3 class=fixed_tp_sl N=3 spec=ExitSpec(strategy_class='fixed_tp_sl', horizon=12, tp=0.25, sl=-0.14, vol_lookback=None, vol_high_thresh=None, vol_low_thresh=None, vol_profit_mult=None, vol_stop_mult=None, low_vol_profit_mult=None, top_k=None, score_margin=None) [2019-01-01..2022-10-31]
+2026-09-03 14:15:55 run_backtest_v3 done: class=fixed_tp_sl signals=10216 entered=213 trades=213 final_equity=2372860.06
+2026-09-03 14:15:55 run_config_v3 finished in 0.3s
+2026-09-03 14:15:55 最优配置 A13 明细落盘 /home/karl/repos/personal/stock_qt_nd/v3_pipeline/reports/strategy_tuning/runs/val_A13
+2026-09-03 14:15:55 run_config_v3 class=vol_adaptive N=3 spec=ExitSpec(strategy_class='vol_adaptive', horizon=12, tp=0.25, sl=-0.14, vol_lookback=21, vol_high_thresh=1.8, vol_low_thresh=0.6, vol_profit_mult=1.5, vol_stop_mult=1.1, low_vol_profit_mult=1.0, top_k=None, score_margin=None) [2019-01-01..2022-10-31]
+2026-09-03 14:15:56 run_backtest_v3 done: class=vol_adaptive signals=10216 entered=212 trades=212 final_equity=2378371.21
+2026-09-03 14:15:56 run_config_v3 finished in 0.3s
+2026-09-03 14:15:56 最优配置 B15 明细落盘 /home/karl/repos/personal/stock_qt_nd/v3_pipeline/reports/strategy_tuning/runs/val_B15
+2026-09-03 14:15:56 run_config_v3 class=score_decay N=3 spec=ExitSpec(strategy_class='score_decay', horizon=15, tp=None, sl=None, vol_lookback=None, vol_high_thresh=None, vol_low_thresh=None, vol_profit_mult=None, vol_stop_mult=None, low_vol_profit_mult=None, top_k=3, score_margin=0.0) [2019-01-01..2022-10-31]
+2026-09-03 14:15:56 run_backtest_v3 done: class=score_decay signals=10216 entered=534 trades=534 final_equity=1712813.27
+2026-09-03 14:15:56 run_config_v3 finished in 0.8s
+2026-09-03 14:15:56 最优配置 C15 明细落盘 /home/karl/repos/personal/stock_qt_nd/v3_pipeline/reports/strategy_tuning/runs/val_C15
+2026-09-03 14:15:56 类 C 三分支全网格合计: {'rank_out': 4210, 'score_drop': 5848, 'horizon': 284} -> PASS
+2026-09-03 14:15:59 类 C 最优 C15 逐笔重放: 534 笔, 不一致 0 -> PASS
+2026-09-03 14:15:59 T8 RUN DONE (80s) summary -> tuning_summary.json

@@ -1,7 +1,7 @@
 [project]
 name = "stock-qt-nd"
 version = "0.1.0"
-description = "A 股日频量化选股系统:底背离信号池 + LightGBM stacking 打分 + 网格策略回测"
+description = "A 股日频量化系统:背离事件池 + LightGBM 加逻辑回归校准层打分 + 三类出场策略真实回测"
 requires-python = ">=3.11,<3.12"
 dependencies = [
     # Core data

@@ -20,12 +20,13 @@ import argparse
 import json
 import os
 import sys
+from pathlib import Path
 import time
 
 import numpy as np
 import pandas as pd
 
-REPO_ROOT = "/home/karl/repos/personal/stock_qt_nd"
+REPO_ROOT = str(Path(__file__).resolve().parents[2])
 sys.path.insert(0, os.path.join(REPO_ROOT, "v3_pipeline", "scripts"))
 
 import strategy_engine as se  # noqa: E402

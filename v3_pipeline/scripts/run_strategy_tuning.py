@@ -17,12 +17,13 @@ from __future__ import annotations
 import json
 import os
 import sys
+from pathlib import Path
 import time
 
 import numpy as np
 import pandas as pd
 
-REPO_ROOT = "/home/karl/repos/personal/stock_qt_nd"
+REPO_ROOT = str(Path(__file__).resolve().parents[2])
 sys.path.insert(0, os.path.join(REPO_ROOT, "v3_pipeline", "scripts"))
 
 import strategy_engine as se  # noqa: E402
@@ -306,7 +307,7 @@ def main() -> None:
 
     summary: dict[str, list[dict]] = {"A": [], "B": [], "C": []}
 
-    def run_row(cls: str, cfg: dict, spec: se3.ExitSpec, **kwargs) -> dict:
+    def run_row(cls: str, cfg: dict, spec: se3.ExitSpec, **kwargs) -> tuple[dict, dict]:
         t0 = time.time()
         res = se3.run_backtest_v3(events, md, n_slots=cfg["n_slots"], exit_spec=spec,
                                   **kwargs)
