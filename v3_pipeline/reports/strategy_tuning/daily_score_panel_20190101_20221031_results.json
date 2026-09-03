@@ -1,0 +1,39 @@
+{
+  "window": [
+    "2019-01-01",
+    "2022-10-31"
+  ],
+  "n_universe": 3875,
+  "n_events": 10231,
+  "panel_rows": 3170634,
+  "assertions": [
+    {
+      "name": "coverage",
+      "pass": true,
+      "n_events": 10231,
+      "n_missing": 0,
+      "examples": []
+    },
+    {
+      "name": "feature_anchor",
+      "pass": true,
+      "n_cells": 255400,
+      "max_abs_diff": 8.526145833798182e-07,
+      "bad_cols": []
+    },
+    {
+      "name": "prefix_spot",
+      "pass": true,
+      "n_checked": 192,
+      "mismatches": []
+    },
+    {
+      "name": "prob_anchor",
+      "pass": true,
+      "n_events": 10231,
+      "max_abs_diff": 2.220446049250313e-16
+    }
+  ],
+  "elapsed_s": 372.8,
+  "panel_path": "/home/karl/repos/personal/stock_qt_nd/v3_pipeline/reports/strategy_tuning/daily_score_panel_20190101_20221031.parquet"
+}

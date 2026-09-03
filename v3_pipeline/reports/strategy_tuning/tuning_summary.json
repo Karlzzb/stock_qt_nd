@@ -1,0 +1,43 @@
+{
+  "issue": 28,
+  "window": [
+    "2019-01-01",
+    "2022-10-31"
+  ],
+  "benchmark": "000905.SH",
+  "benchmark_ann": 0.09298997233132544,
+  "adjudication": {
+    "A": {
+      "config": "A13",
+      "excess_ann": 0.16028360327245306,
+      "sharpe": 0.9877543582907086,
+      "ann_return": 0.2532735756037785
+    },
+    "B": {
+      "config": "B15",
+      "excess_ann": 0.16104345114617313,
+      "sharpe": 0.9836746209547038,
+      "ann_return": 0.2540334234774986
+    },
+    "C": {
+      "config": "C15",
+      "excess_ann": 0.057970751136911414,
+      "sharpe": 0.6313638395058696,
+      "ann_return": 0.15096072346823686
+    }
+  },
+  "class_c_branch_totals": {
+    "rank_out": 4210,
+    "score_drop": 5848,
+    "horizon": 284
+  },
+  "class_c_branch_assertion": "PASS",
+  "class_c_replay": {
+    "n_trades": 534,
+    "n_checked": 534,
+    "n_mismatch": 0,
+    "mismatches": [],
+    "pass": true
+  },
+  "elapsed_s": 79.6
+}
