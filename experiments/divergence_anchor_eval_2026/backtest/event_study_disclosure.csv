@@ -1,0 +1,7 @@
+signal,config,total,closed,incomplete,dropped_limitup,dropped_no_quote,dropped_no_next_day,dropped_no_close_T,dropped_cash,vol_fallback_mid,deferred_events,limit_missing_days
+events_v1,A13,5646,5174,363,16,8,82,0,3,0,21,0
+events_v1,B15,5646,5174,363,16,8,82,0,3,18,22,0
+events_v1,E1-H12,5646,5164,373,16,8,82,0,3,0,14,0
+events_v2,A13,5194,4820,284,17,6,64,0,3,0,20,0
+events_v2,B15,5194,4820,284,17,6,64,0,3,17,20,0
+events_v2,E1-H12,5194,4814,290,17,6,64,0,3,0,12,0

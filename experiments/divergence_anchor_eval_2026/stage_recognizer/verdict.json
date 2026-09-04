@@ -1,0 +1,489 @@
+{
+  "experiment": "阶段底信号当天识别赛(A 方案本体)",
+  "prereadme": "README.md 先于任何跑数落盘",
+  "disclosure": [
+    "R3 为价格行为代理(跌停收盘/跳空低开),非真新闻利空数据(token 过期不可得)",
+    "特征用全历史日线(引擎序列 60 日前向缓冲不足以供 120 根窗口,README 披露 2)",
+    "near/far 标签为事后信息,仅训练段拟合与对照披露,不进特征不进验证宣判"
+  ],
+  "fit_info": {
+    "v1": {
+      "n_train": 1382,
+      "n_train_near": 128,
+      "r0_mu": {
+        "f1": -0.2085016388102165,
+        "f2": 0.08888043039887734,
+        "f3": 0.13298310690009227,
+        "f4": 0.08380876592214974,
+        "f5": -0.3218325388147168,
+        "f6": 0.39021586024096483
+      },
+      "r0_sd": {
+        "f1": 0.11433221667858731,
+        "f2": 0.09698399179440534,
+        "f3": 0.19264525843882027,
+        "f4": 0.09186940878140824,
+        "f5": 0.9696240226568312,
+        "f6": 0.8963819479549134
+      },
+      "r0_coef": {
+        "f1": 0.06535242826519129,
+        "f2": -1.2989804273841217,
+        "f3": 0.1505779579820151,
+        "f4": 1.2133169665923222,
+        "f5": -0.19278143914553106,
+        "f6": -0.26027434766049046
+      },
+      "r0_intercept": -2.343854078923678,
+      "r5_theta": -0.19211472069101182
+    },
+    "v2": {
+      "n_train": 1382,
+      "n_train_near": 143,
+      "r0_mu": {
+        "f1": -0.21481906133912942,
+        "f2": 0.07974665971518334,
+        "f3": 0.12149359037148906,
+        "f4": 0.07367366837125297,
+        "f5": -0.3034247229142315,
+        "f6": 0.3508868582727926
+      },
+      "r0_sd": {
+        "f1": 0.11055765496851953,
+        "f2": 0.08541481232938335,
+        "f3": 0.18885720243382786,
+        "f4": 0.08093544010900496,
+        "f5": 0.8978627331636174,
+        "f6": 0.7455256706901606
+      },
+      "r0_coef": {
+        "f1": -0.009052149074060196,
+        "f2": -0.5782066451347595,
+        "f3": 0.07899013274123003,
+        "f4": 0.6064739262784653,
+        "f5": -0.1661133463852408,
+        "f6": -0.17400191779088045
+      },
+      "r0_intercept": -2.191583874894937,
+      "r5_theta": -0.20367610531544944
+    }
+  },
+  "candidates": {
+    "R0": {
+      "per_variant": {
+        "v1": {
+          "n_selected": 2,
+          "net_mean": 0.42054309349724384,
+          "cluster_t": 0.8553107040498217,
+          "all_net_mean": -0.1583669195055082,
+          "excess_vs_all": 0.578910013002752,
+          "crit_power": false,
+          "crit_positive": true,
+          "crit_t": false,
+          "crit_excess": true,
+          "passed": false
+        },
+        "v2": {
+          "n_selected": 0,
+          "net_mean": null,
+          "cluster_t": null,
+          "all_net_mean": -0.1594078780320046,
+          "excess_vs_all": null,
+          "crit_power": false,
+          "crit_positive": false,
+          "crit_t": false,
+          "crit_excess": false,
+          "passed": false
+        }
+      },
+      "passed": false,
+      "verdict": "不过线"
+    },
+    "R1": {
+      "per_variant": {
+        "v1": {
+          "n_selected": 659,
+          "net_mean": -0.1601553649816627,
+          "cluster_t": -8.788477692972167,
+          "all_net_mean": -0.1583669195055082,
+          "excess_vs_all": -0.0017884454761544766,
+          "crit_power": true,
+          "crit_positive": false,
+          "crit_t": false,
+          "crit_excess": false,
+          "passed": false
+        },
+        "v2": {
+          "n_selected": 575,
+          "net_mean": -0.16293028371119805,
+          "cluster_t": -11.650718724517628,
+          "all_net_mean": -0.1594078780320046,
+          "excess_vs_all": -0.0035224056791934577,
+          "crit_power": true,
+          "crit_positive": false,
+          "crit_t": false,
+          "crit_excess": false,
+          "passed": false
+        }
+      },
+      "passed": false,
+      "verdict": "不过线"
+    },
+    "R2": {
+      "per_variant": {
+        "v1": {
+          "n_selected": 1060,
+          "net_mean": -0.1583878329405697,
+          "cluster_t": -11.83200525849795,
+          "all_net_mean": -0.1583669195055082,
+          "excess_vs_all": -2.091343506149812e-05,
+          "crit_power": true,
+          "crit_positive": false,
+          "crit_t": false,
+          "crit_excess": false,
+          "passed": false
+        },
+        "v2": {
+          "n_selected": 980,
+          "net_mean": -0.1594078780320046,
+          "cluster_t": -13.954106321433873,
+          "all_net_mean": -0.1594078780320046,
+          "excess_vs_all": 0.0,
+          "crit_power": true,
+          "crit_positive": false,
+          "crit_t": false,
+          "crit_excess": false,
+          "passed": false
+        }
+      },
+      "passed": false,
+      "verdict": "不过线"
+    },
+    "R3": {
+      "per_variant": {
+        "v1": {
+          "n_selected": 796,
+          "net_mean": -0.1522817496175669,
+          "cluster_t": -13.117680871814404,
+          "all_net_mean": -0.1583669195055082,
+          "excess_vs_all": 0.006085169887941305,
+          "crit_power": true,
+          "crit_positive": false,
+          "crit_t": false,
+          "crit_excess": false,
+          "passed": false
+        },
+        "v2": {
+          "n_selected": 728,
+          "net_mean": -0.14980629767128964,
+          "cluster_t": -12.807350641596665,
+          "all_net_mean": -0.1594078780320046,
+          "excess_vs_all": 0.009601580360714956,
+          "crit_power": true,
+          "crit_positive": false,
+          "crit_t": false,
+          "crit_excess": false,
+          "passed": false
+        }
+      },
+      "passed": false,
+      "verdict": "不过线"
+    },
+    "R4": {
+      "per_variant": {
+        "v1": {
+          "n_selected": 0,
+          "net_mean": null,
+          "cluster_t": null,
+          "all_net_mean": -0.1583669195055082,
+          "excess_vs_all": null,
+          "crit_power": false,
+          "crit_positive": false,
+          "crit_t": false,
+          "crit_excess": false,
+          "passed": false
+        },
+        "v2": {
+          "n_selected": 0,
+          "net_mean": null,
+          "cluster_t": null,
+          "all_net_mean": -0.1594078780320046,
+          "excess_vs_all": null,
+          "crit_power": false,
+          "crit_positive": false,
+          "crit_t": false,
+          "crit_excess": false,
+          "passed": false
+        }
+      },
+      "passed": false,
+      "verdict": "不过线"
+    },
+    "R5": {
+      "per_variant": {
+        "v1": {
+          "n_selected": 797,
+          "net_mean": -0.16685501936038666,
+          "cluster_t": -11.978972118863929,
+          "all_net_mean": -0.1583669195055082,
+          "excess_vs_all": -0.008488099854878445,
+          "crit_power": true,
+          "crit_positive": false,
+          "crit_t": false,
+          "crit_excess": false,
+          "passed": false
+        },
+        "v2": {
+          "n_selected": 704,
+          "net_mean": -0.1735945116150416,
+          "cluster_t": -14.84903676508227,
+          "all_net_mean": -0.1594078780320046,
+          "excess_vs_all": -0.014186633583037012,
+          "crit_power": true,
+          "crit_positive": false,
+          "crit_t": false,
+          "crit_excess": false,
+          "passed": false
+        }
+      },
+      "passed": false,
+      "verdict": "不过线"
+    }
+  },
+  "pass_criteria": "验证段两变体同满:n_selected>=30 且 净笔均>0 且 cluster_t>=2 且 净笔均>=同段ALL+10pp",
+  "n_candidates_passed": 0,
+  "overall": "当天不可识别,A 封档(6 候选验证段全部不过线)",
+  "checks": {
+    "check1_feature_causality": {
+      "ok": true,
+      "seed": 20260904,
+      "samples": [
+        {
+          "variant": "v2",
+          "ts_code": "002972.SZ",
+          "event_date": "2026-03-11",
+          "max_abs_diff": 0.0,
+          "ok": true
+        },
+        {
+          "variant": "v2",
+          "ts_code": "300122.SZ",
+          "event_date": "2026-04-01",
+          "max_abs_diff": 0.0,
+          "ok": true
+        },
+        {
+          "variant": "v2",
+          "ts_code": "300897.SZ",
+          "event_date": "2026-03-17",
+          "max_abs_diff": 0.0,
+          "ok": true
+        },
+        {
+          "variant": "v2",
+          "ts_code": "300652.SZ",
+          "event_date": "2026-05-06",
+          "max_abs_diff": 0.0,
+          "ok": true
+        },
+        {
+          "variant": "v2",
+          "ts_code": "300869.SZ",
+          "event_date": "2026-04-30",
+          "max_abs_diff": 0.0,
+          "ok": true
+        }
+      ],
+      "note": "特征/规则函数只接收截断到事件日的数组"
+    },
+    "check2_sim_replay": {
+      "ok": true,
+      "detail": {
+        "v1": {
+          "n_pairs": 409,
+          "status_mine": {
+            "closed": 405,
+            "dropped_limitup": 3,
+            "dropped_cash": 1
+          },
+          "status_ref": {
+            "closed": 405,
+            "dropped_limitup": 3,
+            "dropped_cash": 1
+          },
+          "pair_status_ok": true,
+          "max_abs_net_ret_diff": 0.0,
+          "ok": true
+        },
+        "v2": {
+          "n_pairs": 402,
+          "status_mine": {
+            "closed": 397,
+            "dropped_limitup": 3,
+            "dropped_cash": 1,
+            "dropped_no_quote": 1
+          },
+          "status_ref": {
+            "closed": 397,
+            "dropped_limitup": 3,
+            "dropped_cash": 1,
+            "dropped_no_quote": 1
+          },
+          "pair_status_ok": true,
+          "max_abs_net_ret_diff": 0.0,
+          "ok": true
+        }
+      }
+    },
+    "check3_counts": {
+      "ok": true,
+      "base_counts": {
+        "v1": 2449,
+        "v2": 2366
+      },
+      "ref_base_v1": 2449,
+      "base_diff_v1": 0,
+      "exclusions": {
+        "v1": [
+          {
+            "ts_code": "301668.SZ",
+            "event_date": "2026-01-05",
+            "reason": "hist_lt_120",
+            "hist_days": 63
+          },
+          {
+            "ts_code": "920007.BJ",
+            "event_date": "2026-01-06",
+            "reason": "hist_lt_120",
+            "hist_days": 99
+          },
+          {
+            "ts_code": "688790.SH",
+            "event_date": "2026-03-24",
+            "reason": "hist_lt_120",
+            "hist_days": 62
+          },
+          {
+            "ts_code": "688805.SH",
+            "event_date": "2026-04-02",
+            "reason": "hist_lt_120",
+            "hist_days": 63
+          },
+          {
+            "ts_code": "920124.BJ",
+            "event_date": "2026-05-07",
+            "reason": "hist_lt_120",
+            "hist_days": 103
+          },
+          {
+            "ts_code": "920091.BJ",
+            "event_date": "2026-05-12",
+            "reason": "hist_lt_120",
+            "hist_days": 110
+          }
+        ],
+        "v2": [
+          {
+            "ts_code": "920007.BJ",
+            "event_date": "2026-01-06",
+            "reason": "hist_lt_120",
+            "hist_days": 99
+          },
+          {
+            "ts_code": "688805.SH",
+            "event_date": "2026-04-02",
+            "reason": "hist_lt_120",
+            "hist_days": 63
+          },
+          {
+            "ts_code": "920124.BJ",
+            "event_date": "2026-05-07",
+            "reason": "hist_lt_120",
+            "hist_days": 103
+          },
+          {
+            "ts_code": "920091.BJ",
+            "event_date": "2026-05-12",
+            "reason": "hist_lt_120",
+            "hist_days": 110
+          }
+        ]
+      },
+      "sel_le_universe": true,
+      "all_eq_universe": true
+    },
+    "check4_trade_causality": {
+      "ok": true,
+      "n_violations": 0
+    },
+    "check5_samples": {
+      "ok": true,
+      "seed": 20260904,
+      "samples": [
+        {
+          "variant": "v2",
+          "ts_code": "603377.SH",
+          "event_date": "2026-03-06",
+          "entry_date": "2026-03-09",
+          "entry_raw": 3.76,
+          "entry_exec": 3.7637599999999996,
+          "shares": 26500,
+          "exit_date": "2026-06-04",
+          "exit_raw": 3.71,
+          "exit_exec": 3.70629,
+          "gross_ret": -0.01526930516292202,
+          "buy_comm": 24.934909999999995,
+          "sell_comm": 24.55417125,
+          "stamp": 49.1083425,
+          "net_pnl": -1621.5524237499858,
+          "net_ret": -0.0162537897366157,
+          "held_days": 60,
+          "deferred_days": 0
+        },
+        {
+          "variant": "v2",
+          "ts_code": "600763.SH",
+          "event_date": "2026-02-25",
+          "entry_date": "2026-02-26",
+          "entry_raw": 51.73,
+          "entry_exec": 51.78172999999999,
+          "shares": 1900,
+          "exit_date": "2026-05-26",
+          "exit_raw": 36.4,
+          "exit_exec": 36.3636,
+          "gross_ret": -0.29775231534365487,
+          "buy_comm": 24.596321749999998,
+          "sell_comm": 17.27271,
+          "stamp": 34.54542,
+          "net_pnl": -29370.86145174998,
+          "net_ret": -0.29845438751026954,
+          "held_days": 60,
+          "deferred_days": 0
+        },
+        {
+          "variant": "v1",
+          "ts_code": "300761.SZ",
+          "event_date": "2026-02-05",
+          "entry_date": "2026-02-06",
+          "entry_raw": 19.71,
+          "entry_exec": 19.729709999999997,
+          "shares": 5000,
+          "exit_date": "2026-05-14",
+          "exit_raw": 22.97,
+          "exit_exec": 22.947029999999998,
+          "gross_ret": 0.1630698069054235,
+          "buy_comm": 24.662137499999996,
+          "sell_comm": 28.683787499999998,
+          "stamp": 57.367574999999995,
+          "net_pnl": 15975.886500000004,
+          "net_ret": 0.16190702779329602,
+          "held_days": 60,
+          "deferred_days": 0
+        }
+      ]
+    }
+  },
+  "checks_all_pass": true,
+  "duration_sec": 32.1,
+  "timestamp": "2026-09-04 15:14:13"
+}

@@ -1,0 +1,4 @@
+signal,config,ts_code,event_date,event_status
+events_v1,A13,688256.SH,2026-04-01,dropped_cash
+events_v1,B15,688256.SH,2026-04-01,dropped_cash
+events_v2,A13,688256.SH,2026-04-01,dropped_cash

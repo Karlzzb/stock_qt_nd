@@ -1,0 +1,23 @@
+{
+  "total_events": 5646,
+  "n_stocks_with_events": 3434,
+  "monthly_events": {
+    "2026-01": 300,
+    "2026-02": 504,
+    "2026-03": 590,
+    "2026-04": 388,
+    "2026-05": 539,
+    "2026-06": 903,
+    "2026-07": 1773,
+    "2026-08": 649
+  },
+  "stocks_processed": 5820,
+  "skipped": {
+    "schema": 2,
+    "short": 69,
+    "nan": 0,
+    "error": 0
+  },
+  "elapsed_sec": 1.17,
+  "calibration_all_pass": true
+}

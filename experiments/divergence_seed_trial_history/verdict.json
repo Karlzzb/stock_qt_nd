@@ -1,0 +1,516 @@
+{
+  "experiment": "急跌背离种子全历史审判",
+  "prereadme": "README.md 先于任何跑数落盘(冻结)",
+  "disclosure": [
+    "数据加载自写(逐股 parquet,不复权);成本/滑点/整手调冻结引擎原语",
+    "退市股:事件后无下一行记 truncated_no_next(按没买成处理,结论偏乐观方向,README 披露 3)",
+    "个股序列无停牌行,'停牌日计入但不评估'条款自然空置",
+    "stk_limit 缺文件日=无涨跌停约束;顺延超出事件+40 自然日的日期按需回退加载",
+    "dd20 窗口 j<20 时按 max(0, j-20) 截断(上市初期事件,占比极小)",
+    "索引口径为个股序列行号(README 第 4 节),非市场日历对齐"
+  ],
+  "seeds": {
+    "S1": {
+      "variant_judged": "v1",
+      "per_H": {
+        "10": {
+          "n_closed": 5545.0,
+          "net_mean": 0.021051131551709835,
+          "cluster_t": 2.9377443548271196,
+          "win_year_share": 0.8181818181818182,
+          "date_conc": 0.44044870163558314,
+          "checks": {
+            "c1_n_closed_ge_300": true,
+            "c2_net_mean_pos": true,
+            "c3_cluster_t_ge_2": true,
+            "c4_win_year_share_ge_60pct": true,
+            "c5_date_conc_le_50pct": true
+          },
+          "passed": true
+        },
+        "20": {
+          "n_closed": 5534.0,
+          "net_mean": 0.04886970104463415,
+          "cluster_t": 5.361073376108275,
+          "win_year_share": 0.9090909090909091,
+          "date_conc": 0.27745091972323516,
+          "checks": {
+            "c1_n_closed_ge_300": true,
+            "c2_net_mean_pos": true,
+            "c3_cluster_t_ge_2": true,
+            "c4_win_year_share_ge_60pct": true,
+            "c5_date_conc_le_50pct": true
+          },
+          "passed": true
+        },
+        "25": {
+          "n_closed": 5451.0,
+          "net_mean": 0.04591831242964935,
+          "cluster_t": 3.9620401138791994,
+          "win_year_share": 0.9545454545454546,
+          "date_conc": 0.33536726378765064,
+          "checks": {
+            "c1_n_closed_ge_300": true,
+            "c2_net_mean_pos": true,
+            "c3_cluster_t_ge_2": true,
+            "c4_win_year_share_ge_60pct": true,
+            "c5_date_conc_le_50pct": true
+          },
+          "passed": true
+        }
+      },
+      "alive": true,
+      "verdict": "活(存在 H 五线全满)"
+    },
+    "S2": {
+      "variant_judged": "v1",
+      "per_H": {
+        "10": {
+          "n_closed": 2394.0,
+          "net_mean": 0.027024957215712405,
+          "cluster_t": 2.1401491879957915,
+          "win_year_share": 0.875,
+          "date_conc": 0.6174276143715356,
+          "checks": {
+            "c1_n_closed_ge_300": true,
+            "c2_net_mean_pos": true,
+            "c3_cluster_t_ge_2": true,
+            "c4_win_year_share_ge_60pct": true,
+            "c5_date_conc_le_50pct": false
+          },
+          "passed": false
+        },
+        "20": {
+          "n_closed": 2384.0,
+          "net_mean": 0.05995501758376636,
+          "cluster_t": 3.7245075556222873,
+          "win_year_share": 1.0,
+          "date_conc": 0.3953136467327951,
+          "checks": {
+            "c1_n_closed_ge_300": true,
+            "c2_net_mean_pos": true,
+            "c3_cluster_t_ge_2": true,
+            "c4_win_year_share_ge_60pct": true,
+            "c5_date_conc_le_50pct": true
+          },
+          "passed": true
+        },
+        "25": {
+          "n_closed": 2345.0,
+          "net_mean": 0.050547279914982916,
+          "cluster_t": 2.342042879389537,
+          "win_year_share": 1.0,
+          "date_conc": 0.5290624590754267,
+          "checks": {
+            "c1_n_closed_ge_300": true,
+            "c2_net_mean_pos": true,
+            "c3_cluster_t_ge_2": true,
+            "c4_win_year_share_ge_60pct": true,
+            "c5_date_conc_le_50pct": false
+          },
+          "passed": false
+        }
+      },
+      "alive": true,
+      "verdict": "活(存在 H 五线全满)"
+    },
+    "S3": {
+      "variant_judged": "v1",
+      "per_H": {
+        "10": {
+          "n_closed": 1140.0,
+          "net_mean": 0.03155599442683261,
+          "cluster_t": 1.811224250824001,
+          "win_year_share": 1.0,
+          "date_conc": 0.72666507968771,
+          "checks": {
+            "c1_n_closed_ge_300": true,
+            "c2_net_mean_pos": true,
+            "c3_cluster_t_ge_2": false,
+            "c4_win_year_share_ge_60pct": true,
+            "c5_date_conc_le_50pct": false
+          },
+          "passed": false
+        },
+        "20": {
+          "n_closed": 1135.0,
+          "net_mean": 0.0652758893714118,
+          "cluster_t": 3.025902779194909,
+          "win_year_share": 1.0,
+          "date_conc": 0.47746884482400426,
+          "checks": {
+            "c1_n_closed_ge_300": true,
+            "c2_net_mean_pos": true,
+            "c3_cluster_t_ge_2": true,
+            "c4_win_year_share_ge_60pct": true,
+            "c5_date_conc_le_50pct": true
+          },
+          "passed": true
+        },
+        "25": {
+          "n_closed": 1116.0,
+          "net_mean": 0.0527298146701792,
+          "cluster_t": 1.7665918240286393,
+          "win_year_share": 1.0,
+          "date_conc": 0.6874249649921095,
+          "checks": {
+            "c1_n_closed_ge_300": true,
+            "c2_net_mean_pos": true,
+            "c3_cluster_t_ge_2": false,
+            "c4_win_year_share_ge_60pct": true,
+            "c5_date_conc_le_50pct": false
+          },
+          "passed": false
+        }
+      },
+      "alive": true,
+      "verdict": "活(存在 H 五线全满)"
+    },
+    "S4": {
+      "variant_judged": "v1",
+      "per_H": {
+        "10": {
+          "n_closed": 11749.0,
+          "net_mean": 0.020915788443523466,
+          "cluster_t": 3.3265518169054955,
+          "win_year_share": 0.8888888888888888,
+          "date_conc": 0.3442260170649138,
+          "checks": {
+            "c1_n_closed_ge_300": true,
+            "c2_net_mean_pos": true,
+            "c3_cluster_t_ge_2": true,
+            "c4_win_year_share_ge_60pct": true,
+            "c5_date_conc_le_50pct": true
+          },
+          "passed": true
+        },
+        "20": {
+          "n_closed": 11694.0,
+          "net_mean": 0.05679493373045908,
+          "cluster_t": 6.472477359956038,
+          "win_year_share": 0.9259259259259259,
+          "date_conc": 0.23919051194426252,
+          "checks": {
+            "c1_n_closed_ge_300": true,
+            "c2_net_mean_pos": true,
+            "c3_cluster_t_ge_2": true,
+            "c4_win_year_share_ge_60pct": true,
+            "c5_date_conc_le_50pct": true
+          },
+          "passed": true
+        },
+        "25": {
+          "n_closed": 11571.0,
+          "net_mean": 0.05434442428179425,
+          "cluster_t": 5.041786349638573,
+          "win_year_share": 0.9259259259259259,
+          "date_conc": 0.2933595898910396,
+          "checks": {
+            "c1_n_closed_ge_300": true,
+            "c2_net_mean_pos": true,
+            "c3_cluster_t_ge_2": true,
+            "c4_win_year_share_ge_60pct": true,
+            "c5_date_conc_le_50pct": true
+          },
+          "passed": true
+        }
+      },
+      "alive": true,
+      "verdict": "活(存在 H 五线全满)"
+    },
+    "S5": {
+      "variant_judged": "v1",
+      "per_H": {
+        "10": {
+          "n_closed": 3210.0,
+          "net_mean": 0.02794283592896726,
+          "cluster_t": 2.2780537916789427,
+          "win_year_share": 0.8333333333333334,
+          "date_conc": 0.5783330070312163,
+          "checks": {
+            "c1_n_closed_ge_300": true,
+            "c2_net_mean_pos": true,
+            "c3_cluster_t_ge_2": true,
+            "c4_win_year_share_ge_60pct": true,
+            "c5_date_conc_le_50pct": false
+          },
+          "passed": false
+        },
+        "20": {
+          "n_closed": 3182.0,
+          "net_mean": 0.09643686153344246,
+          "cluster_t": 5.935144908400121,
+          "win_year_share": 0.9166666666666666,
+          "date_conc": 0.45102978660678567,
+          "checks": {
+            "c1_n_closed_ge_300": true,
+            "c2_net_mean_pos": true,
+            "c3_cluster_t_ge_2": true,
+            "c4_win_year_share_ge_60pct": true,
+            "c5_date_conc_le_50pct": true
+          },
+          "passed": true
+        },
+        "25": {
+          "n_closed": 3152.0,
+          "net_mean": 0.09126641125034755,
+          "cluster_t": 4.166812946057916,
+          "win_year_share": 0.9166666666666666,
+          "date_conc": 0.5566233407750819,
+          "checks": {
+            "c1_n_closed_ge_300": true,
+            "c2_net_mean_pos": true,
+            "c3_cluster_t_ge_2": true,
+            "c4_win_year_share_ge_60pct": true,
+            "c5_date_conc_le_50pct": false
+          },
+          "passed": false
+        }
+      },
+      "alive": true,
+      "verdict": "活(存在 H 五线全满)"
+    },
+    "ALL": {
+      "variant_judged": "v1",
+      "per_H": {
+        "10": {
+          "n_closed": 95545.0,
+          "net_mean": 0.003221817847337158,
+          "cluster_t": 1.6583677318307377,
+          "win_year_share": 0.6060606060606061,
+          "date_conc": 0.6929514348318366,
+          "checks": {
+            "c1_n_closed_ge_300": true,
+            "c2_net_mean_pos": true,
+            "c3_cluster_t_ge_2": false,
+            "c4_win_year_share_ge_60pct": true,
+            "c5_date_conc_le_50pct": false
+          },
+          "passed": false
+        },
+        "20": {
+          "n_closed": 95386.0,
+          "net_mean": 0.015817431716460332,
+          "cluster_t": 4.543354471742771,
+          "win_year_share": 0.6363636363636364,
+          "date_conc": 0.31604597833958875,
+          "checks": {
+            "c1_n_closed_ge_300": true,
+            "c2_net_mean_pos": true,
+            "c3_cluster_t_ge_2": true,
+            "c4_win_year_share_ge_60pct": true,
+            "c5_date_conc_le_50pct": true
+          },
+          "passed": true
+        },
+        "25": {
+          "n_closed": 94975.0,
+          "net_mean": 0.015466767835851766,
+          "cluster_t": 4.3330584238671515,
+          "win_year_share": 0.6060606060606061,
+          "date_conc": 0.2811960888007218,
+          "checks": {
+            "c1_n_closed_ge_300": true,
+            "c2_net_mean_pos": true,
+            "c3_cluster_t_ge_2": true,
+            "c4_win_year_share_ge_60pct": true,
+            "c5_date_conc_le_50pct": true
+          },
+          "passed": true
+        }
+      },
+      "alive": true,
+      "verdict": "活(存在 H 五线全满)"
+    }
+  },
+  "pass_criteria": "v1 同一 H 五线全满:n_closed>=300 / 净笔均>0 / cluster_t>=2 / 盈利年占比>=60% / 日期集中度<=50%",
+  "alive_seeds": [
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5"
+  ],
+  "overall": "种子存活:S1,S2,S3,S4,S5(给定版候选)",
+  "checks": {
+    "check1_scan_consistency": {
+      "ok": true,
+      "detail": {
+        "v1": {
+          "n_subset": 5646,
+          "n_ref": 5646,
+          "max_abs_float_diff": 0.0,
+          "ok": true
+        },
+        "v2": {
+          "n_subset": 5194,
+          "n_ref": 5194,
+          "max_abs_float_diff": 0.0,
+          "ok": true
+        }
+      }
+    },
+    "check2_trade_causality": {
+      "ok": true,
+      "n_entry_viol": 0,
+      "n_exit_viol": 0
+    },
+    "check3_count_conservation": {
+      "ok": true,
+      "sel_le_uni": true,
+      "all_eq_uni": true,
+      "sum_eq": true
+    },
+    "check4_samples": {
+      "ok": true,
+      "seed": 20260904,
+      "samples": [
+        {
+          "era": "2007-2010",
+          "variant": "v2",
+          "ts_code": "600497.SH",
+          "H": 20,
+          "event_date": "2008-09-05",
+          "dd20": -0.19766593727206427,
+          "bounce": 0.01382488479262678,
+          "entry_date": "2008-09-08",
+          "entry_raw": 10.89,
+          "entry_exec": 10.900889999999999,
+          "shares": 9100,
+          "buy_comm": 24.799524749999996,
+          "exit_date": "2008-10-13",
+          "exit_raw": 9.23,
+          "exit_exec": 9.22077,
+          "sell_comm": 20.97725175,
+          "stamp": 83.909007,
+          "gross_ret": -0.1541268648706664,
+          "net_pnl": -15418.777783499989,
+          "net_ret": -0.15539535745021554,
+          "held_rows": 20,
+          "deferred_days": 0
+        },
+        {
+          "era": "2011-2014",
+          "variant": "v1",
+          "ts_code": "600754.SH",
+          "H": 25,
+          "event_date": "2013-07-24",
+          "dd20": -0.052059052059052036,
+          "bounce": 0.05081826012058577,
+          "entry_date": "2013-07-25",
+          "entry_raw": 12.18,
+          "entry_exec": 12.192179999999999,
+          "shares": 8100,
+          "buy_comm": 24.6891645,
+          "exit_date": "2013-08-28",
+          "exit_raw": 15.02,
+          "exit_exec": 15.00498,
+          "sell_comm": 30.3850845,
+          "stamp": 121.540338,
+          "gross_ret": 0.23070525533579733,
+          "net_pnl": 22607.065413000008,
+          "net_ret": 0.22885965885191456,
+          "held_rows": 25,
+          "deferred_days": 0
+        },
+        {
+          "era": "2015-2018",
+          "variant": "v2",
+          "ts_code": "600526.SH",
+          "H": 20,
+          "event_date": "2018-01-26",
+          "dd20": -0.05626850937808492,
+          "bounce": 0.014861995753715496,
+          "entry_date": "2018-01-29",
+          "entry_raw": 9.61,
+          "entry_exec": 9.619609999999998,
+          "shares": 10300,
+          "buy_comm": 24.770495749999995,
+          "exit_date": "2018-03-02",
+          "exit_raw": 8.8,
+          "exit_exec": 8.7912,
+          "sell_comm": 22.637340000000002,
+          "stamp": 90.54936000000001,
+          "gross_ret": -0.08611679683479878,
+          "net_pnl": -8670.580195749979,
+          "net_ret": -0.08748727901900048,
+          "held_rows": 20,
+          "deferred_days": 0
+        },
+        {
+          "era": "2019-2022",
+          "variant": "v1",
+          "ts_code": "603698.SH",
+          "H": 20,
+          "event_date": "2021-08-05",
+          "dd20": -0.08622685185185197,
+          "bounce": 0.08522336769759442,
+          "entry_date": "2021-08-06",
+          "entry_raw": 15.82,
+          "entry_exec": 15.835819999999998,
+          "shares": 6300,
+          "buy_comm": 24.941416499999995,
+          "exit_date": "2021-09-02",
+          "exit_raw": 17.19,
+          "exit_exec": 17.172810000000002,
+          "sell_comm": 27.04717575,
+          "stamp": 108.188703,
+          "gross_ret": 0.08442821401102085,
+          "net_pnl": 8262.859704750024,
+          "net_ret": 0.08280197824894482,
+          "held_rows": 20,
+          "deferred_days": 0
+        },
+        {
+          "era": "2023-2026",
+          "variant": "v1",
+          "ts_code": "603879.SH",
+          "H": 10,
+          "event_date": "2026-07-24",
+          "dd20": -0.08172043010752705,
+          "bounce": 0.10621761658031081,
+          "entry_date": "2026-07-27",
+          "entry_raw": 4.29,
+          "entry_exec": 4.294289999999999,
+          "shares": 23200,
+          "buy_comm": 24.906881999999996,
+          "exit_date": "2026-08-07",
+          "exit_raw": 5.27,
+          "exit_exec": 5.264729999999999,
+          "sell_comm": 30.535433999999995,
+          "stamp": 61.07086799999999,
+          "gross_ret": 0.22598380640338678,
+          "net_pnl": 22397.694816,
+          "net_ret": 0.22475812901633024,
+          "held_rows": 10,
+          "deferred_days": 0
+        }
+      ]
+    },
+    "check5_disclosure": {
+      "ok": true,
+      "n_limit_missing_days": 0,
+      "n_limit_files_needed": 4778,
+      "n_limit_files_total": 4778,
+      "n_fallback_loads": 36941,
+      "n_closed_entry_before_limit_era": 65585,
+      "truncated_by_variant_H": {
+        "v1|H10|truncated_exhausted": 391,
+        "v1|H10|truncated_no_next": 82,
+        "v1|H20|truncated_exhausted": 550,
+        "v1|H20|truncated_no_next": 82,
+        "v1|H25|truncated_exhausted": 961,
+        "v1|H25|truncated_no_next": 82,
+        "v2|H10|truncated_exhausted": 306,
+        "v2|H10|truncated_no_next": 65,
+        "v2|H20|truncated_exhausted": 431,
+        "v2|H20|truncated_no_next": 65,
+        "v2|H25|truncated_exhausted": 899,
+        "v2|H25|truncated_no_next": 65
+      }
+    }
+  },
+  "checks_all_pass": true,
+  "duration_sec": 21.6,
+  "timestamp": "2026-09-04 23:10:57"
+}

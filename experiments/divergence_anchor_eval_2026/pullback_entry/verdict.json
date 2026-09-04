@@ -1,0 +1,165 @@
+{
+  "experiment": "pullback_entry(实验A:事件后回踩挂单入场)",
+  "prereadme": "README.md 先于任何跑数落盘",
+  "gate": {
+    "events_v1__E1-H12": {
+      "n_events": 5646,
+      "n_status_mismatch": 0,
+      "n_closed": 5164,
+      "n_ret_mismatch": 0,
+      "max_ret_diff": 0.0,
+      "n_date_mismatch": 0
+    },
+    "events_v1__A13": {
+      "n_events": 5646,
+      "n_status_mismatch": 0,
+      "n_closed": 5174,
+      "n_ret_mismatch": 0,
+      "max_ret_diff": 0.0,
+      "n_date_mismatch": 0
+    },
+    "events_v2__E1-H12": {
+      "n_events": 5194,
+      "n_status_mismatch": 0,
+      "n_closed": 4814,
+      "n_ret_mismatch": 0,
+      "max_ret_diff": 0.0,
+      "n_date_mismatch": 0
+    },
+    "events_v2__A13": {
+      "n_events": 5194,
+      "n_status_mismatch": 0,
+      "n_closed": 4820,
+      "n_ret_mismatch": 0,
+      "max_ret_diff": 0.0,
+      "n_date_mismatch": 0
+    },
+    "passed": true
+  },
+  "verdicts": [
+    {
+      "signal": "events_v1",
+      "m": "0.00",
+      "exit_rule": "E1-H12",
+      "exp_ret": -0.015442327382802386,
+      "baseline_exp_ret": -0.01280175159318249,
+      "delta_vs_baseline_pp": -0.26405757896198967,
+      "t_cluster": -3.524278429502362,
+      "alive": false
+    },
+    {
+      "signal": "events_v1",
+      "m": "0.00",
+      "exit_rule": "A13",
+      "exp_ret": -0.015226666513165673,
+      "baseline_exp_ret": -0.01024307359454448,
+      "delta_vs_baseline_pp": -0.4983592918621193,
+      "t_cluster": -3.7311425418261974,
+      "alive": false
+    },
+    {
+      "signal": "events_v1",
+      "m": "0.00",
+      "exit_rule": "ANCHOR-SL",
+      "exp_ret": -0.007366513840841998,
+      "baseline_exp_ret": -0.007507141464290994,
+      "delta_vs_baseline_pp": 0.01406276234489955,
+      "t_cluster": -3.2714131955722654,
+      "alive": false
+    },
+    {
+      "signal": "events_v1",
+      "m": "0.03",
+      "exit_rule": "E1-H12",
+      "exp_ret": -0.01608234623712152,
+      "baseline_exp_ret": -0.01280175159318249,
+      "delta_vs_baseline_pp": -0.3280594643939032,
+      "t_cluster": -2.7293853277359577,
+      "alive": false
+    },
+    {
+      "signal": "events_v1",
+      "m": "0.03",
+      "exit_rule": "A13",
+      "exp_ret": -0.015170067825089069,
+      "baseline_exp_ret": -0.01024307359454448,
+      "delta_vs_baseline_pp": -0.4926994230544589,
+      "t_cluster": -2.698453186302414,
+      "alive": false
+    },
+    {
+      "signal": "events_v1",
+      "m": "0.03",
+      "exit_rule": "ANCHOR-SL",
+      "exp_ret": -0.00842349356076418,
+      "baseline_exp_ret": -0.007507141464290994,
+      "delta_vs_baseline_pp": -0.09163520964731867,
+      "t_cluster": -1.8236308736996205,
+      "alive": false
+    },
+    {
+      "signal": "events_v2",
+      "m": "0.00",
+      "exit_rule": "E1-H12",
+      "exp_ret": -0.015640835135096173,
+      "baseline_exp_ret": -0.008490280853030831,
+      "delta_vs_baseline_pp": -0.7150554282065341,
+      "t_cluster": -3.7131471208652176,
+      "alive": false
+    },
+    {
+      "signal": "events_v2",
+      "m": "0.00",
+      "exit_rule": "A13",
+      "exp_ret": -0.01609393345092236,
+      "baseline_exp_ret": -0.006512056081476791,
+      "delta_vs_baseline_pp": -0.9581877369445568,
+      "t_cluster": -3.9727217041823395,
+      "alive": false
+    },
+    {
+      "signal": "events_v2",
+      "m": "0.00",
+      "exit_rule": "ANCHOR-SL",
+      "exp_ret": -0.00689555514493704,
+      "baseline_exp_ret": -0.0020453648911599267,
+      "delta_vs_baseline_pp": -0.4850190253777113,
+      "t_cluster": -3.1513507212563825,
+      "alive": false
+    },
+    {
+      "signal": "events_v2",
+      "m": "0.03",
+      "exit_rule": "E1-H12",
+      "exp_ret": -0.01293090313230919,
+      "baseline_exp_ret": -0.008490280853030831,
+      "delta_vs_baseline_pp": -0.4440622279278359,
+      "t_cluster": -2.050895904441061,
+      "alive": false
+    },
+    {
+      "signal": "events_v2",
+      "m": "0.03",
+      "exit_rule": "A13",
+      "exp_ret": -0.012467005544540508,
+      "baseline_exp_ret": -0.006512056081476791,
+      "delta_vs_baseline_pp": -0.5954949463063717,
+      "t_cluster": -2.0324360091295612,
+      "alive": false
+    },
+    {
+      "signal": "events_v2",
+      "m": "0.03",
+      "exit_rule": "ANCHOR-SL",
+      "exp_ret": -0.0042974152363798885,
+      "baseline_exp_ret": -0.0020453648911599267,
+      "delta_vs_baseline_pp": -0.22520503452199617,
+      "t_cluster": -0.864839357277669,
+      "alive": false
+    }
+  ],
+  "n_alive": 0,
+  "overall": "判死:12 行全部不过线,阴性结果原样交付",
+  "duration_sec": 22.3,
+  "timestamp": "2026-09-04 12:05:04"
+}
