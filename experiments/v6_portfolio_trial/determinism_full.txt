@@ -1,0 +1,7 @@
+背离v6 组合层 全量两遍确定性对拍(README §六.5 全量口径)
+日期: 2026-09-06 23:57:04
+口径: 全量 12,240 格 x 2 遍独立全量跑数(pass1 -> runs_pass1/, pass2 -> runs/)
+比较: 逐格 stats.json(除 runtime_sec)NaN 安全逐位 + equity_curve.parquet DataFrame.equals + trades.parquet DataFrame.equals + summary 全行(除 runtime_sec)
+结果: cells_bad=0, summary_equal=True -> FULL-GRID DETERMINISM PASS
+脚本: /tmp/detcmp.py(一次性校验脚本,不入库)
+日志: detcmp.log

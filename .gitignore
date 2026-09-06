@@ -53,3 +53,8 @@ models/
 
 # ===== 其他 =====
 .worktrees/
+
+# v6 组合层审判:每格产物约 6.8G,复现=重跑 run_portfolio.py(约 2 分钟)
+experiments/v6_portfolio_trial/runs/
+experiments/v6_portfolio_trial/runs_pass1/
+experiments/v6_portfolio_trial/cache/

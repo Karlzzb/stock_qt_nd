@@ -1,0 +1,41 @@
+{
+  "checks": {
+    "check6_index_calendar": {
+      "ok": true,
+      "index_missing_days": 0,
+      "limit_missing_days": 0,
+      "note": "000001.SH 降序已 sort;个股日期⊆指数日期硬断言通过"
+    },
+    "check1_reconcile": {
+      "n_ref": 76471,
+      "n_compared": 76471,
+      "dd20_bitwise": true,
+      "bounce_bitwise": true,
+      "n_mismatch": 0,
+      "mismatch_head": [],
+      "ok": true,
+      "engine_counts": {
+        "entered": 75918,
+        "n_trades": 75374,
+        "dropped_limitup": 461,
+        "dropped_no_quote": 0,
+        "dropped_cash": 10,
+        "truncated_no_next": 82,
+        "truncated_exhausted": 41,
+        "truncated_window": 503
+      }
+    },
+    "check4_dual_ledger": {
+      "ok": true,
+      "max_diff_yuan": 0.0,
+      "note": "引擎内置断言,见 run_cell"
+    },
+    "check5_determinism": {
+      "ok": true,
+      "n_cells": 2,
+      "bad": []
+    }
+  },
+  "checks_all_pass": true,
+  "timestamp": "2026-09-07 00:01:28"
+}

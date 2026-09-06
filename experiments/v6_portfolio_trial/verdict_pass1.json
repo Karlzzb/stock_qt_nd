@@ -1,0 +1,101 @@
+{
+  "experiment": "背离v6 组合层 + 出场族审判",
+  "prereadme": "README.md 先于任何跑数落盘(冻结)",
+  "scope": "全量审判(grid=full,12240 格)",
+  "pass_criteria": "净年化超额(判活口径=空仓买指数) > 基准 +15pp 且 Sharpe > 0.5;S5 附加 cluster_t >= 2",
+  "benchmark_annualized": 0.031244538233113017,
+  "n_cells": 12240,
+  "n_passed": 0,
+  "passed_cells": [],
+  "checks": {
+    "check6_index_calendar": {
+      "ok": true,
+      "index_missing_days": 0,
+      "limit_missing_days": 0,
+      "note": "000001.SH 降序已 sort;个股日期⊆指数日期硬断言通过"
+    },
+    "check1_reconcile": {
+      "n_ref": 76471,
+      "n_compared": 76471,
+      "dd20_bitwise": true,
+      "bounce_bitwise": true,
+      "n_mismatch": 0,
+      "mismatch_head": [],
+      "ok": true,
+      "engine_counts": {
+        "entered": 75918,
+        "n_trades": 75374,
+        "dropped_limitup": 461,
+        "dropped_no_quote": 0,
+        "dropped_cash": 10,
+        "truncated_no_next": 82,
+        "truncated_exhausted": 41,
+        "truncated_window": 503
+      }
+    },
+    "check2_cash_conservation": {
+      "ok": true,
+      "note": "抽样格逐日流水回放零容差断言全过(run_cell 内置,不过即中断)"
+    },
+    "check3_causality": {
+      "ok": true,
+      "note": "入场日>事件日硬断言;E2/E7/P3/P4 ATR ≤t−1 或 ≤事件日;挑选/仓位决策只用信号日及之前信息(结构性)"
+    },
+    "check4_dual_ledger": {
+      "ok": true,
+      "max_diff_yuan": 0.0
+    },
+    "check5_determinism": {
+      "ok": true,
+      "n_cells": 20,
+      "bad": []
+    }
+  },
+  "checks_all_pass": true,
+  "benchmark": {
+    "n_cells": 20,
+    "times_sec": [
+      0.041,
+      0.039,
+      0.042,
+      0.049,
+      0.052,
+      0.049,
+      0.046,
+      0.123,
+      0.169,
+      0.212,
+      0.225,
+      0.267,
+      0.268,
+      0.284,
+      0.293,
+      0.292,
+      0.356,
+      0.357,
+      0.368,
+      0.395
+    ],
+    "mean_sec": 0.196,
+    "median_sec": 0.218,
+    "max_sec": 0.395,
+    "threshold_sec": 2.0,
+    "degraded": false,
+    "decision": "全量 12,240 格",
+    "est_full_hours": 0.02,
+    "est_degraded_hours": 0.01,
+    "workers": 27
+  },
+  "disclosure": [
+    "种子源自 2026 沙盒探索性扫描(沿用 #31 披露 1)",
+    "窗口砍掉 2008 产粮年,样本内大股灾 regime 只剩 2015",
+    "无终审段:全窗口一次出数,如实披露",
+    "stk_limit 2007-01-04 起,本窗口全覆盖,无 #31 披露 4 的缺口",
+    "退市截断条款沿用 #31 §2.3,偏乐观方向沿用 #31 披露 3",
+    "E1/E2 参数继承 #28 冻结配置,horizon 被本实验 H 网格(10/20/25)统一覆盖;A15/A16/B17 的 n_slots 变体由仓位族接管;去重后 E1=12 格、E2=17 格",
+    "E3~E7 为本实验新写出场族,执行语义(收盘判定+次日开盘卖)与引擎类 A/B(盘中触及成交)不同,并列数不混比",
+    "S1 的先到先得以 ts_code 升序为确定性代理,非真实到达序",
+    "P4 对无初始止损线的出场族(E0/E3/E4/E6)空置"
+  ],
+  "timestamp": "2026-09-06 23:53:12"
+}
