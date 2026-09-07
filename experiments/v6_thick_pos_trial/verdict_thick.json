@@ -1,0 +1,126 @@
+{
+  "experiment": "背离v6 R1 变体:加厚弹性仓位(P6) + 口径D 终审",
+  "prereadme": "README.md 先于任何跑数落盘(冻结)",
+  "scope": "全量终审(1890 格,双跑逐位一致)",
+  "main_line": "口径 D 纯现金字面版: excess_cash/capital_utilization > +10pp 且 capital_utilization >= 0.5 且 sharpe_cash > 0.5(README §一.2)",
+  "ref_lines": [
+    "混合口径变体(参考,不判活): excess_idx/u > +10pp 且 u>=0.5 且 sharpe_cash > 0.5(README §一.2)",
+    "旧终审线(参考,不判活): excess_idx > +15pp 且 sharpe_idx > 0.5(S5 附加 cluster_t 条款对 S0 无操作对象,决断 D-9)"
+  ],
+  "benchmark_annualized": 0.031244538233113017,
+  "n_cells": 1890,
+  "n_passed_main": 0,
+  "passed_main_cells": [],
+  "n_passed_mixed": 4,
+  "passed_mixed_cells": [
+    "v6-2__H10__S0__P6K5__E6",
+    "v6-3__H25__S0__P6K5__E1_A6",
+    "v6-3__H25__S0__P6K5__E1_A9",
+    "v6-3__H25__S0__P6K5__E2_B14"
+  ],
+  "n_passed_old": 0,
+  "passed_old_cells": [],
+  "checks": {
+    "check0_caliber_recompute": {
+      "ok": true,
+      "n_pure": 0,
+      "n_mixed": 0,
+      "n_old": 0,
+      "expect_pure": 0,
+      "expect_mixed": 0,
+      "expect_old": 0,
+      "n_rows": 630,
+      "note": "独立重算自 #37 冻结 summary_elastic.csv(README §五.1)"
+    },
+    "check6_index_calendar": {
+      "ok": true,
+      "index_missing_days": 0,
+      "limit_missing_days": 0,
+      "note": "000001.SH 降序已 sort;个股日期⊆指数日期硬断言通过"
+    },
+    "check1_reconcile": {
+      "n_ref": 76471,
+      "n_compared": 76471,
+      "dd20_bitwise": true,
+      "bounce_bitwise": true,
+      "n_mismatch": 0,
+      "mismatch_head": [],
+      "ok": true,
+      "engine_counts": {
+        "entered": 75918,
+        "n_trades": 75374,
+        "dropped_limitup": 461,
+        "dropped_no_quote": 0,
+        "dropped_cash": 10,
+        "truncated_no_next": 82,
+        "truncated_exhausted": 41,
+        "truncated_window": 503
+      }
+    },
+    "check2_cash_conservation": {
+      "ok": true,
+      "note": "抽样格逐日流水回放零容差断言全过(run_cell 内置,不过即中断)"
+    },
+    "check3_causality": {
+      "ok": true,
+      "note": "入场日>事件日硬断言;E2/E7 ATR ≤t−1;P6 信号日决策只用信号日及之前信息(结构性;cash 为上一交易行收盘值)"
+    },
+    "check4_dual_ledger": {
+      "ok": true,
+      "max_diff_yuan": 0.0
+    },
+    "check5_determinism": {
+      "ok": true,
+      "n_cells": 8,
+      "bad": []
+    },
+    "checkP6": {
+      "ok": true,
+      "n_cells": 1890,
+      "n_dropped_slot_full_violation": 0,
+      "n_equiv_pairs": 0,
+      "n_equiv_pairs_skipped": 1890,
+      "n_equiv_violation": 0,
+      "n_dropped_cash_cells": 1890,
+      "total_dropped_cash": 20508820,
+      "bad_slot_head": [],
+      "bad_equiv_head": []
+    },
+    "check_determinism_full": {
+      "ok": true,
+      "n_cells": 1890,
+      "n_mismatch": 0,
+      "bad": []
+    }
+  },
+  "checks_all_pass": true,
+  "benchmark": {
+    "n_cells": 8,
+    "times_sec": [
+      0.073,
+      0.08,
+      0.145,
+      1.243,
+      1.365,
+      1.607,
+      1.956,
+      2.067
+    ],
+    "mean_sec": 1.067,
+    "median_sec": 1.304,
+    "max_sec": 2.067,
+    "decision": "全量 1,890 格(预估墙钟 0.02 小时,27 进程并行)",
+    "est_full_hours": 0.02,
+    "workers": 27
+  },
+  "disclosure": [
+    "种子源自 2026 沙盒探索性扫描(沿用 #31 披露 1)。",
+    "窗口砍掉 2008 产粮年,样本内大股灾 regime 只剩 2015(沿用 #32 §一.1)。",
+    "无终审段:全窗口一次出数,如实披露(沿用 #32 §七.3)。",
+    "P6 加厚显著提高单票集中度(K=3 时单仓名义 33.3 万 = 总资金三分之一),组合波动与回撤结构异于 P1~P5;口径 D 的 sharpe_cash 条件即对此的风险约束,不另设集中度上限。",
+    "口径 D 为拍板的判活线,旧终审线(+15pp 且 Sharpe>0.5,判活口径记账)只作参考列出数;本实验不回溯改判 #32/#37 已归档结论。",
+    "单位在投超额对纯加厚近似尺度不变(§二预警),本实验的判活希望寄于成本拖拽减轻与现金耗尽形态改变两条次生通道;若 0 格过线,该近似不变性即为结构性解释而非实现缺陷。",
+    "稀疏性是定义级约束(#35 已论证):加厚只能重排既有的在持市值,不能创造信号;利用率条件能否过线同样受此上限约束。"
+  ],
+  "timestamp": "2026-09-07 19:45:40"
+}
