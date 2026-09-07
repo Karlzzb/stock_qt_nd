@@ -1,0 +1,156 @@
+{
+  "experiment": "背离v6:精选加厚仓位(P7) + 口径D 终审",
+  "prereadme": "README.md 先于任何跑数落盘(冻结)",
+  "scope": "全量终审(9450 格,双跑逐位一致)",
+  "main_line": "口径 D 纯现金字面版: excess_cash/capital_utilization > +10pp 且 capital_utilization >= 0.5 且 sharpe_cash > 0.5(README §一.2)",
+  "ref_lines": [
+    "混合口径变体(参考,不判活): excess_idx/u > +10pp 且 u>=0.5 且 sharpe_cash > 0.5(README §一.2)",
+    "旧终审线(参考,不判活): excess_idx > +15pp 且 sharpe_idx > 0.5(#32 旧线的 S5 附加 cluster_t 条款不纳入参考列,决断 T-4)"
+  ],
+  "benchmark_annualized": 0.031244538233113017,
+  "n_cells": 9450,
+  "n_passed_main": 0,
+  "passed_main_cells": [],
+  "n_passed_mixed": 32,
+  "passed_mixed_cells": [
+    "v6-1__H20__S2__P7K5__E6",
+    "v6-1__H20__S3__P7K5__E6",
+    "v6-1__H20__S4__P7K5__E6",
+    "v6-1__H25__S2__P7K3__E1_A1",
+    "v6-1__H25__S2__P7K3__E2_B1",
+    "v6-1__H25__S2__P7K3__E2_B11",
+    "v6-1__H25__S2__P7K3__E2_B20",
+    "v6-1__H25__S2__P7K3__E2_B4",
+    "v6-1__H25__S2__P7K3__E2_B5",
+    "v6-1__H25__S2__P7K3__E2_B6",
+    "v6-1__H25__S2__P7K3__E2_B8",
+    "v6-1__H25__S2__P7K3__E2_B9",
+    "v6-1__H25__S2__P7K3__E6",
+    "v6-1__H25__S2__P7K5__E6",
+    "v6-1__H25__S3__P7K3__E1_A1",
+    "v6-1__H25__S3__P7K3__E2_B1",
+    "v6-1__H25__S3__P7K3__E2_B11",
+    "v6-1__H25__S3__P7K3__E2_B20",
+    "v6-1__H25__S3__P7K3__E2_B4",
+    "v6-1__H25__S3__P7K3__E2_B5",
+    "v6-1__H25__S3__P7K3__E2_B6",
+    "v6-1__H25__S3__P7K3__E2_B8",
+    "v6-1__H25__S3__P7K3__E2_B9",
+    "v6-1__H25__S3__P7K3__E6",
+    "v6-1__H25__S3__P7K5__E6",
+    "v6-1__H25__S4__P7K3__E1_A7",
+    "v6-1__H25__S4__P7K3__E2_B8",
+    "v6-1__H25__S4__P7K5__E6",
+    "v6-1__H25__S5__P7K3__E1_A5",
+    "v6-1__H25__S5__P7K3__E2_B8",
+    "v6-1__H25__S5__P7K3__E2_B9",
+    "v6-1__H25__S5__P7K3__E6"
+  ],
+  "n_passed_old": 0,
+  "passed_old_cells": [],
+  "checks": {
+    "check0_caliber_recompute": {
+      "ok": true,
+      "n_pure": 0,
+      "n_mixed": 4,
+      "n_old": 0,
+      "expect_pure": 0,
+      "expect_mixed": 4,
+      "expect_old": 0,
+      "n_rows": 1890,
+      "note": "独立重算自 #38 冻结 summary_thick.csv(README §五.1)"
+    },
+    "check6_index_calendar": {
+      "ok": true,
+      "index_missing_days": 0,
+      "limit_missing_days": 0,
+      "note": "000001.SH 降序已 sort;个股日期⊆指数日期硬断言通过"
+    },
+    "check1_reconcile": {
+      "n_ref": 76471,
+      "n_compared": 76471,
+      "dd20_bitwise": true,
+      "bounce_bitwise": true,
+      "n_mismatch": 0,
+      "mismatch_head": [],
+      "ok": true,
+      "engine_counts": {
+        "entered": 75918,
+        "n_trades": 75374,
+        "dropped_limitup": 461,
+        "dropped_no_quote": 0,
+        "dropped_cash": 10,
+        "truncated_no_next": 82,
+        "truncated_exhausted": 41,
+        "truncated_window": 503
+      }
+    },
+    "check2_cash_conservation": {
+      "ok": true,
+      "note": "抽样格逐日流水回放零容差断言全过(run_cell 内置,不过即中断)"
+    },
+    "check3_causality": {
+      "ok": true,
+      "note": "入场日>事件日硬断言;E2/E7 ATR ≤t−1;挑选/仓位决策只用信号日及之前信息(结构性)"
+    },
+    "check4_dual_ledger": {
+      "ok": true,
+      "max_diff_yuan": 0.0
+    },
+    "check5_determinism": {
+      "ok": true,
+      "n_cells": 8,
+      "bad": []
+    },
+    "checkP7_invariants": {
+      "ok": true,
+      "n_cells": 9450,
+      "n_trades_total": 4838626,
+      "max_entries_per_day": 7,
+      "max_concurrent": 7,
+      "max_n_positions": 7,
+      "max_notional_ratio": 0.99974875,
+      "n_bad_day": 0,
+      "n_bad_conc": 0,
+      "n_bad_npos": 0,
+      "n_bad_notional": 0,
+      "n_bad_recon": 0
+    },
+    "check_determinism_full": {
+      "ok": true,
+      "n_cells": 9450,
+      "n_mismatch": 0,
+      "bad": []
+    }
+  },
+  "checks_all_pass": true,
+  "benchmark": {
+    "n_cells": 8,
+    "times_sec": [
+      0.04,
+      0.065,
+      0.067,
+      0.079,
+      0.126,
+      0.131,
+      0.174,
+      0.21
+    ],
+    "mean_sec": 0.112,
+    "median_sec": 0.103,
+    "max_sec": 0.21,
+    "decision": "全量 9,450 格双跑(预估单遍墙钟 0.01 小时,27 进程并行)",
+    "est_full_hours": 0.01,
+    "workers": 27
+  },
+  "disclosure": [
+    "种子源自 2026 沙盒探索性扫描(沿用 #31 披露 1)。",
+    "窗口砍掉 2008 产粮年,样本内大股灾 regime 只剩 2015(沿用 #32 §一.1)。",
+    "无终审段:全窗口一次出数,如实披露(沿用 #32 §七.3)。",
+    "K=3 时单仓名义 33.3 万 = 总资金三分之一,组合集中度为历次实验最高;口径 D 的 sharpe_cash 条件即对此的风险约束,不另设集中度上限。",
+    "口径 D 为拍板的判活线,旧终审线(+15pp 且 Sharpe>0.5,判活口径记账)只作参考列出数;本实验不回溯改判 #32/#37/#38 已归档结论。",
+    "精选与加厚对资金利用率作用方向相反(§二张力预警);若 0 格过线且头部格仍卡在\"利用率与在投质量此消彼长\",则该张力即为本信号族在口径 D 下的结构性结论而非实现缺陷。",
+    "8 个\"在投质量过线\"格中 S4(随机挑选)占 2 席且为最优(+11.31pp),说明稀疏池上精选增益主要来自\"少接\"而非\"会挑\";本实验保留全部五种挑选规则,不据此事后偏爱 S4。"
+  ],
+  "timestamp": "2026-09-07 21:40:11"
+}
