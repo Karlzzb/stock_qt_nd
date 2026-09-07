@@ -1,0 +1,415 @@
+{
+  "experiment": "V1(最早背离设计)按 #31 口径重跑统计(issue #34)",
+  "prereadme": "README.md 先于任何跑数落盘(冻结)",
+  "event_pool": {
+    "source": "/home/karl/repos/personal/stock_qt_nd/v3_pipeline/reports/divergence_event_study/events.parquet",
+    "n_events": 1033193,
+    "semantics": "issue #2 逐日截断因果模拟产物,val_mismatch=0"
+  },
+  "checks": {
+    "check_a_sim_fidelity": {
+      "n_mine": 96577,
+      "n_ref": 96577,
+      "same_key": true,
+      "same_status": true,
+      "max_abs_net_ret_diff": 0.0,
+      "n_closed": 95386,
+      "n_closed_s1": 5534,
+      "net_mean": 0.04886970104463415,
+      "ref_net_mean": 0.04887,
+      "abs_diff_vs_csv": 2.9895536584473303e-07,
+      "pct_2dp": 4.89,
+      "ok": true
+    },
+    "check_b_causality": {
+      "ok": true,
+      "seed": 20260907,
+      "stocks": [
+        {
+          "ts_code": "002063.SZ",
+          "n_rows": 4758,
+          "n_events": 286,
+          "sim_equal": true,
+          "detector_days_checked": 436,
+          "detector_mismatch": 0
+        },
+        {
+          "ts_code": "002321.SZ",
+          "n_rows": 3989,
+          "n_events": 226,
+          "sim_equal": true,
+          "detector_days_checked": 376,
+          "detector_mismatch": 0
+        },
+        {
+          "ts_code": "300516.SZ",
+          "n_rows": 2489,
+          "n_events": 160,
+          "sim_equal": true,
+          "detector_days_checked": 310,
+          "detector_mismatch": 0
+        },
+        {
+          "ts_code": "600109.SH",
+          "n_rows": 6000,
+          "n_events": 348,
+          "sim_equal": true,
+          "detector_days_checked": 498,
+          "detector_mismatch": 0
+        },
+        {
+          "ts_code": "600285.SH",
+          "n_rows": 6000,
+          "n_events": 307,
+          "sim_equal": true,
+          "detector_days_checked": 457,
+          "detector_mismatch": 0
+        },
+        {
+          "ts_code": "600646.SH",
+          "n_rows": 2423,
+          "n_events": 145,
+          "sim_equal": true,
+          "detector_days_checked": 295,
+          "detector_mismatch": 0
+        }
+      ],
+      "total_detector_mismatch": 0
+    },
+    "check_c_conservation": {
+      "ok": true,
+      "n_entry_viol": 0,
+      "n_exit_viol": 0,
+      "sel_le_uni": true,
+      "all_eq_uni": true,
+      "sum_eq": true,
+      "rows_eq_3x_pool": true,
+      "idx_assert_zero": true
+    },
+    "check_d_v6_reference": {
+      "ok": true,
+      "n_checked": 70,
+      "n_mismatch": 0,
+      "mismatches": []
+    }
+  },
+  "checks_all_pass": true,
+  "five_line_reference": {
+    "criteria": "n>=300 / 净笔均>0 / cluster_t>=2 / 盈利年>=60% / 集中度<=50%(同一 H 五线全满;本票不设硬线)",
+    "per_config": {
+      "ALL": {
+        "per_H": {
+          "10": {
+            "n_closed": 1025638,
+            "net_mean": 0.0017243464405334256,
+            "cluster_t": 1.1890393386366063,
+            "win_year_share": 0.5714285714285714,
+            "date_conc": 0.8365212985298673,
+            "checks": {
+              "c1_n_closed_ge_300": true,
+              "c2_net_mean_pos": true,
+              "c3_cluster_t_ge_2": false,
+              "c4_win_year_ge_60": false,
+              "c5_date_conc_le_50": false
+            },
+            "passed": false
+          },
+          "20": {
+            "n_closed": 1023184,
+            "net_mean": 0.00033138638353150725,
+            "cluster_t": 0.167833227411787,
+            "win_year_share": 0.5428571428571428,
+            "date_conc": 4.605938148034587,
+            "checks": {
+              "c1_n_closed_ge_300": true,
+              "c2_net_mean_pos": true,
+              "c3_cluster_t_ge_2": false,
+              "c4_win_year_ge_60": false,
+              "c5_date_conc_le_50": false
+            },
+            "passed": false
+          },
+          "25": {
+            "n_closed": 1022518,
+            "net_mean": 0.004983847861329704,
+            "cluster_t": 2.2388917977110787,
+            "win_year_share": 0.5714285714285714,
+            "date_conc": 0.41570740792535366,
+            "checks": {
+              "c1_n_closed_ge_300": true,
+              "c2_net_mean_pos": true,
+              "c3_cluster_t_ge_2": true,
+              "c4_win_year_ge_60": false,
+              "c5_date_conc_le_50": true
+            },
+            "passed": false
+          }
+        },
+        "any_H_pass": false
+      },
+      "v6-1": {
+        "per_H": {
+          "10": {
+            "n_closed": 0,
+            "net_mean": null,
+            "cluster_t": null,
+            "win_year_share": null,
+            "date_conc": null,
+            "checks": {
+              "c1_n_closed_ge_300": false,
+              "c2_net_mean_pos": false,
+              "c3_cluster_t_ge_2": false,
+              "c4_win_year_ge_60": false,
+              "c5_date_conc_le_50": false
+            },
+            "passed": false
+          },
+          "20": {
+            "n_closed": 0,
+            "net_mean": null,
+            "cluster_t": null,
+            "win_year_share": null,
+            "date_conc": null,
+            "checks": {
+              "c1_n_closed_ge_300": false,
+              "c2_net_mean_pos": false,
+              "c3_cluster_t_ge_2": false,
+              "c4_win_year_ge_60": false,
+              "c5_date_conc_le_50": false
+            },
+            "passed": false
+          },
+          "25": {
+            "n_closed": 0,
+            "net_mean": null,
+            "cluster_t": null,
+            "win_year_share": null,
+            "date_conc": null,
+            "checks": {
+              "c1_n_closed_ge_300": false,
+              "c2_net_mean_pos": false,
+              "c3_cluster_t_ge_2": false,
+              "c4_win_year_ge_60": false,
+              "c5_date_conc_le_50": false
+            },
+            "passed": false
+          }
+        },
+        "any_H_pass": false
+      },
+      "v6-2": {
+        "per_H": {
+          "10": {
+            "n_closed": 0,
+            "net_mean": null,
+            "cluster_t": null,
+            "win_year_share": null,
+            "date_conc": null,
+            "checks": {
+              "c1_n_closed_ge_300": false,
+              "c2_net_mean_pos": false,
+              "c3_cluster_t_ge_2": false,
+              "c4_win_year_ge_60": false,
+              "c5_date_conc_le_50": false
+            },
+            "passed": false
+          },
+          "20": {
+            "n_closed": 0,
+            "net_mean": null,
+            "cluster_t": null,
+            "win_year_share": null,
+            "date_conc": null,
+            "checks": {
+              "c1_n_closed_ge_300": false,
+              "c2_net_mean_pos": false,
+              "c3_cluster_t_ge_2": false,
+              "c4_win_year_ge_60": false,
+              "c5_date_conc_le_50": false
+            },
+            "passed": false
+          },
+          "25": {
+            "n_closed": 0,
+            "net_mean": null,
+            "cluster_t": null,
+            "win_year_share": null,
+            "date_conc": null,
+            "checks": {
+              "c1_n_closed_ge_300": false,
+              "c2_net_mean_pos": false,
+              "c3_cluster_t_ge_2": false,
+              "c4_win_year_ge_60": false,
+              "c5_date_conc_le_50": false
+            },
+            "passed": false
+          }
+        },
+        "any_H_pass": false
+      },
+      "v6-3": {
+        "per_H": {
+          "10": {
+            "n_closed": 0,
+            "net_mean": null,
+            "cluster_t": null,
+            "win_year_share": null,
+            "date_conc": null,
+            "checks": {
+              "c1_n_closed_ge_300": false,
+              "c2_net_mean_pos": false,
+              "c3_cluster_t_ge_2": false,
+              "c4_win_year_ge_60": false,
+              "c5_date_conc_le_50": false
+            },
+            "passed": false
+          },
+          "20": {
+            "n_closed": 0,
+            "net_mean": null,
+            "cluster_t": null,
+            "win_year_share": null,
+            "date_conc": null,
+            "checks": {
+              "c1_n_closed_ge_300": false,
+              "c2_net_mean_pos": false,
+              "c3_cluster_t_ge_2": false,
+              "c4_win_year_ge_60": false,
+              "c5_date_conc_le_50": false
+            },
+            "passed": false
+          },
+          "25": {
+            "n_closed": 0,
+            "net_mean": null,
+            "cluster_t": null,
+            "win_year_share": null,
+            "date_conc": null,
+            "checks": {
+              "c1_n_closed_ge_300": false,
+              "c2_net_mean_pos": false,
+              "c3_cluster_t_ge_2": false,
+              "c4_win_year_ge_60": false,
+              "c5_date_conc_le_50": false
+            },
+            "passed": false
+          }
+        },
+        "any_H_pass": false
+      },
+      "v6-4": {
+        "per_H": {
+          "10": {
+            "n_closed": 182130,
+            "net_mean": 0.011473669216011857,
+            "cluster_t": 3.4409415841280904,
+            "win_year_share": 0.7428571428571429,
+            "date_conc": 0.36004048728067983,
+            "checks": {
+              "c1_n_closed_ge_300": true,
+              "c2_net_mean_pos": true,
+              "c3_cluster_t_ge_2": true,
+              "c4_win_year_ge_60": true,
+              "c5_date_conc_le_50": true
+            },
+            "passed": true
+          },
+          "20": {
+            "n_closed": 181866,
+            "net_mean": 0.012793779690580251,
+            "cluster_t": 2.712450522754541,
+            "win_year_share": 0.8,
+            "date_conc": 0.47554083985030127,
+            "checks": {
+              "c1_n_closed_ge_300": true,
+              "c2_net_mean_pos": true,
+              "c3_cluster_t_ge_2": true,
+              "c4_win_year_ge_60": true,
+              "c5_date_conc_le_50": true
+            },
+            "passed": true
+          },
+          "25": {
+            "n_closed": 181403,
+            "net_mean": 0.021969406676711045,
+            "cluster_t": 4.170584882371007,
+            "win_year_share": 0.8285714285714286,
+            "date_conc": 0.33774259759692926,
+            "checks": {
+              "c1_n_closed_ge_300": true,
+              "c2_net_mean_pos": true,
+              "c3_cluster_t_ge_2": true,
+              "c4_win_year_ge_60": true,
+              "c5_date_conc_le_50": true
+            },
+            "passed": true
+          }
+        },
+        "any_H_pass": true
+      },
+      "v6-5": {
+        "per_H": {
+          "10": {
+            "n_closed": 48098,
+            "net_mean": 0.02850344978430658,
+            "cluster_t": 4.9395079877139745,
+            "win_year_share": 0.8125,
+            "date_conc": 0.3883369726960553,
+            "checks": {
+              "c1_n_closed_ge_300": true,
+              "c2_net_mean_pos": true,
+              "c3_cluster_t_ge_2": true,
+              "c4_win_year_ge_60": true,
+              "c5_date_conc_le_50": true
+            },
+            "passed": true
+          },
+          "20": {
+            "n_closed": 47930,
+            "net_mean": 0.031126266588170488,
+            "cluster_t": 2.851330725125468,
+            "win_year_share": 0.8125,
+            "date_conc": 0.5515075636983529,
+            "checks": {
+              "c1_n_closed_ge_300": true,
+              "c2_net_mean_pos": true,
+              "c3_cluster_t_ge_2": true,
+              "c4_win_year_ge_60": true,
+              "c5_date_conc_le_50": false
+            },
+            "passed": false
+          },
+          "25": {
+            "n_closed": 47632,
+            "net_mean": 0.042773049617141096,
+            "cluster_t": 3.517883536877012,
+            "win_year_share": 0.84375,
+            "date_conc": 0.47757968184137867,
+            "checks": {
+              "c1_n_closed_ge_300": true,
+              "c2_net_mean_pos": true,
+              "c3_cluster_t_ge_2": true,
+              "c4_win_year_ge_60": true,
+              "c5_date_conc_le_50": true
+            },
+            "passed": true
+          }
+        },
+        "any_H_pass": true
+      }
+    }
+  },
+  "disclosure": [
+    "V1 事件日即低点日 -> bounce 恒 < 0 -> V1 版 v6-1/2/3 结构性 0 选中(README 披露 1)",
+    "事件池复用 issue #2 产物(逐日截断因果,抽样对拍见自检 b)",
+    "退市股事件后数据不足记 truncated(按没买成处理,结论偏乐观方向)",
+    "stk_limit 2007-01-04 起,缺文件日=无涨跌停约束",
+    "事件索引基于事件研究预处理序列(dropna close/dedup date/sort),逐事件日期断言 0 违例"
+  ],
+  "n_limit_missing_days": 0,
+  "n_limit_files_needed": 4778,
+  "n_limit_files_total": 4778,
+  "n_fallback_loads": 90471,
+  "duration_sec": 205.0,
+  "timestamp": "2026-09-07 16:46:52"
+}
