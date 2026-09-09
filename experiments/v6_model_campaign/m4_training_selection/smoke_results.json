@@ -1,0 +1,31 @@
+{
+  "label": "net_ret_60d",
+  "config_id": 24,
+  "grid": {
+    "num_leaves": 63,
+    "min_data_in_leaf": 50,
+    "learning_rate": 0.05,
+    "feature_fraction": 0.6
+  },
+  "elapsed_sec": 22.3,
+  "oof_bitwise_vs_m3": true,
+  "val_metric_exact_vs_m3": true,
+  "final_num_boost_round": 15,
+  "best_iters": [
+    4,
+    13,
+    2,
+    50,
+    4
+  ],
+  "row_base": {
+    "val_top5_net_dayavg": 0.016313368236451103,
+    "val_top5_net_cluster_t": 3.288678978251993,
+    "val_top5_hit_eventavg": 0.4359338061465721,
+    "train_oof_top5_net_dayavg": 0.01729863818579653,
+    "train_oof_top5_net_cluster_t": 3.6460315856370986,
+    "train_oof_top5_hit_eventavg": 0.45475133617175467
+  },
+  "n_train": 49806,
+  "n_val": 24247
+}
