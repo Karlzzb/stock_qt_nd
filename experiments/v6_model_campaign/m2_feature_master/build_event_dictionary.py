@@ -135,9 +135,9 @@ def _worker(task):
 
     geo_cols = geo.compute_geo_events(C, V, dif, dea, i2, i1, j, a, p_low)
 
-    blk = feats.iloc[j].reset_index(drop=True)
-    for c in geo.GEO_COLUMNS:
-        blk[c] = geo_cols[c]
+    blk = pd.concat([feats.iloc[j].reset_index(drop=True),
+                     pd.DataFrame({c: geo_cols[c] for c in geo.GEO_COLUMNS})],
+                    axis=1)
     blk.insert(0, "event_id", eid)
     blk = blk.astype({c: np.float32 for c in blk.columns if c != "event_id"})
     return dict(panel=panel, rows=blk, error=None, n_events=len(eid))
@@ -179,6 +179,20 @@ def main():
     files = sorted(fe.DATA_DIR.glob("*.parquet"))
     if args.sample:
         files = files[: args.sample]
+        keep_codes = {p.stem for p in files}
+        ev = ev[ev["ts_code"].isin(keep_codes)].reset_index(drop=True)
+        per_stock = defaultdict(list)
+        for r in ev.itertuples():
+            per_stock[r.ts_code].append(
+                (int(r.event_id), int(r.event_row), int(r.cross_prev_row),
+                 int(r.cross_prev2_row), int(r.anchor_row), int(r.min_prev_row),
+                 {"cross_dif": r.cross_dif, "cross_dea": r.cross_dea,
+                  "event_close": r.event_close, "event_vol": r.event_vol,
+                  "event_amount": r.event_amount, "cross_prev_dif": r.cross_prev_dif,
+                  "cross_prev_dea": r.cross_prev_dea, "cross_prev2_dif": r.cross_prev2_dif,
+                  "cross_prev2_dea": r.cross_prev2_dea, "anchor_close": r.anchor_close,
+                  "min_prev_close": r.min_prev_close}))
+        log(f"冒烟模式: 事件子集 {len(ev)} 行")
     tasks = [(str(p), p.stem, sid, per_stock.get(p.stem, []), idx_dates, idx_r)
              for sid, p in enumerate(files)]
     log(f"加载并计算 {len(tasks)} 只股票 (workers={args.workers}) ...")
@@ -212,6 +226,7 @@ def main():
     mkt = market.reindex(days)
     mkt.index = df.index
     df = pd.concat([df, mkt.reset_index(drop=True).astype(np.float32)], axis=1)
+    df = df.copy()  # 去碎片化(merge/concat 后再插列触发 PerformanceWarning)
     df["RET20_CSR"] = fe.attach_ret20_csr(
         panel, days, df["RET20"].to_numpy(np.float64)).astype(np.float32)
 
@@ -229,9 +244,10 @@ def main():
     fe.assert_no_inf(df[feat_cols])
     assert len(df) == len(ev), "来源 1 行数 != 事件数"
 
-    # ---- 种子布尔全表硬断言(README §四)
+    # ---- 种子布尔全表硬断言(README §四;冒烟子集跳过 frozen 计数对账)
     seed_counts = {c: int(df[c].to_numpy(np.float64).sum()) for c in geo.SEED_FROZEN_COUNTS}
-    assert seed_counts == geo.SEED_FROZEN_COUNTS, f"种子计数不符: {seed_counts}"
+    if not args.sample:
+        assert seed_counts == geo.SEED_FROZEN_COUNTS, f"种子计数不符: {seed_counts}"
     s = {c: df[c].astype(bool).to_numpy() for c in geo.SEED_FROZEN_COUNTS}
     assert not (s["SEED_V6_3"] & ~s["SEED_V6_2"]).any()
     assert not (s["SEED_V6_2"] & ~s["SEED_V6_1"]).any()
