@@ -1,0 +1,179 @@
+{
+  "experiment": "M1 因果性自检(#42 §7 十一断言)",
+  "assertion_1": {
+    "ok": true,
+    "detail": {
+      "i2<i1": true,
+      "i1<j": true,
+      "p_low>i2": true,
+      "p_low<=i1": true,
+      "a>i1": true,
+      "a<=j": true,
+      "anchor_bars==j-a": true,
+      "anchor_bars>=0": true
+    },
+    "note": "全部输入行号 <= j 由构造保证;构造性证明 = 验收B 截断重算(见 m1_scan_results.json)"
+  },
+  "assertion_2": {
+    "ok": true,
+    "n_sample": 2000,
+    "n_stocks": 1616,
+    "n_fail": 0,
+    "bad_examples": [],
+    "seed": 20260909
+  },
+  "assertion_3": {
+    "ok": true,
+    "n_sample": 300,
+    "max_abs_diff": 0.0,
+    "tol": 1e-08,
+    "seed": 20260909
+  },
+  "assertion_4": {
+    "n_events": 96577,
+    "row_match_all": true,
+    "win_len_all_ok": true,
+    "dd20_le_1e-12_all": true,
+    "dd20_max": 0.0,
+    "dd20_min": -0.9218865143699336,
+    "ok": true
+  },
+  "assertion_5": {
+    "ok": true,
+    "detail": {
+      "a<=j": true,
+      "anchor_close>0": true,
+      "n_a_eq_j": 179,
+      "a==j_imply_bounce0": true,
+      "max_abs_bounce_when_a_eq_j": 0.0
+    }
+  },
+  "assertion_6_full": {
+    "ok": true,
+    "detail": {
+      "dif_lift_min": 0.0010007679973869088,
+      "dif_lift>=0.001_all": true,
+      "min_prev>min_cur_all": true,
+      "min_prev/max(min_prev-anchor)": 151.39
+    },
+    "note": "抽样从原始日线逐字段重算核对见断言2(同批 2,000 事件)"
+  },
+  "assertion_7": {
+    "ok": true,
+    "n_stocks": 50,
+    "n_events": 868,
+    "lambda": 2.718,
+    "max_rel_scale_err": 7.819936010556714e-12,
+    "max_ratio_diff": 1.7763568394002505e-15,
+    "tol": 1e-09,
+    "added_events_by_threshold_band": {
+      "002950.SZ": 1,
+      "002884.SZ": 1,
+      "600030.SH": 1,
+      "600217.SH": 1,
+      "600080.SH": 1
+    },
+    "deviation": "事件集合缩放不变性与冻结口径的绝对阈值 dif_lift>=0.001 矛盾;按 scan_v1.py 因果可行为准,改为基线事件零缺失 + 新增事件阈值带归因 + 交集不变性(README 修订记录 ①,report.md 披露)",
+    "bad": [],
+    "seed": 20260909
+  },
+  "assertion_8": {
+    "columns_exact_registered": true,
+    "no_snapshot_env_cols": true,
+    "ok": true,
+    "note": "E2/E3/E4 按 #42 族E 立规由 v5 日频快照在 M2 覆盖,本表不含亦不得含;M2 构建器不得直接读事件日后行(移交声明)"
+  },
+  "assertion_9": {
+    "no_label_prefix_cols": true,
+    "no_label_artifacts": true,
+    "join_key": "(ts_code, event_date)",
+    "ok": true,
+    "note": "M1 不产出标签表;标签由 M3 独立构建器产出,join 键仅限 (ts_code, event_date)(移交声明)"
+  },
+  "assertion_10": {
+    "frozen_counts_consistent": true,
+    "counts_recalc": {
+      "S1": 5580,
+      "S2": 2419,
+      "S3": 1159,
+      "S4": 11888,
+      "S5": 3271
+    },
+    "counts_frozen": {
+      "S1": 5580,
+      "S2": 2419,
+      "S3": 1159,
+      "S4": 11888,
+      "S5": 3271
+    },
+    "counts_match": true,
+    "nesting_violations": {
+      "S3_in_S2": 0,
+      "S2_in_S1": 0,
+      "S1_in_S4": 0,
+      "S5_in_S4": 0
+    },
+    "nesting_ok": true,
+    "join_with_frozen_trades_ok": true,
+    "dd20_bitwise": true,
+    "dd20_max_abs_diff": 0.0,
+    "bounce_bitwise": true,
+    "bounce_max_abs_diff": 0.0,
+    "seed_bool_bitwise": {
+      "S1": true,
+      "S2": true,
+      "S3": true,
+      "S4": true,
+      "S5": true
+    },
+    "ok": true
+  },
+  "assertion_11": {
+    "ok": true,
+    "nan_count": {
+      "cross_prev2_row": 0,
+      "cross_prev2_date": 0,
+      "cross_prev2_dif": 0,
+      "cross_prev2_dea": 0,
+      "cross_prev_row": 0,
+      "cross_prev_dea": 0,
+      "event_row": 0,
+      "event_close": 0,
+      "event_vol": 0,
+      "event_amount": 0,
+      "cross_dea": 0,
+      "min_prev_close": 0,
+      "min_prev_row": 0,
+      "min_prev_date": 0,
+      "anchor_row": 0,
+      "anchor_bars": 0
+    },
+    "nan_ratio": {
+      "cross_prev2_row": 0.0,
+      "cross_prev2_date": 0.0,
+      "cross_prev2_dif": 0.0,
+      "cross_prev2_dea": 0.0,
+      "cross_prev_row": 0.0,
+      "cross_prev_dea": 0.0,
+      "event_row": 0.0,
+      "event_close": 0.0,
+      "event_vol": 0.0,
+      "event_amount": 0.0,
+      "cross_dea": 0.0,
+      "min_prev_close": 0.0,
+      "min_prev_row": 0.0,
+      "min_prev_date": 0.0,
+      "anchor_row": 0.0,
+      "anchor_bars": 0.0
+    },
+    "allowed_nan_cols": [
+      "event_amount"
+    ],
+    "unexpected_nan": {},
+    "note": "含守卫 NaN 分支的特征 B3/B4/B6/C4/E1 归 M2 特征构建器,其 NaN 占比披露与'不得用事件日后信息填充'断言在 M2 执行(移交声明)"
+  },
+  "duration_sec": 3.1,
+  "timestamp": "2026-09-09 18:58:42",
+  "assertions_all_pass": true,
+  "checks_all_pass_incl_scan_side": true
+}
