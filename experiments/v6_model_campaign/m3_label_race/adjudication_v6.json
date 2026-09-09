@@ -1,0 +1,10 @@
+{
+  "winner": "net_ret_60d",
+  "winner_val_top5_net_dayavg": 0.0163133682364511,
+  "winner_val_top5_net_cluster_t": 3.288678978251993,
+  "median_val_top5_net_dayavg": 0.0040843639287548,
+  "constraint_main_ge_median": true,
+  "constraint_cluster_t_ge_2": true,
+  "double_constraint_passed": true,
+  "status": "provisional_pending_independent_review"
+}

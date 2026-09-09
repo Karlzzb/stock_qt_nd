@@ -1,0 +1,309 @@
+{
+  "issue": 50,
+  "part_of": 47,
+  "n_candidates": 8,
+  "grid_size": 36,
+  "grid": [
+    {
+      "num_leaves": 15,
+      "min_data_in_leaf": 50,
+      "learning_rate": 0.05,
+      "feature_fraction": 0.6
+    },
+    {
+      "num_leaves": 15,
+      "min_data_in_leaf": 50,
+      "learning_rate": 0.05,
+      "feature_fraction": 0.8
+    },
+    {
+      "num_leaves": 15,
+      "min_data_in_leaf": 50,
+      "learning_rate": 0.1,
+      "feature_fraction": 0.6
+    },
+    {
+      "num_leaves": 15,
+      "min_data_in_leaf": 50,
+      "learning_rate": 0.1,
+      "feature_fraction": 0.8
+    },
+    {
+      "num_leaves": 15,
+      "min_data_in_leaf": 100,
+      "learning_rate": 0.05,
+      "feature_fraction": 0.6
+    },
+    {
+      "num_leaves": 15,
+      "min_data_in_leaf": 100,
+      "learning_rate": 0.05,
+      "feature_fraction": 0.8
+    },
+    {
+      "num_leaves": 15,
+      "min_data_in_leaf": 100,
+      "learning_rate": 0.1,
+      "feature_fraction": 0.6
+    },
+    {
+      "num_leaves": 15,
+      "min_data_in_leaf": 100,
+      "learning_rate": 0.1,
+      "feature_fraction": 0.8
+    },
+    {
+      "num_leaves": 15,
+      "min_data_in_leaf": 200,
+      "learning_rate": 0.05,
+      "feature_fraction": 0.6
+    },
+    {
+      "num_leaves": 15,
+      "min_data_in_leaf": 200,
+      "learning_rate": 0.05,
+      "feature_fraction": 0.8
+    },
+    {
+      "num_leaves": 15,
+      "min_data_in_leaf": 200,
+      "learning_rate": 0.1,
+      "feature_fraction": 0.6
+    },
+    {
+      "num_leaves": 15,
+      "min_data_in_leaf": 200,
+      "learning_rate": 0.1,
+      "feature_fraction": 0.8
+    },
+    {
+      "num_leaves": 31,
+      "min_data_in_leaf": 50,
+      "learning_rate": 0.05,
+      "feature_fraction": 0.6
+    },
+    {
+      "num_leaves": 31,
+      "min_data_in_leaf": 50,
+      "learning_rate": 0.05,
+      "feature_fraction": 0.8
+    },
+    {
+      "num_leaves": 31,
+      "min_data_in_leaf": 50,
+      "learning_rate": 0.1,
+      "feature_fraction": 0.6
+    },
+    {
+      "num_leaves": 31,
+      "min_data_in_leaf": 50,
+      "learning_rate": 0.1,
+      "feature_fraction": 0.8
+    },
+    {
+      "num_leaves": 31,
+      "min_data_in_leaf": 100,
+      "learning_rate": 0.05,
+      "feature_fraction": 0.6
+    },
+    {
+      "num_leaves": 31,
+      "min_data_in_leaf": 100,
+      "learning_rate": 0.05,
+      "feature_fraction": 0.8
+    },
+    {
+      "num_leaves": 31,
+      "min_data_in_leaf": 100,
+      "learning_rate": 0.1,
+      "feature_fraction": 0.6
+    },
+    {
+      "num_leaves": 31,
+      "min_data_in_leaf": 100,
+      "learning_rate": 0.1,
+      "feature_fraction": 0.8
+    },
+    {
+      "num_leaves": 31,
+      "min_data_in_leaf": 200,
+      "learning_rate": 0.05,
+      "feature_fraction": 0.6
+    },
+    {
+      "num_leaves": 31,
+      "min_data_in_leaf": 200,
+      "learning_rate": 0.05,
+      "feature_fraction": 0.8
+    },
+    {
+      "num_leaves": 31,
+      "min_data_in_leaf": 200,
+      "learning_rate": 0.1,
+      "feature_fraction": 0.6
+    },
+    {
+      "num_leaves": 31,
+      "min_data_in_leaf": 200,
+      "learning_rate": 0.1,
+      "feature_fraction": 0.8
+    },
+    {
+      "num_leaves": 63,
+      "min_data_in_leaf": 50,
+      "learning_rate": 0.05,
+      "feature_fraction": 0.6
+    },
+    {
+      "num_leaves": 63,
+      "min_data_in_leaf": 50,
+      "learning_rate": 0.05,
+      "feature_fraction": 0.8
+    },
+    {
+      "num_leaves": 63,
+      "min_data_in_leaf": 50,
+      "learning_rate": 0.1,
+      "feature_fraction": 0.6
+    },
+    {
+      "num_leaves": 63,
+      "min_data_in_leaf": 50,
+      "learning_rate": 0.1,
+      "feature_fraction": 0.8
+    },
+    {
+      "num_leaves": 63,
+      "min_data_in_leaf": 100,
+      "learning_rate": 0.05,
+      "feature_fraction": 0.6
+    },
+    {
+      "num_leaves": 63,
+      "min_data_in_leaf": 100,
+      "learning_rate": 0.05,
+      "feature_fraction": 0.8
+    },
+    {
+      "num_leaves": 63,
+      "min_data_in_leaf": 100,
+      "learning_rate": 0.1,
+      "feature_fraction": 0.6
+    },
+    {
+      "num_leaves": 63,
+      "min_data_in_leaf": 100,
+      "learning_rate": 0.1,
+      "feature_fraction": 0.8
+    },
+    {
+      "num_leaves": 63,
+      "min_data_in_leaf": 200,
+      "learning_rate": 0.05,
+      "feature_fraction": 0.6
+    },
+    {
+      "num_leaves": 63,
+      "min_data_in_leaf": 200,
+      "learning_rate": 0.05,
+      "feature_fraction": 0.8
+    },
+    {
+      "num_leaves": 63,
+      "min_data_in_leaf": 200,
+      "learning_rate": 0.1,
+      "feature_fraction": 0.6
+    },
+    {
+      "num_leaves": 63,
+      "min_data_in_leaf": 200,
+      "learning_rate": 0.1,
+      "feature_fraction": 0.8
+    }
+  ],
+  "candidates": [
+    {
+      "name": "net_pos_10d",
+      "head": "binary",
+      "H": 10,
+      "cn": "次日开盘入场净收益大于零二分类标签(10 个交易日视野)"
+    },
+    {
+      "name": "net_ret_10d",
+      "head": "regression",
+      "H": 10,
+      "cn": "次日开盘入场净收益幅度回归标签(10 个交易日视野)"
+    },
+    {
+      "name": "net_pos_20d",
+      "head": "binary",
+      "H": 20,
+      "cn": "次日开盘入场净收益大于零二分类标签(20 个交易日视野)"
+    },
+    {
+      "name": "net_ret_20d",
+      "head": "regression",
+      "H": 20,
+      "cn": "次日开盘入场净收益幅度回归标签(20 个交易日视野)"
+    },
+    {
+      "name": "net_pos_25d",
+      "head": "binary",
+      "H": 25,
+      "cn": "次日开盘入场净收益大于零二分类标签(25 个交易日视野)"
+    },
+    {
+      "name": "net_ret_25d",
+      "head": "regression",
+      "H": 25,
+      "cn": "次日开盘入场净收益幅度回归标签(25 个交易日视野)"
+    },
+    {
+      "name": "net_pos_60d",
+      "head": "binary",
+      "H": 60,
+      "cn": "次日开盘入场净收益大于零二分类标签(60 个交易日视野)"
+    },
+    {
+      "name": "net_ret_60d",
+      "head": "regression",
+      "H": 60,
+      "cn": "次日开盘入场净收益幅度回归标签(60 个交易日视野)"
+    }
+  ],
+  "n_features": 1997,
+  "seg_counts": {
+    "train": 50165,
+    "val": 24405,
+    "test": 17902,
+    "embargo": 3063,
+    "pre2001": 1042
+  },
+  "train_effective_events": {
+    "net_pos_10d": 49847,
+    "net_ret_10d": 49847,
+    "net_pos_20d": 49839,
+    "net_ret_20d": 49839,
+    "net_pos_25d": 49835,
+    "net_ret_25d": 49835,
+    "net_pos_60d": 49806,
+    "net_ret_60d": 49806
+  },
+  "adjudication": {
+    "winner": "net_ret_60d",
+    "winner_val_top5_net_dayavg": 0.0163133682364511,
+    "winner_val_top5_net_cluster_t": 3.288678978251993,
+    "median_val_top5_net_dayavg": 0.0040843639287548,
+    "constraint_main_ge_median": true,
+    "constraint_cluster_t_ge_2": true,
+    "double_constraint_passed": true,
+    "status": "provisional_pending_independent_review"
+  },
+  "assertions": {
+    "segment_embargo": "PASS (assert_segment_integrity)",
+    "leakage_exclusion": "PASS (model_feature_columns 1,997 列零命中)",
+    "winner_oof_reproducible": "PASS (8 候选当选配置 OOF 复现断言逐位一致; 模式 stored_vs_rerun)",
+    "test_untouched": "PASS (test 17902 行在场, 零指标零逐行统计)"
+  },
+  "elapsed_sec": 3248.4
+}

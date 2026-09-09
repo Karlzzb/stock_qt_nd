@@ -1,0 +1,93 @@
+{
+  "issue": 50,
+  "checks": {
+    "0_row_key_conservation": "PASS (96,577 行,双侧键唯一,event_id/ts_code/date/seg 四面一致)",
+    "1_causality_truncation": "PASS (抽样 20 股截头 200 行重算,交集 1448 事件×H 逐位一致 ≤1e-9;独立模拟器全序列重算 1508 事件×H,net_ret 最大绝对差 0.00e+00)",
+    "2_reconcile_trades_seed": "PASS (v1 × H{10,20,25} 逐笔对账: status 逐类零不一致,net_ret 最大绝对差 0.00e+00)",
+    "3_label_feature_isolation": "PASS (构建器主表只读元数据列 ['event_id', 'ts_code', 'date', 'event_row', 'seg'];标签表 18 列合预登记 schema;特征集 1997 列无 label_ 混入)",
+    "5_leakage_rescan": "PASS (1,997 特征列对 EXCLUDE_PATTERNS 独立重扫零命中)",
+    "4_segment_boundary": "PASS (assert_segment_integrity 四项全过;8×36 metrics 行数齐;val 行数逐候选与独立重算有效标签计数一致;train_oof ∈ [0.8,1]×有效数,首块无折外口径内)",
+    "6a_labels_determinism": "PASS (双跑 md5 逐位一致: 0180da04cc87ea894c85ab5ecf2ab0a9)",
+    "8_adjudication_integrity": "PASS (每候选选配置与总裁决独立重算逐位一致;双约束核验 主指标≥中位数=True, cluster_t≥2=True;死锁条款未触发,训练段有效标签最小值 49806)",
+    "6b_winner_oof_rerun": "PASS (8 候选当选配置 OOF 独立复跑与落盘折外分数逐位一致)",
+    "7_drop_counts_and_disclosure": "PASS (train/val 逐类计数与占比落盘并与标签表独立重算一致;2007-01-04 前入场成交占比逐 H 重算披露:H10=11.85%; H20=11.87%; H25=11.91%; H60=12.19%)",
+    "9_test_untouched": "PASS (metrics/summary 零 test 列;test 17902 行在场)"
+  },
+  "reconcile_detail": {
+    "H10": {
+      "n_rows": 96577,
+      "n_closed": 95545,
+      "status_mismatch": 0,
+      "net_ret_max_abs_diff": 0.0,
+      "status_crosstab_diag": {
+        "closed": 95545,
+        "dropped_cash": 10,
+        "dropped_limitup": 549,
+        "truncated_exhausted": 391,
+        "truncated_no_next": 82
+      }
+    },
+    "H20": {
+      "n_rows": 96577,
+      "n_closed": 95386,
+      "status_mismatch": 0,
+      "net_ret_max_abs_diff": 0.0,
+      "status_crosstab_diag": {
+        "closed": 95386,
+        "dropped_cash": 10,
+        "dropped_limitup": 549,
+        "truncated_exhausted": 550,
+        "truncated_no_next": 82
+      }
+    },
+    "H25": {
+      "n_rows": 96577,
+      "n_closed": 94975,
+      "status_mismatch": 0,
+      "net_ret_max_abs_diff": 0.0,
+      "status_crosstab_diag": {
+        "closed": 94975,
+        "dropped_cash": 10,
+        "dropped_limitup": 549,
+        "truncated_exhausted": 961,
+        "truncated_no_next": 82
+      }
+    }
+  },
+  "oof_rerun_detail": {
+    "net_pos_10d": {
+      "config_id": 31,
+      "bitwise_identical": true
+    },
+    "net_ret_10d": {
+      "config_id": 9,
+      "bitwise_identical": true
+    },
+    "net_pos_20d": {
+      "config_id": 26,
+      "bitwise_identical": true
+    },
+    "net_ret_20d": {
+      "config_id": 11,
+      "bitwise_identical": true
+    },
+    "net_pos_25d": {
+      "config_id": 31,
+      "bitwise_identical": true
+    },
+    "net_ret_25d": {
+      "config_id": 5,
+      "bitwise_identical": true
+    },
+    "net_pos_60d": {
+      "config_id": 5,
+      "bitwise_identical": true
+    },
+    "net_ret_60d": {
+      "config_id": 24,
+      "bitwise_identical": true
+    }
+  },
+  "all_pass": true,
+  "elapsed_sec": 176.3
+}
