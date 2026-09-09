@@ -1,0 +1,83 @@
+{
+  "issue": 51,
+  "part_of": 47,
+  "label": "net_ret_60d",
+  "label_cn": "次日开盘入场净收益幅度回归标签(60 个交易日视野)",
+  "config_id": 24,
+  "grid": {
+    "num_leaves": 63,
+    "min_data_in_leaf": 50,
+    "learning_rate": 0.05,
+    "feature_fraction": 0.6
+  },
+  "objective": "regression",
+  "calibration": "无(回归头,预测原值排序)",
+  "n_features_total": 1997,
+  "layers": {
+    "layer1": {
+      "in": 1997,
+      "out": 221,
+      "removed_zero_importance": 1776
+    },
+    "layer2": {
+      "in": 221,
+      "out": 194,
+      "removed_drift": 27,
+      "year_list": [
+        2020,
+        2021,
+        2022,
+        2023
+      ]
+    },
+    "layer3": {
+      "in": 194,
+      "out": 144,
+      "cluster_absorbed": 50,
+      "threshold": 0.9
+    },
+    "layer4": {
+      "ladder": [
+        5,
+        10,
+        15,
+        20,
+        25,
+        30,
+        40,
+        50,
+        75,
+        100,
+        144
+      ],
+      "k_star": 10,
+      "rule": "x=log2(K), y=验证段头部五名净笔均(日加权)(M3 主指标,回归头预测原值排序), 首末连线垂距最远, 平局取小 K, 末点最远取末点"
+    }
+  },
+  "final": {
+    "n_features": 10,
+    "final_num_boost_round": 28,
+    "val_top5_net_dayavg": 0.017732336714284373,
+    "val_top5_net_cluster_t": 3.4327606903785797,
+    "base_all_features_val_top5_net_dayavg": 0.016313368236451103,
+    "base_all_features_val_top5_net_cluster_t": 3.288678978251993
+  },
+  "seg_counts": {
+    "train": 50165,
+    "val": 24405,
+    "test": 17902,
+    "embargo": 3063,
+    "pre2001": 1042
+  },
+  "scores_md5": "f426a0efaaffcc8cfd24e941b4018274",
+  "assertions": {
+    "segment_embargo": "PASS (assert_segment_integrity)",
+    "leakage_exclusion": "PASS (model_feature_columns 1,997 列零命中)",
+    "base_oof_anchor_m3": "PASS (基模 OOF 与 M3 落盘 config_24 列逐位一致)",
+    "base_val_metric_anchor_m3": "PASS (基模 val 主指标/cluster_t 与 M3 metrics 精确相等)",
+    "scores_repro_fresh_process": "PASS (--repro-check 全新进程全链重导, 层表/拐点/终选/模型字节/分数逐位一致)",
+    "scores_double_run_md5": "PASS (双跑 md5 一致: f426a0efaaffcc8cfd24e941b4018274)",
+    "test_zero_metric": "PASS (test 17902 行仅出分数, 分数表无标签列, 零指标零逐行统计)"
+  },
+  "elapsed_sec": 86.5
+}

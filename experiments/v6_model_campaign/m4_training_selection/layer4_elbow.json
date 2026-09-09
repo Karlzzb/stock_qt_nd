@@ -1,0 +1,154 @@
+{
+  "k_star": 10,
+  "distances": [
+    0.0,
+    0.013283488912133063,
+    0.004351136058575529,
+    0.009305805169675701,
+    0.001449657794955327,
+    0.0037344177507703806,
+    0.0009086481238248365,
+    0.00023615435514445177,
+    0.0044164976640626834,
+    0.001809458217112869,
+    0.0
+  ],
+  "ladder": [
+    5,
+    10,
+    15,
+    20,
+    25,
+    30,
+    40,
+    50,
+    75,
+    100,
+    144
+  ],
+  "rule": "x=log2(K), y=验证段头部五名净笔均(日加权)(M3 主指标,回归头预测原值排序), 首末连线垂距最远, 平局取小 K, 末点最远取末点",
+  "metric": "验证段头部五名净笔均(日加权)(M3 主指标,回归头预测原值排序)",
+  "curve": [
+    {
+      "k": 5,
+      "final_num_boost_round": 20,
+      "best_iters": "17,6,2,72,3",
+      "val_top5_net_dayavg": 0.0014126421792302942,
+      "val_top5_net_cluster_t": 0.3431984004449318,
+      "val_top5_hit_eventavg": 0.4307328605200946,
+      "train_oof_top5_net_dayavg": 0.01457570394541814,
+      "train_oof_top5_net_cluster_t": 2.995274693103975,
+      "train_oof_top5_hit_eventavg": 0.45384545701603407
+    },
+    {
+      "k": 10,
+      "final_num_boost_round": 28,
+      "best_iters": "24,4,12,92,6",
+      "val_top5_net_dayavg": 0.017732336714284373,
+      "val_top5_net_cluster_t": 3.4327606903785797,
+      "val_top5_hit_eventavg": 0.4453900709219858,
+      "train_oof_top5_net_dayavg": 0.02080474389444167,
+      "train_oof_top5_net_cluster_t": 4.547828622312251,
+      "train_oof_top5_hit_eventavg": 0.46217954524866384
+    },
+    {
+      "k": 15,
+      "final_num_boost_round": 34,
+      "best_iters": "88,9,14,53,8",
+      "val_top5_net_dayavg": 0.0105759733106239,
+      "val_top5_net_cluster_t": 2.1000840855096894,
+      "val_top5_hit_eventavg": 0.42458628841607565,
+      "train_oof_top5_net_dayavg": 0.020227964080174746,
+      "train_oof_top5_net_cluster_t": 4.429683325791538,
+      "train_oof_top5_hit_eventavg": 0.45683485822991216
+    },
+    {
+      "k": 20,
+      "final_num_boost_round": 31,
+      "best_iters": "51,12,13,70,10",
+      "val_top5_net_dayavg": 0.01679077903669518,
+      "val_top5_net_cluster_t": 3.209220674287739,
+      "val_top5_hit_eventavg": 0.4271867612293144,
+      "train_oof_top5_net_dayavg": 0.0231556118693981,
+      "train_oof_top5_net_cluster_t": 5.2022792626082035,
+      "train_oof_top5_hit_eventavg": 0.46335718815110066
+    },
+    {
+      "k": 25,
+      "final_num_boost_round": 48,
+      "best_iters": "50,1,129,57,4",
+      "val_top5_net_dayavg": 0.0070126866812724314,
+      "val_top5_net_cluster_t": 1.4622656229792275,
+      "val_top5_hit_eventavg": 0.4231678486997636,
+      "train_oof_top5_net_dayavg": 0.022732666474743413,
+      "train_oof_top5_net_cluster_t": 5.169695393052018,
+      "train_oof_top5_hit_eventavg": 0.46471600688468157
+    },
+    {
+      "k": 30,
+      "final_num_boost_round": 18,
+      "best_iters": "20,6,9,47,7",
+      "val_top5_net_dayavg": 0.012995396558631307,
+      "val_top5_net_cluster_t": 2.5932446037843535,
+      "val_top5_hit_eventavg": 0.4380614657210402,
+      "train_oof_top5_net_dayavg": 0.020622854522948084,
+      "train_oof_top5_net_cluster_t": 4.5440870120636765,
+      "train_oof_top5_hit_eventavg": 0.46172660567080354
+    },
+    {
+      "k": 40,
+      "final_num_boost_round": 11,
+      "best_iters": "3,11,5,32,5",
+      "val_top5_net_dayavg": 0.011429727686025112,
+      "val_top5_net_cluster_t": 2.5003935987622237,
+      "val_top5_hit_eventavg": 0.4356973995271868,
+      "train_oof_top5_net_dayavg": 0.02043795255908433,
+      "train_oof_top5_net_cluster_t": 4.40458015148923,
+      "train_oof_top5_hit_eventavg": 0.4615454298396594
+    },
+    {
+      "k": 50,
+      "final_num_boost_round": 16,
+      "best_iters": "11,7,7,52,4",
+      "val_top5_net_dayavg": 0.011262340112526595,
+      "val_top5_net_cluster_t": 2.256701287997535,
+      "val_top5_hit_eventavg": 0.43829787234042555,
+      "train_oof_top5_net_dayavg": 0.02040421002578727,
+      "train_oof_top5_net_cluster_t": 4.417576815457874,
+      "train_oof_top5_hit_eventavg": 0.4584654407102093
+    },
+    {
+      "k": 75,
+      "final_num_boost_round": 13,
+      "best_iters": "4,7,9,36,8",
+      "val_top5_net_dayavg": 0.017691044195947747,
+      "val_top5_net_cluster_t": 3.5506746590139406,
+      "val_top5_hit_eventavg": 0.440661938534279,
+      "train_oof_top5_net_dayavg": 0.020554781953181837,
+      "train_oof_top5_net_cluster_t": 4.452715589459801,
+      "train_oof_top5_hit_eventavg": 0.45973367152821815
+    },
+    {
+      "k": 100,
+      "final_num_boost_round": 15,
+      "best_iters": "1,10,7,52,7",
+      "val_top5_net_dayavg": 0.016344106511481254,
+      "val_top5_net_cluster_t": 3.4476231953636898,
+      "val_top5_hit_eventavg": 0.44633569739952716,
+      "train_oof_top5_net_dayavg": 0.02086561329362113,
+      "train_oof_top5_net_cluster_t": 4.488975729117199,
+      "train_oof_top5_hit_eventavg": 0.4580125011323489
+    },
+    {
+      "k": 144,
+      "final_num_boost_round": 15,
+      "best_iters": "2,7,9,45,13",
+      "val_top5_net_dayavg": 0.016131860830110575,
+      "val_top5_net_cluster_t": 3.3724755797671455,
+      "val_top5_hit_eventavg": 0.4465721040189125,
+      "train_oof_top5_net_dayavg": 0.020431051400461336,
+      "train_oof_top5_net_cluster_t": 4.438028871258781,
+      "train_oof_top5_hit_eventavg": 0.45973367152821815
+    }
+  ]
+}

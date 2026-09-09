@@ -1,0 +1,68 @@
+{
+  "issue": 51,
+  "part_of": 47,
+  "label": "net_ret_60d",
+  "label_cn": "次日开盘入场净收益幅度回归标签(60 个交易日视野)",
+  "config_id": 24,
+  "params": {
+    "num_leaves": 63,
+    "min_data_in_leaf": 50,
+    "learning_rate": 0.05,
+    "feature_fraction": 0.6
+  },
+  "objective": "regression",
+  "calibration": "无(回归头,预测原值排序)",
+  "n_features": 10,
+  "features": [
+    {
+      "feature": "market_avg_amplitude_rankpct",
+      "rank": 0,
+      "cn_name": "市场综合状态avg_amplitude｜当日横截面百分位"
+    },
+    {
+      "feature": "MKT_VOL20_PCT",
+      "rank": 2,
+      "cn_name": "市场状态｜pct_ts(Std(R_idx,20),250)"
+    },
+    {
+      "feature": "STYLE_SIZE_RS60",
+      "rank": 4,
+      "cn_name": "大小盘风格六十日相对强弱"
+    },
+    {
+      "feature": "MKT_TURNOVER_PCTL",
+      "rank": 5,
+      "cn_name": "全市场换手率七百五十日滚动分位（成交额加权）"
+    },
+    {
+      "feature": "LIMITUP_N_MKT_MA20",
+      "rank": 8,
+      "cn_name": "市场情绪｜LIMITUP_N_MKT 的 20 日均值"
+    },
+    {
+      "feature": "Q20_RETON_30",
+      "rank": 11,
+      "cn_name": "Quant(O/PC-1,30,0.2)"
+    },
+    {
+      "feature": "DELTA_OPEN_60",
+      "rank": 13,
+      "cn_name": "Delta(Õ,60)/C̃"
+    },
+    {
+      "feature": "ILLIQ20",
+      "rank": 14,
+      "cn_name": "流动性｜log(Mean(abs(R)/(A*1000), 20) + 1e-30)"
+    },
+    {
+      "feature": "DIST_52W_HIGH",
+      "rank": 16,
+      "cn_name": "位置｜C~/Max(H~,250)-1"
+    },
+    {
+      "feature": "MKT_MEDIAN_RET20",
+      "rank": 20,
+      "cn_name": "市场宽度｜universe 内 RET20 中位数 (自算)"
+    }
+  ]
+}

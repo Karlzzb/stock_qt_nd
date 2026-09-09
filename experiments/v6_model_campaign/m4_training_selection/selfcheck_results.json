@@ -1,0 +1,18 @@
+{
+  "issue": 51,
+  "checks": {
+    "1_winner_resolution": "PASS (winner=net_ret_60d, 双约束过, config_id=24 与 GRID[24] 逐项相等,回归头, metrics↔adjudication 1 ulp 内互证)",
+    "2_segment_and_leakage": "PASS (assert_segment_integrity 四项全过;1,997 特征列独立重扫零命中)",
+    "3_base_oof_vs_m3": "PASS (基模全特征五折折外独立复跑与 M3 config_24 列逐位一致)",
+    "4_layer1_independent": "PASS (自写 SHAP 重算层1 逐位一致: 1997 -> 221,零重要性剔 1776,中文全称零缺失)",
+    "5_layer2_independent": "PASS (自写分年度符号全等: 221 -> 194,漂移剔 27,年份列恰 2020~2023)",
+    "6_layer3_independent": "PASS (自写相关+贪婪聚类全等: 194 -> 144,簇吸收 50,阈值 0.9)",
+    "7_layer4_elbow_independent": "PASS (自写拐点 k_star=10 与垂距逐位一致;曲线 11 行 K 全出数;终选 10 特征 == 代表前 K*,中文全称核验过)",
+    "8_final_scores_independent": "PASS (train 行 = 终选特征五折折外独立复跑逐位一致;val/test/embargo/pre2001 行 = model.txt 预测原值逐位一致)",
+    "0_row_key_conservation": "PASS (96,577 行 × 恰 5 列,event_id 唯一,与主表键/段逐行一致)",
+    "9_determinism_md5": "PASS (双跑 md5 台账与现盘重哈希一致: f426a0efaaffcc8cfd24e941b4018274)",
+    "10_test_untouched": "PASS (分数表无标签列;曲线/层表零 test 列;test 17902 行在场仅出分数)"
+  },
+  "all_pass": true,
+  "elapsed_sec": 22.9
+}

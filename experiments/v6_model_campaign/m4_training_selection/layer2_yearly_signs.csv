@@ -1,0 +1,222 @@
+feature,cn_name,sign_2020,sign_2021,sign_2022,sign_2023,consistent
+market_avg_amplitude_rankpct,市场综合状态avg_amplitude｜当日横截面百分位,1,1,1,1,True
+cs_n,当日横截面样本数,-1,-1,1,-1,False
+MKT_VOL20_PCT,"市场状态｜pct_ts(Std(R_idx,20),250)",-1,-1,-1,-1,True
+day_of_year,年内日序,1,-1,1,-1,False
+STYLE_SIZE_RS60,大小盘风格六十日相对强弱,-1,-1,-1,-1,True
+MKT_TURNOVER_PCTL,全市场换手率七百五十日滚动分位（成交额加权）,1,1,1,1,True
+week_of_year,年内周序,1,-1,1,-1,False
+MKT_AMT_PCT,市场情绪｜全市场 amount 加总 20 日均值的 250 日时序分位,1,-1,-1,-1,False
+LIMITUP_N_MKT_MA20,市场情绪｜LIMITUP_N_MKT 的 20 日均值,-1,-1,-1,-1,True
+STYLE_GV_RS60,成长价值风格六十日相对强弱,-1,-1,-1,1,False
+MKT_TURNOVER_PCTL_EQW,全市场换手率七百五十日滚动分位（等权对照）,1,1,1,1,True
+Q20_RETON_30,"Quant(O/PC-1,30,0.2)",-1,-1,-1,-1,True
+MKT_DD120,"市场状态｜C_idx/Max(H_idx,120)-1",-1,-1,-1,1,False
+DELTA_OPEN_60,"Delta(Õ,60)/C̃",-1,-1,-1,-1,True
+ILLIQ20,"流动性｜log(Mean(abs(R)/(A*1000), 20) + 1e-30)",1,1,1,1,True
+quarter,季度,1,-1,-1,-1,False
+DIST_52W_HIGH,"位置｜C~/Max(H~,250)-1",-1,-1,-1,-1,True
+REF_OPEN_60,"Ref(Õ,60)/C̃",1,1,1,1,True
+MKT_MA60,"市场状态｜C_idx/Mean(C_idx,60)-1",1,1,-1,1,False
+DELTA_HIGH_60,"Delta(H̃,60)/C̃",-1,-1,-1,-1,True
+MKT_MEDIAN_RET20,市场宽度｜universe 内 RET20 中位数 (自算),-1,-1,-1,-1,True
+rsi_oversold_24_rankpct,相对强弱指标oversold_24｜当日横截面百分位,-1,1,1,1,False
+bb_lower,布林带lower,-1,-1,-1,-1,True
+MAX_OPEN_60,"Max(Õ,60)/C̃",1,1,1,1,True
+DV_TTM,股息率滚动十二个月值,1,1,1,1,True
+MKT_DOWNLIMIT_Z,市场跌停家数滚动标准化恐慌度,1,-1,-1,-1,False
+LOG_PRICE,"价格水平｜ln(C) (原始价, 除权失真标注: 仅作彩票/退市代理)",-1,-1,-1,-1,True
+anchor_close,"锚点收盘价(区间(i1,j]最低收盘价)",-1,-1,-1,-1,True
+COV_R_RIDX_20,"Cov(pct_chg/100,R_idx(000001.SH),20)",1,1,1,1,True
+MKT_NH_NL_DIFF,市场二百五十日新高新低家数差占比,1,1,1,1,True
+MKT_LIMITUP_PREM_MA5,昨日涨停股当日平均溢价五日均值,1,1,1,1,True
+LIMITUP_N_MKT,"市场情绪｜全市场涨停家数 (pct_chg>=limit-0.1, 自算)",-1,-1,-1,1,False
+COV_R_RIDX_10,"Cov(pct_chg/100,R_idx(000001.SH),10)",1,1,1,1,True
+REGIME_CODE,"市场状态｜全样本等权日收益累积指数 120 日滚动收益 -> unknown/sideways/up/down = -1/0/1/2 (divergence_lab build_market_regime 口径, universe 剔除 2 只指数文件)",-1,1,-1,-1,False
+event_amount,事件日成交额,-1,-1,-1,-1,True
+Q80_CF_20,"Quant(CF,20,0.8)/C̃",1,1,1,1,True
+atr,平均真实波幅,-1,-1,-1,-1,True
+RET120_20,"动量｜shift(CF,20)/shift(CF,240)-1 (剔除近 1 月的中期动量)",-1,-1,-1,1,False
+CAL_HOLIDAY,"日历｜春节/国庆前 10 个工作日、后 5 个工作日 dummy (静态节假日表+工作日近似, 截断不变)",1,1,1,1,True
+rsi_oversold_6_rankpct,相对强弱指标oversold_6｜当日横截面百分位,1,1,1,1,True
+macd_golden_cross_rankpct,指数平滑异同移动平均线_golden_cross｜当日横截面百分位,-1,-1,-1,-1,True
+REF_HIGH_60,"Ref(H̃,60)/C̃",1,1,1,1,True
+BREADTH_ADV5,市场宽度｜universe 内 RET5>0 占比 (自算),1,1,-1,1,False
+high_mean_20,20日高点均值,-1,-1,-1,-1,True
+close_lag_15,收盘价｜滞后15日,-1,-1,-1,-1,True
+AMT20,"流动性｜log(Mean(A,20))",-1,-1,-1,-1,True
+REF_LOW_60,"Ref(L̃,60)/C̃",1,1,1,1,True
+amihud_illiq_intraday_z,Amihud非流动性(日内)_illiq_intraday｜当日横截面稳健标准化,1,1,1,1,True
+AMIHUD_TURN20,换手口径 Amihud 非流动性二十日均值,-1,-1,-1,-1,True
+macd_golden_cross_z,指数平滑异同移动平均线_golden_cross｜当日横截面稳健标准化,1,-1,-1,1,False
+rsi_oversold_14_rankpct,相对强弱指标oversold_14｜当日横截面百分位,1,1,1,1,True
+ma_60_rankpct,移动均线60｜当日横截面百分位,1,-1,-1,-1,False
+stoch_oversold_rankpct,随机指标状态oversold｜当日横截面百分位,1,1,1,1,True
+DEA_LIFT_CLOSE_NORM,金叉DEA抬升幅度收盘价归一,1,1,1,1,True
+COV_R_RIDX_60,"Cov(pct_chg/100,R_idx(000001.SH),60)",1,-1,1,-1,False
+MKT_SZ_AMPLITUDE,市场状态｜深证成指 (H-L)/L,1,1,1,1,True
+ma_arrangement_rankpct,均线排列｜当日横截面百分位,1,1,1,1,True
+rsi_overbought_24_rankpct,相对强弱指标overbought_24｜当日横截面百分位,1,1,1,1,True
+macd_signal_rankpct,指数平滑异同移动平均线信号线｜当日横截面百分位,-1,-1,-1,-1,True
+STD_RETID_60,"Std(C/O-1,60)",-1,-1,-1,-1,True
+VOL_CONTRACTION60,"波动率｜ATRp/shift(ATRp,60)",1,1,1,1,True
+DIF_PREV_CLOSE_NORM,前金叉DIF收盘价归一水平,-1,-1,-1,-1,True
+amihud_illiq_intraday_rankpct,Amihud非流动性(日内)_illiq_intraday｜当日横截面百分位,1,1,1,1,True
+high_mean_20_z,20日高点均值｜当日横截面稳健标准化,1,1,1,1,True
+LN_FREE_MV,自由流通市值对数,-1,-1,-1,-1,True
+close_lag_30,收盘价｜滞后30日,-1,-1,-1,-1,True
+MKT_NH_NL_RATIO,市场二百五十日新高占新高新低家数比,1,1,1,1,True
+ST_STATUS,风险警示状态（3=退市整理期 2=*ST 1=ST 0=正常）,1,1,1,1,True
+macd_zero_cross_rankpct,指数平滑异同移动平均线_zero_cross｜当日横截面百分位,1,1,1,1,True
+COV_CLOSE_LOGV_30,"Cov(C̃,log(V+1),30)",-1,-1,-1,-1,True
+macd_zero_cross_up_rankpct,指数平滑异同移动平均线_zero_cross_up｜当日横截面百分位,1,1,1,1,True
+illiq,非流动性,1,1,1,1,True
+price_volume_divergence_rankpct,价量背离标记｜当日横截面百分位,1,1,1,1,True
+MKT_RSI14,"市场状态｜RSI(C_idx,14)",1,1,1,1,True
+day_of_month,月内日序,-1,-1,-1,-1,True
+illiq_lag_1_z,非流动性｜滞后1日｜当日横截面稳健标准化,1,1,1,1,True
+VR5_60,"量能｜Mean(V,5)/Mean(V,60)",-1,-1,-1,-1,True
+volume_ma_20_z,成交量均线_20｜当日横截面稳健标准化,-1,-1,-1,-1,True
+RSQ_HLR_30,"Rsquare(H/L,30)",1,1,1,1,True
+volume_lag_15_rankpct,成交量｜滞后15日｜当日横截面百分位,-1,-1,-1,-1,True
+CORR_CLOSE_RIDX_20,"Corr(C̃,R_idx(000001.SH),20)",-1,-1,-1,-1,True
+atr_rankpct,平均真实波幅｜当日横截面百分位,-1,-1,-1,-1,True
+macd_above_signal_rankpct,指数平滑异同移动平均线_above_signal｜当日横截面百分位,1,-1,1,1,False
+CORR_CLOSE_RIDX_60,"Corr(C̃,R_idx(000001.SH),60)",1,1,1,1,True
+MKT_SEAL_RATIO,市场封板率,1,1,1,1,True
+close_lag_15_z,收盘价｜滞后15日｜当日横截面稳健标准化,-1,-1,-1,-1,True
+Q80_HLR_30,"Quant(H/L,30,0.8)",-1,-1,-1,-1,True
+MKT_RET20,"市场状态｜C_idx/shift(C_idx,20)-1",1,-1,-1,-1,False
+close_lag_15_rankpct,收盘价｜滞后15日｜当日横截面百分位,-1,-1,-1,-1,True
+obv_rankpct,能量潮｜当日横截面百分位,1,1,1,1,True
+SLOPE_LOW_5,"Slope(L̃,5)/C̃",1,1,1,1,True
+MED_HLR_5,"Med(H/L,5)",-1,-1,-1,-1,True
+EMA_LOW_60,"EMA(L̃,60)/C̃",1,1,1,1,True
+vol_gk_lag_10_z,GK波动率｜滞后10日｜当日横截面稳健标准化,1,1,1,1,True
+MKT_SH_AMPLITUDE,市场状态｜上证指数 (H-L)/L,-1,-1,-1,1,False
+bb_squeeze_rankpct,布林带squeeze｜当日横截面百分位,1,1,1,1,True
+volume_lag_15_z,成交量｜滞后15日｜当日横截面稳健标准化,-1,-1,-1,-1,True
+close_lag_30_z,收盘价｜滞后30日｜当日横截面稳健标准化,-1,-1,1,1,False
+bb_lower_rankpct,布林带lower｜当日横截面百分位,-1,-1,-1,-1,True
+MED_LOGV_3,"Med(log(V+1),3)",1,1,1,1,True
+DEA_EVENT_CLOSE_NORM,事件日DEA收盘价归一水平,-1,-1,-1,-1,True
+pv_corr_10_z,量价相关(10日)｜当日横截面稳健标准化,1,1,1,1,True
+high_mean_20_rankpct,20日高点均值｜当日横截面百分位,-1,-1,-1,-1,True
+close_lag_25,收盘价｜滞后25日,-1,-1,-1,-1,True
+DIST_52W_LOW,"位置｜C~/Min(L~,250)-1",-1,-1,-1,-1,True
+IDXMAX_CF_60,"IdxMax(CF,60)/60",-1,-1,-1,-1,True
+MKT_LIMITUP_PREM,昨日涨停股当日平均溢价,1,1,1,1,True
+MA200_ABOVE,趋势｜1[C~ > MA200],1,1,1,1,True
+boxcox_atr,ATR对数变换(log1p),-1,-1,-1,-1,True
+CORR_R_RIDX_5,"Corr(pct_chg/100,R_idx(000001.SH),5)",-1,-1,-1,-1,True
+Q80_HIGH_30,"Quant(H̃,30,0.8)/C̃",1,1,1,1,True
+MEAN_LOW_30,"Mean(L̃,30)/C̃",1,1,1,1,True
+SKEW_HLR_60,"Skew(H/L,60)",-1,-1,-1,-1,True
+ma_arrangement_z,均线排列｜当日横截面稳健标准化,-1,-1,-1,-1,True
+RSQ_HLR_3,"Rsquare(H/L,3)",-1,-1,-1,-1,True
+IND_MOM20_EQW,申万一级行业二十日等权动量,1,1,1,1,True
+Q20_R_30,"Quant(pct_chg/100,30,0.2)",-1,-1,-1,-1,True
+RSQ_CF_60,"Rsquare(CF,60)",1,1,1,1,True
+COV_R_RIDX_30,"Cov(pct_chg/100,R_idx(000001.SH),30)",1,1,1,1,True
+SLOPE_OPEN_60,"Slope(Õ,60)/C̃",1,1,1,1,True
+Q80_LOW_20,"Quant(L̃,20,0.8)/C̃",1,1,1,1,True
+Q80_RETON_30,"Quant(O/PC-1,30,0.8)",1,1,1,1,True
+IND_CAPIT_PCT120,行业内一百二十日新低附近个股占比,-1,-1,-1,-1,True
+KURT_A_60,"Kurt(A,60)",-1,-1,-1,-1,True
+bb_upper,布林带upper,-1,-1,-1,-1,True
+IDXMAX_LOW_10,"IdxMax(L̃,10)/10",-1,-1,-1,-1,True
+SLOPE_CF_60,"Slope(CF,60)/C̃",-1,-1,-1,-1,True
+MKT_SH_SZ_SYNC_STRENGTH,市场状态｜|pc_sh - pc_sz|,-1,-1,-1,-1,True
+CORR_R_RIDX_3,"Corr(pct_chg/100,R_idx(000001.SH),3)",-1,-1,-1,-1,True
+Q80_CF_60,"Quant(CF,60,0.8)/C̃",1,1,1,1,True
+volume_lag_10_z,成交量｜滞后10日｜当日横截面稳健标准化,-1,-1,-1,-1,True
+macd_hist_rankpct,指数平滑异同移动平均线柱｜当日横截面百分位,-1,-1,-1,-1,True
+Q20_OPEN_60,"Quant(Õ,60,0.2)/C̃",-1,-1,-1,-1,True
+BREADTH_ABOVE_MA20,"市场宽度｜universe 内 C~>Mean(C~,20) 占比 (自算)",-1,-1,-1,-1,True
+STD_CF_60,"Std(CF,60)/C̃",1,1,1,1,True
+macd_hist_amplitude,指数平滑异同移动平均线柱_amplitude,-1,-1,-1,-1,True
+DISPOSAL60,"制度｜C/(Sum(A,60)/Sum(V,60)) - 1 (现价对 60 日 VWAP 成本偏离)",-1,-1,-1,-1,True
+MAX_HIGH_30,"Max(H̃,30)/C̃",1,1,1,1,True
+SKEW_OPEN_20,"Skew(Õ,20)",-1,-1,-1,-1,True
+KURT60,"高阶矩｜Kurt(R,60)",-1,-1,-1,-1,True
+Q80_HIGH_60,"Quant(H̃,60,0.8)/C̃",1,1,1,1,True
+STD_LOW_10,"Std(L̃,10)/C̃",1,1,1,1,True
+MKT_SH_VOLUME_RATIO,市场状态｜上证指数量/20 日均量,-1,-1,-1,-1,True
+macd_robust_rankpct,指数平滑异同移动平均线_robust｜当日横截面百分位,-1,-1,-1,-1,True
+WMA_RETON_20,"DecayLinear(O/PC-1,20)",-1,-1,-1,-1,True
+rsi_overbought_14_rankpct,相对强弱指标overbought_14｜当日横截面百分位,1,1,1,1,True
+Q20_RETID_30,"Quant(C/O-1,30,0.2)",-1,-1,-1,-1,True
+Q20_HLR_60,"Quant(H/L,60,0.2)",-1,-1,-1,-1,True
+macd_death_cross_rankpct,指数平滑异同移动平均线_death_cross｜当日横截面百分位,1,1,1,1,True
+Q20_R_60,"Quant(pct_chg/100,60,0.2)",-1,-1,-1,-1,True
+SKEW_HIGH_60,"Skew(H̃,60)",1,1,1,1,True
+MIN_R_30,"Min(pct_chg/100,30)",-1,-1,-1,-1,True
+Q80_R_60,"Quant(pct_chg/100,60,0.8)",-1,-1,-1,-1,True
+Q20_R_20,"Quant(pct_chg/100,20,0.2)",-1,-1,-1,-1,True
+SLOPE_HIGH_5,"Slope(H̃,5)/C̃",-1,-1,-1,-1,True
+IDXMAX_RETON_60,"IdxMax(O/PC-1,60)/60",1,1,1,1,True
+volume_lag_20_z,成交量｜滞后20日｜当日横截面稳健标准化,-1,-1,-1,-1,True
+DELTA_A_60,"Delta(A,60)/(x+1)",1,-1,-1,-1,False
+volume_lag_30_rankpct,成交量｜滞后30日｜当日横截面百分位,-1,-1,-1,-1,True
+STD_CF_30,"Std(CF,30)/C̃",1,1,1,1,True
+MED_CF_30,"Med(CF,30)/C̃",1,1,1,1,True
+SLOPE_R_3,"Slope(pct_chg/100,3)",-1,-1,-1,-1,True
+IDXMIN_CF_5,"IdxMin(CF,5)/5",-1,-1,-1,-1,True
+MAX_LOGV_5,"Max(log(V+1),5)",-1,-1,-1,-1,True
+illiq_z,非流动性｜当日横截面稳健标准化,1,1,1,1,True
+SKEW_V_60,"Skew(V,60)",-1,-1,-1,-1,True
+volume_lag_20_rankpct,成交量｜滞后20日｜当日横截面百分位,-1,-1,-1,-1,True
+Q80_OPEN_30,"Quant(Õ,30,0.8)/C̃",1,-1,-1,1,False
+STD_OPEN_10,"Std(Õ,10)/C̃",1,1,1,1,True
+stoch_overbought_rankpct,随机指标状态overbought｜当日横截面百分位,-1,-1,-1,-1,True
+RESID_MOM60,剔除市场与行业后的六十日残差动量（跳过近五日）,-1,-1,-1,-1,True
+KURT_A_5,"Kurt(A,5)",-1,-1,-1,-1,True
+SKEW_RETON_60,"Skew(O/PC-1,60)",1,1,1,1,True
+macd_z,指数平滑异同移动平均线｜当日横截面稳健标准化,-1,-1,-1,-1,True
+SKEW_VWAP_10,"Skew(A/V,10)",-1,-1,-1,-1,True
+MIN_HLR_3,"Min(H/L,3)",1,1,1,1,True
+EMA_LOGV_5,"EMA(log(V+1),5)",-1,-1,-1,-1,True
+MEAN_HIGH_60,"Mean(H̃,60)/C̃",1,1,1,1,True
+bb_upper_z,布林带upper｜当日横截面稳健标准化,1,1,1,1,True
+macd_signal,指数平滑异同移动平均线信号线,1,1,1,1,True
+RESI_HIGH_60,"Resi(H̃,60)/C̃",-1,-1,-1,-1,True
+STD_OPEN_30,"Std(Õ,30)/C̃",1,1,-1,1,False
+MAX_V_20,"Max(V,20)/(x+1)",1,1,1,1,True
+MKT_SZ_PRICE_CHANGE,市场状态｜深证成指 (C-O)/O,1,1,1,1,True
+RET20_CSR,反转×截面｜cs_rank(RET20) 横截面百分位 (全 universe 当日),-1,-1,-1,-1,True
+MACD_DIF_NORM,技术指标｜DIF/(C~*ATRp),1,1,1,1,True
+RESI_HIGH_30,"Resi(H̃,30)/C̃",1,1,1,1,True
+DELTA_OPEN_20,"Delta(Õ,20)/C̃",-1,-1,-1,-1,True
+KURT_HLR_5,"Kurt(H/L,5)",-1,-1,-1,-1,True
+price_vs_ma60_rankpct,价格相对均线偏离60｜当日横截面百分位,-1,-1,-1,-1,True
+ma_60,移动均线60,-1,-1,-1,-1,True
+KURT_RETON_60,"Kurt(O/PC-1,60)",1,1,1,1,True
+MAX_RETID_5,"Max(C/O-1,5)",1,1,1,1,True
+SKEW_R_30,"Skew(pct_chg/100,30)",1,1,1,1,True
+STD_LOW_30,"Std(L̃,30)/C̃",1,-1,-1,1,False
+SLOPE_LOW_30,"Slope(L̃,30)/C̃",-1,1,1,-1,False
+RSQ_OPEN_30,"Rsquare(Õ,30)",1,1,1,1,True
+MAX_LOGV_10,"Max(log(V+1),10)",-1,-1,-1,-1,True
+MKT_SZ_VOLUME_RATIO,市场状态｜深证成指量/20 日均量,1,1,1,1,True
+MED_R_10,"Med(pct_chg/100,10)",1,1,1,1,True
+RSQ_HIGH_60,"Rsquare(H̃,60)",1,1,1,1,True
+MED_RETID_10,"Med(C/O-1,10)",1,1,1,1,True
+illiq_rankpct,非流动性｜当日横截面百分位,1,1,1,1,True
+RSQ_LOW_60,"Rsquare(L̃,60)",1,1,1,1,True
+rsi_overbought_6_rankpct,相对强弱指标overbought_6｜当日横截面百分位,-1,-1,-1,-1,True
+volume_lag_3_z,成交量｜滞后3日｜当日横截面稳健标准化,1,1,1,1,True
+KURT_R_30,"Kurt(pct_chg/100,30)",-1,-1,-1,-1,True
+KURT_R_60,"Kurt(pct_chg/100,60)",-1,-1,-1,-1,True
+KURT_RETON_20,"Kurt(O/PC-1,20)",-1,-1,-1,-1,True
+Q20_CF_20,"Quant(CF,20,0.2)/C̃",-1,-1,-1,-1,True
+REF_VWAP_30,"Ref(A/V,30)/C",-1,-1,-1,-1,True
+DELTA_OPEN_5,"Delta(Õ,5)/C̃",-1,-1,-1,-1,True
+volatility_10d,滚动波动率10d,1,1,1,1,True
+SLOPE_OPEN_3,"Slope(Õ,3)/C̃",1,1,1,1,True
+KURT_VWAP_20,"Kurt(A/V,20)",1,1,1,1,True
+volume_lag_3_rankpct,成交量｜滞后3日｜当日横截面百分位,-1,-1,-1,-1,True
+MED_HLR_60,"Med(H/L,60)",1,1,1,1,True
+price_vs_ma60,价格相对均线偏离60,1,-1,-1,-1,False
+smart_money_diff_lag_5,聪明钱差值｜滞后5日,-1,-1,-1,-1,True
+Q80_CF_30,"Quant(CF,30,0.8)/C̃",1,1,1,1,True
+Q20_R_10,"Quant(pct_chg/100,10,0.2)",-1,-1,-1,-1,True
