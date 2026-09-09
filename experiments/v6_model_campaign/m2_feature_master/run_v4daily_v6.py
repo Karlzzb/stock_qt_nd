@@ -283,7 +283,8 @@ def main():
         "events_missing_snapshot": n_missed,
         "elapsed_sec": time.time() - t0,
     }
-    rpath = CACHE_DIR / "s3_results.json" if out_path.name == "s3_v4daily_snapshot.parquet" \
+    rpath = CACHE_DIR / "s3_results.json" \
+        if out_path.resolve() == (CACHE_DIR / "s3_v4daily_snapshot.parquet").resolve() \
         else out_path.with_suffix(".results.json")
     rpath.write_text(json.dumps(results, ensure_ascii=False, indent=2, default=str))
     log(f"结果 -> {rpath}; 总耗时 {time.time() - t0:.0f}s")

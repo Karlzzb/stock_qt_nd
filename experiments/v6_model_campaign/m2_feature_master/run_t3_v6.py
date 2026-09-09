@@ -180,7 +180,8 @@ def main():
     results = {"prefix_stability": stab, "coverage": rep,
                "columns": t3.T3_COLUMNS, "cn": t3.T3_CN,
                "elapsed_sec": time.time() - t0}
-    rpath = CACHE_DIR / "s4_results.json" if out_path.name == "s4_t3_snapshot.parquet" \
+    rpath = CACHE_DIR / "s4_results.json" \
+        if out_path.resolve() == (CACHE_DIR / "s4_t3_snapshot.parquet").resolve() \
         else out_path.with_suffix(".results.json")
     rpath.write_text(json.dumps(results, ensure_ascii=False, indent=2,
                                 default=str))

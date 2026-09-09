@@ -153,7 +153,8 @@ def main():
         "events_missing": n_missing, "errors": errors,
         "elapsed_sec": time.time() - t0,
     }
-    rpath = CACHE_DIR / "s2_results.json" if out_path.name == "s2_factory_full.parquet" \
+    rpath = CACHE_DIR / "s2_results.json" \
+        if out_path.resolve() == (CACHE_DIR / "s2_factory_full.parquet").resolve() \
         else out_path.with_suffix(".results.json")
     rpath.write_text(json.dumps(results, ensure_ascii=False, indent=2, default=str))
     log(f"结果 -> {rpath}; 总耗时 {time.time() - t0:.0f}s")

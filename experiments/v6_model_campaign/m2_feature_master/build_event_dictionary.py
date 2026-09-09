@@ -296,8 +296,10 @@ def main():
         "errors": errs,
         "elapsed_sec": time.time() - t0,
     }
-    (CACHE_DIR / "s1_results.json").write_text(
-        json.dumps(results, ensure_ascii=False, indent=2, default=str))
+    rpath = CACHE_DIR / "s1_results.json" \
+        if out_path.resolve() == (CACHE_DIR / "s1_event_dictionary.parquet").resolve() \
+        else out_path.with_suffix(".results.json")
+    rpath.write_text(json.dumps(results, ensure_ascii=False, indent=2, default=str))
     log(f"完成 {time.time() - t0:.0f}s;守卫 NaN 披露: {nan_disclosure}")
 
 

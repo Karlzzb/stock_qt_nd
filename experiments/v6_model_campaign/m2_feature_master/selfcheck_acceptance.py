@@ -102,7 +102,7 @@ def load_events():
     ev = pd.read_parquet(EVENTS_PATH)
     ev = ev.sort_values(["ts_code", "event_date"], kind="mergesort").reset_index(drop=True)
     ev["event_id"] = np.arange(len(ev), dtype=np.int64)
-    return ev
+    return ev.rename(columns={"event_date": "date"})
 
 
 def scan_load(path):
@@ -362,10 +362,17 @@ def _geo40_independent(C, V, i2, i1, j, a, p_low):
     return o
 
 
-def check_geo_sample(master, ev):
+def check_geo_sample(master, ev, results):
     rng = np.random.default_rng(GEO_SEED)
     picks = ev.iloc[rng.choice(len(ev), size=GEO_SAMPLE, replace=False)]
     m_by_eid = master.set_index("event_id")
+    # 去重剔列(F1~F5 仿射距离列等)不在主表,须与去重台账逐字对上才豁免
+    present = [c for c in GEO40 if c in master.columns]
+    dropped_geo = sorted(c for c in GEO40 if c not in master.columns)
+    ledger_dropped = sorted(d["column"] for d in results["dedup"]["dropped"]
+                            if d["column"] in GEO40)
+    assert dropped_geo == ledger_dropped, \
+        f"几何族缺席列 {dropped_geo} 与去重台账 {ledger_dropped} 不符"
     n_checked, mismatches = 0, []
     cache = {}
     for r in picks.itertuples():
@@ -378,15 +385,17 @@ def check_geo_sample(master, ev):
         ref = _geo40_independent(C, V, int(r.cross_prev2_row), int(r.cross_prev_row),
                                  int(r.event_row), int(r.anchor_row),
                                  int(r.min_prev_row))
-        got = m_by_eid.loc[int(r.event_id), GEO40].to_numpy(np.float64)
-        want = np.array([ref[c] for c in GEO40], np.float64)
+        got = m_by_eid.loc[int(r.event_id), present].to_numpy(np.float64)
+        want = np.array([ref[c] for c in present], np.float64)
         n_checked += 1
         ok = np.isclose(got, want, rtol=1e-5, atol=1e-12, equal_nan=True)
         if not ok.all():
-            bad = [GEO40[k] for k in np.where(~ok)[0]]
+            bad = [present[k] for k in np.where(~ok)[0]]
             mismatches.append({"event_id": int(r.event_id), "cols": bad[:10]})
     assert not mismatches, f"几何族独立重算不一致: {mismatches[:3]}"
-    return {"n_checked": n_checked, "mismatches": 0}
+    return {"n_checked": n_checked, "mismatches": 0,
+            "geo_cols_compared": len(present),
+            "geo_cols_dedup_dropped": dropped_geo}
 
 
 def check_macd_truncation(ev):
@@ -424,6 +433,17 @@ def check_md5(results):
     registered = results.get("md5", {}).get(MASTER_PATH.name)
     if registered:
         assert registered == ledger[MASTER_PATH.name], "台账 md5 与实测不符"
+    # s3 Pass A 双份 parts 逐文件 md5(README 验收 8)
+    parts_a = {p.name: p for p in (CACHE_DIR / "v4daily_parts_fullhist").glob("*.parquet")}
+    parts_b = {p.name: p for p in (REBUILD_DIR / "v4daily_parts_fullhist").glob("*.parquet")}
+    assert parts_a.keys() == parts_b.keys(), \
+        f"双份 parts 文件集不一致: 仅单边 {list(parts_a.keys() ^ parts_b.keys())[:5]}"
+    parts_ledger = {}
+    for name in sorted(parts_a):
+        ha, hb = md5_of(parts_a[name]), md5_of(parts_b[name])
+        assert ha == hb, f"parts 双跑不一致: {name}"
+        parts_ledger[name] = ha
+    ledger["v4daily_parts_fullhist"] = parts_ledger
     return ledger
 
 
@@ -449,7 +469,7 @@ def main():
     log("4/7 种子布尔全表独立重算 ...")
     out["seed_booleans"] = check_seed_booleans(master, ev, args.workers)
     log("5/7 几何族 500 事件独立重算 ...")
-    out["geo_sample"] = check_geo_sample(master, ev)
+    out["geo_sample"] = check_geo_sample(master, ev, results)
     log("6/7 MACD 截尾无前视 100 事件 ...")
     out["macd_truncation"] = check_macd_truncation(ev)
     if not args.skip_md5:
