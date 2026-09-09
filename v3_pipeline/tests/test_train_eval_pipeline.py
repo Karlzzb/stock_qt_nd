@@ -35,42 +35,44 @@ def _seg_df(rows):
 
 
 # ---------------------------------------------------------------- 段完整性
+# #30 切分: train ~2019-12-31 / val 2020-01-01~2023-12-31 / test 2024-01 起;
+# 隔离带 2019-11-20~2020-02-20 与 2023-11-20~2024-02-20(双侧 30 交易日)。
 def test_segment_integrity_pass():
-    df = _seg_df([("A", "2018-11-16"), ("B", "2019-01-02"), ("C", "2022-11-01")])
+    df = _seg_df([("A", "2019-06-03"), ("B", "2021-03-01"), ("C", "2024-06-03")])
     tep.assert_segment_integrity(df, CALENDAR)
 
 
 def test_segment_integrity_rejects_seg_mismatch():
-    df = _seg_df([("A", "2018-11-16"), ("B", "2019-01-02"), ("C", "2022-11-01")])
+    df = _seg_df([("A", "2019-06-03"), ("B", "2021-03-01"), ("C", "2024-06-03")])
     df.loc[0, "seg"] = "val"  # 篡改段标签
     with pytest.raises(AssertionError, match="不一致"):
         tep.assert_segment_integrity(df, CALENDAR)
 
 
 def test_segment_integrity_rejects_embargo_row_in_train():
-    df = _seg_df([("A", "2018-11-16"), ("B", "2019-01-02"), ("C", "2022-11-01")])
-    df.loc[0, "date"] = pd.Timestamp("2018-11-20")  # 落入隔离带 1
+    df = _seg_df([("A", "2019-06-03"), ("B", "2021-03-01"), ("C", "2024-06-03")])
+    df.loc[0, "date"] = pd.Timestamp("2019-12-02")  # 落入隔离带 1
     df.loc[0, "seg"] = "train"  # 且段标签谎报为 train——同时触发不一致断言
     with pytest.raises(AssertionError):
         tep.assert_segment_integrity(df, CALENDAR)
 
 
 def test_segment_integrity_rejects_short_embargo():
-    # 截断日历使隔离带 1 只剩 10 个交易日
+    # 截断日历使隔离带 1 只剩 14 个交易日(2020-02-03~2020-02-20)
     cal = pd.bdate_range("1990-01-01", "2027-01-01")
-    cal = cal[(cal < "2018-11-19") | (cal > "2018-11-30")].to_numpy()
-    df = _seg_df([("A", "2018-11-16"), ("B", "2019-01-02"), ("C", "2022-11-01")])
+    cal = cal[(cal < "2019-11-20") | (cal > "2020-01-31")].to_numpy()
+    df = _seg_df([("A", "2019-06-03"), ("B", "2021-03-01"), ("C", "2024-06-03")])
     with pytest.raises(AssertionError, match="个交易日"):
         tep.assert_segment_integrity(df, cal)
 
 
 def test_segment_integrity_rejects_penetrated_gap():
     # train 末行与 val 首行间隔 < 30 个交易日（且 seg 自洽，绕过断言 1/2）:
-    # 用 val 区间内靠近 train 的日期无法做到自洽，改为构造"数据实测间隔"不足:
-    # train 行取 2018-11-16，val 行取 2019-01-02，日历来去中间所有交易日。
-    df = _seg_df([("A", "2018-11-16"), ("B", "2019-01-02"), ("C", "2022-11-01")])
+    # train 行取 2019-11-19(带 1 左侧前一交易日), val 行取 2020-02-21(带 1 右侧后一交易日),
+    # 日历删去中间所有交易日;双侧隔离带下带内日数断言会先触发,同属停线。
+    df = _seg_df([("A", "2019-11-19"), ("B", "2020-02-21"), ("C", "2024-06-03")])
     cal = pd.bdate_range("1990-01-01", "2027-01-01")
-    cal = cal[(cal <= "2018-11-16") | (cal >= "2019-01-02")].to_numpy()
+    cal = cal[(cal <= "2019-11-19") | (cal >= "2020-02-21")].to_numpy()
     with pytest.raises(AssertionError):
         tep.assert_segment_integrity(df, cal)
 

@@ -1,19 +1,24 @@
 #!/usr/bin/env python3
-"""事件×特征主表合并库（issue #22；issue #24 扩展来源 4）。
+"""事件×特征主表合并库(issue #22;issue #24 扩展来源 4;#47 M2 切分/元数据换代)。
 
-四来源合并为一张事件日快照特征主表：
-  s1 事件级特征词典（feature_matrix，179 列，键 event_id）
-  s2 特征工厂（factory_full，1603 列，键 ts_code+date）
-  s3 日频特征缓存重建（v4daily_snapshot，键 ts_code+date）
-  s4 T3 新特征事件日快照（t3_snapshot，issue #24，键 ts_code+date，可缺省）
+四来源合并为一张事件日快照特征主表:
+  s1 事件级特征词典(v6: 键 event_id;v5 历史: feature_matrix 179 列)
+  s2 特征工厂(factory_full,键 ts_code+date)
+  s3 日频特征缓存重建(v4daily_snapshot,键 ts_code+date)
+  s4 T3 新特征事件日快照(t3_snapshot,issue #24,键 ts_code+date,可缺省)
 
-纪律：
-  - 泄漏列物理剔除：既定排除模式 = V4/V5 训练配置 exclude_patterns
-    ∪ feature_engine 14 条黑名单；^rank_ 前缀规则对白名单
-    {rank_return, rank_volume} 豁免（V2 因果横截面特征，非标签排名）。
-  - 同式列去重：|ρ|≥0.999（两池 train+val 段合并计算，不涉标签），
-    保留优先级 s1 > s2 > s3 > s4，同优先级按列名字典序。
-  - 列名跨源碰撞：值同去重、值异报错浮出（禁止静默改名）。
+纪律:
+  - 泄漏列物理剔除:既定排除模式 = V4/V5 训练配置 exclude_patterns
+    ∪ feature_engine 14 条黑名单;^rank_ 前缀规则对白名单
+    {rank_return, rank_volume} 豁免(V2 因果横截面特征,非标签排名)。
+  - 同式列去重:|ρ|≥0.999(train+val 段合并计算,不涉标签),
+    保留优先级 s1 > s2 > s3 > s4,同优先级按列名字典序。
+  - 列名跨源碰撞:值同去重、值异报错浮出(禁止静默改名)。
+
+切分口径(#47 M2 起生效,#30 预登记首次落码;v5 旧切分为历史口径):
+  训练 2001-01~2019-12 / 验证 2020-01~2023-12 / 测试 2024-01 起;
+  段界两侧各 30 个交易日清洗式隔离带,按交易日历派生(derive_embargo_bands),
+  落码值经 m2_feature_master 构建时重算核验一致(台账落 master_results_v6.json)。
 """
 import re
 
@@ -45,25 +50,43 @@ RANK_WHITELIST = frozenset({"rank_return", "rank_volume"})
 
 _EXCLUDE_RE = [re.compile(p, re.IGNORECASE) for p in EXCLUDE_PATTERNS]
 
-# 主表元数据列（非特征）：事件表自带字段 + 段标签
-EVENT_META_COLS = ["event_id", "ts_code", "date", "sig_idx", "low_date",
-                   "prev_low_date", "compare_rank", "formation", "regime",
-                   "above_ma200", "seg"]
+# 主表元数据列(非特征):事件键 + 段标签(v6 口径;v5 历史口径含 sig_idx/low_date 等)
+EVENT_META_COLS = ["event_id", "ts_code", "date", "event_row", "seg"]
 
 KEY = ["ts_code", "date"]
 
-# 切分段（口径 = run_pool_cleaning.py:58-61，隔离带为段界内 30 交易日删除带）
-TRAIN_LO, TRAIN_HI = pd.Timestamp("2001-01-01"), pd.Timestamp("2018-12-31")
-VAL_LO, VAL_HI = pd.Timestamp("2019-01-01"), pd.Timestamp("2022-10-31")
-EMBARGO = [(pd.Timestamp("2018-11-19"), pd.Timestamp("2018-12-28")),
-           (pd.Timestamp("2022-09-13"), pd.Timestamp("2022-10-31"))]
+# 切分段(#30 预登记,段界两侧各 30 交易日清洗式隔离带)
+TRAIN_LO, TRAIN_HI = pd.Timestamp("2001-01-01"), pd.Timestamp("2019-12-31")
+VAL_LO, VAL_HI = pd.Timestamp("2020-01-01"), pd.Timestamp("2023-12-31")
+
+
+def derive_embargo_bands(calendar, n=30):
+    """段界隔离带派生(纯函数):对每个段界取交易日历上早段内侧最后 n 个交易日
+    与晚段内侧最前 n 个交易日,带 = [左带首日, 右带末日]。
+
+    calendar: 排序去重交易日数组(datetime64);返回 ((lo1, hi1), (lo2, hi2))。
+    """
+    cal = pd.to_datetime(pd.Series(calendar)).sort_values().unique()
+    bands = []
+    for hi, lo in ((TRAIN_HI, VAL_LO), (VAL_HI, pd.Timestamp("2024-01-01"))):
+        left = cal[cal <= np.datetime64(hi)][-n:]
+        right = cal[cal >= np.datetime64(lo)][:n]
+        assert len(left) == n and len(right) == n, "交易日历长度不足以派生隔离带"
+        bands.append((pd.Timestamp(left[0]), pd.Timestamp(right[-1])))
+    return tuple(bands)
+
+
+# 落码值 = derive_embargo_bands(上证指数交易日历) 的派生结果(2026-09-09 派生,
+# m2_feature_master 构建时以同一函数对 stock_data/daily/000001.SH.parquet 重算核验)
+EMBARGO = [(pd.Timestamp("2019-11-20"), pd.Timestamp("2020-02-20")),
+           (pd.Timestamp("2023-11-20"), pd.Timestamp("2024-02-20"))]
 
 DEDUP_THRESHOLD = 0.999
 SOURCE_PRIORITY = {"s1": 0, "s2": 1, "s3": 2, "s4": 3}
 
 
 def segment_of(dates):
-    """事件日所属切分段: pre2001/train/val/embargo/test。"""
+    """事件日所属切分段: pre2001/train/val/embargo/test(隔离带覆盖段内归属)。"""
     dates = pd.to_datetime(pd.Series(dates)).to_numpy()
     seg = np.full(len(dates), "test", dtype=object)
     seg[dates < TRAIN_LO] = "pre2001"

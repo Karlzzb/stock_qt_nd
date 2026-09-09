@@ -72,10 +72,29 @@ def test_exclusion_patterns():
 
 # ---------------------------------------------------------------- 段标签
 def test_segment_of():
-    dates = pd.to_datetime(["1999-06-01", "2010-05-04", "2018-12-28",
-                            "2020-03-02", "2022-10-31", "2023-01-09"])
+    # #30 切分(2026-09-09 落码): train 2001-01~2019-12 / val 2020-01~2023-12 /
+    # test 2024-01 起;隔离带 2019-11-20~2020-02-20 与 2023-11-20~2024-02-20(双侧 30 交易日)
+    dates = pd.to_datetime(["1999-06-01", "2010-05-04", "2019-12-02",
+                            "2020-01-15", "2020-03-02", "2023-12-01",
+                            "2024-01-15", "2024-03-01"])
     seg = fm.segment_of(dates)
-    assert list(seg) == ["pre2001", "train", "embargo", "val", "embargo", "test"]
+    assert list(seg) == ["pre2001", "train", "embargo", "embargo",
+                         "val", "embargo", "embargo", "test"]
+
+
+def test_derive_embargo_bands_synthetic():
+    """派生规则(纯函数,合成日历): 每侧恰 30 个交易日, 带 = [左带首日, 右带末日]。"""
+    cal = pd.bdate_range("2018-01-01", "2025-12-31").to_numpy()
+    (b1lo, b1hi), (b2lo, b2hi) = fm.derive_embargo_bands(cal)
+    left1 = cal[(cal >= np.datetime64(b1lo)) & (cal <= np.datetime64(fm.TRAIN_HI))]
+    right1 = cal[(cal >= np.datetime64(fm.VAL_LO)) & (cal <= np.datetime64(b1hi))]
+    assert len(left1) == 30 and len(right1) == 30
+    left2 = cal[(cal >= np.datetime64(b2lo)) & (cal <= np.datetime64(fm.VAL_HI))]
+    right2 = cal[(cal >= np.datetime64("2024-01-01")) & (cal <= np.datetime64(b2hi))]
+    assert len(left2) == 30 and len(right2) == 30
+    # 落码值与真实日历的一致性由 m2 构建断言守护;此处钉死落码值形态
+    assert all(isinstance(lo, pd.Timestamp) and isinstance(hi, pd.Timestamp)
+               and lo < hi for lo, hi in fm.EMBARGO)
 
 
 # ---------------------------------------------------------------- 合并
