@@ -1,0 +1,38 @@
+{
+  "prereg": "experiments/v6_final_exam/PREREG.md",
+  "primary_slice": "AxS4_top30",
+  "control_slice": "union_S4",
+  "primary_metrics": {
+    "n_closed": 394,
+    "win_rate": 0.6091370558375635,
+    "net_mean": 0.06530487928038542,
+    "net_median": 0.04519933889784486,
+    "cluster_t": 2.888959877859717,
+    "win_year_share": 1.0,
+    "date_conc": 0.7681440189937613
+  },
+  "control_metrics": {
+    "n_closed": 1313,
+    "win_rate": 0.5696877380045697,
+    "net_mean": 0.04005876912063427,
+    "net_median": 0.02699660993384526,
+    "cluster_t": 3.461306516882004,
+    "win_year_share": 1.0,
+    "date_conc": 0.486874188352444
+  },
+  "margin_pp": 2.524611015975115,
+  "checks": {
+    "c1_n_closed_ge_300": true,
+    "c2_net_mean_pos": true,
+    "c3_cluster_t_ge_2": true,
+    "c4_win_year_share_ge_60pct": true,
+    "c5_date_conc_le_50pct": false,
+    "c6_margin_ge_2pp_vs_union": true
+  },
+  "verdict": "CAMPAIGN_DEAD",
+  "inputs_md5": {
+    "trades_seed.parquet": "a5d639d26aa1fbc5b60eba14d3d73935",
+    "scores_v2on6_p7fix.parquet": "b1f06afac49a32ad97e0e4f89f18ecd5",
+    "scores_v6.parquet": "f426a0efaaffcc8cfd24e941b4018274"
+  }
+}
