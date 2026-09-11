@@ -309,8 +309,10 @@ def _rolling_slope_minp2(y: np.ndarray, window: int) -> np.ndarray:
 def _macd_percentile_p7(macd: np.ndarray, window: int = 100) -> np.ndarray:
     """P7 口径 macd_percentile:按股截尾 100 行(不含当日)percentileofscore(kind='rank')。
 
-    scipy kind='rank' 语义 = (count(< x) + count(<= x)) / 2 / n × 100(向量化逐字等价;
-    窗内 NaN 两种比较均 False,与 scipy count_nonzero 语义一致);不足 100 行 → NaN(P7)。
+    scipy kind='rank' 语义 = (count(< x) + count(<= x)) / 2 / n × 100;不足 100 行 → NaN(P7)。
+    暖机窗 NaN 口径(2026-09-11 监工复核裁定,README 修订记录三轮):scipy 1.17.1 实测
+    percentileofscore 对含 NaN 输入整窗返回 NaN,故窗内含任一 NaN → NaN(scipy 字面),
+    随后经 v2 L897 面板 fillna(0) 与原管线汇合。
     """
     n = len(macd)
     out = np.full(n, np.nan, dtype=np.float64)
@@ -321,7 +323,9 @@ def _macd_percentile_p7(macd: np.ndarray, window: int = 100) -> np.ndarray:
         with np.errstate(invalid="ignore"):
             less = (hist < cur[:, None]).sum(axis=1)
             leq = (hist <= cur[:, None]).sum(axis=1)
-        out[window:] = (less + leq) / 2.0 / window * 100.0
+        vals = (less + leq) / 2.0 / window * 100.0
+        vals[np.isnan(hist).any(axis=1)] = np.nan  # scipy 字面:含 NaN 窗 → NaN
+        out[window:] = vals
     return out
 
 

@@ -194,3 +194,25 @@
   - 宣判:**V2_ROUTE_DEAD** —— 按 §八 原文,v2 路线与 M 路线互证判死,「170 vs 10」归因于 v2 池污染与宽松选择规则,回用户拍板。
   - 副门(信息性):precision@top10% = 0.438351 vs 池基线 0.459768,提升 **−2.14pp**(排序全集 24,247,前 2,425)。
 - 独立自检(selfcheck_v2on6.py):13 项全 PASS(行数与键/泄漏扫描/段界/特征口径抽检 192 单元/背离结构族 500×16/标签 300×7×4 自写重算/词典/三件套双跑 md5/选择清单/分数表口径/门产物机械一致),7s。
+
+### 2026-09-11 口径裁定(监工复核发现,三轮):macd_percentile 暖机窗 NaN 口径 = scipy 字面语义
+
+- 发现(监工独立复核 B2 层):`_macd_percentile_p7` 对「窗内含 NaN 的 100 行窗」(事件行号 j∈[100,134),talib MACD 暖机 33 行 NaN 落入窗内)给出 (less+leq)/2/100 实值;P7 登记引用函数 `scipy.stats.percentileofscore(kind='rank')` 在本环境(scipy 1.17.1)对含 NaN 输入返回 NaN。
+  工人代码注释「与 scipy count_nonzero 语义一致」经实测不成立(scipy 1.17.1 实测:含 NaN → NaN)。
+- 裁定:P7 暖机语义以 scipy 字面为准 —— 窗内含任一 NaN → 整窗结果 NaN(随后经 v2 L897 面板 fillna(0) → 0.0,与原管线汇合);不足 100 行 → NaN(原实现已一致)。
+- 影响面:j∈[100,134) 事件 1,114 起(train 596 / val 341 / test 93 / embargo 66 / pre2001 18,占全池 1.15%)的 macd_percentile 基列由 0~34 实值变为 0.0,及其 rankpct/z 两横截面衍生列在含暖机股的事件日微变。
+  j<100 的 592 起事件修复前后落盘值不变(均为 NaN→fillna(0)→0.0)。
+  FULL 阶段五折重要性台账证实 macd_percentile 三列分裂数全 0(LGBM 路径零影响);STABLE 64 条含 macd_percentile(LR 元模型路径理论上非零影响)。
+- 处置:按「构造缺陷 → 修复重跑」纪律,修复后全链重跑(面板 p7fix/p7fix2 双跑 → 主表 → 训练双跑 → 终审复跑;终审 scores 输入路径与主表输入路径指向 p7fix 产物,均属 §八/§九 白名单与输入路径项)。
+  修复前裁决(K=3 +0.5850pp/t 0.9856,K=5 −0.9793pp/t −0.1174,K=10 −0.1345pp/t 0.4684,副门 −2.14pp,宣判 V2_ROUTE_DEAD)已在 commit 5e9d7ff 全量归档,修复后数字连同前后对照一并落盘。
+
+### 2026-09-11 口径裁定(监工复核发现,四轮):build_master 输入目录硬编码 run1 → 随 tag 走;三轮暖机行数勘误
+
+- 发现(监工独立复核,p7fix 链后验):p7fix/p7fix2 面板逐股 part 已是修复后值(暖机窗 macd_percentile=0.0,实测 000001.SZ 2001-09-19),但 `build_master_v2on6.py` 输入目录硬编码 `eventrows_run1`/`event_aux_run1`(原 382-387 行),`--rerun-tag` 只改输出文件名 —— p7fix/p7fix2 主表静默吃 run1 修复前事件行(md5 与 run1 全等,scores md5 随之与修复前全等,终审复跑等于没跑)。
+  该硬编码对 run2 无害(run1/run2 事件行按设计逐位相等,双跑对账由面板台账 md5 独立承担),仅在修复链暴露。
+- 裁定:build_master 输入目录随 `--rerun-tag` 走(`eventrows_{tag}`/`event_aux_{tag}`,断言信息同步);标签输入 `labels_v2on6_run1` 不受 macd_percentile 修复影响(标签只由未来价格计算),维持不变。
+- 勘误(三轮):talib MACD 线暖机实测 33 行 NaN(首个有效 index=33),故含 NaN 窗事件行号为 j∈[100,132],计 1,069 起(train 569 / val 331 / test 61 / embargo 46 / pre2001 62,占全池 1.11%);三轮文中「j∈[100,134)、1,114 起」的分段计数以此为准,口径结论不变。
+- 处置:p7fix/p7fix2 面板产物(逐股 part、事件行 chunks、台账 md5)本身正确,保留;自主表起下游重跑(build_master p7fix/p7fix2 → train p7fix/p7fix2 → 终审复跑),修复前裁决归档不变(commit 5e9d7ff)。
+  三轮修复链已产生的主表/分数/终审产物全部由本轮重跑覆盖,不作证据引用。
+- 附记(同日终审复跑停工排查):build_master 修复后首次终审复跑 detcmp 报 2 格(M K3/K10)不一致 —— 排查确认为 `checkpoint_pass1.pkl`(修复前 13:14 留存,gitignored)被断点续跑机制当作 pass1 结果复用,与新分数 pass2 对拍自然不符;单格 emit 双跑逐位相等证明引擎确定性本身无恙。
+  处置:删除陈旧 checkpoint 后全新终审复跑;此为运维面教训(checkpoint 未按分数 md5 命名),非引擎缺陷,机制代码不改。

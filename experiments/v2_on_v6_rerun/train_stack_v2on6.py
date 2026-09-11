@@ -206,6 +206,7 @@ def analyze_coef_stability(coef_df: pd.DataFrame) -> pd.DataFrame:
 def main() -> None:
     ap = argparse.ArgumentParser(description="v2on6 特征选择 + 训练栈 + 分数表")
     ap.add_argument("--rerun-tag", default="run1")
+    ap.add_argument("--master-tag", default="run1", help="主表输入标签(默认 run1;P7 修复链用 p7fix)")
     args = ap.parse_args()
     tag = args.rerun_tag
     t_all = time.time()
@@ -213,7 +214,7 @@ def main() -> None:
         f"lightgbm {lgb.__version__}")
 
     # ---- 输入:主表 + 标签 ----
-    master = pd.read_parquet(CACHE_DIR / "master_v2on6_run1.parquet")
+    master = pd.read_parquet(CACHE_DIR / f"master_v2on6_{args.master_tag}.parquet")
     lab = pd.read_parquet(CACHE_DIR / "labels_v2on6_run1.parquet",
                           columns=["ts_code", "event_date", LABEL_COL])
     df = master.merge(lab, on=["ts_code", "event_date"], how="left", validate="1:1")

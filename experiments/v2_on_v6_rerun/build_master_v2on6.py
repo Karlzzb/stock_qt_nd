@@ -379,12 +379,13 @@ def main() -> None:
     # ---- 输入装载 ----
     ev = pd.read_parquet(EVENTS_PATH)
     assert len(ev) == 96577 and not ev.duplicated(["ts_code", "event_date"]).any()
-    ev_files = sorted((CACHE_DIR / "eventrows_run1").glob("chunk_*.parquet"))
-    assert ev_files, "eventrows_run1 缺失,先跑 build_panel --full"
+    # 输入目录随 tag 走(2026-09-11 四轮裁定:原硬编码 eventrows_run1 会在修复链静默吃旧数据)
+    ev_files = sorted((CACHE_DIR / f"eventrows_{tag}").glob("chunk_*.parquet"))
+    assert ev_files, f"eventrows_{tag} 缺失,先跑 build_panel --full --rerun-tag {tag}"
     evrows = pd.concat([pd.read_parquet(f) for f in ev_files], ignore_index=True)
     assert len(evrows) == 96577, f"事件行切片 {len(evrows)} != 96,577"
-    aux_files = sorted((CACHE_DIR / "event_aux_run1").glob("*.parquet"))
-    assert aux_files, "event_aux_run1 缺失"
+    aux_files = sorted((CACHE_DIR / f"event_aux_{tag}").glob("*.parquet"))
+    assert aux_files, f"event_aux_{tag} 缺失"
     aux = pd.concat([pd.read_parquet(f).assign(
         ts_code=f.stem) for f in aux_files], ignore_index=True)
 

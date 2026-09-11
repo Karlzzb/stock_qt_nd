@@ -54,7 +54,7 @@ import strategy_engine as se  # noqa: E402  冻结引擎:只读复用成本原�
 import run_long_hold as RLH  # noqa: E402  #40 底座:只读 import,本体零改动(README §三)
 
 GATE_DIR = REPO / "experiments" / "v2_on_v6_rerun"            # 白名单:输出目录
-SCORES_PATH = GATE_DIR / "cache" / "scores_v2on6_run1.parquet"  # 白名单:scores 输入路径
+SCORES_PATH = GATE_DIR / "cache" / "scores_v2on6_p7fix.parquet"  # 白名单:scores 输入路径(P7 修复链,README 修订记录三轮)
 LABELS_PATH = REPO / "experiments" / "v6_model_campaign" / "m3_label_race" / "labels_v6.parquet"  # 标签对账口径继承 M5(同事件集)
 LH_RUNS = REPO / "experiments" / "v6_long_hold_trial" / "runs"  # #40 冻结产物(只读;无前缀原值)
 CKPT_PATH = GATE_DIR / "checkpoint_pass1.pkl"  # 断点续跑(*.pkl 按 .gitignore 不入库)
