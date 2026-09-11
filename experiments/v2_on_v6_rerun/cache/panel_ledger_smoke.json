@@ -1,0 +1,35 @@
+{
+  "tag": "smoke",
+  "n_codes": 50,
+  "n_event_dates": 200,
+  "workers": 26,
+  "passA": {
+    "sec": 1.0,
+    "n_hist_rows": 282316,
+    "n_event_rows": 7517
+  },
+  "causality": {
+    "sec": 2.8,
+    "n_checked": 36,
+    "n_mismatch": 0,
+    "mismatch_head": []
+  },
+  "market": {
+    "sec": 0.3,
+    "n_sh_missing": 0,
+    "n_sz_missing": 0,
+    "n_off_calendar_rows": 1098,
+    "n_days_zero_coverage": 10
+  },
+  "passB": {
+    "sec": 27.1,
+    "n_chunk_rows": 7517,
+    "n_chunks": 1,
+    "n_event_rows": 61,
+    "n_boxcox_days": 200
+  },
+  "eventrows_md5": {
+    "chunk_000.parquet": "37f7af8e3dc81746f8c2095e71ace04d"
+  },
+  "total_sec": 32.2
+}

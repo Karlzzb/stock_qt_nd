@@ -1,0 +1,24 @@
+{
+  "tag": "run2",
+  "sec": 7.6,
+  "n_rows": 96577,
+  "n_feature_cols": 604,
+  "n_cols_total": 609,
+  "md5": "a9fe203bcfb2273dad9b8ccb8c822714",
+  "seg_counts": {
+    "train": 50165,
+    "val": 24405,
+    "test": 17902,
+    "embargo": 3063,
+    "pre2001": 1042
+  },
+  "structure_sample": {
+    "n_checked": 500,
+    "n_mismatch": 0
+  },
+  "volume_signal_encoder": {
+    "bearish": 0,
+    "bullish": 1,
+    "neutral": 2
+  }
+}

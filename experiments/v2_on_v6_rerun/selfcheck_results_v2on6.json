@@ -1,0 +1,73 @@
+{
+  "sec": 7.1,
+  "n_checks": 13,
+  "n_fail": 0,
+  "all_pass": true,
+  "results": [
+    {
+      "check": "§九.4 行数与键",
+      "ok": true,
+      "detail": "master 96577 行,event_id 唯一,(ts_code,event_date) 与事件表互证"
+    },
+    {
+      "check": "§九.4 event_id/seg 对 master_v6 逐行一致",
+      "ok": true,
+      "detail": "96577 行"
+    },
+    {
+      "check": "§九.4 event_close/event_row 抽样 500 逐位",
+      "ok": true,
+      "detail": "不一致 0"
+    },
+    {
+      "check": "§九.2 泄漏列扫描(主表/分数表)",
+      "ok": true,
+      "detail": "主表标签列 [];分数表恰 5 列"
+    },
+    {
+      "check": "§九.3 段界与段计数",
+      "ok": true,
+      "detail": "段计数 {'train': 50165, 'val': 24405, 'test': 17902, 'embargo': 3063, 'pre2001': 1042}"
+    },
+    {
+      "check": "§九.1 特征口径抽检(6 股 × 2 日 × 16 列,自写重算)",
+      "ok": true,
+      "detail": "192 单元,不一致 0;[]"
+    },
+    {
+      "check": "§九.5 背离结构族抽样 500 自写重算",
+      "ok": true,
+      "detail": "500 事件 × 16 列,不一致 0;[]"
+    },
+    {
+      "check": "标签抽样 300 事件 × 7 期 × 4 列自写重算",
+      "ok": true,
+      "detail": "8400 单元,不一致 0;[]"
+    },
+    {
+      "check": "§九.6 词典列集与中文全称",
+      "ok": true,
+      "detail": "609 列"
+    },
+    {
+      "check": "§九.7 双跑 md5(标签/面板/分数)",
+      "ok": true,
+      "detail": "labels 一致;panel True;scores True"
+    },
+    {
+      "check": "§九.8 选择清单程序化落盘",
+      "ok": true,
+      "detail": "OPTIMIZED 250 条 / STABLE 64 条"
+    },
+    {
+      "check": "分数表口径(96,577/val 全覆盖/train NaN=标签 NaN/值域)",
+      "ok": true,
+      "detail": "val 24405(非 NaN 24405),train NaN 4 vs 4"
+    },
+    {
+      "check": "§九.9 门产物 18 格与 verdict 机械一致",
+      "ok": true,
+      "detail": "summary 18 行,trades/equity 18/18,主门重算一致 True,自检总评 True"
+    }
+  ]
+}

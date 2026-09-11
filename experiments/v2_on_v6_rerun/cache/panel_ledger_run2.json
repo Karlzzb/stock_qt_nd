@@ -1,0 +1,59 @@
+{
+  "tag": "run2",
+  "n_codes": 5889,
+  "n_event_dates": 5696,
+  "workers": 26,
+  "passA": {
+    "sec": 35.8,
+    "n_hist_rows": 17321333,
+    "n_event_rows": 15455882
+  },
+  "causality": {
+    "sec": 2.4,
+    "n_checked": 36,
+    "n_mismatch": 0,
+    "mismatch_head": []
+  },
+  "market": {
+    "sec": 15.3,
+    "n_sh_missing": 8,
+    "n_sz_missing": 10,
+    "n_calendar_days": 8610,
+    "n_sidecar_rows": 16975096,
+    "n_days_pre_index_start": 610,
+    "n_days_zero_coverage": 0
+  },
+  "passB": {
+    "sec": 1063.0,
+    "n_event_rows": 96577,
+    "n_boxcox_days": 5696,
+    "n_chunk_rows": 15455882,
+    "n_chunks": 23
+  },
+  "eventrows_md5": {
+    "chunk_000.parquet": "9eda32446fcbf6d422797fe5c1c6aca2",
+    "chunk_001.parquet": "ed734ff1812b57b96808d9b8b838244d",
+    "chunk_002.parquet": "a8806ce24e468de49447beb94321e3da",
+    "chunk_003.parquet": "f825494aab26b2265886b0ec9ef094dc",
+    "chunk_004.parquet": "7c4d8812fc725f4388049dc85e3673b7",
+    "chunk_005.parquet": "15a57cbfdf3370535dc00afe1ecb0010",
+    "chunk_006.parquet": "16c87b690dac0db89d8fa17ef9a4140f",
+    "chunk_007.parquet": "644b89ef68ca8b87839ec93ca9683ea4",
+    "chunk_008.parquet": "f330291a3633f952eea5f13abfa2f4ed",
+    "chunk_009.parquet": "f4462088df14dfef5a8fb68f1e9b4104",
+    "chunk_010.parquet": "a93c8345030b45e06cbd827bc865f491",
+    "chunk_011.parquet": "b785698f317ce392a62cf3921cfbc960",
+    "chunk_012.parquet": "b51e5efcf3fc709642b366bb611cddd2",
+    "chunk_013.parquet": "39a15cba861965067a3cfddfec7c5c32",
+    "chunk_014.parquet": "996e6e2852a1305a223cac23321e1ad9",
+    "chunk_015.parquet": "39a905e9c1e1883902a877cb9f55c4d9",
+    "chunk_016.parquet": "91e8a45fb71d29c3f4f604c59364e80d",
+    "chunk_017.parquet": "31f273d3b0a4947deb83fbd18f1331c0",
+    "chunk_018.parquet": "928b5f92367a8e145d440953e1f2f87a",
+    "chunk_019.parquet": "aa253445d88a5b0a80d64e2c517f0261",
+    "chunk_020.parquet": "67764f5a42bce72cfe144ef252d32a48",
+    "chunk_021.parquet": "fdd4d8873ca37400503805f2a92b6b5f",
+    "chunk_022.parquet": "438d6a80eb323290ba894064123f87d8"
+  },
+  "total_sec": 1623.1
+}

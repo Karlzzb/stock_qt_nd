@@ -1,0 +1,17 @@
+{
+  "tag": "run1",
+  "sec": 4.5,
+  "n_rows": 96577,
+  "n_codes": 5748,
+  "nan_counts": {
+    "future_return_3d_nan": 326,
+    "future_return_5d_nan": 412,
+    "future_return_10d_nan": 476,
+    "future_return_15d_nan": 522,
+    "future_return_20d_nan": 696,
+    "future_return_25d_nan": 1229,
+    "future_return_30d_nan": 1490
+  },
+  "md5": "ce6a584fb65716ac777ed98669f00b46",
+  "file": "/home/karl/repos/personal/stock_qt_nd/experiments/v2_on_v6_rerun/cache/labels_v2on6_run1.parquet"
+}
